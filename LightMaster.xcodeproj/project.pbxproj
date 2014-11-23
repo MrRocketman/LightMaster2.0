@@ -1,0 +1,436 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1AE830211A21BA68000E297D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830201A21BA68000E297D /* AppDelegate.m */; };
+		1AE830231A21BA68000E297D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830221A21BA68000E297D /* main.m */; };
+		1AE830261A21BA68000E297D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830251A21BA68000E297D /* ViewController.m */; };
+		1AE830291A21BA68000E297D /* LightMaster.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830271A21BA68000E297D /* LightMaster.xcdatamodeld */; };
+		1AE8302B1A21BA68000E297D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AE8302A1A21BA68000E297D /* Images.xcassets */; };
+		1AE8302E1A21BA68000E297D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AE8302C1A21BA68000E297D /* Main.storyboard */; };
+		1AE8303A1A21BA68000E297D /* LightMasterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830391A21BA68000E297D /* LightMasterTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1AE830341A21BA68000E297D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AE830121A21BA68000E297D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1AE830191A21BA68000E297D;
+			remoteInfo = LightMaster;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1AE8301A1A21BA68000E297D /* LightMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AE8301E1A21BA68000E297D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AE8301F1A21BA68000E297D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1AE830201A21BA68000E297D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1AE830221A21BA68000E297D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1AE830241A21BA68000E297D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		1AE830251A21BA68000E297D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		1AE830281A21BA68000E297D /* LightMaster.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LightMaster.xcdatamodel; sourceTree = "<group>"; };
+		1AE8302A1A21BA68000E297D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		1AE8302D1A21BA68000E297D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1AE830331A21BA68000E297D /* LightMasterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LightMasterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AE830381A21BA68000E297D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AE830391A21BA68000E297D /* LightMasterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightMasterTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1AE830171A21BA68000E297D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AE830301A21BA68000E297D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1AE830111A21BA68000E297D = {
+			isa = PBXGroup;
+			children = (
+				1AE8301C1A21BA68000E297D /* LightMaster */,
+				1AE830361A21BA68000E297D /* LightMasterTests */,
+				1AE8301B1A21BA68000E297D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1AE8301B1A21BA68000E297D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1AE8301A1A21BA68000E297D /* LightMaster.app */,
+				1AE830331A21BA68000E297D /* LightMasterTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1AE8301C1A21BA68000E297D /* LightMaster */ = {
+			isa = PBXGroup;
+			children = (
+				1AE8301F1A21BA68000E297D /* AppDelegate.h */,
+				1AE830201A21BA68000E297D /* AppDelegate.m */,
+				1AE830241A21BA68000E297D /* ViewController.h */,
+				1AE830251A21BA68000E297D /* ViewController.m */,
+				1AE8302A1A21BA68000E297D /* Images.xcassets */,
+				1AE8302C1A21BA68000E297D /* Main.storyboard */,
+				1AE830271A21BA68000E297D /* LightMaster.xcdatamodeld */,
+				1AE8301D1A21BA68000E297D /* Supporting Files */,
+			);
+			path = LightMaster;
+			sourceTree = "<group>";
+		};
+		1AE8301D1A21BA68000E297D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1AE8301E1A21BA68000E297D /* Info.plist */,
+				1AE830221A21BA68000E297D /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1AE830361A21BA68000E297D /* LightMasterTests */ = {
+			isa = PBXGroup;
+			children = (
+				1AE830391A21BA68000E297D /* LightMasterTests.m */,
+				1AE830371A21BA68000E297D /* Supporting Files */,
+			);
+			path = LightMasterTests;
+			sourceTree = "<group>";
+		};
+		1AE830371A21BA68000E297D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1AE830381A21BA68000E297D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1AE830191A21BA68000E297D /* LightMaster */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1AE8303D1A21BA68000E297D /* Build configuration list for PBXNativeTarget "LightMaster" */;
+			buildPhases = (
+				1AE830161A21BA68000E297D /* Sources */,
+				1AE830171A21BA68000E297D /* Frameworks */,
+				1AE830181A21BA68000E297D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LightMaster;
+			productName = LightMaster;
+			productReference = 1AE8301A1A21BA68000E297D /* LightMaster.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1AE830321A21BA68000E297D /* LightMasterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1AE830401A21BA68000E297D /* Build configuration list for PBXNativeTarget "LightMasterTests" */;
+			buildPhases = (
+				1AE8302F1A21BA68000E297D /* Sources */,
+				1AE830301A21BA68000E297D /* Frameworks */,
+				1AE830311A21BA68000E297D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1AE830351A21BA68000E297D /* PBXTargetDependency */,
+			);
+			name = LightMasterTests;
+			productName = LightMasterTests;
+			productReference = 1AE830331A21BA68000E297D /* LightMasterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1AE830121A21BA68000E297D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = JamesAdams;
+				TargetAttributes = {
+					1AE830191A21BA68000E297D = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					1AE830321A21BA68000E297D = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = 1AE830191A21BA68000E297D;
+					};
+				};
+			};
+			buildConfigurationList = 1AE830151A21BA68000E297D /* Build configuration list for PBXProject "LightMaster" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1AE830111A21BA68000E297D;
+			productRefGroup = 1AE8301B1A21BA68000E297D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1AE830191A21BA68000E297D /* LightMaster */,
+				1AE830321A21BA68000E297D /* LightMasterTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1AE830181A21BA68000E297D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AE8302B1A21BA68000E297D /* Images.xcassets in Resources */,
+				1AE8302E1A21BA68000E297D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AE830311A21BA68000E297D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1AE830161A21BA68000E297D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AE830291A21BA68000E297D /* LightMaster.xcdatamodeld in Sources */,
+				1AE830261A21BA68000E297D /* ViewController.m in Sources */,
+				1AE830231A21BA68000E297D /* main.m in Sources */,
+				1AE830211A21BA68000E297D /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AE8302F1A21BA68000E297D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AE8303A1A21BA68000E297D /* LightMasterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1AE830351A21BA68000E297D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1AE830191A21BA68000E297D /* LightMaster */;
+			targetProxy = 1AE830341A21BA68000E297D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1AE8302C1A21BA68000E297D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1AE8302D1A21BA68000E297D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1AE8303B1A21BA68000E297D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		1AE8303C1A21BA68000E297D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		1AE8303E1A21BA68000E297D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LightMaster/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1AE8303F1A21BA68000E297D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LightMaster/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		1AE830411A21BA68000E297D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LightMasterTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LightMaster.app/Contents/MacOS/LightMaster";
+			};
+			name = Debug;
+		};
+		1AE830421A21BA68000E297D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LightMasterTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LightMaster.app/Contents/MacOS/LightMaster";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1AE830151A21BA68000E297D /* Build configuration list for PBXProject "LightMaster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AE8303B1A21BA68000E297D /* Debug */,
+				1AE8303C1A21BA68000E297D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1AE8303D1A21BA68000E297D /* Build configuration list for PBXNativeTarget "LightMaster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AE8303E1A21BA68000E297D /* Debug */,
+				1AE8303F1A21BA68000E297D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		1AE830401A21BA68000E297D /* Build configuration list for PBXNativeTarget "LightMasterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AE830411A21BA68000E297D /* Debug */,
+				1AE830421A21BA68000E297D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1AE830271A21BA68000E297D /* LightMaster.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1AE830281A21BA68000E297D /* LightMaster.xcdatamodel */,
+			);
+			currentVersion = 1AE830281A21BA68000E297D /* LightMaster.xcdatamodel */;
+			path = LightMaster.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 1AE830121A21BA68000E297D /* Project object */;
+}
