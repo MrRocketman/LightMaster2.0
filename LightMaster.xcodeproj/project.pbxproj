@@ -7,6 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771171A243E6500C49006 /* CommandFadeUp.m */; };
+		1AE7711B1A243E6500C49006 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7711A1A243E6500C49006 /* Sequence.m */; };
+		1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */; };
+		1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771201A243E6500C49006 /* EchoNestSegment.m */; };
+		1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771231A243E6500C49006 /* EchoNestBar.m */; };
+		1AE771271A243E6500C49006 /* UserAudioAnalysisTatums.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771261A243E6500C49006 /* UserAudioAnalysisTatums.m */; };
+		1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771291A243E6500C49006 /* CommandOn.m */; };
+		1AE7712D1A243E6500C49006 /* Playlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7712C1A243E6500C49006 /* Playlist.m */; };
+		1AE771301A243E6500C49006 /* CommandFadeDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7712F1A243E6500C49006 /* CommandFadeDown.m */; };
+		1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771351A243E6500C49006 /* EchoNestSection.m */; };
+		1AE771391A243E6600C49006 /* EchoNestAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771381A243E6600C49006 /* EchoNestAudioAnalysis.m */; };
+		1AE7713C1A243E6600C49006 /* UserAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7713B1A243E6600C49006 /* UserAudioAnalysis.m */; };
+		1AE7713F1A243E6600C49006 /* EchoNestTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7713E1A243E6600C49006 /* EchoNestTatum.m */; };
+		1AE771421A243E6600C49006 /* ChannelPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771411A243E6600C49006 /* ChannelPattern.m */; };
+		1AE771451A243E6600C49006 /* EchoNestPitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771441A243E6600C49006 /* EchoNestPitch.m */; };
+		1AE771481A243E6600C49006 /* ControlBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771471A243E6600C49006 /* ControlBox.m */; };
+		1AE7714B1A243E6600C49006 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7714A1A243E6600C49006 /* Channel.m */; };
+		1AE7714E1A243E6600C49006 /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7714D1A243E6600C49006 /* Audio.m */; };
+		1AE771511A243E6600C49006 /* EchoNestMeta.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771501A243E6600C49006 /* EchoNestMeta.m */; };
+		1AE771571A243E6600C49006 /* EchoNestBeat.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771561A243E6600C49006 /* EchoNestBeat.m */; };
+		1AE7715A1A243E6600C49006 /* EchoNestTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771591A243E6600C49006 /* EchoNestTrack.m */; };
+		1AE7716D1A2441C600C49006 /* UserAudioAnalysisTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7716C1A2441C600C49006 /* UserAudioAnalysisTrack.m */; };
+		1AE771701A2441C600C49006 /* UserAudioAnalysisTrackChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7716F1A2441C600C49006 /* UserAudioAnalysisTrackChannel.m */; };
+		1AE771731A2441C700C49006 /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771721A2441C700C49006 /* Command.m */; };
+		1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771751A24422C00C49006 /* ComplexCommand.m */; };
+		1AE771791A24422C00C49006 /* CommandPulse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771781A24422C00C49006 /* CommandPulse.m */; };
+		1AE7717C1A24422C00C49006 /* CommandTwinkle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7717B1A24422C00C49006 /* CommandTwinkle.m */; };
 		1AE830211A21BA68000E297D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830201A21BA68000E297D /* AppDelegate.m */; };
 		1AE830231A21BA68000E297D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830221A21BA68000E297D /* main.m */; };
 		1AE830261A21BA68000E297D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830251A21BA68000E297D /* ViewController.m */; };
@@ -16,26 +43,6 @@
 		1AE8303A1A21BA68000E297D /* LightMasterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830391A21BA68000E297D /* LightMasterTests.m */; };
 		1AE830481A21C70D000E297D /* NSManagedObjectContext+Queryable.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830461A21C70D000E297D /* NSManagedObjectContext+Queryable.m */; };
 		1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830881A21C7F4000E297D /* CoreDataManager.m */; };
-		1AE8308C1A21C922000E297D /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8308B1A21C922000E297D /* Sequence.m */; };
-		1AE8308F1A21C923000E297D /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8308E1A21C923000E297D /* Audio.m */; };
-		1AE830921A21C923000E297D /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830911A21C923000E297D /* Command.m */; };
-		1AE830951A21C923000E297D /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830941A21C923000E297D /* EchoNestTimbre.m */; };
-		1AE830981A21C923000E297D /* EchoNestSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830971A21C923000E297D /* EchoNestSegment.m */; };
-		1AE8309B1A21C923000E297D /* Effect.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8309A1A21C923000E297D /* Effect.m */; };
-		1AE8309E1A21C923000E297D /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8309D1A21C923000E297D /* Channel.m */; };
-		1AE830A11A21C923000E297D /* EchoNestPitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830A01A21C923000E297D /* EchoNestPitch.m */; };
-		1AE830A41A21C923000E297D /* ControlBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830A31A21C923000E297D /* ControlBox.m */; };
-		1AE830A71A21C923000E297D /* EchoNestAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830A61A21C923000E297D /* EchoNestAudioAnalysis.m */; };
-		1AE830AA1A21C923000E297D /* EchoNestTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830A91A21C923000E297D /* EchoNestTrack.m */; };
-		1AE830AD1A21C923000E297D /* ChannelPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830AC1A21C923000E297D /* ChannelPattern.m */; };
-		1AE830B01A21C923000E297D /* UserInstrument.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830AF1A21C923000E297D /* UserInstrument.m */; };
-		1AE830B31A21C923000E297D /* EchoNestTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830B21A21C923000E297D /* EchoNestTatum.m */; };
-		1AE830B61A21C923000E297D /* EchoNestSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830B51A21C923000E297D /* EchoNestSection.m */; };
-		1AE830B91A21C923000E297D /* EchoNestBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830B81A21C923000E297D /* EchoNestBar.m */; };
-		1AE830BC1A21C923000E297D /* UserAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830BB1A21C923000E297D /* UserAudioAnalysis.m */; };
-		1AE830BF1A21C923000E297D /* EchoNestBeat.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830BE1A21C923000E297D /* EchoNestBeat.m */; };
-		1AE830C21A21C924000E297D /* EchoNestMeta.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830C11A21C924000E297D /* EchoNestMeta.m */; };
-		1AE830C51A21C924000E297D /* UserInstrumentNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830C41A21C924000E297D /* UserInstrumentNote.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +56,60 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1AE771161A243E6500C49006 /* CommandFadeUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandFadeUp.h; path = LightMaster/CommandFadeUp.h; sourceTree = "<group>"; };
+		1AE771171A243E6500C49006 /* CommandFadeUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandFadeUp.m; path = LightMaster/CommandFadeUp.m; sourceTree = "<group>"; };
+		1AE771191A243E6500C49006 /* Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sequence.h; path = LightMaster/Sequence.h; sourceTree = "<group>"; };
+		1AE7711A1A243E6500C49006 /* Sequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Sequence.m; path = LightMaster/Sequence.m; sourceTree = "<group>"; };
+		1AE7711C1A243E6500C49006 /* EchoNestTimbre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTimbre.h; path = LightMaster/EchoNestTimbre.h; sourceTree = "<group>"; };
+		1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTimbre.m; path = LightMaster/EchoNestTimbre.m; sourceTree = "<group>"; };
+		1AE7711F1A243E6500C49006 /* EchoNestSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestSegment.h; path = LightMaster/EchoNestSegment.h; sourceTree = "<group>"; };
+		1AE771201A243E6500C49006 /* EchoNestSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestSegment.m; path = LightMaster/EchoNestSegment.m; sourceTree = "<group>"; };
+		1AE771221A243E6500C49006 /* EchoNestBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestBar.h; path = LightMaster/EchoNestBar.h; sourceTree = "<group>"; };
+		1AE771231A243E6500C49006 /* EchoNestBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestBar.m; path = LightMaster/EchoNestBar.m; sourceTree = "<group>"; };
+		1AE771251A243E6500C49006 /* UserAudioAnalysisTatums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysisTatums.h; path = LightMaster/UserAudioAnalysisTatums.h; sourceTree = "<group>"; };
+		1AE771261A243E6500C49006 /* UserAudioAnalysisTatums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysisTatums.m; path = LightMaster/UserAudioAnalysisTatums.m; sourceTree = "<group>"; };
+		1AE771281A243E6500C49006 /* CommandOn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandOn.h; path = LightMaster/CommandOn.h; sourceTree = "<group>"; };
+		1AE771291A243E6500C49006 /* CommandOn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandOn.m; path = LightMaster/CommandOn.m; sourceTree = "<group>"; };
+		1AE7712B1A243E6500C49006 /* Playlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Playlist.h; path = LightMaster/Playlist.h; sourceTree = "<group>"; };
+		1AE7712C1A243E6500C49006 /* Playlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Playlist.m; path = LightMaster/Playlist.m; sourceTree = "<group>"; };
+		1AE7712E1A243E6500C49006 /* CommandFadeDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandFadeDown.h; path = LightMaster/CommandFadeDown.h; sourceTree = "<group>"; };
+		1AE7712F1A243E6500C49006 /* CommandFadeDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandFadeDown.m; path = LightMaster/CommandFadeDown.m; sourceTree = "<group>"; };
+		1AE771341A243E6500C49006 /* EchoNestSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestSection.h; path = LightMaster/EchoNestSection.h; sourceTree = "<group>"; };
+		1AE771351A243E6500C49006 /* EchoNestSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestSection.m; path = LightMaster/EchoNestSection.m; sourceTree = "<group>"; };
+		1AE771371A243E6600C49006 /* EchoNestAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestAudioAnalysis.h; path = LightMaster/EchoNestAudioAnalysis.h; sourceTree = "<group>"; };
+		1AE771381A243E6600C49006 /* EchoNestAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestAudioAnalysis.m; path = LightMaster/EchoNestAudioAnalysis.m; sourceTree = "<group>"; };
+		1AE7713A1A243E6600C49006 /* UserAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysis.h; path = LightMaster/UserAudioAnalysis.h; sourceTree = "<group>"; };
+		1AE7713B1A243E6600C49006 /* UserAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysis.m; path = LightMaster/UserAudioAnalysis.m; sourceTree = "<group>"; };
+		1AE7713D1A243E6600C49006 /* EchoNestTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTatum.h; path = LightMaster/EchoNestTatum.h; sourceTree = "<group>"; };
+		1AE7713E1A243E6600C49006 /* EchoNestTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTatum.m; path = LightMaster/EchoNestTatum.m; sourceTree = "<group>"; };
+		1AE771401A243E6600C49006 /* ChannelPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChannelPattern.h; path = LightMaster/ChannelPattern.h; sourceTree = "<group>"; };
+		1AE771411A243E6600C49006 /* ChannelPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChannelPattern.m; path = LightMaster/ChannelPattern.m; sourceTree = "<group>"; };
+		1AE771431A243E6600C49006 /* EchoNestPitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestPitch.h; path = LightMaster/EchoNestPitch.h; sourceTree = "<group>"; };
+		1AE771441A243E6600C49006 /* EchoNestPitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestPitch.m; path = LightMaster/EchoNestPitch.m; sourceTree = "<group>"; };
+		1AE771461A243E6600C49006 /* ControlBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ControlBox.h; path = LightMaster/ControlBox.h; sourceTree = "<group>"; };
+		1AE771471A243E6600C49006 /* ControlBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ControlBox.m; path = LightMaster/ControlBox.m; sourceTree = "<group>"; };
+		1AE771491A243E6600C49006 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Channel.h; path = LightMaster/Channel.h; sourceTree = "<group>"; };
+		1AE7714A1A243E6600C49006 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Channel.m; path = LightMaster/Channel.m; sourceTree = "<group>"; };
+		1AE7714C1A243E6600C49006 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = LightMaster/Audio.h; sourceTree = "<group>"; };
+		1AE7714D1A243E6600C49006 /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Audio.m; path = LightMaster/Audio.m; sourceTree = "<group>"; };
+		1AE7714F1A243E6600C49006 /* EchoNestMeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestMeta.h; path = LightMaster/EchoNestMeta.h; sourceTree = "<group>"; };
+		1AE771501A243E6600C49006 /* EchoNestMeta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestMeta.m; path = LightMaster/EchoNestMeta.m; sourceTree = "<group>"; };
+		1AE771551A243E6600C49006 /* EchoNestBeat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestBeat.h; path = LightMaster/EchoNestBeat.h; sourceTree = "<group>"; };
+		1AE771561A243E6600C49006 /* EchoNestBeat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestBeat.m; path = LightMaster/EchoNestBeat.m; sourceTree = "<group>"; };
+		1AE771581A243E6600C49006 /* EchoNestTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTrack.h; path = LightMaster/EchoNestTrack.h; sourceTree = "<group>"; };
+		1AE771591A243E6600C49006 /* EchoNestTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTrack.m; path = LightMaster/EchoNestTrack.m; sourceTree = "<group>"; };
+		1AE7716B1A2441C600C49006 /* UserAudioAnalysisTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysisTrack.h; path = LightMaster/UserAudioAnalysisTrack.h; sourceTree = "<group>"; };
+		1AE7716C1A2441C600C49006 /* UserAudioAnalysisTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysisTrack.m; path = LightMaster/UserAudioAnalysisTrack.m; sourceTree = "<group>"; };
+		1AE7716E1A2441C600C49006 /* UserAudioAnalysisTrackChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysisTrackChannel.h; path = LightMaster/UserAudioAnalysisTrackChannel.h; sourceTree = "<group>"; };
+		1AE7716F1A2441C600C49006 /* UserAudioAnalysisTrackChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysisTrackChannel.m; path = LightMaster/UserAudioAnalysisTrackChannel.m; sourceTree = "<group>"; };
+		1AE771711A2441C700C49006 /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Command.h; path = LightMaster/Command.h; sourceTree = "<group>"; };
+		1AE771721A2441C700C49006 /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Command.m; path = LightMaster/Command.m; sourceTree = "<group>"; };
+		1AE771741A24422C00C49006 /* ComplexCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComplexCommand.h; path = LightMaster/ComplexCommand.h; sourceTree = "<group>"; };
+		1AE771751A24422C00C49006 /* ComplexCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComplexCommand.m; path = LightMaster/ComplexCommand.m; sourceTree = "<group>"; };
+		1AE771771A24422C00C49006 /* CommandPulse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandPulse.h; path = LightMaster/CommandPulse.h; sourceTree = "<group>"; };
+		1AE771781A24422C00C49006 /* CommandPulse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandPulse.m; path = LightMaster/CommandPulse.m; sourceTree = "<group>"; };
+		1AE7717A1A24422C00C49006 /* CommandTwinkle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandTwinkle.h; path = LightMaster/CommandTwinkle.h; sourceTree = "<group>"; };
+		1AE7717B1A24422C00C49006 /* CommandTwinkle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandTwinkle.m; path = LightMaster/CommandTwinkle.m; sourceTree = "<group>"; };
 		1AE8301A1A21BA68000E297D /* LightMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AE8301E1A21BA68000E297D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AE8301F1A21BA68000E297D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -66,46 +127,6 @@
 		1AE830461A21C70D000E297D /* NSManagedObjectContext+Queryable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Queryable.m"; sourceTree = "<group>"; };
 		1AE830871A21C7F4000E297D /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		1AE830881A21C7F4000E297D /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
-		1AE8308A1A21C922000E297D /* Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sequence.h; path = LightMaster/Sequence.h; sourceTree = "<group>"; };
-		1AE8308B1A21C922000E297D /* Sequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Sequence.m; path = LightMaster/Sequence.m; sourceTree = "<group>"; };
-		1AE8308D1A21C923000E297D /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = LightMaster/Audio.h; sourceTree = "<group>"; };
-		1AE8308E1A21C923000E297D /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Audio.m; path = LightMaster/Audio.m; sourceTree = "<group>"; };
-		1AE830901A21C923000E297D /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Command.h; path = LightMaster/Command.h; sourceTree = "<group>"; };
-		1AE830911A21C923000E297D /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Command.m; path = LightMaster/Command.m; sourceTree = "<group>"; };
-		1AE830931A21C923000E297D /* EchoNestTimbre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTimbre.h; path = LightMaster/EchoNestTimbre.h; sourceTree = "<group>"; };
-		1AE830941A21C923000E297D /* EchoNestTimbre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTimbre.m; path = LightMaster/EchoNestTimbre.m; sourceTree = "<group>"; };
-		1AE830961A21C923000E297D /* EchoNestSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestSegment.h; path = LightMaster/EchoNestSegment.h; sourceTree = "<group>"; };
-		1AE830971A21C923000E297D /* EchoNestSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestSegment.m; path = LightMaster/EchoNestSegment.m; sourceTree = "<group>"; };
-		1AE830991A21C923000E297D /* Effect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Effect.h; path = LightMaster/Effect.h; sourceTree = "<group>"; };
-		1AE8309A1A21C923000E297D /* Effect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Effect.m; path = LightMaster/Effect.m; sourceTree = "<group>"; };
-		1AE8309C1A21C923000E297D /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Channel.h; path = LightMaster/Channel.h; sourceTree = "<group>"; };
-		1AE8309D1A21C923000E297D /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Channel.m; path = LightMaster/Channel.m; sourceTree = "<group>"; };
-		1AE8309F1A21C923000E297D /* EchoNestPitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestPitch.h; path = LightMaster/EchoNestPitch.h; sourceTree = "<group>"; };
-		1AE830A01A21C923000E297D /* EchoNestPitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestPitch.m; path = LightMaster/EchoNestPitch.m; sourceTree = "<group>"; };
-		1AE830A21A21C923000E297D /* ControlBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ControlBox.h; path = LightMaster/ControlBox.h; sourceTree = "<group>"; };
-		1AE830A31A21C923000E297D /* ControlBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ControlBox.m; path = LightMaster/ControlBox.m; sourceTree = "<group>"; };
-		1AE830A51A21C923000E297D /* EchoNestAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestAudioAnalysis.h; path = LightMaster/EchoNestAudioAnalysis.h; sourceTree = "<group>"; };
-		1AE830A61A21C923000E297D /* EchoNestAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestAudioAnalysis.m; path = LightMaster/EchoNestAudioAnalysis.m; sourceTree = "<group>"; };
-		1AE830A81A21C923000E297D /* EchoNestTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTrack.h; path = LightMaster/EchoNestTrack.h; sourceTree = "<group>"; };
-		1AE830A91A21C923000E297D /* EchoNestTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTrack.m; path = LightMaster/EchoNestTrack.m; sourceTree = "<group>"; };
-		1AE830AB1A21C923000E297D /* ChannelPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChannelPattern.h; path = LightMaster/ChannelPattern.h; sourceTree = "<group>"; };
-		1AE830AC1A21C923000E297D /* ChannelPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChannelPattern.m; path = LightMaster/ChannelPattern.m; sourceTree = "<group>"; };
-		1AE830AE1A21C923000E297D /* UserInstrument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInstrument.h; path = LightMaster/UserInstrument.h; sourceTree = "<group>"; };
-		1AE830AF1A21C923000E297D /* UserInstrument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInstrument.m; path = LightMaster/UserInstrument.m; sourceTree = "<group>"; };
-		1AE830B11A21C923000E297D /* EchoNestTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTatum.h; path = LightMaster/EchoNestTatum.h; sourceTree = "<group>"; };
-		1AE830B21A21C923000E297D /* EchoNestTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTatum.m; path = LightMaster/EchoNestTatum.m; sourceTree = "<group>"; };
-		1AE830B41A21C923000E297D /* EchoNestSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestSection.h; path = LightMaster/EchoNestSection.h; sourceTree = "<group>"; };
-		1AE830B51A21C923000E297D /* EchoNestSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestSection.m; path = LightMaster/EchoNestSection.m; sourceTree = "<group>"; };
-		1AE830B71A21C923000E297D /* EchoNestBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestBar.h; path = LightMaster/EchoNestBar.h; sourceTree = "<group>"; };
-		1AE830B81A21C923000E297D /* EchoNestBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestBar.m; path = LightMaster/EchoNestBar.m; sourceTree = "<group>"; };
-		1AE830BA1A21C923000E297D /* UserAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysis.h; path = LightMaster/UserAudioAnalysis.h; sourceTree = "<group>"; };
-		1AE830BB1A21C923000E297D /* UserAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysis.m; path = LightMaster/UserAudioAnalysis.m; sourceTree = "<group>"; };
-		1AE830BD1A21C923000E297D /* EchoNestBeat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestBeat.h; path = LightMaster/EchoNestBeat.h; sourceTree = "<group>"; };
-		1AE830BE1A21C923000E297D /* EchoNestBeat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestBeat.m; path = LightMaster/EchoNestBeat.m; sourceTree = "<group>"; };
-		1AE830C01A21C924000E297D /* EchoNestMeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestMeta.h; path = LightMaster/EchoNestMeta.h; sourceTree = "<group>"; };
-		1AE830C11A21C924000E297D /* EchoNestMeta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestMeta.m; path = LightMaster/EchoNestMeta.m; sourceTree = "<group>"; };
-		1AE830C31A21C924000E297D /* UserInstrumentNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInstrumentNote.h; path = LightMaster/UserInstrumentNote.h; sourceTree = "<group>"; };
-		1AE830C41A21C924000E297D /* UserInstrumentNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInstrumentNote.m; path = LightMaster/UserInstrumentNote.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +147,90 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1AE7715E1A243EED00C49006 /* EchoNest */ = {
+			isa = PBXGroup;
+			children = (
+				1AE771371A243E6600C49006 /* EchoNestAudioAnalysis.h */,
+				1AE771381A243E6600C49006 /* EchoNestAudioAnalysis.m */,
+				1AE7714F1A243E6600C49006 /* EchoNestMeta.h */,
+				1AE771501A243E6600C49006 /* EchoNestMeta.m */,
+				1AE771581A243E6600C49006 /* EchoNestTrack.h */,
+				1AE771591A243E6600C49006 /* EchoNestTrack.m */,
+				1AE771341A243E6500C49006 /* EchoNestSection.h */,
+				1AE771351A243E6500C49006 /* EchoNestSection.m */,
+				1AE771221A243E6500C49006 /* EchoNestBar.h */,
+				1AE771231A243E6500C49006 /* EchoNestBar.m */,
+				1AE771551A243E6600C49006 /* EchoNestBeat.h */,
+				1AE771561A243E6600C49006 /* EchoNestBeat.m */,
+				1AE7713D1A243E6600C49006 /* EchoNestTatum.h */,
+				1AE7713E1A243E6600C49006 /* EchoNestTatum.m */,
+				1AE7711F1A243E6500C49006 /* EchoNestSegment.h */,
+				1AE771201A243E6500C49006 /* EchoNestSegment.m */,
+				1AE7711C1A243E6500C49006 /* EchoNestTimbre.h */,
+				1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */,
+				1AE771431A243E6600C49006 /* EchoNestPitch.h */,
+				1AE771441A243E6600C49006 /* EchoNestPitch.m */,
+			);
+			name = EchoNest;
+			sourceTree = "<group>";
+		};
+		1AE7715F1A243EF700C49006 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				1AE771711A2441C700C49006 /* Command.h */,
+				1AE771721A2441C700C49006 /* Command.m */,
+				1AE771281A243E6500C49006 /* CommandOn.h */,
+				1AE771291A243E6500C49006 /* CommandOn.m */,
+				1AE771161A243E6500C49006 /* CommandFadeUp.h */,
+				1AE771171A243E6500C49006 /* CommandFadeUp.m */,
+				1AE7712E1A243E6500C49006 /* CommandFadeDown.h */,
+				1AE7712F1A243E6500C49006 /* CommandFadeDown.m */,
+				1AE771741A24422C00C49006 /* ComplexCommand.h */,
+				1AE771751A24422C00C49006 /* ComplexCommand.m */,
+				1AE7717D1A24423D00C49006 /* ComplexCommands */,
+			);
+			name = Commands;
+			sourceTree = "<group>";
+		};
+		1AE771601A243F2000C49006 /* ControlBox */ = {
+			isa = PBXGroup;
+			children = (
+				1AE771461A243E6600C49006 /* ControlBox.h */,
+				1AE771471A243E6600C49006 /* ControlBox.m */,
+				1AE771491A243E6600C49006 /* Channel.h */,
+				1AE7714A1A243E6600C49006 /* Channel.m */,
+				1AE771401A243E6600C49006 /* ChannelPattern.h */,
+				1AE771411A243E6600C49006 /* ChannelPattern.m */,
+			);
+			name = ControlBox;
+			sourceTree = "<group>";
+		};
+		1AE771611A243F2900C49006 /* UserAudioAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				1AE7713A1A243E6600C49006 /* UserAudioAnalysis.h */,
+				1AE7713B1A243E6600C49006 /* UserAudioAnalysis.m */,
+				1AE771251A243E6500C49006 /* UserAudioAnalysisTatums.h */,
+				1AE771261A243E6500C49006 /* UserAudioAnalysisTatums.m */,
+				1AE7716B1A2441C600C49006 /* UserAudioAnalysisTrack.h */,
+				1AE7716C1A2441C600C49006 /* UserAudioAnalysisTrack.m */,
+				1AE7716E1A2441C600C49006 /* UserAudioAnalysisTrackChannel.h */,
+				1AE7716F1A2441C600C49006 /* UserAudioAnalysisTrackChannel.m */,
+			);
+			name = UserAudioAnalysis;
+			sourceTree = "<group>";
+		};
+		1AE7717D1A24423D00C49006 /* ComplexCommands */ = {
+			isa = PBXGroup;
+			children = (
+				1AE7717A1A24422C00C49006 /* CommandTwinkle.h */,
+				1AE7717B1A24422C00C49006 /* CommandTwinkle.m */,
+				1AE771771A24422C00C49006 /* CommandPulse.h */,
+				1AE771781A24422C00C49006 /* CommandPulse.m */,
+			);
+			name = ComplexCommands;
+			sourceTree = "<group>";
+		};
 		1AE830111A21BA68000E297D = {
 			isa = PBXGroup;
 			children = (
@@ -201,46 +306,16 @@
 		1AE830861A21C75E000E297D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				1AE830C31A21C924000E297D /* UserInstrumentNote.h */,
-				1AE830C41A21C924000E297D /* UserInstrumentNote.m */,
-				1AE830C01A21C924000E297D /* EchoNestMeta.h */,
-				1AE830C11A21C924000E297D /* EchoNestMeta.m */,
-				1AE830BD1A21C923000E297D /* EchoNestBeat.h */,
-				1AE830BE1A21C923000E297D /* EchoNestBeat.m */,
-				1AE830BA1A21C923000E297D /* UserAudioAnalysis.h */,
-				1AE830BB1A21C923000E297D /* UserAudioAnalysis.m */,
-				1AE830B71A21C923000E297D /* EchoNestBar.h */,
-				1AE830B81A21C923000E297D /* EchoNestBar.m */,
-				1AE830B41A21C923000E297D /* EchoNestSection.h */,
-				1AE830B51A21C923000E297D /* EchoNestSection.m */,
-				1AE830B11A21C923000E297D /* EchoNestTatum.h */,
-				1AE830B21A21C923000E297D /* EchoNestTatum.m */,
-				1AE830AE1A21C923000E297D /* UserInstrument.h */,
-				1AE830AF1A21C923000E297D /* UserInstrument.m */,
-				1AE830AB1A21C923000E297D /* ChannelPattern.h */,
-				1AE830AC1A21C923000E297D /* ChannelPattern.m */,
-				1AE830A81A21C923000E297D /* EchoNestTrack.h */,
-				1AE830A91A21C923000E297D /* EchoNestTrack.m */,
-				1AE830A51A21C923000E297D /* EchoNestAudioAnalysis.h */,
-				1AE830A61A21C923000E297D /* EchoNestAudioAnalysis.m */,
-				1AE830A21A21C923000E297D /* ControlBox.h */,
-				1AE830A31A21C923000E297D /* ControlBox.m */,
-				1AE8309F1A21C923000E297D /* EchoNestPitch.h */,
-				1AE830A01A21C923000E297D /* EchoNestPitch.m */,
-				1AE8309C1A21C923000E297D /* Channel.h */,
-				1AE8309D1A21C923000E297D /* Channel.m */,
-				1AE830991A21C923000E297D /* Effect.h */,
-				1AE8309A1A21C923000E297D /* Effect.m */,
-				1AE830961A21C923000E297D /* EchoNestSegment.h */,
-				1AE830971A21C923000E297D /* EchoNestSegment.m */,
-				1AE830931A21C923000E297D /* EchoNestTimbre.h */,
-				1AE830941A21C923000E297D /* EchoNestTimbre.m */,
-				1AE830901A21C923000E297D /* Command.h */,
-				1AE830911A21C923000E297D /* Command.m */,
-				1AE8308D1A21C923000E297D /* Audio.h */,
-				1AE8308E1A21C923000E297D /* Audio.m */,
-				1AE8308A1A21C922000E297D /* Sequence.h */,
-				1AE8308B1A21C922000E297D /* Sequence.m */,
+				1AE7712B1A243E6500C49006 /* Playlist.h */,
+				1AE7712C1A243E6500C49006 /* Playlist.m */,
+				1AE771191A243E6500C49006 /* Sequence.h */,
+				1AE7711A1A243E6500C49006 /* Sequence.m */,
+				1AE7714C1A243E6600C49006 /* Audio.h */,
+				1AE7714D1A243E6600C49006 /* Audio.m */,
+				1AE771601A243F2000C49006 /* ControlBox */,
+				1AE771611A243F2900C49006 /* UserAudioAnalysis */,
+				1AE7715E1A243EED00C49006 /* EchoNest */,
+				1AE7715F1A243EF700C49006 /* Commands */,
 			);
 			name = Classes;
 			path = ..;
@@ -345,32 +420,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AE830AD1A21C923000E297D /* ChannelPattern.m in Sources */,
-				1AE8309E1A21C923000E297D /* Channel.m in Sources */,
-				1AE830A71A21C923000E297D /* EchoNestAudioAnalysis.m in Sources */,
-				1AE8309B1A21C923000E297D /* Effect.m in Sources */,
-				1AE830AA1A21C923000E297D /* EchoNestTrack.m in Sources */,
-				1AE830C21A21C924000E297D /* EchoNestMeta.m in Sources */,
+				1AE771571A243E6600C49006 /* EchoNestBeat.m in Sources */,
+				1AE771511A243E6600C49006 /* EchoNestMeta.m in Sources */,
 				1AE830481A21C70D000E297D /* NSManagedObjectContext+Queryable.m in Sources */,
-				1AE830C51A21C924000E297D /* UserInstrumentNote.m in Sources */,
-				1AE830A11A21C923000E297D /* EchoNestPitch.m in Sources */,
-				1AE830BC1A21C923000E297D /* UserAudioAnalysis.m in Sources */,
-				1AE830981A21C923000E297D /* EchoNestSegment.m in Sources */,
-				1AE830B91A21C923000E297D /* EchoNestBar.m in Sources */,
+				1AE771731A2441C700C49006 /* Command.m in Sources */,
+				1AE7714E1A243E6600C49006 /* Audio.m in Sources */,
+				1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */,
+				1AE771701A2441C600C49006 /* UserAudioAnalysisTrackChannel.m in Sources */,
+				1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */,
+				1AE771421A243E6600C49006 /* ChannelPattern.m in Sources */,
+				1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */,
+				1AE7716D1A2441C600C49006 /* UserAudioAnalysisTrack.m in Sources */,
+				1AE771301A243E6500C49006 /* CommandFadeDown.m in Sources */,
 				1AE830291A21BA68000E297D /* LightMaster.xcdatamodeld in Sources */,
+				1AE7713C1A243E6600C49006 /* UserAudioAnalysis.m in Sources */,
+				1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */,
+				1AE7715A1A243E6600C49006 /* EchoNestTrack.m in Sources */,
+				1AE771481A243E6600C49006 /* ControlBox.m in Sources */,
+				1AE771791A24422C00C49006 /* CommandPulse.m in Sources */,
+				1AE7712D1A243E6500C49006 /* Playlist.m in Sources */,
 				1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */,
-				1AE830B31A21C923000E297D /* EchoNestTatum.m in Sources */,
-				1AE8308C1A21C922000E297D /* Sequence.m in Sources */,
-				1AE830BF1A21C923000E297D /* EchoNestBeat.m in Sources */,
-				1AE8308F1A21C923000E297D /* Audio.m in Sources */,
-				1AE830A41A21C923000E297D /* ControlBox.m in Sources */,
+				1AE7717C1A24422C00C49006 /* CommandTwinkle.m in Sources */,
 				1AE830261A21BA68000E297D /* ViewController.m in Sources */,
+				1AE7713F1A243E6600C49006 /* EchoNestTatum.m in Sources */,
+				1AE7711B1A243E6500C49006 /* Sequence.m in Sources */,
+				1AE771391A243E6600C49006 /* EchoNestAudioAnalysis.m in Sources */,
+				1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */,
 				1AE830231A21BA68000E297D /* main.m in Sources */,
-				1AE830951A21C923000E297D /* EchoNestTimbre.m in Sources */,
-				1AE830921A21C923000E297D /* Command.m in Sources */,
-				1AE830B01A21C923000E297D /* UserInstrument.m in Sources */,
+				1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */,
+				1AE771271A243E6500C49006 /* UserAudioAnalysisTatums.m in Sources */,
+				1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */,
 				1AE830211A21BA68000E297D /* AppDelegate.m in Sources */,
-				1AE830B61A21C923000E297D /* EchoNestSection.m in Sources */,
+				1AE7714B1A243E6600C49006 /* Channel.m in Sources */,
+				1AE771451A243E6600C49006 /* EchoNestPitch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,6 +639,7 @@
 				1AE8303F1A21BA68000E297D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1AE830401A21BA68000E297D /* Build configuration list for PBXNativeTarget "LightMasterTests" */ = {
 			isa = XCConfigurationList;
@@ -565,6 +648,7 @@
 				1AE830421A21BA68000E297D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -2,7 +2,7 @@
 //  EchoNestSection.m
 //  LightMaster
 //
-//  Created by James Adams on 11/23/14.
+//  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -14,14 +14,14 @@
 
 @dynamic confidence;
 @dynamic duration;
-@dynamic start;
-@dynamic loudness;
-@dynamic tempo;
-@dynamic tempoConfidence;
 @dynamic key;
 @dynamic keyConfidence;
+@dynamic loudness;
 @dynamic mode;
 @dynamic modeConfidence;
+@dynamic start;
+@dynamic tempo;
+@dynamic tempoConfidence;
 @dynamic timeSignature;
 @dynamic timeSignatureConfidence;
 @dynamic echoNestAudioAnalysis;

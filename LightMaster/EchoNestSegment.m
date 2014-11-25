@@ -2,7 +2,7 @@
 //  EchoNestSegment.m
 //  LightMaster
 //
-//  Created by James Adams on 11/23/14.
+//  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -14,14 +14,14 @@
 
 @implementation EchoNestSegment
 
-@dynamic start;
-@dynamic duration;
 @dynamic confidence;
-@dynamic loudnessStart;
-@dynamic loudnessMaxTime;
+@dynamic duration;
 @dynamic loudnessMax;
+@dynamic loudnessMaxTime;
+@dynamic loudnessStart;
+@dynamic start;
+@dynamic echoNestAudioAnalysis;
 @dynamic pitches;
 @dynamic timbres;
-@dynamic echoNestAudioAnalysis;
 
 @end

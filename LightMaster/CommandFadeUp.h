@@ -1,5 +1,5 @@
 //
-//  EchoNestPitch.h
+//  CommandFadeUp.h
 //  LightMaster
 //
 //  Created by James Adams on 11/24/14.
@@ -8,12 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "Command.h"
 
-@class EchoNestSegment;
 
-@interface EchoNestPitch : NSManagedObject
+@interface CommandFadeUp : Command
 
-@property (nonatomic, retain) NSNumber * pitch;
-@property (nonatomic, retain) EchoNestSegment *segment;
 
 @end

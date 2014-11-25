@@ -1,21 +1,18 @@
 //
-//  ControlBox.m
+//  Playlist.m
 //  LightMaster
 //
 //  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
-#import "ControlBox.h"
-#import "Channel.h"
+#import "Playlist.h"
 #import "Sequence.h"
 
 
-@implementation ControlBox
+@implementation Playlist
 
-@dynamic id;
 @dynamic title;
-@dynamic channels;
-@dynamic sequence;
+@dynamic sequences;
 
 @end

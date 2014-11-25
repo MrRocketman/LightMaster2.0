@@ -2,21 +2,23 @@
 //  Audio.m
 //  LightMaster
 //
-//  Created by James Adams on 11/23/14.
+//  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
 #import "Audio.h"
 #import "EchoNestAudioAnalysis.h"
 #import "Sequence.h"
+#import "UserAudioAnalysis.h"
 
 
 @implementation Audio
 
-@dynamic title;
-@dynamic uploadProgress;
 @dynamic audioFile;
+@dynamic echoNestUploadProgress;
+@dynamic title;
 @dynamic echoNestAudioAnalysis;
 @dynamic sequence;
+@dynamic userAudioAnalysis;
 
 @end

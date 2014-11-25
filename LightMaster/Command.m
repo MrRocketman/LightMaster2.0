@@ -2,25 +2,22 @@
 //  Command.m
 //  LightMaster
 //
-//  Created by James Adams on 11/23/14.
+//  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
 #import "Command.h"
 #import "Channel.h"
-#import "Effect.h"
+#import "Sequence.h"
+#import "UserAudioAnalysisTrackChannel.h"
 
 
 @implementation Command
 
-@dynamic startTime;
 @dynamic endTime;
-@dynamic startBrightness;
-@dynamic fadeInDuration;
-@dynamic brightness;
-@dynamic endBrightness;
-@dynamic fadeOutDuration;
+@dynamic startTime;
 @dynamic channel;
-@dynamic effects;
+@dynamic sequence;
+@dynamic userAudioAnalysisTrackChannel;
 
 @end

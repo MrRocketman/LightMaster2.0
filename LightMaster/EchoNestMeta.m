@@ -2,7 +2,7 @@
 //  EchoNestMeta.m
 //  LightMaster
 //
-//  Created by James Adams on 11/23/14.
+//  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -12,19 +12,19 @@
 
 @implementation EchoNestMeta
 
+@dynamic album;
+@dynamic analysisTime;
 @dynamic analyzerVersion;
+@dynamic artist;
+@dynamic bitrate;
 @dynamic detailedStatus;
 @dynamic fileName;
-@dynamic artist;
-@dynamic album;
-@dynamic title;
 @dynamic genre;
-@dynamic bitrate;
 @dynamic sampleRate;
 @dynamic seconds;
 @dynamic statusCode;
 @dynamic timestamp;
-@dynamic analysisTime;
+@dynamic title;
 @dynamic echoNestAudioAnalysis;
 
 @end

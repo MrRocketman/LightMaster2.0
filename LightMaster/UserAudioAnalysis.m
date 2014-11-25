@@ -2,16 +2,20 @@
 //  UserAudioAnalysis.m
 //  LightMaster
 //
-//  Created by James Adams on 11/23/14.
+//  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
 #import "UserAudioAnalysis.h"
+#import "Audio.h"
+#import "UserAudioAnalysisTatums.h"
 #import "UserInstrument.h"
 
 
 @implementation UserAudioAnalysis
 
-@dynamic instruments;
+@dynamic sound;
+@dynamic tatums;
+@dynamic tracks;
 
 @end

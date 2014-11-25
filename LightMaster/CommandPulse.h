@@ -1,5 +1,5 @@
 //
-//  EchoNestPitch.h
+//  CommandPulse.h
 //  LightMaster
 //
 //  Created by James Adams on 11/24/14.
@@ -8,12 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "ComplexCommand.h"
 
-@class EchoNestSegment;
 
-@interface EchoNestPitch : NSManagedObject
+@interface CommandPulse : ComplexCommand
 
-@property (nonatomic, retain) NSNumber * pitch;
-@property (nonatomic, retain) EchoNestSegment *segment;
+@property (nonatomic, retain) NSNumber * speed;
 
 @end

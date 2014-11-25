@@ -2,7 +2,7 @@
 //  EchoNestSegment.h
 //  LightMaster
 //
-//  Created by James Adams on 11/23/14.
+//  Created by James Adams on 11/24/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -13,15 +13,15 @@
 
 @interface EchoNestSegment : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * start;
-@property (nonatomic, retain) NSNumber * duration;
 @property (nonatomic, retain) NSNumber * confidence;
-@property (nonatomic, retain) NSNumber * loudnessStart;
-@property (nonatomic, retain) NSNumber * loudnessMaxTime;
+@property (nonatomic, retain) NSNumber * duration;
 @property (nonatomic, retain) NSNumber * loudnessMax;
+@property (nonatomic, retain) NSNumber * loudnessMaxTime;
+@property (nonatomic, retain) NSNumber * loudnessStart;
+@property (nonatomic, retain) NSNumber * start;
+@property (nonatomic, retain) EchoNestAudioAnalysis *echoNestAudioAnalysis;
 @property (nonatomic, retain) NSSet *pitches;
 @property (nonatomic, retain) NSSet *timbres;
-@property (nonatomic, retain) EchoNestAudioAnalysis *echoNestAudioAnalysis;
 @end
 
 @interface EchoNestSegment (CoreDataGeneratedAccessors)
