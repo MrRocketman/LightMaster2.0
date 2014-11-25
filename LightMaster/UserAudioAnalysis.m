@@ -9,7 +9,7 @@
 #import "UserAudioAnalysis.h"
 #import "Audio.h"
 #import "UserAudioAnalysisTatums.h"
-#import "UserInstrument.h"
+#import "UserAudioAnalysisTrack.h"
 
 
 @implementation UserAudioAnalysis

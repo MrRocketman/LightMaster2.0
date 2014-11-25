@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Audio, UserAudioAnalysisTatums, UserInstrument;
+@class Audio, UserAudioAnalysisTatums, UserAudioAnalysisTrack;
 
 @interface UserAudioAnalysis : NSManagedObject
 
@@ -25,8 +25,8 @@
 - (void)addTatums:(NSSet *)values;
 - (void)removeTatums:(NSSet *)values;
 
-- (void)addTracksObject:(UserInstrument *)value;
-- (void)removeTracksObject:(UserInstrument *)value;
+- (void)addTracksObject:(UserAudioAnalysisTrack *)value;
+- (void)removeTracksObject:(UserAudioAnalysisTrack *)value;
 - (void)addTracks:(NSSet *)values;
 - (void)removeTracks:(NSSet *)values;
 

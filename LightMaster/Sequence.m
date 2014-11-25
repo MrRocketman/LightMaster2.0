@@ -10,7 +10,7 @@
 #import "Audio.h"
 #import "Command.h"
 #import "ControlBox.h"
-#import "Sequence.h"
+#import "Playlist.h"
 
 
 @implementation Sequence
@@ -21,7 +21,7 @@
 @dynamic title;
 @dynamic commands;
 @dynamic controlBoxes;
-@dynamic playlist;
+@dynamic playlists;
 @dynamic sounds;
 
 @end

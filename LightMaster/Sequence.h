@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Audio, Command, ControlBox, Sequence;
+@class Audio, Command, ControlBox, Playlist;
 
 @interface Sequence : NSManagedObject
 
@@ -19,7 +19,7 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSSet *commands;
 @property (nonatomic, retain) NSSet *controlBoxes;
-@property (nonatomic, retain) NSSet *playlist;
+@property (nonatomic, retain) NSSet *playlists;
 @property (nonatomic, retain) NSSet *sounds;
 @end
 
@@ -35,10 +35,10 @@
 - (void)addControlBoxes:(NSSet *)values;
 - (void)removeControlBoxes:(NSSet *)values;
 
-- (void)addPlaylistObject:(Sequence *)value;
-- (void)removePlaylistObject:(Sequence *)value;
-- (void)addPlaylist:(NSSet *)values;
-- (void)removePlaylist:(NSSet *)values;
+- (void)addPlaylistsObject:(Playlist *)value;
+- (void)removePlaylistsObject:(Playlist *)value;
+- (void)addPlaylists:(NSSet *)values;
+- (void)removePlaylists:(NSSet *)values;
 
 - (void)addSoundsObject:(Audio *)value;
 - (void)removeSoundsObject:(Audio *)value;
