@@ -13,7 +13,7 @@
 
 @interface UserAudioAnalysisTatums : NSManagedObject
 
-@property (nonatomic, retain) UNKNOWN_TYPE startTime;
+@property (nonatomic, retain) NSNumber * startTime;
 @property (nonatomic, retain) UserAudioAnalysis *audioAnalysis;
 
 @end

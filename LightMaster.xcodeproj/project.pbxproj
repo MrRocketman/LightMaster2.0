@@ -11,7 +11,6 @@
 		1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */; };
 		1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771201A243E6500C49006 /* EchoNestSegment.m */; };
 		1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771231A243E6500C49006 /* EchoNestBar.m */; };
-		1AE771271A243E6500C49006 /* UserAudioAnalysisTatums.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771261A243E6500C49006 /* UserAudioAnalysisTatums.m */; };
 		1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771291A243E6500C49006 /* CommandOn.m */; };
 		1AE771301A243E6500C49006 /* CommandFadeDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7712F1A243E6500C49006 /* CommandFadeDown.m */; };
 		1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771351A243E6500C49006 /* EchoNestSection.m */; };
@@ -34,6 +33,7 @@
 		1AE771801A2442C500C49006 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7717F1A2442C500C49006 /* Sequence.m */; };
 		1AE771831A2442C500C49006 /* UserAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771821A2442C500C49006 /* UserAudioAnalysis.m */; };
 		1AE771861A2442C500C49006 /* Playlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771851A2442C500C49006 /* Playlist.m */; };
+		1AE771891A24430900C49006 /* UserAudioAnalysisTatums.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771881A24430900C49006 /* UserAudioAnalysisTatums.m */; };
 		1AE830211A21BA68000E297D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830201A21BA68000E297D /* AppDelegate.m */; };
 		1AE830231A21BA68000E297D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830221A21BA68000E297D /* main.m */; };
 		1AE830261A21BA68000E297D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830251A21BA68000E297D /* ViewController.m */; };
@@ -64,8 +64,6 @@
 		1AE771201A243E6500C49006 /* EchoNestSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestSegment.m; path = LightMaster/EchoNestSegment.m; sourceTree = "<group>"; };
 		1AE771221A243E6500C49006 /* EchoNestBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestBar.h; path = LightMaster/EchoNestBar.h; sourceTree = "<group>"; };
 		1AE771231A243E6500C49006 /* EchoNestBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestBar.m; path = LightMaster/EchoNestBar.m; sourceTree = "<group>"; };
-		1AE771251A243E6500C49006 /* UserAudioAnalysisTatums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysisTatums.h; path = LightMaster/UserAudioAnalysisTatums.h; sourceTree = "<group>"; };
-		1AE771261A243E6500C49006 /* UserAudioAnalysisTatums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysisTatums.m; path = LightMaster/UserAudioAnalysisTatums.m; sourceTree = "<group>"; };
 		1AE771281A243E6500C49006 /* CommandOn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandOn.h; path = LightMaster/CommandOn.h; sourceTree = "<group>"; };
 		1AE771291A243E6500C49006 /* CommandOn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandOn.m; path = LightMaster/CommandOn.m; sourceTree = "<group>"; };
 		1AE7712E1A243E6500C49006 /* CommandFadeDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandFadeDown.h; path = LightMaster/CommandFadeDown.h; sourceTree = "<group>"; };
@@ -110,6 +108,8 @@
 		1AE771821A2442C500C49006 /* UserAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysis.m; path = LightMaster/UserAudioAnalysis.m; sourceTree = "<group>"; };
 		1AE771841A2442C500C49006 /* Playlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Playlist.h; path = LightMaster/Playlist.h; sourceTree = "<group>"; };
 		1AE771851A2442C500C49006 /* Playlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Playlist.m; path = LightMaster/Playlist.m; sourceTree = "<group>"; };
+		1AE771871A24430900C49006 /* UserAudioAnalysisTatums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysisTatums.h; path = LightMaster/UserAudioAnalysisTatums.h; sourceTree = "<group>"; };
+		1AE771881A24430900C49006 /* UserAudioAnalysisTatums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysisTatums.m; path = LightMaster/UserAudioAnalysisTatums.m; sourceTree = "<group>"; };
 		1AE8301A1A21BA68000E297D /* LightMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AE8301E1A21BA68000E297D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AE8301F1A21BA68000E297D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -210,10 +210,10 @@
 			children = (
 				1AE771811A2442C500C49006 /* UserAudioAnalysis.h */,
 				1AE771821A2442C500C49006 /* UserAudioAnalysis.m */,
-				1AE771251A243E6500C49006 /* UserAudioAnalysisTatums.h */,
-				1AE771261A243E6500C49006 /* UserAudioAnalysisTatums.m */,
 				1AE7716B1A2441C600C49006 /* UserAudioAnalysisTrack.h */,
 				1AE7716C1A2441C600C49006 /* UserAudioAnalysisTrack.m */,
+				1AE771871A24430900C49006 /* UserAudioAnalysisTatums.h */,
+				1AE771881A24430900C49006 /* UserAudioAnalysisTatums.m */,
 				1AE7716E1A2441C600C49006 /* UserAudioAnalysisTrackChannel.h */,
 				1AE7716F1A2441C600C49006 /* UserAudioAnalysisTrackChannel.m */,
 			);
@@ -438,6 +438,7 @@
 				1AE830291A21BA68000E297D /* LightMaster.xcdatamodeld in Sources */,
 				1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */,
 				1AE7715A1A243E6600C49006 /* EchoNestTrack.m in Sources */,
+				1AE771891A24430900C49006 /* UserAudioAnalysisTatums.m in Sources */,
 				1AE771481A243E6600C49006 /* ControlBox.m in Sources */,
 				1AE771791A24422C00C49006 /* CommandPulse.m in Sources */,
 				1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */,
@@ -448,7 +449,6 @@
 				1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */,
 				1AE830231A21BA68000E297D /* main.m in Sources */,
 				1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */,
-				1AE771271A243E6500C49006 /* UserAudioAnalysisTatums.m in Sources */,
 				1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */,
 				1AE830211A21BA68000E297D /* AppDelegate.m in Sources */,
 				1AE7714B1A243E6600C49006 /* Channel.m in Sources */,
