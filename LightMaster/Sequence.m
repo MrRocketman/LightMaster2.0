@@ -2,7 +2,7 @@
 //  Sequence.m
 //  LightMaster
 //
-//  Created by James Adams on 11/24/14.
+//  Created by James Adams on 11/25/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -19,9 +19,10 @@
 @dynamic endTime;
 @dynamic startOffset;
 @dynamic title;
+@dynamic modifiedDate;
 @dynamic commands;
 @dynamic controlBoxes;
 @dynamic playlists;
-@dynamic sounds;
+@dynamic audio;
 
 @end

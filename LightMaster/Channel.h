@@ -2,7 +2,7 @@
 //  Channel.h
 //  LightMaster
 //
-//  Created by James Adams on 11/24/14.
+//  Created by James Adams on 11/25/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -13,8 +13,8 @@
 
 @interface Channel : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * color;
-@property (nonatomic, retain) NSNumber * number;
+@property (nonatomic, retain) id color;
+@property (nonatomic, retain) NSNumber * idNumber;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSSet *channelPatterns;
 @property (nonatomic, retain) NSSet *command;

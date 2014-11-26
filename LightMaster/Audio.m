@@ -17,6 +17,8 @@
 @dynamic audioFile;
 @dynamic echoNestUploadProgress;
 @dynamic title;
+@dynamic startOffset;
+@dynamic endOffset;
 @dynamic echoNestAudioAnalysis;
 @dynamic sequence;
 @dynamic userAudioAnalysis;

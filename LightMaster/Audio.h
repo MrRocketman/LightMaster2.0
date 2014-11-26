@@ -16,6 +16,8 @@
 @property (nonatomic, retain) NSData * audioFile;
 @property (nonatomic, retain) NSNumber * echoNestUploadProgress;
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSNumber * startOffset;
+@property (nonatomic, retain) NSNumber * endOffset;
 @property (nonatomic, retain) EchoNestAudioAnalysis *echoNestAudioAnalysis;
 @property (nonatomic, retain) NSSet *sequence;
 @property (nonatomic, retain) UserAudioAnalysis *userAudioAnalysis;

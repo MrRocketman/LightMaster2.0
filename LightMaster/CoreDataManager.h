@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Sequence;
+@class Sequence, ControlBox;
 
 @interface CoreDataManager : NSObject
 
@@ -19,7 +19,14 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (strong, nonatomic) Sequence *currentSequence;
+
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+
+// Sequence Methods
+- (void)newSequence;
+- (void)newControlBox;
+- (void)newChannelForControlBox:(ControlBox *)controlBox;
 
 @end

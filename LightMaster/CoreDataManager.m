@@ -9,6 +9,9 @@
 #import "CoreDataManager.h"
 #import "NSManagedObjectContext+Queryable.h"
 #import "AppDelegate.h"
+#import "Sequence.h"
+#import "ControlBox.h"
+#import "Channel.h"
 
 @interface CoreDataManager()
 
@@ -231,6 +234,37 @@
             [[NSApplication sharedApplication] presentError:error];
         }
     }
+}
+
+#pragma mark - Sequence Methods
+
+- (void)newSequence
+{
+    Sequence *sequence = [NSEntityDescription insertNewObjectForEntityForName:@"Sequence" inManagedObjectContext:[self managedObjectContext]];
+    sequence.modifiedDate = [NSDate date];
+    sequence.title = @"New Sequence";
+    
+    [self saveContext];
+}
+
+- (void)newControlBox
+{
+    ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:[self managedObjectContext]];
+    controlBox.title = @"New Box";
+    controlBox.idNumber = @0;
+    
+    [self saveContext];
+}
+
+- (void)newChannelForControlBox:(ControlBox *)controlBox
+{
+    Channel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"Channel" inManagedObjectContext:[self managedObjectContext]];
+    channel.title = @"New Channel";
+    channel.idNumber = @0;
+    channel.color = [NSColor blueColor];
+    channel.controlBox = controlBox;
+    
+    [self saveContext];
 }
 
 @end
