@@ -67,6 +67,7 @@
 {
     if(x > 0)
     {
+        x -= HEADER_TOTAL_WIDTH;
         return  x / self.zoomLevel / PIXEL_TO_ZOOM_RATIO;
     }
     
@@ -357,7 +358,7 @@
     
     // Draw the currentTime marker
     NSPoint trianglePoint = NSMakePoint((float)[self timeToX:self.currentTime], topBarFrame.origin.y + TOP_BAR_HEIGHT);
-    [self drawInvertedTriangleAndLineWithTipPoint:trianglePoint width:20 andHeight:20];
+    [self drawInvertedTriangleAndLineWithTipPoint:trianglePoint width:TOP_BAR_HEIGHT andHeight:TOP_BAR_HEIGHT];
 }
 
 - (void)drawInvertedTriangleAndLineWithTipPoint:(NSPoint)point width:(int)width andHeight:(int)height
@@ -790,18 +791,15 @@
 - (void)timelineBarMouseChecking
 {
     // Draw the Top Bar
-    NSRect superViewFrame = [[self superview] frame];
-    NSRect topBarFrame = NSMakeRect(0, visibleFrame.origin.y + superViewFrame.size.height - TOP_BAR_HEIGHT, self.frame.size.width, TOP_BAR_HEIGHT);
+    NSRect topBarFrame = NSMakeRect(HEADER_TOTAL_WIDTH, visibleFrame.origin.y, self.frame.size.width, TOP_BAR_HEIGHT);
     
-    NSPoint trianglePoint = NSMakePoint((float)[self timeToX:self.currentTime], topBarFrame.origin.y);
-    float width = 20;
-    float height = 20;
-    
+    NSPoint trianglePoint = NSMakePoint((float)[self timeToX:self.currentTime], topBarFrame.origin.y + TOP_BAR_HEIGHT);
     NSBezierPath *triangle = [NSBezierPath bezierPath];
-    
+    float width = TOP_BAR_HEIGHT;
+    float height = TOP_BAR_HEIGHT;
     [triangle moveToPoint:trianglePoint];
-    [triangle lineToPoint:NSMakePoint(trianglePoint.x - width / 2,  trianglePoint.y + height)];
-    [triangle lineToPoint:NSMakePoint(trianglePoint.x + width / 2, trianglePoint.y + height)];
+    [triangle lineToPoint:NSMakePoint(trianglePoint.x - width / 2,  trianglePoint.y - height)];
+    [triangle lineToPoint:NSMakePoint(trianglePoint.x + width / 2, trianglePoint.y - height)];
     [triangle closePath];
     
     // CurrentTime Marker Mouse checking
