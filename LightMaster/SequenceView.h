@@ -13,11 +13,18 @@
 #define AUTO_SCROLL_REFRESH_RATE 0.03
 #define TIME_ADJUST_PIXEL_BUFFER 8.0
 #define PIXEL_TO_ZOOM_RATIO 25
+#define CHANNEL_HEIGHT 20.0
+#define TOP_BAR_HEIGHT 20.0
+#define HEADER_WIDTH 100.0
+#define HEADER_DETAIL_WIDTH 100.0
+#define HEADER_TOTAL_WIDTH HEADER_WIDTH + HEADER_DETAIL_WIDTH
+
 
 enum
 {
-    MNControlBox,
-    MNChannelGroup
+    MNMouseDown,
+    MNMouseDragged,
+    MNMouseUp
 };
 
 enum
@@ -37,10 +44,9 @@ enum
     MNControlBoxCommandClusterMouseDragBetweenChannels,
 };
 
-@interface SequenceView : NSScrollView
+@interface SequenceView : NSView
 {
-    NSPoint scrollViewOrigin;
-    NSSize scrollViewVisibleSize;
+    NSRect visibleFrame;
     
     NSPoint mouseClickDownPoint;
     NSPoint currentMousePoint;
@@ -57,7 +63,8 @@ enum
     int controlBoxTrackIndexes[256];
 }
 
-@property (assign, nonatomic) float zoomLevel;
+@property (assign, nonatomic) float zoomLevel; // 1.0 = no zoom, 10 = 10x zoom
 @property (assign, nonatomic) float timeAtLeftEdgeOfView;
+@property (assign, nonatomic) float currentTime;
 
 @end

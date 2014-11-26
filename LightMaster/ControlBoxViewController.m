@@ -114,19 +114,19 @@
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor
 {
-    if([control.identifier isEqualToString:@"boxID"])
+    if([control.identifier isEqualToString:@"boxIDTextField"])
     {
         [(ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:self.controlBoxTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
     }
-    else if([control.identifier isEqualToString:@"boxTitle"])
+    else if([control.identifier isEqualToString:@"boxTitleTextField"])
     {
         [(ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:self.controlBoxTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
     }
-    else if([control.identifier isEqualToString:@"channelID"])
+    else if([control.identifier isEqualToString:@"channelIDTextField"])
     {
         [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
     }
-    else if([control.identifier isEqualToString:@"channelTitle"])
+    else if([control.identifier isEqualToString:@"channelTitleTextField"])
     {
         [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
     }
