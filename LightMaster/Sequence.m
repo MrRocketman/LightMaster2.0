@@ -11,6 +11,7 @@
 #import "Command.h"
 #import "ControlBox.h"
 #import "Playlist.h"
+#import "SequenceTatums.h"
 
 
 @implementation Sequence
@@ -24,5 +25,6 @@
 @dynamic controlBoxes;
 @dynamic playlists;
 @dynamic audio;
+@dynamic tatums;
 
 @end

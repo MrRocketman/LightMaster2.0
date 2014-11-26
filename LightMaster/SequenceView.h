@@ -12,6 +12,7 @@
 #define COMMAND_CORNER_RADIUS 3.0
 #define AUTO_SCROLL_REFRESH_RATE 0.03
 #define TIME_ADJUST_PIXEL_BUFFER 8.0
+#define PIXEL_TO_ZOOM_RATIO 25
 
 enum
 {
@@ -55,5 +56,8 @@ enum
     
     int controlBoxTrackIndexes[256];
 }
+
+@property (assign, nonatomic) float zoomLevel;
+@property (assign, nonatomic) float timeAtLeftEdgeOfView;
 
 @end

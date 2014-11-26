@@ -7,6 +7,13 @@
 //
 
 #import "SequenceView.h"
+#import "CoreDataManager.h"
+#import "Sequence.h"
+#import "ControlBox.h"
+#import "Channel.h"
+#import "Audio.h"
+#import "UserAudioAnalysis.h"
+#import "UserAudioAnalysisTrack.h"
 
 @interface SequenceView()
 
@@ -41,7 +48,7 @@
 
 #pragma mark - System methods
 
-/*- (id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
     if(self = [super initWithCoder:aDecoder])
     {
@@ -61,18 +68,35 @@
     
     scrollViewOrigin = [changedScrollView documentVisibleRect].origin;
     scrollViewVisibleSize = [changedScrollView documentVisibleRect].size;
-    [data setTimeAtLeftEdgeOfTimelineView:(scrollViewOrigin.x / [data zoomLevel] / PIXEL_TO_ZOOM_RATIO)];
+    self.timeAtLeftEdgeOfView = (scrollViewOrigin.x / self.zoomLevel / PIXEL_TO_ZOOM_RATIO);
     [self setNeedsDisplay:YES];
 }
 
-- (void)drawRect:(NSRect)dirtyRect
+- (int)timeToX:(float)time
+{
+    int x = [self widthForTimeInterval:time];
+    
+    return x;
+}
+
+- (float)xToTime:(int)x
+{
+    return  x / self.zoomLevel / PIXEL_TO_ZOOM_RATIO;
+}
+
+- (int)widthForTimeInterval:(float)timeInterval
+{
+    return (timeInterval * self.zoomLevel * PIXEL_TO_ZOOM_RATIO);
+}
+
+/*- (void)drawRect:(NSRect)dirtyRect
 {
     //[[NSColor colorWithPatternImage:[NSImage imageNamed:@"TimelineTrackBackgroundImage.png"]] set];
     //NSRectFill(self.bounds);
     
-    int trackItemsCount = [data trackItemsCount];
+    int trackItemsCount = [[CoreDataManager sharedManager].currentSequence.controlBoxes count] + 1 + [CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks.count + 2;
     int frameHeight = 0;
-    int frameWidth = [data timeToX:[data endTimeForSequence:[data currentSequence]]];
+    int frameWidth = [self timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]];
     // Set the Frame
     if(trackItemsCount * TRACK_ITEM_HEIGHT + TOP_BAR_HEIGHT > [[self superview] frame].size.height)
     {
@@ -90,6 +114,67 @@
     
     // Check for timelineBar mouse clicks
     [self timelineBarMouseChecking];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // Draw the Top Bar
+    NSRect trackFrame = NSMakeRect(0, self.frame.size.height - TOP_BAR_HEIGHT, self.frame.size.width, TOP_BAR_HEIGHT);
+    NSSize imageSize = [topBarImage size];
+    [topBarImage drawInRect:trackFrame fromRect:NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height) operation:NSCompositeSourceOver fraction:1.0];
+    
+    // Get some state variables
+    int trackItemsCount = [data trackItemsCount];
+    
+    // Set the Frame
+    if(trackItemsCount * TRACK_ITEM_HEIGHT + TOP_BAR_HEIGHT > [[self superview] frame].size.height)
+    {
+        [self setFrame:NSMakeRect(0.0, 0.0, self.bounds.size.width, trackItemsCount * TRACK_ITEM_HEIGHT + TOP_BAR_HEIGHT - 25)];
+    }
+    else
+    {
+        [self setFrame:NSMakeRect(0.0, 0.0, self.bounds.size.width, [[self superview] frame].size.height)];
+    }
+    
+    trackItemsCount = 0;
+    int thisTrackItemsCount = 0;
+    // Draw the audio track
+    if([data audioClipFilePathsCountForSequence:[data currentSequence]] > 0)
+    {
+        thisTrackItemsCount = [data audioClipFilePathsCountForSequence:[data currentSequence]];
+        [self drawTrackWithStyle:MNAudioClipStyle text:@"Audio" trackIndex:trackItemsCount trackItemsCount:thisTrackItemsCount andDataIndex:-1];
+        trackItemsCount += thisTrackItemsCount;
+    }
+    // Draw the controlBox tracks
+    for(int i = 0; i < [data controlBoxFilePathsCountForSequence:[data currentSequence]]; i ++)
+    {
+        thisTrackItemsCount = [data channelsCountForControlBox:[data controlBoxForCurrentSequenceAtIndex:i]];
+        NSMutableDictionary *controlBox = [data controlBoxForCurrentSequenceAtIndex:i];
+        [self drawTrackWithStyle:MNControlBoxStyle text:[NSString stringWithFormat:@"%@ (%@)", [data descriptionForControlBox:controlBox], [data controlBoxIDForControlBox:controlBox]] trackIndex:trackItemsCount trackItemsCount:thisTrackItemsCount andDataIndex:i];
+        
+        trackItemsCount += thisTrackItemsCount;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     highlightedACluster = NO;
     int trackIndex = 0;
@@ -330,6 +415,53 @@
             [[NSString stringWithFormat:@"%d", [data channelIndexForItemData:[data itemDataAtIndex:i forChannelGroup:[data channelGroupForCurrentSequenceAtIndex:parentFilePathIndex]]]] drawInRect:textFrame withAttributes:attributes];
         }
     }
+}
+
+#pragma mark - Control Box/Headers
+
+- (void)drawTrackWithStyle:(int)style text:(NSString *)text trackIndex:(int)trackIndex trackItemsCount:(int)trackItemsCount andDataIndex:(int)dataIndex
+{
+    NSRect trackFrame = NSMakeRect(0, self.frame.size.height - trackIndex * TRACK_ITEM_HEIGHT - trackItemsCount * TRACK_ITEM_HEIGHT - TOP_BAR_HEIGHT, self.frame.size.width, TRACK_ITEM_HEIGHT * trackItemsCount);
+    if(style == MNControlBoxStyle)
+    {
+        NSSize imageSize = [controlBoxImage size];
+        [controlBoxImage drawInRect:trackFrame fromRect:NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height) operation:NSCompositeSourceOver fraction:1.0];
+        
+        // Mouse checking
+        if([[NSBezierPath bezierPathWithRect:trackFrame] containsPoint:mousePoint] && mouseAction == MNMouseUp && mouseEvent != nil)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectControlBox" object:[data controlBoxForCurrentSequenceAtIndex:dataIndex]];
+            mouseEvent = nil;
+        }
+    }
+    else if(style == MNChannelGroupStyle)
+    {
+        NSSize imageSize = [channelGroupImage size];
+        [channelGroupImage drawInRect:trackFrame fromRect:NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height) operation:NSCompositeSourceOver fraction:1.0];
+        
+        // Mouse checking
+        if([[NSBezierPath bezierPathWithRect:trackFrame] containsPoint:mousePoint] && mouseAction == MNMouseUp && mouseEvent != nil)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectChannelGroup" object:[data channelGroupForCurrentSequenceAtIndex:dataIndex]];
+            mouseEvent = nil;
+        }
+    }
+    else if(style == MNAudioClipStyle)
+    {
+        NSSize imageSize = [audioClipImage size];
+        [audioClipImage drawInRect:trackFrame fromRect:NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height) operation:NSCompositeSourceOver fraction:1.0];
+    }
+    
+    // Draw the text
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    NSFont *font = [NSFont fontWithName:@"Helvetica Bold" size:60];
+    NSRect textFrame = NSMakeRect(10, trackFrame.origin.y + 5, self.frame.size.width - 60, TRACK_ITEM_HEIGHT * trackItemsCount - 10);
+    font = [self fontSizedForAreaSize:textFrame.size withString:text usingFont:font];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByCharWrapping];
+    [attributes setObject:font forKey:NSFontAttributeName];
+    [attributes setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
+    [text drawInRect:textFrame withAttributes:attributes];
 }
 
 #pragma mark - Audio analysis drawing methods

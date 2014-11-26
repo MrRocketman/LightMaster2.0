@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Audio, Command, ControlBox, Playlist;
+@class Audio, Command, ControlBox, Playlist, SequenceTatums;
 
 @interface Sequence : NSManagedObject
 
@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSSet *controlBoxes;
 @property (nonatomic, retain) NSSet *playlists;
 @property (nonatomic, retain) Audio *audio;
+@property (nonatomic, retain) NSSet *tatums;
 @end
 
 @interface Sequence (CoreDataGeneratedAccessors)
@@ -40,5 +41,10 @@
 - (void)removePlaylistsObject:(Playlist *)value;
 - (void)addPlaylists:(NSSet *)values;
 - (void)removePlaylists:(NSSet *)values;
+
+- (void)addTatumsObject:(SequenceTatums *)value;
+- (void)removeTatumsObject:(SequenceTatums *)value;
+- (void)addTatums:(NSSet *)values;
+- (void)removeTatums:(NSSet *)values;
 
 @end

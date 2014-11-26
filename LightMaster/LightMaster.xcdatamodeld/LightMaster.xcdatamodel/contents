@@ -171,15 +171,15 @@
         <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="sequence" inverseEntity="Command" syncable="YES"/>
         <relationship name="controlBoxes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ControlBox" inverseName="sequence" inverseEntity="ControlBox" syncable="YES"/>
         <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Playlist" inverseName="sequences" inverseEntity="Playlist" syncable="YES"/>
+        <relationship name="tatums" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SequenceTatums" inverseName="sequence" inverseEntity="SequenceTatums" syncable="YES"/>
+    </entity>
+    <entity name="SequenceTatums" representedClassName="SequenceTatums" syncable="YES">
+        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="tatums" inverseEntity="Sequence" syncable="YES"/>
     </entity>
     <entity name="UserAudioAnalysis" representedClassName="UserAudioAnalysis" syncable="YES">
         <relationship name="sound" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Audio" inverseName="userAudioAnalysis" inverseEntity="Audio" syncable="YES"/>
-        <relationship name="tatums" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserAudioAnalysisTatums" inverseName="audioAnalysis" inverseEntity="UserAudioAnalysisTatums" syncable="YES"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserAudioAnalysisTrack" inverseName="audioAnalysis" inverseEntity="UserAudioAnalysisTrack" syncable="YES"/>
-    </entity>
-    <entity name="UserAudioAnalysisTatums" representedClassName="UserAudioAnalysisTatums" syncable="YES">
-        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="audioAnalysis" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysis" inverseName="tatums" inverseEntity="UserAudioAnalysis" syncable="YES"/>
     </entity>
     <entity name="UserAudioAnalysisTrack" representedClassName="UserAudioAnalysisTrack" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -215,10 +215,10 @@
         <element name="EchoNestTimbre" positionX="441" positionY="557" width="128" height="73"/>
         <element name="EchoNestTrack" positionX="-380" positionY="261" width="128" height="463"/>
         <element name="Playlist" positionX="-1037" positionY="-207" width="128" height="73"/>
-        <element name="Sequence" positionX="-1071" positionY="-72" width="128" height="178"/>
-        <element name="UserAudioAnalysis" positionX="162" positionY="-441" width="128" height="88"/>
-        <element name="UserAudioAnalysisTatums" positionX="169" positionY="-289" width="164" height="73"/>
+        <element name="Sequence" positionX="-1071" positionY="-72" width="128" height="193"/>
+        <element name="UserAudioAnalysis" positionX="162" positionY="-441" width="128" height="73"/>
         <element name="UserAudioAnalysisTrack" positionX="160" positionY="-559" width="164" height="88"/>
         <element name="UserAudioAnalysisTrackChannel" positionX="171" positionY="-738" width="189" height="103"/>
+        <element name="SequenceTatums" positionX="-945" positionY="-585" width="128" height="73"/>
     </elements>
 </model>
