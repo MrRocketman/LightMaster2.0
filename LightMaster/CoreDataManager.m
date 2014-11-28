@@ -10,6 +10,7 @@
 #import "NSManagedObjectContext+Queryable.h"
 #import "AppDelegate.h"
 #import "Sequence.h"
+#import "SequenceTatum.h"
 #import "ControlBox.h"
 #import "Channel.h"
 
@@ -18,6 +19,8 @@
 @property (readwrite, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readwrite, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readwrite, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (assign, nonatomic) BOOL aSequenceHasBeenLoaded;
 
 @end
 
@@ -40,6 +43,7 @@
     if(self)
     {
         [self managedObjectContext]; // Create the managedObjectContext
+        
     }
     
     return self;
@@ -52,6 +56,15 @@
     // The directory the application uses to store the Core Data store file. This code uses a directory named "com.jamesadams.LightMaster" in the user's Application Support directory.
     NSURL *appSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
     return [appSupportURL URLByAppendingPathComponent:@"com.jamesadams.LightMaster"];
+}
+
+- (NSManagedObjectContext *)backgroundThreadManagedObjectContext
+{
+    dispatch_queue_t request_queue = dispatch_queue_create("com.xxx.ScsMethod", NULL);
+    dispatch_async(request_queue, ^{
+        NSPersistentStoreCoordinator *mainThreadContextStoreCoordinator = [context     persistentStoreCoordinator]; //
+        NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init]; //
+        [context setPersistentStoreCoordinator:mainThreadContextStoreCoordinator];}
 }
 
 - (NSManagedObjectContext *)managedObjectContext
@@ -240,11 +253,42 @@
 
 - (void)newSequence
 {
-    Sequence *sequence = [NSEntityDescription insertNewObjectForEntityForName:@"Sequence" inManagedObjectContext:[self managedObjectContext]];
+    Sequence *sequence = [NSEntityDescription insertNewObjectForEntityForName:@"Sequence" inManagedObjectContext:self.managedObjectContext];
     sequence.modifiedDate = [NSDate date];
     sequence.title = @"New Sequence";
+    sequence.endTime = @60.0;
+    
+    // Make the default tatum set
+    for(int i = 0; i < 60.0 / 0.1; i ++)
+    {
+        SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
+        tatum.startTime = @(i * 0.1);
+        [sequence addTatumsObject:tatum];
+    }
     
     [self saveContext];
+}
+
+- (void)getLatestOrCreateNewSequence
+{
+    // Get the most recently modifed StopWatch or create the first one
+    if(self.currentSequence == nil)
+    {
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Sequence"];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"modifiedDate" ascending:NO]];
+        NSError *error;
+        NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+        if([fetchResults count] > 0 && !self.aSequenceHasBeenLoaded)
+        {
+            self.currentSequence = [fetchResults firstObject];
+        }
+        else
+        {
+            [self newSequence];
+        }
+    }
+    
+    self.aSequenceHasBeenLoaded = YES;
 }
 
 - (void)newControlBox
@@ -262,7 +306,7 @@
     channel.title = @"New Channel";
     channel.idNumber = @0;
     channel.color = [NSColor blueColor];
-    channel.controlBox = controlBox;
+    [controlBox addChannelsObject:channel];
     
     [self saveContext];
 }

@@ -26,6 +26,9 @@
 
 // Sequence Methods
 - (void)newSequence;
+- (void)getLatestOrCreateNewSequence;
+
+// ControlBox Methods
 - (void)newControlBox;
 - (void)newChannelForControlBox:(ControlBox *)controlBox;
 

@@ -7,6 +7,7 @@
 //
 
 #import "SequenceViewController.h"
+#import "CoreDataManager.h"
 
 @interface SequenceViewController ()
 
@@ -24,7 +25,7 @@
 
 - (void)viewWillAppear
 {
-    // NSArray *items = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Item"] where:@"parentItem == %@  AND isCompleted == NO", parent] orderBy:@"sortingIndex"] toArray];
+    [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
 }
 
 - (void)reloadSequenceFromNotification:(NSNotification *)notification
@@ -34,7 +35,7 @@
 
 - (void)reloadSequence
 {
-    NSLog(@"reload sequence");
+    [self.view setNeedsDisplay:YES];
 }
 
 @end

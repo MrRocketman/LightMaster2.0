@@ -1,8 +1,8 @@
 //
-//  SequenceTatums.h
+//  SequenceTatum.h
 //  LightMaster
 //
-//  Created by James Adams on 11/25/14.
+//  Created by James Adams on 11/28/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 @class Sequence;
 
-@interface SequenceTatums : NSManagedObject
+@interface SequenceTatum : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * startTime;
 @property (nonatomic, retain) Sequence *sequence;

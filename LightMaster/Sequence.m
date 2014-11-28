@@ -2,7 +2,7 @@
 //  Sequence.m
 //  LightMaster
 //
-//  Created by James Adams on 11/25/14.
+//  Created by James Adams on 11/28/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -11,20 +11,20 @@
 #import "Command.h"
 #import "ControlBox.h"
 #import "Playlist.h"
-#import "SequenceTatums.h"
+#import "SequenceTatum.h"
 
 
 @implementation Sequence
 
 @dynamic endOffset;
 @dynamic endTime;
+@dynamic modifiedDate;
 @dynamic startOffset;
 @dynamic title;
-@dynamic modifiedDate;
+@dynamic audio;
 @dynamic commands;
 @dynamic controlBoxes;
 @dynamic playlists;
-@dynamic audio;
 @dynamic tatums;
 
 @end

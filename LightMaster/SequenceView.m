@@ -10,6 +10,7 @@
 #import "CoreDataManager.h"
 #import "NSManagedObjectContext+Queryable.h"
 #import "Sequence.h"
+#import "SequenceTatum.h"
 #import "ControlBox.h"
 #import "Channel.h"
 #import "Audio.h"
@@ -18,6 +19,14 @@
 #import "UserAudioAnalysisTrackChannel.h"
 
 @interface SequenceView()
+
+@property (strong, nonatomic) NSArray *sequenceTatums;
+@property (strong, nonatomic) NSArray *controlBoxes;
+@property (strong, nonatomic) NSArray *channels;
+@property (strong, nonatomic) NSArray *channelArrays;
+@property (strong, nonatomic) NSArray *userAudioAnalysisTracks;
+@property (strong, nonatomic) NSArray *userAudioAnalysisChannels;
+@property (strong, nonatomic) NSArray *userAudioAnalysisChannelArrays;
 
 @end
 
@@ -36,9 +45,15 @@
         mouseDraggingEventObjectIndex = -1;
         selectedCommandIndex = -1;
         self.zoomLevel = 3.0;
+        [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_REFRESH_RATE target:self selector:@selector(updateData:) userInfo:nil repeats:YES];
     }
     
     return self;
+}
+
+- (void)updateData:(NSTimer *)timer
+{
+    
 }
 
 - (BOOL)isFlipped
@@ -88,7 +103,7 @@
     int frameHeight = 0;
     int frameWidth = [self timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]] + HEADER_TOTAL_WIDTH;
     // Set the Frame
-    frameHeight = channelsCount * CHANNEL_HEIGHT + TOP_BAR_HEIGHT;
+    frameHeight = channelsCount * CHANNEL_HEIGHT + TOP_BARS_TOTAL_HEIGHT;
     if(frameWidth <= self.superview.frame.size.width)
     {
         frameWidth = self.superview.frame.size.width;
@@ -187,7 +202,7 @@
     // Draw audio
     if([CoreDataManager sharedManager].currentSequence.audio)
     {
-        //[self drawRect:NSMakeRect(0, TOP_BAR_HEIGHT + headerChannelCount * CHANNEL_HEIGHT, HEADER_WIDTH + HEADER_DETAIL_WIDTH, CHANNEL_HEIGHT) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.7] andStroke:YES];
+        //[self drawRect:NSMakeRect(0, TIMELINE_BAR_HEIGHT + headerChannelCount * CHANNEL_HEIGHT, HEADER_WIDTH + HEADER_DETAIL_WIDTH, CHANNEL_HEIGHT) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.7] andStroke:YES];
         //[self drawAudioClipsAtTrackIndex:trackIndex tracksTall:tracksTall];
         channelCount ++;
     }
@@ -197,7 +212,7 @@
         NSArray *channelsArray = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"track == %@", userAudioAnalysisTrack] orderBy:@"idNumber"] toArray];
         for(int i = 0; i < channelsArray.count; i ++)
         {
-            //[self drawRect:NSMakeRect(HEADER_WIDTH, TOP_BAR_HEIGHT + channelCount * CHANNEL_HEIGHT, HEADER_DETAIL_WIDTH, CHANNEL_HEIGHT) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:0.8 green:0.8 blue:0.8 alpha:0.7] andStroke:YES];
+            //[self drawRect:NSMakeRect(HEADER_WIDTH, TIMELINE_BAR_HEIGHT + channelCount * CHANNEL_HEIGHT, HEADER_DETAIL_WIDTH, CHANNEL_HEIGHT) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:0.8 green:0.8 blue:0.8 alpha:0.7] andStroke:YES];
             //[self drawCommandClustersAtTrackIndex:trackIndex tracksTall:tracksTall parentIndex:i parentIsControlBox:YES];
             channelCount ++;
         }
@@ -209,7 +224,7 @@
         NSArray *channelsArray = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox == %@", controlBox] orderBy:@"idNumber"] toArray];
         for(int i = 0; i < channelsArray.count; i ++)
         {
-            //[self drawRect:NSMakeRect(HEADER_WIDTH, TOP_BAR_HEIGHT + channelCount * CHANNEL_HEIGHT, HEADER_DETAIL_WIDTH, CHANNEL_HEIGHT) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:0.6 green:0.6 blue:0.6 alpha:0.7] andStroke:YES];
+            //[self drawRect:NSMakeRect(HEADER_WIDTH, TIMELINE_BAR_HEIGHT + channelCount * CHANNEL_HEIGHT, HEADER_DETAIL_WIDTH, CHANNEL_HEIGHT) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:0.6 green:0.6 blue:0.6 alpha:0.7] andStroke:YES];
             //[self drawCommandClustersAtTrackIndex:trackIndex tracksTall:tracksTall parentIndex:i parentIsControlBox:YES];
             channelCount ++;
         }
@@ -219,6 +234,9 @@
     
     // Draw the channel seperators
     [self drawChannelGuidlines:channelsCount];
+    
+    // Draw the tatum bar
+    [self drawTatumBarAndGrid];
     
     // Draw the timeline on top of everything
     [self drawTimelineBar];
@@ -263,7 +281,7 @@
 
 - (void)drawChannelBackgroundWithX:(float)x y:(float)y width:(float)width height:(float)height red:(float)red green:(float)green blue:(float)blue alpha:(float)alpha
 {
-    [self drawRect:NSMakeRect(x, TOP_BAR_HEIGHT + (y * CHANNEL_HEIGHT) + 1, width, height * CHANNEL_HEIGHT - 2) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha] andStroke:YES];
+    [self drawRect:NSMakeRect(x, TOP_BARS_TOTAL_HEIGHT + (y * CHANNEL_HEIGHT) + 1, width, height * CHANNEL_HEIGHT - 2) withCornerRadius:COMMAND_CORNER_RADIUS fillColor:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha] andStroke:YES];
 }
 
 - (void)drawRect:(NSRect)aRect withCornerRadius:(float)radius fillColor:(NSColor *)color andStroke:(BOOL)yesOrNo
@@ -283,7 +301,7 @@
 - (void)drawTimelineBar
 {
     // Draw the Top Bar
-    NSRect topBarFrame = NSMakeRect(HEADER_TOTAL_WIDTH, visibleFrame.origin.y, self.frame.size.width, TOP_BAR_HEIGHT);
+    NSRect topBarFrame = NSMakeRect(HEADER_TOTAL_WIDTH, visibleFrame.origin.y, self.frame.size.width, TIMELINE_BAR_HEIGHT);
     [self drawRect:topBarFrame withCornerRadius:0 fillColor:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.9] andStroke:NO];
     
     // Determine the grid spacing
@@ -350,15 +368,15 @@
         // Draw grid lines
         //if(data.shouldDrawTime)
         //{
-            //NSRect markerLineFrame = NSMakeRect(textFrame.origin.x, scrollViewOrigin.y, 1, superViewFrame.size.height - TOP_BAR_HEIGHT);
+            //NSRect markerLineFrame = NSMakeRect(textFrame.origin.x, scrollViewOrigin.y, 1, superViewFrame.size.height - TIMELINE_BAR_HEIGHT);
             //[[NSColor blackColor] set];
             //NSRectFill(markerLineFrame);
         //}
     }
     
     // Draw the currentTime marker
-    NSPoint trianglePoint = NSMakePoint((float)[self timeToX:self.currentTime], topBarFrame.origin.y + TOP_BAR_HEIGHT);
-    [self drawInvertedTriangleAndLineWithTipPoint:trianglePoint width:TOP_BAR_HEIGHT andHeight:TOP_BAR_HEIGHT];
+    NSPoint trianglePoint = NSMakePoint((float)[self timeToX:self.currentTime], topBarFrame.origin.y + TIMELINE_BAR_HEIGHT);
+    [self drawInvertedTriangleAndLineWithTipPoint:trianglePoint width:TIMELINE_BAR_HEIGHT andHeight:TIMELINE_BAR_HEIGHT];
 }
 
 - (void)drawInvertedTriangleAndLineWithTipPoint:(NSPoint)point width:(int)width andHeight:(int)height
@@ -383,16 +401,45 @@
     [[NSColor whiteColor] setStroke];
     [triangle stroke];
     
-    NSRect markerLineFrame = NSMakeRect(point.x, TOP_BAR_HEIGHT, 1, self.frame.size.height - TOP_BAR_HEIGHT);
+    NSRect markerLineFrame = NSMakeRect(point.x, TIMELINE_BAR_HEIGHT, 1, self.frame.size.height - TIMELINE_BAR_HEIGHT);
     [[NSColor redColor] set];
     NSRectFill(markerLineFrame);
+}
+
+- (void)drawTatumBarAndGrid
+{
+    // Draw the Top Bar
+    NSRect topBarFrame = NSMakeRect(HEADER_TOTAL_WIDTH, visibleFrame.origin.y + TIMELINE_BAR_HEIGHT, self.frame.size.width, TIMELINE_BAR_HEIGHT);
+    [self drawRect:topBarFrame withCornerRadius:0 fillColor:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.9] andStroke:NO];
+    
+    //NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND startTime >= %f AND startTIme <= %f", [CoreDataManager sharedManager].currentSequence, self.timeAtLeftEdgeOfView, [self xToTime:self.visibleRect.origin.x + self.visibleRect.size.width]] orderBy:@"startTime"] toArray];
+    //NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"startTime"] toArray];
+    
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"SequenceTatum"];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"startTime" ascending:YES]];
+    //fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sequence == %@ AND startTime >= %@ AND startTIme <= %@", [CoreDataManager sharedManager].currentSequence, @(self.timeAtLeftEdgeOfView), @([self xToTime:self.visibleRect.origin.x + self.visibleRect.size.width])];
+    //fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sequence == %@ AND startTime >= %@ AND startTime <= %@", [CoreDataManager sharedManager].currentSequence, @(5.0), @(10.0)];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sequence == %@", [CoreDataManager sharedManager].currentSequence];
+    NSError *error;
+    NSArray *visibleTatums = [[CoreDataManager sharedManager].managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    
+    
+    NSColor *color = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    [color setFill];
+    for(int i = 0; i <= visibleTatums.count; i ++)
+    {
+        NSRect line = NSMakeRect([self timeToX:[((SequenceTatum *)visibleTatums[i]).startTime floatValue]], topBarFrame.origin.y, 1, self.frame.size.height);
+        
+        NSRectFill(line);
+    }
 }
 
 - (void)drawChannelGuidlines:(int)channelsCount;
 {
     for(int i = 0; i <= channelsCount; i ++)
     {
-        NSRect bottomOfChannelLine = NSMakeRect(HEADER_WIDTH + HEADER_DETAIL_WIDTH, i * CHANNEL_HEIGHT + TOP_BAR_HEIGHT, self.frame.size.width, 1);
+        NSRect bottomOfChannelLine = NSMakeRect(HEADER_WIDTH + HEADER_DETAIL_WIDTH, i * CHANNEL_HEIGHT + TIMELINE_BAR_HEIGHT, self.frame.size.width, 1);
         
         NSColor *guidelineColor = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
         [guidelineColor setFill];
@@ -421,7 +468,7 @@
     while(visibleSectionIndex < [sections count] && (timeAtLeftEdge - 1 < [[[sections objectAtIndex:visibleSectionIndex] objectForKey:@"start"] floatValue] && timeAtRightEdge + 1 > [[[sections objectAtIndex:visibleSectionIndex] objectForKey:@"start"] floatValue]))
     {
         // Draw grid lines
-        NSRect markerLineFrame = NSMakeRect([data timeToX:[[[sections objectAtIndex:visibleSectionIndex] objectForKey:@"start"] floatValue]], scrollViewOrigin.y, 3, superViewFrame.size.height - TOP_BAR_HEIGHT);
+        NSRect markerLineFrame = NSMakeRect([data timeToX:[[[sections objectAtIndex:visibleSectionIndex] objectForKey:@"start"] floatValue]], scrollViewOrigin.y, 3, superViewFrame.size.height - TIMELINE_BAR_HEIGHT);
         [color set];
         NSRectFill(markerLineFrame);
         
@@ -447,7 +494,7 @@
         // Check to see if this audioClip is in the visible rangeself.timeAtLeftEdgeOfView
         if(([data startTimeForAudioClip:currentAudioClip] > timeAtLeftEdge && [data startTimeForAudioClip:currentAudioClip] < timeAtRightEdge) || ([data endTimeForAudioClip:currentAudioClip] > timeAtLeftEdge && [data endTimeForAudioClip:currentAudioClip] < timeAtRightEdge) || ([data startTimeForAudioClip:currentAudioClip] <= timeAtLeftEdge && [data endTimeForAudioClip:currentAudioClip] >= timeAtRightEdge))
         {
-            NSRect audioClipRect = NSMakeRect([data timeToX:[data startTimeForAudioClip:currentAudioClip]], self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TOP_BAR_HEIGHT + 1, [data widthForTimeInterval:[data endTimeForAudioClip:currentAudioClip] - [data startTimeForAudioClip:currentAudioClip]], CHANNEL_HEIGHT - 2);
+            NSRect audioClipRect = NSMakeRect([data timeToX:[data startTimeForAudioClip:currentAudioClip]], self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TIMELINE_BAR_HEIGHT + 1, [data widthForTimeInterval:[data endTimeForAudioClip:currentAudioClip] - [data startTimeForAudioClip:currentAudioClip]], CHANNEL_HEIGHT - 2);
             
             // AudioClip Mouse Checking here
             if(mouseEvent != nil && ((mouseAction == MNMouseDown && [[NSBezierPath bezierPathWithRect:audioClipRect] containsPoint:currentMousePoint]) || (mouseAction == MNMouseDragged && ((mouseDraggingEvent == MNMouseDragNotInUse && [[NSBezierPath bezierPathWithRect:audioClipRect] containsPoint:currentMousePoint]) || mouseDraggingEvent == MNAudioClipMouseDrag) && (mouseDraggingEventObjectIndex == -1 || mouseDraggingEventObjectIndex == i))))
@@ -494,7 +541,7 @@
         NSMutableDictionary *currentCommandCluster = [data commandClusterForCurrentSequenceAtIndex:i];
         float startTime = [data startTimeForCommandCluster:currentCommandCluster];
         float endTime = [data endTimeForCommandCluster:currentCommandCluster];
-        float clusterYCoordinate = self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TOP_BAR_HEIGHT + 1;
+        float clusterYCoordinate = self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TIMELINE_BAR_HEIGHT + 1;
         float clusterHeight = CHANNEL_HEIGHT * tracksTall - 2;
         
         // Command Cluster is for this controlBox/channelGroup
@@ -514,7 +561,7 @@
                     // Check for new command clicks
                     if(mouseEvent != nil && mouseAction == MNMouseDown && mouseEvent.modifierFlags & NSCommandKeyMask)
                     {
-                        int channelIndex = (self.frame.size.height - currentMousePoint.y - (trackIndex * CHANNEL_HEIGHT + TOP_BAR_HEIGHT + 1)) / CHANNEL_HEIGHT;
+                        int channelIndex = (self.frame.size.height - currentMousePoint.y - (trackIndex * CHANNEL_HEIGHT + TIMELINE_BAR_HEIGHT + 1)) / CHANNEL_HEIGHT;
                         float time = [data xToTime:currentMousePoint.x];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"AddCommandAtChannelIndexAndTimeForCommandCluster" object:nil userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:channelIndex], [NSNumber numberWithFloat:time], currentCommandCluster, nil] forKeys:[NSArray arrayWithObjects:@"channelIndex", @"startTime", @"commandCluster", nil]]];
                         int newCommandIndex = [data commandsCountForCommandCluster:currentCommandCluster] - 1;
@@ -613,9 +660,9 @@
                                 // Mouse drag is moving the cluster to a different controlBox
                                 if(currentMousePoint.y > commandClusterRect.origin.y + commandClusterRect.size.height || currentMousePoint.y < commandClusterRect.origin.y)
                                 {
-                                    int newTrackIndex = (self.frame.size.height - currentMousePoint.y - TOP_BAR_HEIGHT) / CHANNEL_HEIGHT;
+                                    int newTrackIndex = (self.frame.size.height - currentMousePoint.y - TIMELINE_BAR_HEIGHT) / CHANNEL_HEIGHT;
                                     int newIndex = [self controlBoxIndexForTrackIndex:newTrackIndex];
-                                    //NSLog(@"newI:%d mouseY:%f newTrackIndex:%d trackIndex:%d", newIndex, self.frame.size.height - currentMousePoint.y - TOP_BAR_HEIGHT, newTrackIndex, trackIndex);
+                                    //NSLog(@"newI:%d mouseY:%f newTrackIndex:%d trackIndex:%d", newIndex, self.frame.size.height - currentMousePoint.y - TIMELINE_BAR_HEIGHT, newTrackIndex, trackIndex);
                                     [data setControlBoxFilePath:[data controlBoxFilePathAtIndex:newIndex forSequence:[data currentSequence]] forCommandCluster:currentCommandCluster];
                                 }
                             }
@@ -624,7 +671,7 @@
                                 // Mouse drag is moving the cluster to a different controlBox
                                 if(currentMousePoint.y > commandClusterRect.origin.y + commandClusterRect.size.height || currentMousePoint.y < commandClusterRect.origin.y)
                                 {
-                                    int newTrackIndex = (self.frame.size.height - currentMousePoint.y - TOP_BAR_HEIGHT) / CHANNEL_HEIGHT;
+                                    int newTrackIndex = (self.frame.size.height - currentMousePoint.y - TIMELINE_BAR_HEIGHT) / CHANNEL_HEIGHT;
                                     int newIndex = [self controlBoxIndexForTrackIndex:newTrackIndex];
                                     [data setControlBoxFilePath:[data controlBoxFilePathAtIndex:newIndex forSequence:[data currentSequence]] forCommandCluster:currentCommandCluster];
                                 }
@@ -703,7 +750,7 @@
             NSRect commandRect;
             float x, y, width , height;
             x  = [data timeToX:startTime];
-            y = self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TOP_BAR_HEIGHT + 1;
+            y = self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TIMELINE_BAR_HEIGHT + 1;
             width = [data widthForTimeInterval:endTime - startTime];
             height = CHANNEL_HEIGHT - 2;
             
@@ -791,12 +838,12 @@
 - (void)timelineBarMouseChecking
 {
     // Draw the Top Bar
-    NSRect topBarFrame = NSMakeRect(HEADER_TOTAL_WIDTH, visibleFrame.origin.y, self.frame.size.width, TOP_BAR_HEIGHT);
+    NSRect topBarFrame = NSMakeRect(HEADER_TOTAL_WIDTH, visibleFrame.origin.y, self.frame.size.width, TIMELINE_BAR_HEIGHT);
     
-    NSPoint trianglePoint = NSMakePoint((float)[self timeToX:self.currentTime], topBarFrame.origin.y + TOP_BAR_HEIGHT);
+    NSPoint trianglePoint = NSMakePoint((float)[self timeToX:self.currentTime], topBarFrame.origin.y + TIMELINE_BAR_HEIGHT);
     NSBezierPath *triangle = [NSBezierPath bezierPath];
-    float width = TOP_BAR_HEIGHT;
-    float height = TOP_BAR_HEIGHT;
+    float width = TIMELINE_BAR_HEIGHT;
+    float height = TIMELINE_BAR_HEIGHT;
     [triangle moveToPoint:trianglePoint];
     [triangle lineToPoint:NSMakePoint(trianglePoint.x - width / 2,  trianglePoint.y - height)];
     [triangle lineToPoint:NSMakePoint(trianglePoint.x + width / 2, trianglePoint.y - height)];
@@ -859,7 +906,7 @@
             tracksTall = [data channelsCountForControlBox:[data controlBoxForCurrentSequenceAtIndex:i]];
             
             // Detemine the rect
-            NSRect trackGroupRect = NSMakeRect(0, self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TOP_BAR_HEIGHT, self.frame.size.width, CHANNEL_HEIGHT * tracksTall);
+            NSRect trackGroupRect = NSMakeRect(0, self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TIMELINE_BAR_HEIGHT, self.frame.size.width, CHANNEL_HEIGHT * tracksTall);
             
             // Check for the mouse point within the trackGroupRect
             if([[NSBezierPath bezierPathWithRect:trackGroupRect] containsPoint:currentMousePoint])
@@ -886,7 +933,7 @@
             tracksTall = [data itemsCountForChannelGroup:[data channelGroupForCurrentSequenceAtIndex:i]];
             
             // Detemine the rect
-            NSRect trackGroupRect = NSMakeRect(0, self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TOP_BAR_HEIGHT, self.frame.size.width, CHANNEL_HEIGHT * tracksTall);
+            NSRect trackGroupRect = NSMakeRect(0, self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TIMELINE_BAR_HEIGHT, self.frame.size.width, CHANNEL_HEIGHT * tracksTall);
             
             // Check for the mouse point within the trackGroupRect
             if([[NSBezierPath bezierPathWithRect:trackGroupRect] containsPoint:currentMousePoint])
@@ -925,7 +972,7 @@
         NSRect commandRect;
         float x, y, width , height;
         x  = [data timeToX:startTime];
-        y = self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TOP_BAR_HEIGHT + 1;
+        y = self.frame.size.height - trackIndex * CHANNEL_HEIGHT - tracksTall * CHANNEL_HEIGHT - TIMELINE_BAR_HEIGHT + 1;
         width = [data widthForTimeInterval:endTime - startTime];
         height = CHANNEL_HEIGHT - 2;
         
@@ -1064,7 +1111,7 @@
                 // Mouse drag is changing the channel index
                 if(currentMousePoint.y > y + height || currentMousePoint.y < y)
                 {
-                    int newIndex = (self.frame.size.height - currentMousePoint.y - TOP_BAR_HEIGHT) / CHANNEL_HEIGHT - startingTrackIndex;
+                    int newIndex = (self.frame.size.height - currentMousePoint.y - TIMELINE_BAR_HEIGHT) / CHANNEL_HEIGHT - startingTrackIndex;
                     [data setChannelIndex:newIndex forCommandAtIndex:i whichIsPartOfCommandCluster:commandCluster];
                 }
             }
@@ -1073,7 +1120,7 @@
                 // Mouse drag is changing the channel index
                 if(currentMousePoint.y > y + height || currentMousePoint.y < y)
                 {
-                    int newIndex = (self.frame.size.height - currentMousePoint.y - TOP_BAR_HEIGHT) / CHANNEL_HEIGHT - startingTrackIndex;
+                    int newIndex = (self.frame.size.height - currentMousePoint.y - TIMELINE_BAR_HEIGHT) / CHANNEL_HEIGHT - startingTrackIndex;
                     [data setChannelIndex:newIndex forCommandAtIndex:i whichIsPartOfCommandCluster:commandCluster];
                 }
             }

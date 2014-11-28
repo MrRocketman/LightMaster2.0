@@ -171,9 +171,9 @@
         <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="sequence" inverseEntity="Command" syncable="YES"/>
         <relationship name="controlBoxes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ControlBox" inverseName="sequence" inverseEntity="ControlBox" syncable="YES"/>
         <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Playlist" inverseName="sequences" inverseEntity="Playlist" syncable="YES"/>
-        <relationship name="tatums" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SequenceTatums" inverseName="sequence" inverseEntity="SequenceTatums" syncable="YES"/>
+        <relationship name="tatums" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SequenceTatum" inverseName="sequence" inverseEntity="SequenceTatum" syncable="YES"/>
     </entity>
-    <entity name="SequenceTatums" representedClassName="SequenceTatums" syncable="YES">
+    <entity name="SequenceTatum" representedClassName="SequenceTatum" syncable="YES">
         <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="tatums" inverseEntity="Sequence" syncable="YES"/>
     </entity>
@@ -216,9 +216,9 @@
         <element name="EchoNestTrack" positionX="-380" positionY="261" width="128" height="463"/>
         <element name="Playlist" positionX="-1037" positionY="-207" width="128" height="73"/>
         <element name="Sequence" positionX="-1071" positionY="-72" width="128" height="193"/>
+        <element name="SequenceTatum" positionX="-945" positionY="-585" width="128" height="75"/>
         <element name="UserAudioAnalysis" positionX="162" positionY="-441" width="128" height="73"/>
         <element name="UserAudioAnalysisTrack" positionX="160" positionY="-559" width="164" height="88"/>
         <element name="UserAudioAnalysisTrackChannel" positionX="171" positionY="-738" width="189" height="103"/>
-        <element name="SequenceTatums" positionX="-945" positionY="-585" width="128" height="73"/>
     </elements>
 </model>
