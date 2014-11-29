@@ -17,8 +17,6 @@
 		1A14CA6C1A256B4E00C4FEB0 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA6B1A256B4E00C4FEB0 /* Channel.m */; };
 		1A14CA6F1A25797D00C4FEB0 /* ChannelColorTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA6E1A25797D00C4FEB0 /* ChannelColorTableCellView.m */; };
 		1A14CA781A257E4C00C4FEB0 /* UserAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA771A257E4C00C4FEB0 /* UserAudioAnalysis.m */; };
-		1A91A1181A29ACC200BF4D1D /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A91A1141A29ACC200BF4D1D /* GameView.m */; };
-		1A91A1191A29ACC200BF4D1D /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A91A1161A29ACC200BF4D1D /* GameScene.m */; };
 		1AB937BF1A28665600A397E3 /* SequenceTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937BE1A28665600A397E3 /* SequenceTatum.m */; };
 		1AB937C21A286C5500A397E3 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937C11A286C5500A397E3 /* Sequence.m */; };
 		1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771171A243E6500C49006 /* CommandFadeUp.m */; };
@@ -83,10 +81,6 @@
 		1A14CA6E1A25797D00C4FEB0 /* ChannelColorTableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelColorTableCellView.m; sourceTree = "<group>"; };
 		1A14CA761A257E4C00C4FEB0 /* UserAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysis.h; path = LightMaster/UserAudioAnalysis.h; sourceTree = "<group>"; };
 		1A14CA771A257E4C00C4FEB0 /* UserAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysis.m; path = LightMaster/UserAudioAnalysis.m; sourceTree = "<group>"; };
-		1A91A1131A29ACC200BF4D1D /* GameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameView.h; sourceTree = "<group>"; };
-		1A91A1141A29ACC200BF4D1D /* GameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
-		1A91A1151A29ACC200BF4D1D /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
-		1A91A1161A29ACC200BF4D1D /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
 		1AB937BD1A28665600A397E3 /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
 		1AB937BE1A28665600A397E3 /* SequenceTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SequenceTatum.m; path = LightMaster/SequenceTatum.m; sourceTree = "<group>"; };
 		1AB937C01A286C5500A397E3 /* Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sequence.h; path = LightMaster/Sequence.h; sourceTree = "<group>"; };
@@ -175,10 +169,6 @@
 				1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */,
 				1A14CA5C1A253B0100C4FEB0 /* SequenceView.h */,
 				1A14CA5D1A253B0100C4FEB0 /* SequenceView.m */,
-				1A91A1131A29ACC200BF4D1D /* GameView.h */,
-				1A91A1141A29ACC200BF4D1D /* GameView.m */,
-				1A91A1151A29ACC200BF4D1D /* GameScene.h */,
-				1A91A1161A29ACC200BF4D1D /* GameScene.m */,
 				1A14CA531A246CB100C4FEB0 /* SequenceListViewController.h */,
 				1A14CA541A246CB100C4FEB0 /* SequenceListViewController.m */,
 			);
@@ -493,7 +483,6 @@
 				1AE771301A243E6500C49006 /* CommandFadeDown.m in Sources */,
 				1A14CA551A246CB100C4FEB0 /* SequenceListViewController.m in Sources */,
 				1AE830291A21BA68000E297D /* LightMaster.xcdatamodeld in Sources */,
-				1A91A1191A29ACC200BF4D1D /* GameScene.m in Sources */,
 				1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */,
 				1AE7715A1A243E6600C49006 /* EchoNestTrack.m in Sources */,
 				1AE771791A24422C00C49006 /* CommandPulse.m in Sources */,
@@ -502,7 +491,6 @@
 				1A14CA781A257E4C00C4FEB0 /* UserAudioAnalysis.m in Sources */,
 				1AE7713F1A243E6600C49006 /* EchoNestTatum.m in Sources */,
 				1AE771391A243E6600C49006 /* EchoNestAudioAnalysis.m in Sources */,
-				1A91A1181A29ACC200BF4D1D /* GameView.m in Sources */,
 				1A14CA621A25411B00C4FEB0 /* ControlBoxViewController.m in Sources */,
 				1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */,
 				1AE830231A21BA68000E297D /* main.m in Sources */,

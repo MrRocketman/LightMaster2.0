@@ -58,6 +58,15 @@
     return [appSupportURL URLByAppendingPathComponent:@"com.jamesadams.LightMaster"];
 }
 
+- (NSManagedObjectContext *)backgroundThreadManagedObjectContext
+{
+    dispatch_queue_t request_queue = dispatch_queue_create("com.xxx.ScsMethod", NULL);
+    dispatch_async(request_queue, ^{
+        NSPersistentStoreCoordinator *mainThreadContextStoreCoordinator = [context     persistentStoreCoordinator]; //
+        NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init]; //
+        [context setPersistentStoreCoordinator:mainThreadContextStoreCoordinator];}
+}
+
 - (NSManagedObjectContext *)managedObjectContext
 {
     // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)
