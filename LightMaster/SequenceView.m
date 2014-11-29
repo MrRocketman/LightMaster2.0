@@ -20,14 +20,6 @@
 
 @interface SequenceView()
 
-@property (strong, nonatomic) NSArray *sequenceTatums;
-@property (strong, nonatomic) NSArray *controlBoxes;
-@property (strong, nonatomic) NSArray *channels;
-@property (strong, nonatomic) NSArray *channelArrays;
-@property (strong, nonatomic) NSArray *userAudioAnalysisTracks;
-@property (strong, nonatomic) NSArray *userAudioAnalysisChannels;
-@property (strong, nonatomic) NSArray *userAudioAnalysisChannelArrays;
-
 @end
 
 @implementation SequenceView
@@ -45,15 +37,9 @@
         mouseDraggingEventObjectIndex = -1;
         selectedCommandIndex = -1;
         self.zoomLevel = 3.0;
-        [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_REFRESH_RATE target:self selector:@selector(updateData:) userInfo:nil repeats:YES];
     }
     
     return self;
-}
-
-- (void)updateData:(NSTimer *)timer
-{
-    
 }
 
 - (BOOL)isFlipped

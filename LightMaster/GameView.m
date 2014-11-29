@@ -25,7 +25,7 @@
         [self presentScene:scene];
         
         /* Sprite Kit applies additional optimizations to improve rendering performance */
-        self.ignoresSiblingOrder = YES;
+        //self.ignoresSiblingOrder = YES;
         
         self.showsFPS = YES;
         self.showsNodeCount = YES;

@@ -19,10 +19,6 @@
 		1A14CA781A257E4C00C4FEB0 /* UserAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA771A257E4C00C4FEB0 /* UserAudioAnalysis.m */; };
 		1A91A1181A29ACC200BF4D1D /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A91A1141A29ACC200BF4D1D /* GameView.m */; };
 		1A91A1191A29ACC200BF4D1D /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A91A1161A29ACC200BF4D1D /* GameScene.m */; };
-		1A91A1201A29AD2300BF4D1D /* bird.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11B1A29AD2300BF4D1D /* bird.png */; };
-		1A91A1221A29AD2300BF4D1D /* cat.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11D1A29AD2300BF4D1D /* cat.png */; };
-		1A91A1231A29AD2300BF4D1D /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11E1A29AD2300BF4D1D /* dog.png */; };
-		1A91A1241A29AD2300BF4D1D /* turtle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11F1A29AD2300BF4D1D /* turtle.png */; };
 		1AB937BF1A28665600A397E3 /* SequenceTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937BE1A28665600A397E3 /* SequenceTatum.m */; };
 		1AB937C21A286C5500A397E3 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937C11A286C5500A397E3 /* Sequence.m */; };
 		1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771171A243E6500C49006 /* CommandFadeUp.m */; };
@@ -91,10 +87,6 @@
 		1A91A1141A29ACC200BF4D1D /* GameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
 		1A91A1151A29ACC200BF4D1D /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		1A91A1161A29ACC200BF4D1D /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
-		1A91A11B1A29AD2300BF4D1D /* bird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bird.png; sourceTree = "<group>"; };
-		1A91A11D1A29AD2300BF4D1D /* cat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cat.png; sourceTree = "<group>"; };
-		1A91A11E1A29AD2300BF4D1D /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
-		1A91A11F1A29AD2300BF4D1D /* turtle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = turtle.png; sourceTree = "<group>"; };
 		1AB937BD1A28665600A397E3 /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
 		1AB937BE1A28665600A397E3 /* SequenceTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SequenceTatum.m; path = LightMaster/SequenceTatum.m; sourceTree = "<group>"; };
 		1AB937C01A286C5500A397E3 /* Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sequence.h; path = LightMaster/Sequence.h; sourceTree = "<group>"; };
@@ -187,10 +179,6 @@
 				1A91A1141A29ACC200BF4D1D /* GameView.m */,
 				1A91A1151A29ACC200BF4D1D /* GameScene.h */,
 				1A91A1161A29ACC200BF4D1D /* GameScene.m */,
-				1A91A11B1A29AD2300BF4D1D /* bird.png */,
-				1A91A11D1A29AD2300BF4D1D /* cat.png */,
-				1A91A11E1A29AD2300BF4D1D /* dog.png */,
-				1A91A11F1A29AD2300BF4D1D /* turtle.png */,
 				1A14CA531A246CB100C4FEB0 /* SequenceListViewController.h */,
 				1A14CA541A246CB100C4FEB0 /* SequenceListViewController.m */,
 			);
@@ -464,11 +452,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A91A1231A29AD2300BF4D1D /* dog.png in Resources */,
-				1A91A1221A29AD2300BF4D1D /* cat.png in Resources */,
-				1A91A1201A29AD2300BF4D1D /* bird.png in Resources */,
 				1AE8302B1A21BA68000E297D /* Images.xcassets in Resources */,
-				1A91A1241A29AD2300BF4D1D /* turtle.png in Resources */,
 				1AE8302E1A21BA68000E297D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
