@@ -21,19 +21,14 @@ static NSString * const kAnimalNodeName = @"movable";
 
 @implementation GameScene
 
--(void)didMoveToView:(SKView *)view {
-    /* Setup your scene here */
-    //SKLabelNode *myLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
-    //myLabel.text = @"Hello, World!";
-    //myLabel.fontSize = 65;
-    //myLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
-    //[self addChild:myLabel];
-    
+-(void)didMoveToView:(SKView *)view
+{
     // 1) Loading the background
-    _background = [SKSpriteNode spriteNodeWithImageNamed:@"blue-shooting-stars"];
-    [_background setName:@"background"];
-    [_background setAnchorPoint:CGPointZero];
-    [_background setPosition:CGPointMake(0, 0)];
+    self.background = [SKSpriteNode spriteNodeWithImageNamed:@"Background"];
+    self.background.name = @"Background";
+    self.background.size = self.frame.size;
+    self.background.anchorPoint = CGPointZero;
+    self.background.position = CGPointZero;
     [self addChild:_background];
     
     // 2) Loading the images
@@ -70,22 +65,14 @@ static NSString * const kAnimalNodeName = @"movable";
 
 - (void)scrollWheel:(NSEvent *)event
 {
-    NSLog(@"Pan:%@", event);
+    CGPoint position = self.background.position;
+    CGPoint newPos = CGPointMake(position.x + event.deltaX, position.y - event.deltaY);
+    [_background setPosition:newPos];
 }
 
 - (void)magnifyWithEvent:(NSMagnificationGestureRecognizer *)event
 {
-    NSLog(@"Pinch:%@", event);
-}
-
-- (void)rotateWithEvent:(NSRotationGestureRecognizer *)event
-{
-    NSLog(@"Rotate:%@", event);
-}
-
-- (void)panWithEvent:(NSPanGestureRecognizer *)event
-{
-    NSLog(@"pan:%@", event);
+    NSLog(@"Zoon:%@", event);
 }
 
 - (void)selectNodeForTouch:(CGPoint)touchLocation
@@ -129,12 +116,13 @@ float degToRad(float degree)
     CGPoint position = [_selectedNode position];
     if([[_selectedNode name] isEqualToString:kAnimalNodeName])
     {
-        [_selectedNode setPosition:CGPointMake(position.x + translation.x, position.y + translation.y)];
+        //[_selectedNode setPosition:CGPointMake(position.x + translation.x, position.y + translation.y)];
+        self.selectedNode.size = CGSizeMake(self.selectedNode.size.width + translation.x, self.selectedNode.size.height + translation.y);
     }
     else
     {
         CGPoint newPos = CGPointMake(position.x + translation.x, position.y + translation.y);
-        [_background setPosition:newPos];//[self boundLayerPos:newPos]];
+        [_background setPosition:newPos];
     }
 }
 

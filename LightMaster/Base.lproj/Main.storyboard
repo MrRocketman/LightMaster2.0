@@ -837,16 +837,6 @@
                                             <action selector="magnifyGesutre:" target="6lF-Sh-Mhi" id="S7v-px-KtZ"/>
                                         </connections>
                                     </magnificationGestureRecognizer>
-                                    <panGestureRecognizer delaysPrimaryMouseButtonEvents="YES" id="fwQ-wt-yAH">
-                                        <connections>
-                                            <action selector="panGesutre:" target="6lF-Sh-Mhi" id="OLy-kz-z8T"/>
-                                        </connections>
-                                    </panGestureRecognizer>
-                                    <rotationGestureRecognizer delaysRotationEvents="YES" id="UId-qT-3aq">
-                                        <connections>
-                                            <action selector="rotateGesutre:" target="6lF-Sh-Mhi" id="UrP-0V-0I2"/>
-                                        </connections>
-                                    </rotationGestureRecognizer>
                                 </gestureRecognizers>
                             </customView>
                         </subviews>

@@ -19,9 +19,7 @@
 		1A14CA781A257E4C00C4FEB0 /* UserAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA771A257E4C00C4FEB0 /* UserAudioAnalysis.m */; };
 		1A91A1181A29ACC200BF4D1D /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A91A1141A29ACC200BF4D1D /* GameView.m */; };
 		1A91A1191A29ACC200BF4D1D /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A91A1161A29ACC200BF4D1D /* GameScene.m */; };
-		1A91A11A1A29ACC200BF4D1D /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A1171A29ACC200BF4D1D /* GameScene.sks */; };
 		1A91A1201A29AD2300BF4D1D /* bird.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11B1A29AD2300BF4D1D /* bird.png */; };
-		1A91A1211A29AD2300BF4D1D /* blue-shooting-stars.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11C1A29AD2300BF4D1D /* blue-shooting-stars.png */; };
 		1A91A1221A29AD2300BF4D1D /* cat.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11D1A29AD2300BF4D1D /* cat.png */; };
 		1A91A1231A29AD2300BF4D1D /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11E1A29AD2300BF4D1D /* dog.png */; };
 		1A91A1241A29AD2300BF4D1D /* turtle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A91A11F1A29AD2300BF4D1D /* turtle.png */; };
@@ -93,9 +91,7 @@
 		1A91A1141A29ACC200BF4D1D /* GameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
 		1A91A1151A29ACC200BF4D1D /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		1A91A1161A29ACC200BF4D1D /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
-		1A91A1171A29ACC200BF4D1D /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		1A91A11B1A29AD2300BF4D1D /* bird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bird.png; sourceTree = "<group>"; };
-		1A91A11C1A29AD2300BF4D1D /* blue-shooting-stars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-shooting-stars.png"; sourceTree = "<group>"; };
 		1A91A11D1A29AD2300BF4D1D /* cat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cat.png; sourceTree = "<group>"; };
 		1A91A11E1A29AD2300BF4D1D /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
 		1A91A11F1A29AD2300BF4D1D /* turtle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = turtle.png; sourceTree = "<group>"; };
@@ -191,9 +187,7 @@
 				1A91A1141A29ACC200BF4D1D /* GameView.m */,
 				1A91A1151A29ACC200BF4D1D /* GameScene.h */,
 				1A91A1161A29ACC200BF4D1D /* GameScene.m */,
-				1A91A1171A29ACC200BF4D1D /* GameScene.sks */,
 				1A91A11B1A29AD2300BF4D1D /* bird.png */,
-				1A91A11C1A29AD2300BF4D1D /* blue-shooting-stars.png */,
 				1A91A11D1A29AD2300BF4D1D /* cat.png */,
 				1A91A11E1A29AD2300BF4D1D /* dog.png */,
 				1A91A11F1A29AD2300BF4D1D /* turtle.png */,
@@ -472,11 +466,9 @@
 			files = (
 				1A91A1231A29AD2300BF4D1D /* dog.png in Resources */,
 				1A91A1221A29AD2300BF4D1D /* cat.png in Resources */,
-				1A91A1211A29AD2300BF4D1D /* blue-shooting-stars.png in Resources */,
 				1A91A1201A29AD2300BF4D1D /* bird.png in Resources */,
 				1AE8302B1A21BA68000E297D /* Images.xcassets in Resources */,
 				1A91A1241A29AD2300BF4D1D /* turtle.png in Resources */,
-				1A91A11A1A29ACC200BF4D1D /* GameScene.sks in Resources */,
 				1AE8302E1A21BA68000E297D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

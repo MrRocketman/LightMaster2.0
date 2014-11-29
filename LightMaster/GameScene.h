@@ -12,7 +12,5 @@
 
 - (void)scrollWheel:(NSEvent *)event;
 - (void)magnifyWithEvent:(NSMagnificationGestureRecognizer *)event;
-- (void)rotateWithEvent:(NSRotationGestureRecognizer *)event;
-- (void)panWithEvent:(NSPanGestureRecognizer *)event;
 
 @end

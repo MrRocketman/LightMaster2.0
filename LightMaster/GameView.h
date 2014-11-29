@@ -10,8 +10,6 @@
 
 @interface GameView : SKView
 
-- (IBAction)panGesutre:(id)sender;
-- (IBAction)rotateGesutre:(id)sender;
 - (IBAction)magnifyGesutre:(id)sender;
 
 - (IBAction)scrollWheel:(NSEvent *)event;
