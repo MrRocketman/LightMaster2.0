@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define CHANNEL_HEIGHT 20.0
+
 @interface SequenceLogic : NSObject
 
 + (SequenceLogic *)sharedInstance;

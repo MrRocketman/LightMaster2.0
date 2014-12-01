@@ -8,6 +8,10 @@
 
 #import "SequenceView.h"
 #import "SequenceLogic.h"
+#import "CoreDataManager.h"
+#import "NSManagedObjectContext+Queryable.h"
+#import "Sequence.h"
+#import "SequenceTatum.h"
 
 @implementation SequenceView
 
@@ -31,7 +35,7 @@
     [[NSColor greenColor] set];
     NSRectFill(dirtyRect);
     
-    // basic beat line
+    // Horizontal lines
     NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
     
     int largestY = NSMaxY(self.bounds);
@@ -48,8 +52,13 @@
     [basicBeatLine setLineWidth:1.0];
     [basicBeatLine stroke];
     
-    // basic beat line
-    basicBeatLine = [NSBezierPath bezierPath];
+    
+    
+    
+    [self drawTatumGrid];
+    
+    // Vertical lines
+    /*basicBeatLine = [NSBezierPath bezierPath];
     
     int largestX = NSMaxX(self.bounds);
     for (int i = 0; i < largestX; i += 10)
@@ -63,7 +72,7 @@
     
     [[NSColor whiteColor] set];
     [basicBeatLine setLineWidth:1.0];
-    [basicBeatLine stroke];
+    [basicBeatLine stroke];*/
     
     /*
     NSBezierPath *keyRollLine = [NSBezierPath bezierPath];
@@ -111,6 +120,29 @@
     [keyRollLine setLineWidth:1.0];
     [keyRollLine stroke];
      */
+}
+
+- (void)drawTatumGrid
+{
+    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+    NSLog(@"startTime:%f endTime:%f", [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width]);
+    NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND startTime >= %f AND startTime <= %f", [CoreDataManager sharedManager].currentSequence, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width]] orderBy:@"startTime"] toArray];
+    //NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"startTime"] toArray];
+    NSLog(@"visiableTatums:%d", (int)visibleTatums.count);
+    
+    NSBezierPath *tatumLinesPaths = [NSBezierPath bezierPath];
+    for(int i = 0; i < visibleTatums.count; i ++)
+    {
+        NSLog(@"Tatum:%f", [((SequenceTatum *)visibleTatums[i]).startTime floatValue]);
+        NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i]).startTime floatValue]], NSMinY(self.bounds));
+        NSPoint endPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i]).startTime floatValue]], NSMaxY(self.bounds));
+        
+        [tatumLinesPaths moveToPoint:startPoint];
+        [tatumLinesPaths lineToPoint:endPoint];
+    }
+    [[NSColor whiteColor] set];
+    [tatumLinesPaths setLineWidth:1.0];
+    [tatumLinesPaths stroke];
 }
 
 @end

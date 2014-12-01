@@ -25,6 +25,7 @@
 {
     [self.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
+    self.magnification = 5.0;
 }
 
 - (BOOL)isFlipped

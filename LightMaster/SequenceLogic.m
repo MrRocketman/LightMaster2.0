@@ -18,7 +18,7 @@
 #import "UserAudioAnalysisTrack.h"
 #import "UserAudioAnalysisTrackChannel.h"
 
-#define CHANNEL_HEIGHT 20.0
+#define SECONDS_TO_PIXELS 25.0
 
 @implementation SequenceLogic
 
@@ -95,7 +95,7 @@
 {
     if(x > 0)
     {
-        //return  x / self.zoomLevel / PIXEL_TO_ZOOM_RATIO;
+        return  x / self.magnification / SECONDS_TO_PIXELS;
     }
     
     return 0;
@@ -103,7 +103,7 @@
 
 - (int)widthForTimeInterval:(float)timeInterval
 {
-    return 100;// (timeInterval * self.zoomLevel * PIXEL_TO_ZOOM_RATIO);
+    return (timeInterval * self.magnification * SECONDS_TO_PIXELS);
 }
 
 @end
