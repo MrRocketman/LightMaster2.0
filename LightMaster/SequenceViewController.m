@@ -9,6 +9,8 @@
 #import "SequenceViewController.h"
 #import "CoreDataManager.h"
 #import "SequenceScrollView.h"
+#import "SequenceChannelScrollView.h"
+#import "SequenceTimelineScrollView.h"
 
 @interface SequenceViewController ()
 
@@ -22,9 +24,6 @@
     // Do view setup here.
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSequenceFromNotification:) name:@"CurrentSequenceChange" object:nil];
-    
-    // Register for the notifications on the scrollView
-    [self.sequenceScrollView.contentView setPostsBoundsChangedNotifications:YES];
 }
 
 - (void)viewWillAppear
@@ -40,6 +39,8 @@
 - (void)reloadSequence
 {
     [self.sequenceScrollView updateViews];
+    [self.channelScrollView updateViews];
+    [self.timelineScrollView updateViews];
 }
 
 @end

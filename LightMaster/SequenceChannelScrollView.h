@@ -1,5 +1,5 @@
 //
-//  SequenceScrollView.h
+//  SequenceChannelScrollView.h
 //  LightMaster
 //
 //  Created by James Adams on 11/30/14.
@@ -8,13 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SequenceView, SequenceChannelScrollView, SequenceTimelineScrollView;
+@class SequenceChannelView, SequenceScrollView, SequenceTimelineScrollView;
 
-@interface SequenceScrollView : NSScrollView
+@interface SequenceChannelScrollView : NSScrollView
 
-@property (strong, nonatomic) IBOutlet SequenceView *sequenceView;
+@property (strong, nonatomic) IBOutlet SequenceChannelView *channelView;
 
-@property (strong, nonatomic) IBOutlet SequenceChannelScrollView *channelScrollView;
+@property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
 @property (strong, nonatomic) IBOutlet SequenceTimelineScrollView *timelineScrollView;
 
 - (void)otherScrollViewBoundsChange:(NSNotification *)notification;

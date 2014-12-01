@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SequenceScrollView;
+@class SequenceScrollView, SequenceChannelScrollView, SequenceTimelineScrollView;
 
 @interface SequenceViewController : NSViewController
 
@@ -24,5 +24,7 @@
 @property (strong, nonatomic) IBOutlet NSTextField *titleLabel;
 
 @property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
+@property (strong, nonatomic) IBOutlet SequenceChannelScrollView *channelScrollView;
+@property (strong, nonatomic) IBOutlet SequenceTimelineScrollView *timelineScrollView;
 
 @end

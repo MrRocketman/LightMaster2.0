@@ -20,20 +20,15 @@
     return YES;
 }
 
-- (void)scrollViewBoundsChange:(NSNotification *)notification
-{
-    NSView *changedContentView = [notification object];
-    NSPoint changedBoundsOrigin = [changedContentView bounds].origin;
-    [self setBounds:NSMakeRect(changedBoundsOrigin.x - 30.0f, [self bounds].origin.y, [self bounds].size.width, [self bounds].size.height)];
-}
-
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
     
+    self.frame = NSMakeRect(0, 0, 10000, self.frame.size.height);
+    
     // clear the background
     [[NSColor darkGrayColor] set];
-    NSRectFill(dirtyRect);
+    NSRectFill(self.bounds);
     
     // basic beat line
     NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
@@ -41,8 +36,8 @@
     int largestX = NSMaxX(self.bounds);
     for (int i = 0; i < largestX; i += 10)
     {
-        NSPoint startPoint = NSMakePoint(i, NSMinY(dirtyRect));
-        NSPoint endPoint = NSMakePoint(i, NSMaxY(dirtyRect));
+        NSPoint startPoint = NSMakePoint(i, NSMinY(self.bounds));
+        NSPoint endPoint = NSMakePoint(i, NSMaxY(self.bounds));
         
         [basicBeatLine moveToPoint:startPoint];
         [basicBeatLine lineToPoint:endPoint];

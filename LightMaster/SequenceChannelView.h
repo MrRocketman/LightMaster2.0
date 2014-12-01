@@ -10,6 +10,4 @@
 
 @interface SequenceChannelView : NSView
 
-- (void)scrollViewBoundsChange:(NSNotification *)notification;
-
 @end

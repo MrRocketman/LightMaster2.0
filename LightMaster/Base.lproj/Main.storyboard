@@ -748,7 +748,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <segmentedControl verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Xn-nQr">
-                                        <rect key="frame" x="615" y="32" width="332" height="19"/>
+                                        <rect key="frame" x="615" y="33" width="332" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="330" id="hSV-8E-gMk"/>
                                         </constraints>
@@ -817,31 +817,7 @@
                                     <constraint firstItem="VS1-F9-Vzu" firstAttribute="leading" secondItem="IZ1-n6-LCC" secondAttribute="leading" constant="20" symbolic="YES" id="zcV-Ez-Ipl"/>
                                 </constraints>
                             </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="GLi-5g-jNE" customClass="SequenceChannelHeaderView">
-                                <rect key="frame" x="0.0" y="0.0" width="100" height="492"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="OXI-kw-Sel"/>
-                                </constraints>
-                            </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="X2k-ys-Ebc" customClass="SequenceChannelView">
-                                <rect key="frame" x="99" y="0.0" width="100" height="492"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="Rma-PN-IJ4"/>
-                                </constraints>
-                            </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="U7Y-vN-uha" customClass="SequenceTimelineView">
-                                <rect key="frame" x="198" y="516" width="836" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="25" id="dBd-qy-5gw"/>
-                                </constraints>
-                            </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="KHP-Ra-yWv" customClass="SequenceUserTatumsView">
-                                <rect key="frame" x="198" y="493" width="836" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="25" id="Btl-ts-kTX"/>
-                                </constraints>
-                            </customView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aan-EI-jZD">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Aan-EI-jZD">
                                 <rect key="frame" x="18" y="515" width="174" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="My Sequence Title" id="dh4-dS-ynU">
                                     <font key="font" metaFont="system"/>
@@ -849,7 +825,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" translatesAutoresizingMaskIntoConstraints="NO" id="4Zg-Mw-MgZ" customClass="SequenceScrollView">
+                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="5" minMagnification="1" translatesAutoresizingMaskIntoConstraints="NO" id="4Zg-Mw-MgZ" customClass="SequenceScrollView">
                                 <rect key="frame" x="198" y="0.0" width="836" height="492"/>
                                 <clipView key="contentView" id="fRT-ZF-nO6">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
@@ -875,53 +851,116 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <connections>
-                                    <outlet property="channelHeaderView" destination="GLi-5g-jNE" id="mCS-2T-fut"/>
-                                    <outlet property="channelView" destination="X2k-ys-Ebc" id="583-VE-Flb"/>
+                                    <outlet property="channelScrollView" destination="fNF-w0-RBU" id="Y5P-pn-aY8"/>
                                     <outlet property="sequenceView" destination="h39-Hs-fm9" id="WbH-jW-nle"/>
-                                    <outlet property="timelineView" destination="U7Y-vN-uha" id="g9B-zk-vhq"/>
-                                    <outlet property="userTatumsView" destination="KHP-Ra-yWv" id="Gdt-Ij-Ygq"/>
+                                    <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="N5M-cC-G3k"/>
+                                </connections>
+                            </scrollView>
+                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" allowsMagnification="YES" maxMagnification="5" minMagnification="1" translatesAutoresizingMaskIntoConstraints="NO" id="fNF-w0-RBU" customClass="SequenceChannelScrollView">
+                                <rect key="frame" x="0.0" y="0.0" width="198" height="492"/>
+                                <clipView key="contentView" id="t4x-Q9-xj8">
+                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view translatesAutoresizingMaskIntoConstraints="NO" id="iDU-3M-b4M" customClass="SequenceChannelView">
+                                            <rect key="frame" x="0.0" y="396" width="197" height="491"/>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="iDU-3M-b4M" firstAttribute="top" secondItem="t4x-Q9-xj8" secondAttribute="top" id="6gp-fX-vzU"/>
+                                        <constraint firstAttribute="bottom" secondItem="iDU-3M-b4M" secondAttribute="bottom" constant="-1" id="c59-4e-Nnx"/>
+                                        <constraint firstItem="iDU-3M-b4M" firstAttribute="leading" secondItem="t4x-Q9-xj8" secondAttribute="leading" id="cNk-xq-Q7e"/>
+                                        <constraint firstAttribute="trailing" secondItem="iDU-3M-b4M" secondAttribute="trailing" constant="-1" id="wfs-jJ-AN6"/>
+                                    </constraints>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ydo-TY-mLP">
+                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="4Pe-5I-1PI">
+                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <connections>
+                                    <outlet property="channelView" destination="iDU-3M-b4M" id="ywy-gR-sen"/>
+                                    <outlet property="sequenceScrollView" destination="4Zg-Mw-MgZ" id="rRJ-4b-Fj5"/>
+                                    <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="C34-OO-o1z"/>
+                                </connections>
+                            </scrollView>
+                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="5" minMagnification="1" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
+                                <rect key="frame" x="198" y="491" width="836" height="49"/>
+                                <clipView key="contentView" id="Gx6-st-cQc">
+                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view translatesAutoresizingMaskIntoConstraints="NO" id="pnm-RU-I1n" customClass="SequenceTimelineView">
+                                            <rect key="frame" x="0.0" y="-47" width="836" height="48"/>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="pnm-RU-I1n" secondAttribute="bottom" id="O0k-UX-RnI"/>
+                                        <constraint firstItem="pnm-RU-I1n" firstAttribute="top" secondItem="Gx6-st-cQc" secondAttribute="top" constant="-1" id="WuM-L3-JVH"/>
+                                        <constraint firstAttribute="trailing" secondItem="pnm-RU-I1n" secondAttribute="trailing" constant="-2" id="ljT-Tp-Vic"/>
+                                        <constraint firstItem="pnm-RU-I1n" firstAttribute="leading" secondItem="Gx6-st-cQc" secondAttribute="leading" id="oqr-HR-1eP"/>
+                                    </constraints>
+                                </clipView>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="49" id="fIP-b0-1Il"/>
+                                </constraints>
+                                <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="5hu-tg-Ohe">
+                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="vrh-fv-Awg">
+                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <connections>
+                                    <outlet property="channelScrollView" destination="fNF-w0-RBU" id="jBb-cB-TLX"/>
+                                    <outlet property="sequenceScrollView" destination="4Zg-Mw-MgZ" id="M0K-qb-eAW"/>
+                                    <outlet property="timelineView" destination="pnm-RU-I1n" id="n0K-he-06i"/>
                                 </connections>
                             </scrollView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Aan-EI-jZD" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" constant="8" symbolic="YES" id="0iu-WV-2HD"/>
+                            <constraint firstItem="fNF-w0-RBU" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="132" id="7zT-c6-g8O"/>
                             <constraint firstItem="IZ1-n6-LCC" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" id="8Pe-uN-Ic8"/>
-                            <constraint firstItem="X2k-ys-Ebc" firstAttribute="top" secondItem="U7Y-vN-uha" secondAttribute="top" constant="49" id="8Wx-Yf-uKl"/>
-                            <constraint firstItem="X2k-ys-Ebc" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="99" id="C7F-IN-0LN"/>
-                            <constraint firstItem="KHP-Ra-yWv" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" constant="22" id="DIk-bJ-jZJ"/>
-                            <constraint firstAttribute="bottom" secondItem="GLi-5g-jNE" secondAttribute="bottom" id="F5f-ls-HOt"/>
-                            <constraint firstItem="GLi-5g-jNE" firstAttribute="leading" secondItem="IZ1-n6-LCC" secondAttribute="leading" id="HBg-0B-Mjd"/>
-                            <constraint firstItem="U7Y-vN-uha" firstAttribute="trailing" secondItem="KHP-Ra-yWv" secondAttribute="trailing" id="ItQ-Rr-Br9"/>
-                            <constraint firstItem="4Zg-Mw-MgZ" firstAttribute="top" secondItem="X2k-ys-Ebc" secondAttribute="top" id="MJ6-SF-QuI"/>
-                            <constraint firstItem="4Zg-Mw-MgZ" firstAttribute="leading" secondItem="KHP-Ra-yWv" secondAttribute="leading" id="Tv0-Jk-qxr"/>
-                            <constraint firstItem="X2k-ys-Ebc" firstAttribute="top" secondItem="GLi-5g-jNE" secondAttribute="top" id="W7V-DQ-aOZ"/>
-                            <constraint firstItem="4Zg-Mw-MgZ" firstAttribute="trailing" secondItem="KHP-Ra-yWv" secondAttribute="trailing" id="WPK-Yq-3za"/>
+                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" id="8we-EJ-EPl"/>
+                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="Aan-EI-jZD" secondAttribute="trailing" constant="8" symbolic="YES" id="GWs-qV-j3e"/>
+                            <constraint firstItem="4Zg-Mw-MgZ" firstAttribute="leading" secondItem="fNF-w0-RBU" secondAttribute="trailing" id="IRH-mI-BeR"/>
+                            <constraint firstItem="Aan-EI-jZD" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="20" symbolic="YES" id="Kic-M0-CZU"/>
+                            <constraint firstItem="fNF-w0-RBU" firstAttribute="leading" secondItem="IZ1-n6-LCC" secondAttribute="leading" id="Nc1-I0-qFD"/>
+                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="198" id="Ttc-1X-8rt"/>
+                            <constraint firstItem="fNF-w0-RBU" firstAttribute="top" secondItem="4Zg-Mw-MgZ" secondAttribute="top" id="Unt-AL-gDs"/>
                             <constraint firstAttribute="trailing" secondItem="IZ1-n6-LCC" secondAttribute="trailing" id="Wpz-2G-v22"/>
                             <constraint firstItem="IZ1-n6-LCC" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" id="XBf-so-Pwc"/>
-                            <constraint firstItem="4Zg-Mw-MgZ" firstAttribute="bottom" secondItem="X2k-ys-Ebc" secondAttribute="bottom" id="bOz-mO-OU2"/>
-                            <constraint firstItem="U7Y-vN-uha" firstAttribute="leading" secondItem="KHP-Ra-yWv" secondAttribute="leading" id="h12-b0-ZMW"/>
-                            <constraint firstItem="U7Y-vN-uha" firstAttribute="trailing" secondItem="IZ1-n6-LCC" secondAttribute="trailing" id="iJs-iF-W68"/>
-                            <constraint firstItem="GLi-5g-jNE" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="132" id="p4s-Yh-Cjq"/>
-                            <constraint firstItem="U7Y-vN-uha" firstAttribute="leading" secondItem="GLi-5g-jNE" secondAttribute="trailing" constant="98" id="pf9-UU-wuQ"/>
-                            <constraint firstItem="U7Y-vN-uha" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="198" id="sec-M8-mFn"/>
-                            <constraint firstItem="4Zg-Mw-MgZ" firstAttribute="top" secondItem="KHP-Ra-yWv" secondAttribute="bottom" constant="1" id="uhW-jk-Hjf"/>
-                            <constraint firstItem="X2k-ys-Ebc" firstAttribute="bottom" secondItem="GLi-5g-jNE" secondAttribute="bottom" id="vBd-LF-cH5"/>
+                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="trailing" secondItem="IZ1-n6-LCC" secondAttribute="trailing" id="n7c-ue-Zh6"/>
+                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="trailing" secondItem="4Zg-Mw-MgZ" secondAttribute="trailing" id="oRE-fM-I1I"/>
+                            <constraint firstAttribute="bottom" secondItem="fNF-w0-RBU" secondAttribute="bottom" id="r71-7H-gXW"/>
+                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="84" id="uaA-0M-Q1s"/>
+                            <constraint firstItem="fNF-w0-RBU" firstAttribute="bottom" secondItem="4Zg-Mw-MgZ" secondAttribute="bottom" id="uqb-jU-6lk"/>
+                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="4Zg-Mw-MgZ" secondAttribute="leading" id="ySS-6e-bdf"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="channelScrollView" destination="fNF-w0-RBU" id="W1L-X5-wNf"/>
                         <outlet property="commandTypeSegmentedControl" destination="yGR-Xn-nQr" id="Zch-jM-ese"/>
                         <outlet property="playButton" destination="hW0-Qs-xwE" id="oVn-al-wBy"/>
                         <outlet property="playSelectionButton" destination="IQI-CM-lYY" id="Qr3-Sg-NC3"/>
                         <outlet property="sequenceListButton" destination="PIb-yP-RwM" id="th2-LR-QAD"/>
+                        <outlet property="sequenceScrollView" destination="4Zg-Mw-MgZ" id="sgh-c9-t9h"/>
                         <outlet property="serialPortButton" destination="VS1-F9-Vzu" id="klR-tS-ouU"/>
                         <outlet property="skipBackButton" destination="mU0-ML-CRS" id="tCD-6a-81C"/>
                         <outlet property="timeLabel" destination="aBB-OC-aOC" id="kBm-am-Cl8"/>
+                        <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="BV2-am-X3V"/>
                         <outlet property="titleLabel" destination="Aan-EI-jZD" id="gDK-OZ-JiA"/>
                         <outlet property="toolbarView" destination="IZ1-n6-LCC" id="y9S-FJ-m46"/>
                     </connections>
                 </viewController>
                 <customObject id="ocF-mK-GXc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1746" y="1097"/>
+            <point key="canvasLocation" x="1746" y="1144"/>
         </scene>
         <!--Sequence List View Controller-->
         <scene sceneID="HpC-NA-8Ga">
