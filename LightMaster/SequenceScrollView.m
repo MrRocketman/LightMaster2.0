@@ -38,20 +38,10 @@
     
     if(!self.ignoreBoundsChanges)
     {
-         NSLog(@"bbx:%f", self.documentVisibleRect.origin.x);
-        
         self.ignoreBoundsChanges = YES;
-        float previousMag = [SequenceLogic sharedInstance].magnification;
         [[SequenceLogic sharedInstance] updateMagnification:self.magnification];
         if(fabs(self.magnification - 1.0) > 0.0001)
         {
-            NSPoint visibleOrigin = [self documentVisibleRect].origin;
-            float widthChange = [SequenceLogic sharedInstance].magnification * 10000 - previousMag * 10000;
-            NSLog(@"delta:%f", widthChange);
-            NSPoint scrollPoint = NSMakePoint(visibleOrigin.x + widthChange / 2, visibleOrigin.y);
-            [[self contentView] scrollPoint:scrollPoint];
-            [self reflectScrolledClipView:[self contentView]];
-            
             [self.sequenceView setNeedsDisplay:YES];
             [SequenceLogic sharedInstance].needsDisplay = YES;
         }
