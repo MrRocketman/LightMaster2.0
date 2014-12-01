@@ -24,10 +24,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.
-}
-
-- (void)viewWillAppear
-{
     // Control Boxes
     NSError *error;
     if (![[self controlBoxFetchedResultsController] performFetch:&error])
@@ -43,7 +39,10 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         [[NSApplication sharedApplication] presentError:error];
     }
-    
+}
+
+- (void)viewWillAppear
+{
     [self.controlBoxTableView reloadData];
     [self.channelsTableView reloadData];
 }
@@ -255,7 +254,7 @@
     // Create and configure a fetch request with the Book entity.
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Channel"];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"idNumber" ascending:YES]];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"controlBox == %@", (ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:self.controlBoxTableView.selectedRow]];
+    //fetchRequest.predicate = [NSPredicate predicateWithFormat:@"controlBox == %@", (ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:(self.controlBoxTableView.selectedRow >= 0 ? self.controlBoxTableView.selectedRow : 0)]];
     
     // Create and initialize the fetch results controller.
     _channelFetchedResultsController = [[SNRFetchedResultsController alloc] initWithManagedObjectContext:[[CoreDataManager sharedManager] managedObjectContext] fetchRequest:fetchRequest];

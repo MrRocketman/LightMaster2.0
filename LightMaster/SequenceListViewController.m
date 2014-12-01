@@ -20,14 +20,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
     
-    [self.tableView setDoubleAction:@selector(doubleClick)];
-}
-
-- (void)viewWillAppear
-{
-    // Update our table view
+    // Do view setup here.
     NSError *error;
     if (![[self fetchedResultsController] performFetch:&error])
     {
@@ -35,6 +29,12 @@
         [[NSApplication sharedApplication] presentError:error];
     }
     
+    [self.tableView setDoubleAction:@selector(doubleClick)];
+}
+
+- (void)viewWillAppear
+{
+    // Update our table view
     [self.tableView reloadData];
 }
 
