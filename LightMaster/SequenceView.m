@@ -416,13 +416,14 @@
     //NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"startTime"] toArray];
     
     
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"SequenceTatum"];
+    /*NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"SequenceTatum"];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"startTime" ascending:YES]];
     //fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sequence == %@ AND startTime >= %@ AND startTIme <= %@", [CoreDataManager sharedManager].currentSequence, @(self.timeAtLeftEdgeOfView), @([self xToTime:self.visibleRect.origin.x + self.visibleRect.size.width])];
     //fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sequence == %@ AND startTime >= %@ AND startTime <= %@", [CoreDataManager sharedManager].currentSequence, @(5.0), @(10.0)];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sequence == %@", [CoreDataManager sharedManager].currentSequence];
     NSError *error;
-    NSArray *visibleTatums = [[CoreDataManager sharedManager].managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    NSArray *visibleTatums = [[CoreDataManager sharedManager].managedObjectContext executeFetchRequest:fetchRequest error:&error];*/
+    NSArray *visibleTatums;
     
     
     NSColor *color = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
