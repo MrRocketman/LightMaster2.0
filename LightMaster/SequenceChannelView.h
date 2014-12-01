@@ -1,5 +1,5 @@
 //
-//  SequenceView.h
+//  SequenceChannelView.h
 //  LightMaster
 //
 //  Created by James Adams on 11/30/14.
@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface SequenceView : NSView
+@interface SequenceChannelView : NSView
 
 - (void)scrollViewBoundsChange:(NSNotification *)notification;
 

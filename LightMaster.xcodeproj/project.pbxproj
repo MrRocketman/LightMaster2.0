@@ -11,12 +11,18 @@
 		1A14CA521A246A3800C4FEB0 /* SequenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */; };
 		1A14CA551A246CB100C4FEB0 /* SequenceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA541A246CB100C4FEB0 /* SequenceListViewController.m */; };
 		1A14CA581A25232C00C4FEB0 /* SNRFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA571A25232C00C4FEB0 /* SNRFetchedResultsController.m */; };
-		1A14CA5E1A253B0100C4FEB0 /* SequenceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA5D1A253B0100C4FEB0 /* SequenceView.m */; };
+		1A14CA5E1A253B0100C4FEB0 /* SequenceViewOld.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA5D1A253B0100C4FEB0 /* SequenceViewOld.m */; };
 		1A14CA621A25411B00C4FEB0 /* ControlBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA611A25411B00C4FEB0 /* ControlBoxViewController.m */; };
 		1A14CA691A25698600C4FEB0 /* ControlBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA681A25698600C4FEB0 /* ControlBox.m */; };
 		1A14CA6C1A256B4E00C4FEB0 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA6B1A256B4E00C4FEB0 /* Channel.m */; };
 		1A14CA6F1A25797D00C4FEB0 /* ChannelColorTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA6E1A25797D00C4FEB0 /* ChannelColorTableCellView.m */; };
 		1A14CA781A257E4C00C4FEB0 /* UserAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA771A257E4C00C4FEB0 /* UserAudioAnalysis.m */; };
+		1A27BEDD1A2BF6480043F8C9 /* SequenceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEDC1A2BF6480043F8C9 /* SequenceScrollView.m */; };
+		1A27BEE01A2BF6620043F8C9 /* SequenceChannelHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEDF1A2BF6620043F8C9 /* SequenceChannelHeaderView.m */; };
+		1A27BEE31A2BF66D0043F8C9 /* SequenceChannelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEE21A2BF66D0043F8C9 /* SequenceChannelView.m */; };
+		1A27BEE61A2BF6840043F8C9 /* SequenceTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEE51A2BF6840043F8C9 /* SequenceTimelineView.m */; };
+		1A27BEE91A2BF6960043F8C9 /* SequenceUserTatumsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEE81A2BF6960043F8C9 /* SequenceUserTatumsView.m */; };
+		1A27BEED1A2C0B310043F8C9 /* SequenceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEEC1A2C0B310043F8C9 /* SequenceView.m */; };
 		1AB937BF1A28665600A397E3 /* SequenceTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937BE1A28665600A397E3 /* SequenceTatum.m */; };
 		1AB937C21A286C5500A397E3 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937C11A286C5500A397E3 /* Sequence.m */; };
 		1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771171A243E6500C49006 /* CommandFadeUp.m */; };
@@ -69,8 +75,8 @@
 		1A14CA541A246CB100C4FEB0 /* SequenceListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceListViewController.m; sourceTree = "<group>"; };
 		1A14CA561A25232C00C4FEB0 /* SNRFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNRFetchedResultsController.h; sourceTree = "<group>"; };
 		1A14CA571A25232C00C4FEB0 /* SNRFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNRFetchedResultsController.m; sourceTree = "<group>"; };
-		1A14CA5C1A253B0100C4FEB0 /* SequenceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceView.h; sourceTree = "<group>"; };
-		1A14CA5D1A253B0100C4FEB0 /* SequenceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceView.m; sourceTree = "<group>"; };
+		1A14CA5C1A253B0100C4FEB0 /* SequenceViewOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceViewOld.h; sourceTree = "<group>"; };
+		1A14CA5D1A253B0100C4FEB0 /* SequenceViewOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceViewOld.m; sourceTree = "<group>"; };
 		1A14CA601A25411B00C4FEB0 /* ControlBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlBoxViewController.h; sourceTree = "<group>"; };
 		1A14CA611A25411B00C4FEB0 /* ControlBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlBoxViewController.m; sourceTree = "<group>"; };
 		1A14CA671A25698600C4FEB0 /* ControlBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ControlBox.h; path = LightMaster/ControlBox.h; sourceTree = "<group>"; };
@@ -81,6 +87,18 @@
 		1A14CA6E1A25797D00C4FEB0 /* ChannelColorTableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelColorTableCellView.m; sourceTree = "<group>"; };
 		1A14CA761A257E4C00C4FEB0 /* UserAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysis.h; path = LightMaster/UserAudioAnalysis.h; sourceTree = "<group>"; };
 		1A14CA771A257E4C00C4FEB0 /* UserAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysis.m; path = LightMaster/UserAudioAnalysis.m; sourceTree = "<group>"; };
+		1A27BEDB1A2BF6480043F8C9 /* SequenceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceScrollView.h; sourceTree = "<group>"; };
+		1A27BEDC1A2BF6480043F8C9 /* SequenceScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceScrollView.m; sourceTree = "<group>"; };
+		1A27BEDE1A2BF6620043F8C9 /* SequenceChannelHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceChannelHeaderView.h; sourceTree = "<group>"; };
+		1A27BEDF1A2BF6620043F8C9 /* SequenceChannelHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceChannelHeaderView.m; sourceTree = "<group>"; };
+		1A27BEE11A2BF66D0043F8C9 /* SequenceChannelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceChannelView.h; sourceTree = "<group>"; };
+		1A27BEE21A2BF66D0043F8C9 /* SequenceChannelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceChannelView.m; sourceTree = "<group>"; };
+		1A27BEE41A2BF6840043F8C9 /* SequenceTimelineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceTimelineView.h; sourceTree = "<group>"; };
+		1A27BEE51A2BF6840043F8C9 /* SequenceTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceTimelineView.m; sourceTree = "<group>"; };
+		1A27BEE71A2BF6960043F8C9 /* SequenceUserTatumsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceUserTatumsView.h; sourceTree = "<group>"; };
+		1A27BEE81A2BF6960043F8C9 /* SequenceUserTatumsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceUserTatumsView.m; sourceTree = "<group>"; };
+		1A27BEEB1A2C0B310043F8C9 /* SequenceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceView.h; sourceTree = "<group>"; };
+		1A27BEEC1A2C0B310043F8C9 /* SequenceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceView.m; sourceTree = "<group>"; };
 		1AB937BD1A28665600A397E3 /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
 		1AB937BE1A28665600A397E3 /* SequenceTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SequenceTatum.m; path = LightMaster/SequenceTatum.m; sourceTree = "<group>"; };
 		1AB937C01A286C5500A397E3 /* Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sequence.h; path = LightMaster/Sequence.h; sourceTree = "<group>"; };
@@ -165,10 +183,7 @@
 		1A14CA5F1A253E6200C4FEB0 /* SequenceTab */ = {
 			isa = PBXGroup;
 			children = (
-				1A14CA501A246A3800C4FEB0 /* SequenceViewController.h */,
-				1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */,
-				1A14CA5C1A253B0100C4FEB0 /* SequenceView.h */,
-				1A14CA5D1A253B0100C4FEB0 /* SequenceView.m */,
+				1A27BEEA1A2BF6A10043F8C9 /* SequenceView */,
 				1A14CA531A246CB100C4FEB0 /* SequenceListViewController.h */,
 				1A14CA541A246CB100C4FEB0 /* SequenceListViewController.m */,
 			);
@@ -184,6 +199,29 @@
 				1A14CA6E1A25797D00C4FEB0 /* ChannelColorTableCellView.m */,
 			);
 			name = ControlBoxTab;
+			sourceTree = "<group>";
+		};
+		1A27BEEA1A2BF6A10043F8C9 /* SequenceView */ = {
+			isa = PBXGroup;
+			children = (
+				1A14CA5C1A253B0100C4FEB0 /* SequenceViewOld.h */,
+				1A14CA5D1A253B0100C4FEB0 /* SequenceViewOld.m */,
+				1A14CA501A246A3800C4FEB0 /* SequenceViewController.h */,
+				1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */,
+				1A27BEDB1A2BF6480043F8C9 /* SequenceScrollView.h */,
+				1A27BEDC1A2BF6480043F8C9 /* SequenceScrollView.m */,
+				1A27BEEB1A2C0B310043F8C9 /* SequenceView.h */,
+				1A27BEEC1A2C0B310043F8C9 /* SequenceView.m */,
+				1A27BEDE1A2BF6620043F8C9 /* SequenceChannelHeaderView.h */,
+				1A27BEDF1A2BF6620043F8C9 /* SequenceChannelHeaderView.m */,
+				1A27BEE11A2BF66D0043F8C9 /* SequenceChannelView.h */,
+				1A27BEE21A2BF66D0043F8C9 /* SequenceChannelView.m */,
+				1A27BEE41A2BF6840043F8C9 /* SequenceTimelineView.h */,
+				1A27BEE51A2BF6840043F8C9 /* SequenceTimelineView.m */,
+				1A27BEE71A2BF6960043F8C9 /* SequenceUserTatumsView.h */,
+				1A27BEE81A2BF6960043F8C9 /* SequenceUserTatumsView.m */,
+			);
+			name = SequenceView;
 			sourceTree = "<group>";
 		};
 		1AE7715E1A243EED00C49006 /* EchoNest */ = {
@@ -470,6 +508,7 @@
 				1A14CA521A246A3800C4FEB0 /* SequenceViewController.m in Sources */,
 				1AE771731A2441C700C49006 /* Command.m in Sources */,
 				1AE771861A2442C500C49006 /* Playlist.m in Sources */,
+				1A27BEED1A2C0B310043F8C9 /* SequenceView.m in Sources */,
 				1A14CA431A245AAB00C4FEB0 /* Audio.m in Sources */,
 				1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */,
 				1AE771701A2441C600C49006 /* UserAudioAnalysisTrackChannel.m in Sources */,
@@ -477,10 +516,11 @@
 				1AE771421A243E6600C49006 /* ChannelPattern.m in Sources */,
 				1A14CA6F1A25797D00C4FEB0 /* ChannelColorTableCellView.m in Sources */,
 				1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */,
-				1A14CA5E1A253B0100C4FEB0 /* SequenceView.m in Sources */,
+				1A14CA5E1A253B0100C4FEB0 /* SequenceViewOld.m in Sources */,
 				1AE7716D1A2441C600C49006 /* UserAudioAnalysisTrack.m in Sources */,
 				1A14CA6C1A256B4E00C4FEB0 /* Channel.m in Sources */,
 				1AE771301A243E6500C49006 /* CommandFadeDown.m in Sources */,
+				1A27BEDD1A2BF6480043F8C9 /* SequenceScrollView.m in Sources */,
 				1A14CA551A246CB100C4FEB0 /* SequenceListViewController.m in Sources */,
 				1AE830291A21BA68000E297D /* LightMaster.xcdatamodeld in Sources */,
 				1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */,
@@ -488,7 +528,9 @@
 				1AE771791A24422C00C49006 /* CommandPulse.m in Sources */,
 				1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */,
 				1AE7717C1A24422C00C49006 /* CommandTwinkle.m in Sources */,
+				1A27BEE61A2BF6840043F8C9 /* SequenceTimelineView.m in Sources */,
 				1A14CA781A257E4C00C4FEB0 /* UserAudioAnalysis.m in Sources */,
+				1A27BEE31A2BF66D0043F8C9 /* SequenceChannelView.m in Sources */,
 				1AE7713F1A243E6600C49006 /* EchoNestTatum.m in Sources */,
 				1AE771391A243E6600C49006 /* EchoNestAudioAnalysis.m in Sources */,
 				1A14CA621A25411B00C4FEB0 /* ControlBoxViewController.m in Sources */,
@@ -496,6 +538,8 @@
 				1AE830231A21BA68000E297D /* main.m in Sources */,
 				1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */,
 				1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */,
+				1A27BEE01A2BF6620043F8C9 /* SequenceChannelHeaderView.m in Sources */,
+				1A27BEE91A2BF6960043F8C9 /* SequenceUserTatumsView.m in Sources */,
 				1AE830211A21BA68000E297D /* AppDelegate.m in Sources */,
 				1AE771451A243E6600C49006 /* EchoNestPitch.m in Sources */,
 				1A14CA581A25232C00C4FEB0 /* SNRFetchedResultsController.m in Sources */,

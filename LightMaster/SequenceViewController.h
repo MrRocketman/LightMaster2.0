@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SequenceScrollView;
+
 @interface SequenceViewController : NSViewController
 
 @property (strong, nonatomic) IBOutlet NSView *toolbarView;
@@ -20,5 +22,7 @@
 @property (strong, nonatomic) IBOutlet NSButton *sequenceListButton;
 
 @property (strong, nonatomic) IBOutlet NSTextField *titleLabel;
+
+@property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
 
 @end

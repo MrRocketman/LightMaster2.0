@@ -14,6 +14,8 @@
 #import "ControlBox.h"
 #import "Channel.h"
 
+#define PIXEL_TO_ZOOM_RATIO 25
+
 @interface CoreDataManager()
 
 @property (readwrite, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -309,6 +311,30 @@
     [controlBox addChannelsObject:channel];
     
     [self saveContext];
+}
+
+#pragma mark - Sequence Layout Methods
+
+- (int)timeToX:(float)time
+{
+    int x = [self widthForTimeInterval:time];
+    
+    return x;
+}
+
+- (float)xToTime:(int)x
+{
+    if(x > 0)
+    {
+        return  x / self.zoomLevel / PIXEL_TO_ZOOM_RATIO;
+    }
+    
+    return 0;
+}
+
+- (int)widthForTimeInterval:(float)timeInterval
+{
+    return (timeInterval * self.zoomLevel * PIXEL_TO_ZOOM_RATIO);
 }
 
 @end

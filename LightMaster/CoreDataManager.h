@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#define CHANNEL_HEIGHT 20.0
+
 @class Sequence, ControlBox;
 
 @interface CoreDataManager : NSObject
@@ -20,6 +22,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (strong, nonatomic) Sequence *currentSequence;
+@property (assign, nonatomic) float zoomLevel;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
@@ -31,5 +34,10 @@
 // ControlBox Methods
 - (void)newControlBox;
 - (void)newChannelForControlBox:(ControlBox *)controlBox;
+
+// Sequence Timing Methods
+- (int)timeToX:(float)time;
+- (float)xToTime:(int)x;
+- (int)widthForTimeInterval:(float)timeInterval;
 
 @end
