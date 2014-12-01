@@ -22,6 +22,8 @@
 - (void)awakeFromNib
 {
     [self.contentView setPostsBoundsChangedNotifications:YES];
+    [self setHorizontalLineScroll:0.0];
+    [self setHorizontalPageScroll:0.0];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
 }
 
@@ -66,6 +68,13 @@
         [self reflectScrolledClipView:[self contentView]];
         self.ignoreBoundsChanges = NO;
     }
+}
+
+- (void)otherScrollViewMagnificationChange:(float)magnification
+{
+    self.ignoreBoundsChanges = YES;
+    self.magnification = magnification;
+    self.ignoreBoundsChanges = NO;
 }
 
 - (void)updateViews

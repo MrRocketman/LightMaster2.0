@@ -28,7 +28,7 @@
     
     // clear the background
     [[NSColor yellowColor] set];
-    NSRectFill(self.bounds);
+    NSRectFill(dirtyRect);
     
     // basic beat line
     NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
@@ -36,8 +36,8 @@
     int largestY = NSMaxY(self.bounds);
     for (int i = 0; i < largestY; i += 20)
     {
-        NSPoint startPoint = NSMakePoint(NSMinX(self.bounds), i);
-        NSPoint endPoint = NSMakePoint(NSMaxX(self.bounds), i);
+        NSPoint startPoint = NSMakePoint(NSMinX(dirtyRect), i);
+        NSPoint endPoint = NSMakePoint(NSMaxX(dirtyRect), i);
         
         [basicBeatLine moveToPoint:startPoint];
         [basicBeatLine lineToPoint:endPoint];

@@ -7,6 +7,7 @@
 //
 
 #import "SequenceTimelineView.h"
+#import "SequenceLogic.h"
 
 @implementation SequenceTimelineView
 
@@ -24,11 +25,11 @@
 {
     [super drawRect:dirtyRect];
     
-    self.frame = NSMakeRect(0, 0, 10000, self.frame.size.height);
+    self.frame = NSMakeRect(0, 0, 10000 * [SequenceLogic sharedInstance].magnification, self.frame.size.height);
     
     // clear the background
     [[NSColor darkGrayColor] set];
-    NSRectFill(self.bounds);
+    NSRectFill(dirtyRect);
     
     // basic beat line
     NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
@@ -36,8 +37,8 @@
     int largestX = NSMaxX(self.bounds);
     for (int i = 0; i < largestX; i += 10)
     {
-        NSPoint startPoint = NSMakePoint(i, NSMinY(self.bounds));
-        NSPoint endPoint = NSMakePoint(i, NSMaxY(self.bounds));
+        NSPoint startPoint = NSMakePoint(i * [SequenceLogic sharedInstance].magnification, NSMinY(dirtyRect));
+        NSPoint endPoint = NSMakePoint(i * [SequenceLogic sharedInstance].magnification, NSMaxY(dirtyRect));
         
         [basicBeatLine moveToPoint:startPoint];
         [basicBeatLine lineToPoint:endPoint];

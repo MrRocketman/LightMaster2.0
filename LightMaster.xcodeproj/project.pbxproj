@@ -23,6 +23,7 @@
 		1A27BEED1A2C0B310043F8C9 /* SequenceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEEC1A2C0B310043F8C9 /* SequenceView.m */; };
 		1A27BEF01A2C3B730043F8C9 /* SequenceChannelScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEEF1A2C3B730043F8C9 /* SequenceChannelScrollView.m */; };
 		1A27BEF31A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEF21A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m */; };
+		1A27BEF91A2C4FB90043F8C9 /* SequenceLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */; };
 		1AB937BF1A28665600A397E3 /* SequenceTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937BE1A28665600A397E3 /* SequenceTatum.m */; };
 		1AB937C21A286C5500A397E3 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937C11A286C5500A397E3 /* Sequence.m */; };
 		1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771171A243E6500C49006 /* CommandFadeUp.m */; };
@@ -99,6 +100,8 @@
 		1A27BEEF1A2C3B730043F8C9 /* SequenceChannelScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceChannelScrollView.m; sourceTree = "<group>"; };
 		1A27BEF11A2C3BAE0043F8C9 /* SequenceTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceTimelineScrollView.h; sourceTree = "<group>"; };
 		1A27BEF21A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceTimelineScrollView.m; sourceTree = "<group>"; };
+		1A27BEF71A2C4FB90043F8C9 /* SequenceLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceLogic.h; sourceTree = "<group>"; };
+		1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceLogic.m; sourceTree = "<group>"; };
 		1AB937BD1A28665600A397E3 /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
 		1AB937BE1A28665600A397E3 /* SequenceTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SequenceTatum.m; path = LightMaster/SequenceTatum.m; sourceTree = "<group>"; };
 		1AB937C01A286C5500A397E3 /* Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sequence.h; path = LightMaster/Sequence.h; sourceTree = "<group>"; };
@@ -206,6 +209,8 @@
 			children = (
 				1A14CA5C1A253B0100C4FEB0 /* SequenceViewOld.h */,
 				1A14CA5D1A253B0100C4FEB0 /* SequenceViewOld.m */,
+				1A27BEF71A2C4FB90043F8C9 /* SequenceLogic.h */,
+				1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */,
 				1A14CA501A246A3800C4FEB0 /* SequenceViewController.h */,
 				1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */,
 				1A27BEF41A2C465E0043F8C9 /* SequenceView */,
@@ -554,6 +559,7 @@
 				1AE771791A24422C00C49006 /* CommandPulse.m in Sources */,
 				1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */,
 				1AE7717C1A24422C00C49006 /* CommandTwinkle.m in Sources */,
+				1A27BEF91A2C4FB90043F8C9 /* SequenceLogic.m in Sources */,
 				1A27BEE61A2BF6840043F8C9 /* SequenceTimelineView.m in Sources */,
 				1A14CA781A257E4C00C4FEB0 /* UserAudioAnalysis.m in Sources */,
 				1A27BEE31A2BF66D0043F8C9 /* SequenceChannelView.m in Sources */,

@@ -825,7 +825,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="5" minMagnification="1" translatesAutoresizingMaskIntoConstraints="NO" id="4Zg-Mw-MgZ" customClass="SequenceScrollView">
+                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="4Zg-Mw-MgZ" customClass="SequenceScrollView">
                                 <rect key="frame" x="198" y="0.0" width="836" height="492"/>
                                 <clipView key="contentView" id="fRT-ZF-nO6">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
@@ -856,7 +856,7 @@
                                     <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="N5M-cC-G3k"/>
                                 </connections>
                             </scrollView>
-                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" allowsMagnification="YES" maxMagnification="5" minMagnification="1" translatesAutoresizingMaskIntoConstraints="NO" id="fNF-w0-RBU" customClass="SequenceChannelScrollView">
+                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="fNF-w0-RBU" customClass="SequenceChannelScrollView">
                                 <rect key="frame" x="0.0" y="0.0" width="198" height="492"/>
                                 <clipView key="contentView" id="t4x-Q9-xj8">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
@@ -877,7 +877,7 @@
                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="4Pe-5I-1PI">
+                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="4Pe-5I-1PI">
                                     <rect key="frame" x="166" y="1" width="16" height="94"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -887,7 +887,7 @@
                                     <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="C34-OO-o1z"/>
                                 </connections>
                             </scrollView>
-                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="5" minMagnification="1" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
+                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
                                 <rect key="frame" x="198" y="491" width="836" height="49"/>
                                 <clipView key="contentView" id="Gx6-st-cQc">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
@@ -907,7 +907,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="fIP-b0-1Il"/>
                                 </constraints>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="5hu-tg-Ohe">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="5hu-tg-Ohe">
                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>

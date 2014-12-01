@@ -7,16 +7,7 @@
 //
 
 #import "SequenceView.h"
-#import "CoreDataManager.h"
-#import "NSManagedObjectContext+Queryable.h"
-#import "Sequence.h"
-#import "SequenceTatum.h"
-#import "ControlBox.h"
-#import "Channel.h"
-#import "Audio.h"
-#import "UserAudioAnalysis.h"
-#import "UserAudioAnalysisTrack.h"
-#import "UserAudioAnalysisTrackChannel.h"
+#import "SequenceLogic.h"
 
 @implementation SequenceView
 
@@ -34,25 +25,11 @@
 {
     [super drawRect:dirtyRect];
     
-    // Calculate the frame
-    /*int channelsCount = 1 + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] toArray] count] + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] toArray] count] + (int)[CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks.count + ([CoreDataManager sharedManager].currentSequence.audio ? 1 : 0);
-    int frameHeight = 0;
-    int frameWidth = 5000;//[[CoreDataManager sharedManager] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]];
-    // Set the Frame
-    frameHeight = channelsCount * CHANNEL_HEIGHT;
-    if(frameWidth <= self.superview.frame.size.width)
-    {
-        frameWidth = self.superview.frame.size.width;
-    }
-    if(frameHeight <= self.superview.frame.size.height)
-    {
-        frameHeight = self.superview.frame.size.height;
-    }*/
-    self.frame = NSMakeRect(0, 0, 10000, 1000);
+    self.frame = NSMakeRect(0, 0, 10000 * [SequenceLogic sharedInstance].magnification, 1000);
     
     // clear the background
     [[NSColor greenColor] set];
-    NSRectFill(self.bounds);
+    NSRectFill(dirtyRect);
     
     // basic beat line
     NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
@@ -60,8 +37,8 @@
     int largestY = NSMaxY(self.bounds);
     for (int i = 0; i < largestY; i += 20)
     {
-        NSPoint startPoint = NSMakePoint(NSMinX(self.bounds), i);
-        NSPoint endPoint = NSMakePoint(NSMaxX(self.bounds), i);
+        NSPoint startPoint = NSMakePoint(NSMinX(dirtyRect), i);
+        NSPoint endPoint = NSMakePoint(NSMaxX(dirtyRect), i);
         
         [basicBeatLine moveToPoint:startPoint];
         [basicBeatLine lineToPoint:endPoint];
@@ -77,8 +54,8 @@
     int largestX = NSMaxX(self.bounds);
     for (int i = 0; i < largestX; i += 10)
     {
-        NSPoint startPoint = NSMakePoint(i, NSMinY(self.bounds));
-        NSPoint endPoint = NSMakePoint(i, NSMaxY(self.bounds));
+        NSPoint startPoint = NSMakePoint(i * [SequenceLogic sharedInstance].magnification, NSMinY(dirtyRect));
+        NSPoint endPoint = NSMakePoint(i * [SequenceLogic sharedInstance].magnification, NSMaxY(dirtyRect));
         
         [basicBeatLine moveToPoint:startPoint];
         [basicBeatLine lineToPoint:endPoint];
@@ -87,6 +64,53 @@
     [[NSColor whiteColor] set];
     [basicBeatLine setLineWidth:1.0];
     [basicBeatLine stroke];
+    
+    /*
+    NSBezierPath *keyRollLine = [NSBezierPath bezierPath];
+    
+    int firstKeyRollLine = 0;
+    int currentKeyRollLine = 0;
+    int lastKeyRollLine = NSMaxY(self.editorArea);
+    
+    for (currentKeyRollLine = firstKeyRollLine; currentKeyRollLine <= lastKeyRollLine; currentKeyRollLine += keyRollUnit) {
+        
+        NSPoint startPoint = NSMakePoint([[OCConstantsLib sharedLib] pixelExact:NSMinX(self.editorArea)], [[OCConstantsLib sharedLib] pixelExact:currentKeyRollLine]);
+        NSPoint endPoint = NSMakePoint([[OCConstantsLib sharedLib] pixelExact:NSMaxX(self.editorArea)], [[OCConstantsLib sharedLib] pixelExact:currentKeyRollLine]);
+        
+        [keyRollLine moveToPoint:startPoint];
+        [keyRollLine lineToPoint:endPoint];
+        
+        // draw the black key background if needed
+        // This is a filled rect as opposed to a simple line.
+        
+        BOOL blackKeyFlag = [[OCMusicLib sharedLib] isBlackKey:currentKeyRollLine / keyRollUnit];
+        NSBezierPath *blackKey = [NSBezierPath bezierPath];
+        
+        NSPoint bottomLeft = startPoint;
+        NSPoint bottomRight = endPoint;
+        NSPoint topRight = NSMakePoint(bottomRight.x, (float)currentKeyRollLine + keyRollUnit);
+        NSPoint topLeft = NSMakePoint(bottomLeft.x, topRight.y);
+        
+        [blackKey moveToPoint:bottomLeft];
+        [blackKey lineToPoint:bottomRight];
+        [blackKey lineToPoint:topRight];
+        [blackKey lineToPoint:topLeft];
+        [blackKey lineToPoint:bottomLeft];
+        if (blackKeyFlag)
+        {
+            [[NSColor blueColor] set];
+        }
+        else
+        {
+            [[NSColor grayColor] set];
+        }
+        [blackKey fill];
+    }
+    
+    [[NSColor redColor] set];
+    [keyRollLine setLineWidth:1.0];
+    [keyRollLine stroke];
+     */
 }
 
 @end

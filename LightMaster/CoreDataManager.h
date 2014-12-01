@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#define CHANNEL_HEIGHT 20.0
-
 @class Sequence, ControlBox;
 
 @interface CoreDataManager : NSObject
@@ -34,10 +32,5 @@
 // ControlBox Methods
 - (void)newControlBox;
 - (void)newChannelForControlBox:(ControlBox *)controlBox;
-
-// Sequence Timing Methods
-- (int)timeToX:(float)time;
-- (float)xToTime:(int)x;
-- (int)widthForTimeInterval:(float)timeInterval;
 
 @end

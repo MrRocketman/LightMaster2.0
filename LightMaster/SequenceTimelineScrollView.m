@@ -10,6 +10,7 @@
 #import "SequenceTimelineView.h"
 #import "SequenceChannelScrollView.h"
 #import "SequenceScrollView.h"
+#import "SequenceLogic.h"
 
 @interface SequenceTimelineScrollView()
 
@@ -37,6 +38,15 @@
     
     if(!self.ignoreBoundsChanges)
     {
+        self.ignoreBoundsChanges = YES;
+        [[SequenceLogic sharedInstance] updateMagnification:self.magnification];
+        if(fabs(self.magnification - 1.0) > 0.0001)
+        {
+            [self.timelineView setNeedsDisplay:YES];
+        }
+        self.magnification = 1.0;
+        self.ignoreBoundsChanges = NO;
+        
         [self.sequenceScrollView otherScrollViewBoundsChange:notification];
     }
 }
@@ -67,6 +77,20 @@
         [self reflectScrolledClipView:[self contentView]];
         self.ignoreBoundsChanges = NO;
     }
+    
+    // Redraw if magnification changed
+    if([SequenceLogic sharedInstance].needsDisplay)
+    {
+        [self.timelineView setNeedsDisplay:YES];
+        [SequenceLogic sharedInstance].needsDisplay = NO;
+    }
+}
+
+- (void)otherScrollViewMagnificationChange:(float)magnification
+{
+    self.ignoreBoundsChanges = YES;
+    self.magnification = magnification;
+    self.ignoreBoundsChanges = NO;
 }
 
 - (void)updateViews
