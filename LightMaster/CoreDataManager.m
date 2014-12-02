@@ -259,7 +259,7 @@
     sequence.endTime = @60.0;
     
     // Make the default tatum set
-    for(int i = 0; i < 60.0 / 0.1; i ++)
+    for(int i = 0; i <= [sequence.endTime floatValue] / 0.1; i ++)
     {
         SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
         tatum.startTime = @(i * 0.1);
@@ -289,6 +289,37 @@
     }
     
     self.aSequenceHasBeenLoaded = YES;
+}
+
+- (void)updateSequenceTatumsForNewEndTime:(float)newEndTime
+{
+    // Add tatums
+    if(newEndTime > [self.currentSequence.endTime floatValue])
+    {
+        SequenceTatum *lastTatum = [[[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", self.currentSequence] orderBy:@"startTime"] toArray] lastObject];
+        
+        if(newEndTime > [lastTatum.startTime floatValue] + 0.1)
+        {
+            for(float i = [lastTatum.startTime floatValue] + 0.1; i <= newEndTime; i += 0.1)
+            {
+                SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
+                tatum.startTime = @(i);
+                [self.currentSequence addTatumsObject:tatum];
+            }
+        }
+    }
+    // Remove tatums
+    else if(newEndTime < [self.currentSequence.endTime floatValue])
+    {
+        NSSet *tatumsToRemove = [NSSet setWithArray:[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND startTime > %f", self.currentSequence, newEndTime] toArray]];
+        [self.currentSequence removeTatums:tatumsToRemove];
+    }
+    
+    // Update the endTime
+    self.currentSequence.endTime = @(newEndTime);
+    
+    // Save
+    [self saveContext];
 }
 
 - (void)newControlBox

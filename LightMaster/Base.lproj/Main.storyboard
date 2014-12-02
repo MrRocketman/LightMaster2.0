@@ -747,7 +747,7 @@ IA
                                     </button>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aBB-OC-aOC">
                                         <rect key="frame" x="458" y="17" width="152" height="51"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="000.000" placeholderString="000.000" id="UO0-tf-qIh">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="001.000" placeholderString="" id="UO0-tf-qIh">
                                             <font key="font" metaFont="system" size="41"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="labelColor" catalog="System" colorSpace="catalog"/>

@@ -28,6 +28,7 @@
 // Sequence Methods
 - (void)newSequence;
 - (void)getLatestOrCreateNewSequence;
+- (void)updateSequenceTatumsForNewEndTime:(float)endTime;
 
 // ControlBox Methods
 - (void)newControlBox;
