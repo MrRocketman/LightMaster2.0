@@ -48,8 +48,8 @@
     self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], self.frame.size.height);
     
     // clear the background
-    [[NSColor darkGrayColor] set];
-    NSRectFill(dirtyRect);
+    //[[NSColor darkGrayColor] set];
+    //NSRectFill(dirtyRect);
     
     [self drawTimeline];
 }
@@ -126,7 +126,7 @@
     }
     
     // Draw the time lines
-    [[NSColor whiteColor] set];
+    [[NSColor blackColor] set];
     [timeLines setLineWidth:1.0];
     [timeLines stroke];
     
@@ -153,11 +153,11 @@
     // Set the color according to whether it is clicked or not
     if(!self.currentTimeMarkerIsSelected)
     {
-        [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.5] setFill];
+        [[NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:0.5] setFill];
     }
     else
     {
-        [[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:0.5] setFill];
+        [[NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:0.1] setFill];
     }
     [triangle fill];
     [[NSColor whiteColor] setStroke];

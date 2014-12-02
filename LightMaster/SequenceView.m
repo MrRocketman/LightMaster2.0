@@ -36,7 +36,7 @@
     self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], 1000);
     
     // clear the background
-    [[NSColor greenColor] set];
+    [[NSColor blackColor] set];
     NSRectFill(self.bounds);
     
     // Horizontal lines
@@ -52,7 +52,7 @@
         [basicBeatLine lineToPoint:endPoint];
     }
     
-    [[NSColor whiteColor] set];
+    [[NSColor darkGrayColor] set];
     [basicBeatLine setLineWidth:1.0];
     [basicBeatLine stroke];
     

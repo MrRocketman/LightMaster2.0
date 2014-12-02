@@ -27,8 +27,8 @@
     self.frame = NSMakeRect(0, 0, self.frame.size.width, 1000);
     
     // clear the background
-    [[NSColor yellowColor] set];
-    NSRectFill(dirtyRect);
+    //[[NSColor yellowColor] set];
+    //NSRectFill(dirtyRect);
     
     // basic beat line
     NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
@@ -43,7 +43,7 @@
         [basicBeatLine lineToPoint:endPoint];
     }
     
-    [[NSColor whiteColor] set];
+    [[NSColor blackColor] set];
     [basicBeatLine setLineWidth:1.0];
     [basicBeatLine stroke];
 }
