@@ -34,7 +34,7 @@
 
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
-    //[self.timelineView setNeedsDisplay:YES];
+    [self.timelineView setNeedsDisplay:YES];
     
     if(!self.ignoreBoundsChanges)
     {

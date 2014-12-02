@@ -16,6 +16,8 @@
 @interface SequenceScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
+@property (assign, nonatomic) NSRect lastRefreshVisibleRect;
+@property (assign, nonatomic) float lastRefreshMagnification;
 
 @end
 
@@ -26,6 +28,8 @@
     [self.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
     self.magnification = 5.0;
+    self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
+    self.lastRefreshMagnification = 1.0;
 }
 
 - (BOOL)isFlipped
@@ -35,14 +39,25 @@
 
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
-    //[self.sequenceView setNeedsDisplay:YES];
+    // Only redraw every 50% width change, since the view draws 200% width
+    if(self.documentVisibleRect.origin.x > self.lastRefreshVisibleRect.origin.x + self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.x < self.lastRefreshVisibleRect.origin.x - self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.y > self.lastRefreshVisibleRect.origin.y + self.lastRefreshVisibleRect.size.height / 2 || self.documentVisibleRect.origin.y < self.lastRefreshVisibleRect.origin.y - self.lastRefreshVisibleRect.size.height / 2)
+    {
+        self.lastRefreshVisibleRect = self.documentVisibleRect;
+        
+        [self.sequenceView setNeedsDisplay:YES];
+    }
     
+    // If the scroll happened from the user mouse within this view, update
     if(!self.ignoreBoundsChanges)
     {
         self.ignoreBoundsChanges = YES;
         [[SequenceLogic sharedInstance] updateMagnification:self.magnification];
-        if(fabs(self.magnification - 1.0) > 0.0001)
+        // Only redraw every 50% width change, since the view draws 200% width
+        if(fabs(self.magnification - 1.0) > 0.0001 && ([SequenceLogic sharedInstance].magnification > self.lastRefreshMagnification + 1.0 || [SequenceLogic sharedInstance].magnification < self.lastRefreshMagnification - 1.0))
         {
+            NSLog(@"lastMag:%f mag:%f", self.lastRefreshMagnification, [SequenceLogic sharedInstance].magnification);
+            self.lastRefreshMagnification = [SequenceLogic sharedInstance].magnification;
+            
             [self.sequenceView setNeedsDisplay:YES];
             [SequenceLogic sharedInstance].needsDisplay = YES;
         }

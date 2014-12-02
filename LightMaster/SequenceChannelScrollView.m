@@ -34,7 +34,7 @@
 
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
-    //[self.channelView setNeedsDisplay:YES];
+    [self.channelView setNeedsDisplay:YES];
     
     if(!self.ignoreBoundsChanges)
     {
@@ -45,7 +45,7 @@
 - (void)otherScrollViewBoundsChange:(NSNotification *)notification
 {
     // get the changed content view from the notification
-    NSClipView *changedContentView=[notification object];
+    NSClipView *changedContentView = [notification object];
     
     // get the origin of the NSClipView of the scroll view that we're watching
     NSPoint changedBoundsOrigin = [changedContentView documentVisibleRect].origin;;
