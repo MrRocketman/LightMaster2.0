@@ -27,4 +27,8 @@
 @property (strong, nonatomic) IBOutlet SequenceChannelScrollView *channelScrollView;
 @property (strong, nonatomic) IBOutlet SequenceTimelineScrollView *timelineScrollView;
 
+- (IBAction)skipBackButtonPress:(id)sender;
+- (IBAction)playButtonPress:(id)sender;
+- (IBAction)playSelectionButtonPress:(id)sender;
+
 @end

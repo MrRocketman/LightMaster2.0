@@ -15,13 +15,14 @@
 + (SequenceLogic *)sharedInstance;
 
 @property (assign, nonatomic) float magnification;
-@property (assign, nonatomic) BOOL needsDisplay;
+@property (assign, nonatomic) float currentTime;
+
 - (void)updateMagnification:(float)newMagnification;
 
 - (NSRect)sequenceFrame;
 
-- (int)timeToX:(float)time;
+- (float)timeToX:(float)time;
 - (float)xToTime:(int)x;
-- (int)widthForTimeInterval:(float)timeInterval;
+- (float)widthForTimeInterval:(float)timeInterval;
 
 @end

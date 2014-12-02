@@ -39,6 +39,7 @@
     if(self)
     {
         self.magnification = 1.0;
+        self.currentTime = 1.0;
     }
     
     return self;
@@ -84,7 +85,7 @@
     return NSMakeRect(0, 0, frameWidth, frameHeight);
 }
 
-- (int)timeToX:(float)time
+- (float)timeToX:(float)time
 {
     int x = [self widthForTimeInterval:time];
     
@@ -101,7 +102,7 @@
     return 0;
 }
 
-- (int)widthForTimeInterval:(float)timeInterval
+- (float)widthForTimeInterval:(float)timeInterval
 {
     return (timeInterval * self.magnification * SECONDS_TO_PIXELS);
 }

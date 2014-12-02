@@ -40,9 +40,11 @@
     {
         self.ignoreBoundsChanges = YES;
         [[SequenceLogic sharedInstance] updateMagnification:self.magnification];
+        // Only redraw every 50% width change, since the view draws 200% width
         if(fabs(self.magnification - 1.0) > 0.0001)
         {
-            [self.timelineView setNeedsDisplay:YES];
+            [self updateViews];
+            [self.sequenceScrollView updateViews];
         }
         self.magnification = 1.0;
         self.ignoreBoundsChanges = NO;
@@ -77,20 +79,6 @@
         [self reflectScrolledClipView:[self contentView]];
         self.ignoreBoundsChanges = NO;
     }
-    
-    // Redraw if magnification changed
-    if([SequenceLogic sharedInstance].needsDisplay)
-    {
-        [self.timelineView setNeedsDisplay:YES];
-        [SequenceLogic sharedInstance].needsDisplay = NO;
-    }
-}
-
-- (void)otherScrollViewMagnificationChange:(float)magnification
-{
-    self.ignoreBoundsChanges = YES;
-    self.magnification = magnification;
-    self.ignoreBoundsChanges = NO;
 }
 
 - (void)updateViews

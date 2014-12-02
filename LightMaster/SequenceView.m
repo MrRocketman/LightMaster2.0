@@ -17,7 +17,12 @@
 
 - (void)awakeFromNib
 {
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
+}
+
+- (void)currentTimeChange:(NSNotification *)notification
+{
+    [self setNeedsDisplay:YES];
 }
 
 - (BOOL)isFlipped
@@ -52,7 +57,10 @@
     [basicBeatLine stroke];
     
     // Draw Sequence Tatums
-    [self drawTatumGrid];
+    [self drawSequenceTatums];
+    
+    // Draw the currentTimeMarker
+    [self drawCurrentTimeMarker];
     
     /*
     NSBezierPath *keyRollLine = [NSBezierPath bezierPath];
@@ -102,13 +110,13 @@
      */
 }
 
-- (void)drawTatumGrid
+- (void)drawSequenceTatums
 {
     NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
     //NSLog(@"startTime:%f endTime:%f", [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width]);
     NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND startTime >= %f AND startTime <= %f", [CoreDataManager sharedManager].currentSequence, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5]] orderBy:@"startTime"] toArray];
     //NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"startTime"] toArray];
-    NSLog(@"visiableTatums:%d", (int)visibleTatums.count);
+    //NSLog(@"visiableTatums:%d", (int)visibleTatums.count);
     
     NSBezierPath *tatumLinesPaths = [NSBezierPath bezierPath];
     for(int i = 0; i < visibleTatums.count; i ++)
@@ -123,6 +131,13 @@
     [[NSColor whiteColor] set];
     [tatumLinesPaths setLineWidth:1.0];
     [tatumLinesPaths stroke];
+}
+
+- (void)drawCurrentTimeMarker
+{
+    NSRect markerLineFrame = NSMakeRect([[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime], 0, 1, self.frame.size.height);
+    [[NSColor redColor] set];
+    NSRectFill(markerLineFrame);
 }
 
 @end

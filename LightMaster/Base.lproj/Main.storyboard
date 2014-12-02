@@ -737,7 +737,13 @@
                                         <buttonCell key="cell" type="bevel" title="Play" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="95R-YM-hpO">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="system" size="21"/>
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+IA
+</string>
                                         </buttonCell>
+                                        <connections>
+                                            <action selector="playButtonPress:" target="JHR-DC-ihs" id="tFV-To-T9Q"/>
+                                        </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aBB-OC-aOC">
                                         <rect key="frame" x="458" y="17" width="152" height="51"/>
@@ -747,8 +753,8 @@
                                             <color key="backgroundColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <segmentedControl verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Xn-nQr">
-                                        <rect key="frame" x="615" y="33" width="332" height="18"/>
+                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Xn-nQr">
+                                        <rect key="frame" x="615" y="33" width="332" height="19"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="330" id="hSV-8E-gMk"/>
                                         </constraints>
@@ -768,7 +774,11 @@
                                         <buttonCell key="cell" type="bevel" title="Back To 0" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zSj-ev-PBB">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system" size="8"/>
+                                            <string key="keyEquivalent">z</string>
                                         </buttonCell>
+                                        <connections>
+                                            <action selector="skipBackButtonPress:" target="JHR-DC-ihs" id="oUO-UW-LpS"/>
+                                        </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="IQI-CM-lYY">
                                         <rect key="frame" x="390" y="10" width="64" height="64"/>
@@ -778,7 +788,11 @@
                                         <buttonCell key="cell" type="bevel" title="Play[]" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PeR-vH-oc6">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="system" size="15"/>
+                                            <string key="keyEquivalent">s</string>
                                         </buttonCell>
+                                        <connections>
+                                            <action selector="playSelectionButtonPress:" target="JHR-DC-ihs" id="cij-pc-ZBM"/>
+                                        </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="PIb-yP-RwM">
                                         <rect key="frame" x="952" y="10" width="64" height="64"/>
@@ -826,13 +840,13 @@
                                 </textFieldCell>
                             </textField>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="4Zg-Mw-MgZ" customClass="SequenceScrollView">
-                                <rect key="frame" x="198" y="0.0" width="836" height="492"/>
+                                <rect key="frame" x="198" y="0.0" width="836" height="515"/>
                                 <clipView key="contentView" id="fRT-ZF-nO6">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h39-Hs-fm9" customClass="SequenceView">
-                                            <rect key="frame" x="0.0" y="0.0" width="834" height="491"/>
+                                            <rect key="frame" x="0.0" y="419" width="834" height="514"/>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -846,7 +860,7 @@
                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="Ulz-le-bGt">
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Ulz-le-bGt">
                                     <rect key="frame" x="166" y="1" width="16" height="94"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -857,13 +871,13 @@
                                 </connections>
                             </scrollView>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="fNF-w0-RBU" customClass="SequenceChannelScrollView">
-                                <rect key="frame" x="0.0" y="0.0" width="198" height="492"/>
+                                <rect key="frame" x="0.0" y="0.0" width="198" height="515"/>
                                 <clipView key="contentView" id="t4x-Q9-xj8">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDU-3M-b4M" customClass="SequenceChannelView">
-                                            <rect key="frame" x="0.0" y="396" width="197" height="491"/>
+                                            <rect key="frame" x="0.0" y="815" width="197" height="514"/>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -888,13 +902,13 @@
                                 </connections>
                             </scrollView>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
-                                <rect key="frame" x="198" y="491" width="836" height="49"/>
+                                <rect key="frame" x="198" y="515" width="836" height="25"/>
                                 <clipView key="contentView" id="Gx6-st-cQc">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pnm-RU-I1n" customClass="SequenceTimelineView">
-                                            <rect key="frame" x="0.0" y="-47" width="836" height="48"/>
+                                            <rect key="frame" x="0.0" y="-118" width="836" height="24"/>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -905,7 +919,7 @@
                                     </constraints>
                                 </clipView>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="49" id="fIP-b0-1Il"/>
+                                    <constraint firstAttribute="height" constant="25" id="fIP-b0-1Il"/>
                                 </constraints>
                                 <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="5hu-tg-Ohe">
                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
@@ -924,7 +938,7 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="Aan-EI-jZD" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" constant="8" symbolic="YES" id="0iu-WV-2HD"/>
-                            <constraint firstItem="fNF-w0-RBU" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="132" id="7zT-c6-g8O"/>
+                            <constraint firstItem="fNF-w0-RBU" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="109" id="7zT-c6-g8O"/>
                             <constraint firstItem="IZ1-n6-LCC" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" id="8Pe-uN-Ic8"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" id="8we-EJ-EPl"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="Aan-EI-jZD" secondAttribute="trailing" constant="8" symbolic="YES" id="GWs-qV-j3e"/>

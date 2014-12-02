@@ -17,7 +17,6 @@
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
 @property (assign, nonatomic) NSRect lastRefreshVisibleRect;
-@property (assign, nonatomic) float lastRefreshMagnification;
 
 @end
 
@@ -29,7 +28,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
     self.magnification = 5.0;
     self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
-    self.lastRefreshMagnification = 1.0;
 }
 
 - (BOOL)isFlipped
@@ -44,7 +42,7 @@
     {
         self.lastRefreshVisibleRect = self.documentVisibleRect;
         
-        [self.sequenceView setNeedsDisplay:YES];
+        [self updateViews];
     }
     
     // If the scroll happened from the user mouse within this view, update
@@ -53,13 +51,10 @@
         self.ignoreBoundsChanges = YES;
         [[SequenceLogic sharedInstance] updateMagnification:self.magnification];
         // Only redraw every 50% width change, since the view draws 200% width
-        if(fabs(self.magnification - 1.0) > 0.0001 && ([SequenceLogic sharedInstance].magnification > self.lastRefreshMagnification + 1.0 || [SequenceLogic sharedInstance].magnification < self.lastRefreshMagnification - 1.0))
+        if(fabs(self.magnification - 1.0) > 0.0001)
         {
-            NSLog(@"lastMag:%f mag:%f", self.lastRefreshMagnification, [SequenceLogic sharedInstance].magnification);
-            self.lastRefreshMagnification = [SequenceLogic sharedInstance].magnification;
-            
-            [self.sequenceView setNeedsDisplay:YES];
-            [SequenceLogic sharedInstance].needsDisplay = YES;
+            [self updateViews];
+            [self.timelineScrollView updateViews];
         }
         self.magnification = 1.0;
         self.ignoreBoundsChanges = NO;
@@ -90,13 +85,6 @@
         // scrollers
         [self reflectScrolledClipView:[self contentView]];
         self.ignoreBoundsChanges = NO;
-    }
-    
-    // Redraw if magnification changed
-    if([SequenceLogic sharedInstance].needsDisplay)
-    {
-        [self.sequenceView setNeedsDisplay:YES];
-        [SequenceLogic sharedInstance].needsDisplay = NO;
     }
 }
 

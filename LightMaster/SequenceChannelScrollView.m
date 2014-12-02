@@ -10,6 +10,7 @@
 #import "SequenceChannelView.h"
 #import "SequenceScrollView.h"
 #import "SequenceTimelineScrollView.h"
+#import "SequenceLogic.h"
 
 @interface SequenceChannelScrollView()
 
