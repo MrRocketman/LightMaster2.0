@@ -13,8 +13,6 @@
 #import "SequenceTimelineScrollView.h"
 #import "SequenceScrollView.h"
 
-#define AUTO_SCROLL_REFRESH_RATE 0.03
-
 @interface SequenceTimelineView()
 
 @property (assign, nonatomic) BOOL currentTimeMarkerIsSelected;
@@ -289,7 +287,7 @@
 
 - (void)autoScroll:(NSTimer *)theTimer;
 {
-    BOOL didAutoscroll = [[self superview] autoscroll:self.mouseEvent];
+    BOOL didAutoscroll = [self autoscroll:self.mouseEvent];
     if(didAutoscroll)
     {
         [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance] xToTime:[SequenceLogic sharedInstance].currentTime + self.mouseEvent.deltaX];

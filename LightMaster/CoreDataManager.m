@@ -256,7 +256,7 @@
     Sequence *sequence = [NSEntityDescription insertNewObjectForEntityForName:@"Sequence" inManagedObjectContext:self.managedObjectContext];
     sequence.modifiedDate = [NSDate date];
     sequence.title = @"New Sequence";
-    sequence.endTime = @60.0;
+    sequence.endTime = @10.0;
     
     // Make the default tatum set
     for(int i = 0; i <= [sequence.endTime floatValue] / 0.1; i ++)

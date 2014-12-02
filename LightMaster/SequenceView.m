@@ -13,6 +13,19 @@
 #import "Sequence.h"
 #import "SequenceTatum.h"
 
+@interface SequenceView()
+
+@property (strong, nonatomic) NSBezierPath *sequenceTatumPaths;
+@property (assign, nonatomic) NSPoint currentMousePoint;
+@property (strong, nonatomic) NSEvent *mouseEvent;
+@property (strong, nonatomic) NSTimer *autoScrollTimer;
+@property (strong, nonatomic) NSTrackingArea *trackingArea;
+
+@property (assign, nonatomic) BOOL sequenceTatumIsSelected;
+@property (strong, nonatomic) SequenceTatum *selectedSequenceTatum;
+
+@end
+
 @implementation SequenceView
 
 - (void)awakeFromNib
@@ -34,6 +47,13 @@
 {
     [super drawRect:dirtyRect];
     self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], 1000);
+    
+    if(self.trackingArea)
+    {
+        [self removeTrackingArea:self.trackingArea];
+    }
+    self.trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds] options:(NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved) owner:self userInfo:nil];
+    [self addTrackingArea:self.trackingArea];
     
     // clear the background
     [[NSColor blackColor] set];
@@ -118,19 +138,46 @@
     //NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"startTime"] toArray];
     //NSLog(@"visiableTatums:%d", (int)visibleTatums.count);
     
-    NSBezierPath *tatumLinesPaths = [NSBezierPath bezierPath];
+    self.sequenceTatumPaths = [NSBezierPath bezierPath];
     for(int i = 0; i < visibleTatums.count; i ++)
     {
-        //NSLog(@"Tatum:%f", [((SequenceTatum *)visibleTatums[i]).startTime floatValue]);
-        NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i]).startTime floatValue]], NSMinY(self.bounds));
-        NSPoint endPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i]).startTime floatValue]], NSMaxY(self.bounds));
-        
-        [tatumLinesPaths moveToPoint:startPoint];
-        [tatumLinesPaths lineToPoint:endPoint];
+        // Update the tatum position if it's selected
+        if(self.sequenceTatumIsSelected && self.selectedSequenceTatum == (SequenceTatum *)visibleTatums[i])
+        {
+            ((SequenceTatum *)visibleTatums[i]).startTime = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
+            NSBezierPath *selectedTatumPath = [NSBezierPath bezierPath];
+            [self addSequenceTatum:(SequenceTatum *)visibleTatums[i] toBezierPath:selectedTatumPath];
+            [[NSColor yellowColor] set];
+            [selectedTatumPath fill];
+        }
+        else
+        {
+            // Draw the normal sequence Tatums
+            NSPoint startPoint = [self addSequenceTatum:(SequenceTatum *)visibleTatums[i] toBezierPath:self.sequenceTatumPaths];
+            
+            // Select a sequenceTatum
+            if(self.sequenceTatumIsSelected && !self.selectedSequenceTatum && self.currentMousePoint.x >= startPoint.x - 1 && self.currentMousePoint.x <= startPoint.x + 1)
+            {
+                self.selectedSequenceTatum = (SequenceTatum *)visibleTatums[i];
+            }
+        }
     }
-    [[NSColor whiteColor] set];
-    [tatumLinesPaths setLineWidth:1.0];
-    [tatumLinesPaths stroke];
+    [[NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0] set];
+    //[self.sequenceTatumPaths setLineWidth:1.0];
+    [self.sequenceTatumPaths fill];
+}
+
+- (NSPoint)addSequenceTatum:(SequenceTatum *)tatum toBezierPath:(NSBezierPath *)path
+{
+    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[tatum.startTime floatValue]], NSMinY(self.bounds));
+    NSPoint endPoint = NSMakePoint(startPoint.x, NSMaxY(self.bounds));
+    
+    [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x - 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x + 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(startPoint.x + 1, startPoint.y)];
+    
+    return startPoint;
 }
 
 - (void)drawCurrentTimeMarker
@@ -138,6 +185,92 @@
     NSRect markerLineFrame = NSMakeRect([[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime], 0, 1, self.frame.size.height);
     [[NSColor redColor] set];
     NSRectFill(markerLineFrame);
+}
+
+#pragma mark Mouse Methods
+
+- (void)mouseDown:(NSEvent *)theEvent
+{
+    NSPoint eventLocation = [theEvent locationInWindow];
+    self.currentMousePoint = [self convertPoint:eventLocation fromView:nil];
+    
+    if([self.sequenceTatumPaths containsPoint:self.currentMousePoint])
+    {
+        // Select tatum
+        self.sequenceTatumIsSelected = YES;
+    }
+    
+    [self setNeedsDisplay:YES];
+}
+
+- (void)mouseDragged:(NSEvent *)theEvent
+{
+    NSPoint eventLocation = [theEvent locationInWindow];
+    self.currentMousePoint = [self convertPoint:eventLocation fromView:nil];
+    self.mouseEvent = theEvent;
+    
+    /*if(self.currentTimeMarkerIsSelected)
+    {
+        // Update the currentTime
+        float newCurrentTime = [[SequenceLogic sharedInstance] xToTime:currentMousePoint.x];
+        // Bind the minimum time to 0
+        if(newCurrentTime < 0.0)
+        {
+            newCurrentTime = 0.0;
+        }
+        [SequenceLogic sharedInstance].currentTime = newCurrentTime;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
+    }*/
+    
+    if(self.autoScrollTimer == nil)
+    {
+        [self.autoScrollTimer invalidate];
+        self.autoScrollTimer = nil;
+        self.autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_REFRESH_RATE target:self selector:@selector(autoScroll:) userInfo:nil repeats:YES];
+    }
+    
+    [self setNeedsDisplay:YES];
+}
+
+- (void)mouseUp:(NSEvent *)theEvent
+{
+    if(self.sequenceTatumIsSelected)
+    {
+        self.sequenceTatumIsSelected = NO;
+        self.selectedSequenceTatum = nil;
+        // Save the sequenceTatum time change
+        [[CoreDataManager sharedManager] saveContext];
+    }
+    
+    [self.autoScrollTimer invalidate];
+    self.autoScrollTimer = nil;
+    
+    [self setNeedsDisplay:YES];
+}
+
+- (void)mouseMoved:(NSEvent *)theEvent
+{
+    NSPoint eventLocation = [theEvent locationInWindow];
+    NSPoint currentMousePoint = [self convertPoint:eventLocation fromView:nil];
+    
+    if([self.sequenceTatumPaths containsPoint:currentMousePoint])
+    {
+        [[NSCursor resizeLeftRightCursor] set];
+    }
+    else
+    {
+        [[NSCursor arrowCursor] set];
+    }
+}
+
+- (void)autoScroll:(NSTimer *)theTimer;
+{
+    BOOL didAutoscroll = [self autoscroll:self.mouseEvent];
+    if(didAutoscroll)
+    {
+        [self setNeedsDisplay:YES];
+    }
 }
 
 @end
