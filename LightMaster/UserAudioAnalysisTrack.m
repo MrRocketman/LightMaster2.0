@@ -2,18 +2,19 @@
 //  UserAudioAnalysisTrack.m
 //  LightMaster
 //
-//  Created by James Adams on 11/24/14.
+//  Created by James Adams on 12/2/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
 #import "UserAudioAnalysisTrack.h"
-#import "UserAudioAnalysis.h"
+#import "Sequence.h"
+#import "UserAudioAnalysisTrackChannel.h"
 
 
 @implementation UserAudioAnalysisTrack
 
 @dynamic title;
-@dynamic audioAnalysis;
+@dynamic sequence;
 @dynamic channels;
 
 @end

@@ -26,7 +26,7 @@
 - (NSURL *)applicationDocumentsDirectory;
 
 // Sequence Methods
-- (void)newSequence;
+- (Sequence *)newSequence;
 - (void)getLatestOrCreateNewSequence;
 - (void)updateSequenceTatumsForNewEndTime:(float)endTime;
 

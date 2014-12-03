@@ -2,7 +2,7 @@
 //  Sequence.m
 //  LightMaster
 //
-//  Created by James Adams on 11/28/14.
+//  Created by James Adams on 12/2/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -12,6 +12,7 @@
 #import "ControlBox.h"
 #import "Playlist.h"
 #import "SequenceTatum.h"
+#import "UserAudioAnalysisTrack.h"
 
 
 @implementation Sequence
@@ -26,5 +27,6 @@
 @dynamic controlBoxes;
 @dynamic playlists;
 @dynamic tatums;
+@dynamic userAudioAnalysisTracks;
 
 @end

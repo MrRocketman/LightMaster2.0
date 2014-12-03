@@ -123,6 +123,7 @@
     }
     else if([control.identifier isEqualToString:@"channelIDTextField"])
     {
+        NSLog(@"chaning id for channel:%@", (Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow]);
         [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
     }
     else if([control.identifier isEqualToString:@"channelTitleTextField"])

@@ -251,7 +251,7 @@
 
 #pragma mark - Sequence Methods
 
-- (void)newSequence
+- (Sequence *)newSequence
 {
     Sequence *sequence = [NSEntityDescription insertNewObjectForEntityForName:@"Sequence" inManagedObjectContext:self.managedObjectContext];
     sequence.modifiedDate = [NSDate date];
@@ -267,6 +267,8 @@
     }
     
     [self saveContext];
+    
+    return sequence;
 }
 
 - (void)getLatestOrCreateNewSequence
@@ -284,7 +286,7 @@
         }
         else
         {
-            [self newSequence];
+            self.currentSequence = [self newSequence];
         }
     }
     
@@ -326,7 +328,7 @@
 {
     ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:[self managedObjectContext]];
     controlBox.title = @"New Box";
-    controlBox.idNumber = @0;
+    controlBox.idNumber = @([[[self.managedObjectContext ofType:@"ControlBox"] toArray] count] - 1);
     
     [self saveContext];
 }
@@ -335,7 +337,7 @@
 {
     Channel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"Channel" inManagedObjectContext:[self managedObjectContext]];
     channel.title = @"New Channel";
-    channel.idNumber = @0;
+    channel.idNumber = @(controlBox.channels.count);
     channel.color = [NSColor blueColor];
     [controlBox addChannelsObject:channel];
     

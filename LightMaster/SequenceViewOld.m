@@ -14,7 +14,6 @@
 #import "ControlBox.h"
 #import "Channel.h"
 #import "Audio.h"
-#import "UserAudioAnalysis.h"
 #import "UserAudioAnalysisTrack.h"
 #import "UserAudioAnalysisTrackChannel.h"
 
@@ -91,7 +90,7 @@
     [super drawRect:dirtyRect];
     
     // Calculate the frame
-    int channelsCount = 1 + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] toArray] count] + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] toArray] count] + (int)[CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks.count + ([CoreDataManager sharedManager].currentSequence.audio ? 1 : 0);
+    int channelsCount = 1;// + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] toArray] count] + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] toArray] count] + (int)[CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks.count + ([CoreDataManager sharedManager].currentSequence.audio ? 1 : 0);
     int frameHeight = 0;
     int frameWidth = [self timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]] + HEADER_TOTAL_WIDTH;
     // Set the Frame
@@ -125,11 +124,11 @@
     if([CoreDataManager sharedManager].currentSequence.audio)
     {
         // Draw the audio track headers
-        for(UserAudioAnalysisTrack *userAudioAnalysisTrack in [CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks)
+        /*for(UserAudioAnalysisTrack *userAudioAnalysisTrack in [CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks)
         {
             [self drawChannelBackgroundWithX:0 y:headerChannelCount width:HEADER_WIDTH height:(userAudioAnalysisTrack.channels.count + 1) red:0.8 green:0.0 blue:0.0 alpha:1.0];
             headerChannelCount += userAudioAnalysisTrack.channels.count + 1;
-        }
+        }*/
         
         // Draw the add audio track header
         [self drawChannelBackgroundWithX:0 y:headerChannelCount width:HEADER_TOTAL_WIDTH height:1 red:0.5 green:0.0 blue:0.0 alpha:1.0];
@@ -150,7 +149,7 @@
     if([CoreDataManager sharedManager].currentSequence.audio)
     {
         // Draw the audio channel headers
-        for(UserAudioAnalysisTrack *userAudioAnalysisTrack in [CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks)
+        /*for(UserAudioAnalysisTrack *userAudioAnalysisTrack in [CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks)
         {
             NSArray *channelsArray = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"track == %@", userAudioAnalysisTrack] orderBy:@"idNumber"] toArray];
             for(int i = 0; i < channelsArray.count; i ++)
@@ -170,7 +169,7 @@
                 //{
                 //[[NSString stringWithFormat:@"%d", [[data numberForChannel:[data channelAtIndex:i forControlBox:[data controlBoxForCurrentSequenceAtIndex:parentFilePathIndex]]] intValue]] drawInRect:textFrame withAttributes:attributes];
             }
-        }
+        }*/
         
         // Skip a slot for the add audio track header
         headerDetailChannelCount ++;
@@ -199,7 +198,7 @@
         channelCount ++;
     }
     // Draw the userAudioAnalysis Commands
-    for(UserAudioAnalysisTrack *userAudioAnalysisTrack in [CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks)
+    /*for(UserAudioAnalysisTrack *userAudioAnalysisTrack in [CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks)
     {
         NSArray *channelsArray = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"track == %@", userAudioAnalysisTrack] orderBy:@"idNumber"] toArray];
         for(int i = 0; i < channelsArray.count; i ++)
@@ -208,7 +207,7 @@
             //[self drawCommandClustersAtTrackIndex:trackIndex tracksTall:tracksTall parentIndex:i parentIsControlBox:YES];
             channelCount ++;
         }
-    }
+    }*/
     channelCount ++;
     // Draw the commands
     for(ControlBox *controlBox in [CoreDataManager sharedManager].currentSequence.controlBoxes)

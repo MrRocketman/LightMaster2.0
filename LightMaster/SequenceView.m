@@ -46,7 +46,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
-    self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], 1000);
+    self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
     
     if(self.trackingArea)
     {
@@ -63,7 +63,7 @@
     NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
     
     int largestY = NSMaxY(self.bounds);
-    for (int i = 0; i < largestY; i += 20)
+    for (int i = 0; i < largestY; i += CHANNEL_HEIGHT)
     {
         NSPoint startPoint = NSMakePoint(NSMinX(dirtyRect), i);
         NSPoint endPoint = NSMakePoint(NSMaxX(dirtyRect), i);
@@ -188,6 +188,11 @@
 }
 
 #pragma mark Mouse Methods
+
+- (void)rightMouseDown:(NSEvent*)theEvent
+{
+    // !!!: Add/delete/redo sequence tatums
+}
 
 - (void)mouseDown:(NSEvent *)theEvent
 {

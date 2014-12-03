@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define CHANNEL_HEIGHT 30.0
+#define CHANNEL_HEIGHT 20.0
 #define AUTO_SCROLL_REFRESH_RATE 0.03
 
 @interface SequenceLogic : NSObject
@@ -20,10 +20,9 @@
 
 - (void)updateMagnification:(float)newMagnification;
 
-- (NSRect)sequenceFrame;
-
 - (float)timeToX:(float)time;
 - (float)xToTime:(int)x;
 - (float)widthForTimeInterval:(float)timeInterval;
+- (int)numberOfChannels;
 
 @end

@@ -14,7 +14,6 @@
 #import "ControlBox.h"
 #import "Channel.h"
 #import "Audio.h"
-#import "UserAudioAnalysis.h"
 #import "UserAudioAnalysisTrack.h"
 #import "UserAudioAnalysisTrackChannel.h"
 
@@ -66,25 +65,6 @@
     }
 }
 
-- (NSRect)sequenceFrame
-{
-    // Calculate the frame
-    int channelsCount = 1 + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] toArray] count] + (int)[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] toArray] count] + (int)[CoreDataManager sharedManager].currentSequence.audio.userAudioAnalysis.tracks.count + ([CoreDataManager sharedManager].currentSequence.audio ? 1 : 0);
-    int frameHeight = 0;
-    int frameWidth = [self timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]];
-    // Set the Frame
-    frameHeight = channelsCount * CHANNEL_HEIGHT;
-    if(frameWidth <= 700)
-    {
-        frameWidth = 700;
-    }
-    if(frameHeight <= 300)
-    {
-        frameHeight = 300;
-    }
-    return NSMakeRect(0, 0, frameWidth, frameHeight);
-}
-
 - (float)timeToX:(float)time
 {
     int x = [self widthForTimeInterval:time];
@@ -105,6 +85,24 @@
 - (float)widthForTimeInterval:(float)timeInterval
 {
     return (timeInterval * self.magnification * SECONDS_TO_PIXELS);
+}
+
+- (int)numberOfChannels
+{
+    // audio, new audio track, all audio channels and 1 new audio channel per track, all channels and 1 new channel per control box, new control box
+    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    int audioAnalysisChannelCount = 0;
+    for(UserAudioAnalysisTrack *track in userAudioAnalysisTracks)
+    {
+        audioAnalysisChannelCount += (int)track.channels.count;
+    }
+    NSArray *controlBoxes = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    int channelCount = 0;
+    for(ControlBox *box in controlBoxes)
+    {
+        channelCount += (int)box.channels.count;
+    }
+    return 1 + 1 + audioAnalysisChannelCount + (int)[userAudioAnalysisTracks count] + channelCount + (int)[controlBoxes count] + 1;
 }
 
 @end

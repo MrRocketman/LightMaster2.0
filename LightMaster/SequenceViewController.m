@@ -31,6 +31,7 @@
 - (void)viewWillAppear
 {
     [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
+    [self reloadSequence];
 }
 
 - (void)reloadSequenceFromNotification:(NSNotification *)notification

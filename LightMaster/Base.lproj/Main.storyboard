@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -656,7 +656,7 @@
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="0.0" y="757" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <value key="minSize" type="size" width="1050" height="270"/>
+                        <value key="minSize" type="size" width="1150" height="270"/>
                     </window>
                     <connections>
                         <segue destination="QAB-tN-vhw" kind="relationship" relationship="window.shadowedContentViewController" id="8Z7-hf-J7y"/>
@@ -709,11 +709,11 @@
             <objects>
                 <viewController title="Sequences" id="JHR-DC-ihs" customClass="SequenceViewController" sceneMemberID="viewController">
                     <view key="view" id="egB-YG-W3y">
-                        <rect key="frame" x="0.0" y="0.0" width="1034" height="624"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1159" height="624"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="IZ1-n6-LCC">
-                                <rect key="frame" x="0.0" y="540" width="1034" height="84"/>
+                                <rect key="frame" x="0.0" y="540" width="1159" height="84"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VS1-F9-Vzu">
                                         <rect key="frame" x="18" y="40" width="233" height="26"/>
@@ -733,7 +733,7 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="hW0-Qs-xwE">
-                                        <rect key="frame" x="322" y="10" width="64" height="64"/>
+                                        <rect key="frame" x="322" y="9" width="64" height="65"/>
                                         <buttonCell key="cell" type="bevel" title="Play" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="95R-YM-hpO">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="system" size="21"/>
@@ -746,31 +746,15 @@ IA
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aBB-OC-aOC">
-                                        <rect key="frame" x="458" y="17" width="152" height="51"/>
+                                        <rect key="frame" x="476" y="16" width="152" height="52"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="001.000" placeholderString="" id="UO0-tf-qIh">
                                             <font key="font" metaFont="system" size="41"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Xn-nQr">
-                                        <rect key="frame" x="615" y="33" width="332" height="19"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="330" id="hSV-8E-gMk"/>
-                                        </constraints>
-                                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="roundRect" trackingMode="selectOne" id="XlB-dn-7Fr">
-                                            <font key="font" metaFont="titleBar" size="12"/>
-                                            <segments>
-                                                <segment label="On" width="70" selected="YES"/>
-                                                <segment label="Fade Up" width="69" tag="1"/>
-                                                <segment label="Fade Down" width="69"/>
-                                                <segment label="Twinkle"/>
-                                                <segment label="Pulse"/>
-                                            </segments>
-                                        </segmentedCell>
-                                    </segmentedControl>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="mU0-ML-CRS">
-                                        <rect key="frame" x="254" y="10" width="64" height="64"/>
+                                        <rect key="frame" x="254" y="9" width="64" height="65"/>
                                         <buttonCell key="cell" type="bevel" title="Back To 0" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zSj-ev-PBB">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system" size="8"/>
@@ -781,21 +765,21 @@ IA
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="IQI-CM-lYY">
-                                        <rect key="frame" x="390" y="10" width="64" height="64"/>
+                                        <rect key="frame" x="390" y="9" width="64" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="Yy3-99-b09"/>
                                         </constraints>
                                         <buttonCell key="cell" type="bevel" title="Play[]" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PeR-vH-oc6">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="system" size="15"/>
-                                            <string key="keyEquivalent">s</string>
+                                            <string key="keyEquivalent">p</string>
                                         </buttonCell>
                                         <connections>
                                             <action selector="playSelectionButtonPress:" target="JHR-DC-ihs" id="cij-pc-ZBM"/>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="PIb-yP-RwM">
-                                        <rect key="frame" x="952" y="10" width="64" height="64"/>
+                                        <rect key="frame" x="1077" y="9" width="64" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="VCk-iA-K5a"/>
                                         </constraints>
@@ -807,6 +791,23 @@ IA
                                             <segue destination="fHk-rp-gfQ" kind="popover" popoverAnchorView="PIb-yP-RwM" popoverBehavior="t" preferredEdge="maxY" id="Y3z-qR-Fez"/>
                                         </connections>
                                     </button>
+                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Xn-nQr">
+                                        <rect key="frame" x="654" y="32" width="418" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="416" id="hSV-8E-gMk"/>
+                                        </constraints>
+                                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="roundRect" trackingMode="selectOne" id="XlB-dn-7Fr">
+                                            <font key="font" metaFont="titleBar" size="12"/>
+                                            <segments>
+                                                <segment label="Select" width="70"/>
+                                                <segment label="On" width="69" selected="YES" tag="1"/>
+                                                <segment label="Fade Up" width="69"/>
+                                                <segment label="Fade Down"/>
+                                                <segment label="Twinkle"/>
+                                                <segment label="Pulse"/>
+                                            </segments>
+                                        </segmentedCell>
+                                    </segmentedControl>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="leading" secondItem="VS1-F9-Vzu" secondAttribute="trailing" constant="8" symbolic="YES" id="6pM-kz-wzE"/>
@@ -814,7 +815,7 @@ IA
                                     <constraint firstItem="yGR-Xn-nQr" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="33" id="Hj5-to-pYQ"/>
                                     <constraint firstItem="IQI-CM-lYY" firstAttribute="bottom" secondItem="PIb-yP-RwM" secondAttribute="bottom" id="Ijs-vC-94S"/>
                                     <constraint firstItem="IQI-CM-lYY" firstAttribute="top" secondItem="hW0-Qs-xwE" secondAttribute="top" id="IpW-RP-zii"/>
-                                    <constraint firstAttribute="centerX" secondItem="aBB-OC-aOC" secondAttribute="centerX" constant="-17" id="JSe-NW-Eka"/>
+                                    <constraint firstAttribute="centerX" secondItem="aBB-OC-aOC" secondAttribute="centerX" constant="27.5" id="JSe-NW-Eka"/>
                                     <constraint firstItem="aBB-OC-aOC" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="16" id="Sj5-Yz-e5O"/>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="bottom" secondItem="hW0-Qs-xwE" secondAttribute="bottom" id="UgU-aQ-gMz"/>
                                     <constraint firstItem="hW0-Qs-xwE" firstAttribute="leading" secondItem="mU0-ML-CRS" secondAttribute="trailing" constant="8" symbolic="YES" id="WD8-ae-PqP"/>
@@ -840,13 +841,13 @@ IA
                                 </textFieldCell>
                             </textField>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="4Zg-Mw-MgZ" customClass="SequenceScrollView">
-                                <rect key="frame" x="198" y="0.0" width="836" height="515"/>
+                                <rect key="frame" x="198" y="0.0" width="961" height="515"/>
                                 <clipView key="contentView" id="fRT-ZF-nO6">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h39-Hs-fm9" customClass="SequenceView">
-                                            <rect key="frame" x="0.0" y="419" width="834" height="514"/>
+                                            <rect key="frame" x="0.0" y="838" width="959" height="514"/>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -860,7 +861,7 @@ IA
                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Ulz-le-bGt">
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="Ulz-le-bGt">
                                     <rect key="frame" x="166" y="1" width="16" height="94"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -902,13 +903,13 @@ IA
                                 </connections>
                             </scrollView>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
-                                <rect key="frame" x="198" y="515" width="836" height="25"/>
+                                <rect key="frame" x="198" y="515" width="961" height="25"/>
                                 <clipView key="contentView" id="Gx6-st-cQc">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pnm-RU-I1n" customClass="SequenceTimelineView">
-                                            <rect key="frame" x="0.0" y="-118" width="836" height="24"/>
+                                            <rect key="frame" x="0.0" y="-189" width="961" height="24"/>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -974,7 +975,7 @@ IA
                 </viewController>
                 <customObject id="ocF-mK-GXc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1746" y="1144"/>
+            <point key="canvasLocation" x="1808.5" y="1144"/>
         </scene>
         <!--Sequence List View Controller-->
         <scene sceneID="HpC-NA-8Ga">
@@ -1078,7 +1079,7 @@ IA
                 </viewController>
                 <customObject id="Mod-jS-LQ6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2496" y="1097"/>
+            <point key="canvasLocation" x="2619" y="1144"/>
         </scene>
         <!--Control Boxes-->
         <scene sceneID="Wvy-6V-d0Q">
