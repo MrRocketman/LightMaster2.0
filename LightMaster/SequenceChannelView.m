@@ -91,7 +91,7 @@
     for(Channel *channel in channels)
     {
         NSBezierPath *channelPath = [NSBezierPath bezierPath];
-        [self drawChannelWithIndex:channelIndex text:channel.title textOffset:10 color:[NSColor lightGrayColor] andBezierPath:channelPath];
+        [self drawChannelWithIndex:channelIndex text:channel.title textOffset:10 color:channel.color andBezierPath:channelPath];
         channelIndex ++;
     }
 }
