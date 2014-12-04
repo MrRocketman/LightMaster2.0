@@ -28,6 +28,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
     self.magnification = 5.0;
     self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
+    self.magnification = 10.0;
 }
 
 - (BOOL)isFlipped
