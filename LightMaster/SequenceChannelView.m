@@ -110,20 +110,33 @@
 
 - (void)drawRectWithChannelIndex:(int)index text:(NSString *)text textOffset:(int)textOffset color:(NSColor *)color halfWidth:(BOOL)halfWidth rightHalf:(BOOL)rightHalf andBezierPath:(NSBezierPath *)bezierPath channelHeight:(int)channelMultiples
 {
-    // Draw the box
-    [bezierPath moveToPoint:NSMakePoint((rightHalf ? self.bounds.size.width / 2 : 0), CHANNEL_HEIGHT * index)];
-    [bezierPath lineToPoint:NSMakePoint((rightHalf ? self.bounds.size.width / 2 : 0), CHANNEL_HEIGHT * (index + channelMultiples))];
-    [bezierPath lineToPoint:NSMakePoint(self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1), CHANNEL_HEIGHT * (index + channelMultiples))];
-    [bezierPath lineToPoint:NSMakePoint(self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1), CHANNEL_HEIGHT * index)];
-    [color set];
-    [bezierPath fill];
-    [[NSColor blackColor] set];
-    [bezierPath stroke];
+    float topY = CHANNEL_HEIGHT * index;
+    float bottomY = CHANNEL_HEIGHT * (index + channelMultiples);
+    float leftX = (rightHalf ? self.bounds.size.width / 2 : 0);
+    float rightX = self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1);
     
-    // Draw the text
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
-    NSRect textFrame = NSMakeRect(textOffset + (rightHalf ? self.bounds.size.width / 2 : 0), CHANNEL_HEIGHT * index, self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1), CHANNEL_HEIGHT);
-    [text drawInRect:textFrame withAttributes:attributes];
+    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+    float visibleYSmall = visibleRect.origin.y - visibleRect.size.height / 2;
+    float visibleYLarge = visibleRect.origin.y + visibleRect.size.height * 1.5;
+    
+    // Only draw if we are in the visiable range
+    if((topY > visibleYSmall && topY < visibleYLarge) || (bottomY > visibleYSmall && bottomY < visibleYLarge))
+    {
+        // Draw the box
+        [bezierPath moveToPoint:NSMakePoint(leftX, topY)];
+        [bezierPath lineToPoint:NSMakePoint(leftX, bottomY)];
+        [bezierPath lineToPoint:NSMakePoint(rightX, bottomY)];
+        [bezierPath lineToPoint:NSMakePoint(rightX, topY)];
+        [color set];
+        [bezierPath fill];
+        [[NSColor blackColor] set];
+        [bezierPath stroke];
+        
+        // Draw the text
+        NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
+        NSRect textFrame = NSMakeRect(textOffset + leftX, topY, self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1), CHANNEL_HEIGHT);
+        [text drawInRect:textFrame withAttributes:attributes];
+    }
 }
 
 @end

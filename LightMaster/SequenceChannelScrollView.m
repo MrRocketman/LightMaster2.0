@@ -15,6 +15,7 @@
 @interface SequenceChannelScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
+@property (assign, nonatomic) NSRect lastRefreshVisibleRect;
 
 @end
 
@@ -26,6 +27,7 @@
     [self setHorizontalLineScroll:0.0];
     [self setHorizontalPageScroll:0.0];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
+    self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
 }
 
 - (BOOL)isFlipped
@@ -35,7 +37,13 @@
 
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
-    [self.channelView setNeedsDisplay:YES];
+    // Only redraw every 50% width change, since the view draws 200% width
+    if(self.documentVisibleRect.origin.y > self.lastRefreshVisibleRect.origin.y + self.lastRefreshVisibleRect.size.height / 2 || self.documentVisibleRect.origin.y < self.lastRefreshVisibleRect.origin.y - self.lastRefreshVisibleRect.size.height / 2)
+    {
+        self.lastRefreshVisibleRect = self.documentVisibleRect;
+        
+        [self updateViews];
+    }
     
     if(!self.ignoreBoundsChanges)
     {

@@ -15,6 +15,7 @@
 @interface SequenceTimelineScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
+@property (assign, nonatomic) NSRect lastRefreshVisibleRect;
 
 @end
 
@@ -25,6 +26,7 @@
 {
     [self.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
+    self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
 }
 
 - (BOOL)isFlipped
@@ -34,7 +36,13 @@
 
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
-    [self.timelineView setNeedsDisplay:YES];
+    // Only redraw every 50% width change, since the view draws 200% width
+    if(self.documentVisibleRect.origin.x > self.lastRefreshVisibleRect.origin.x + self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.x < self.lastRefreshVisibleRect.origin.x - self.lastRefreshVisibleRect.size.width / 2)
+    {
+        self.lastRefreshVisibleRect = self.documentVisibleRect;
+        
+        [self updateViews];
+    }
     
     if(!self.ignoreBoundsChanges)
     {

@@ -59,45 +59,46 @@
     NSFont *font = [NSFont fontWithName:@"Helvetica" size:10];
     [attributes setObject:font forKey:NSFontAttributeName];
     NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
-    float timeSpan = [[SequenceLogic sharedInstance] xToTime:visibleRect.size.width];
-    float timeMarkerDifference = 0.0;
-    if(timeSpan >= 60.0)
+    float timeSpan = [[SequenceLogic sharedInstance] xToTime:visibleRect.size.width * 1.5];
+    float calculatedTimeSpan = timeSpan / 1.5;
+    float timeMarkerDifference;
+    if(calculatedTimeSpan >= 60.0)
     {
         timeMarkerDifference = 6.0;
     }
-    else if(timeSpan >= 50.0)
+    else if(calculatedTimeSpan >= 50.0)
     {
         timeMarkerDifference = 5.0;
     }
-    else if(timeSpan >= 40.0)
+    else if(calculatedTimeSpan >= 40.0)
     {
         timeMarkerDifference = 4.0;
     }
-    else if(timeSpan >= 30.0)
+    else if(calculatedTimeSpan >= 30.0)
     {
         timeMarkerDifference = 3.0;
     }
-    else if(timeSpan >= 20.0)
+    else if(calculatedTimeSpan >= 20.0)
     {
         timeMarkerDifference = 2.0;
     }
-    else if(timeSpan >= 15.0)
+    else if(calculatedTimeSpan >= 15.0)
     {
         timeMarkerDifference = 1.5;
     }
-    else if(timeSpan >= 10.0)
+    else if(calculatedTimeSpan >= 10.0)
     {
         timeMarkerDifference = 1.0;
     }
-    else if(timeSpan >= 5.0)
+    else if(calculatedTimeSpan >= 5.0)
     {
         timeMarkerDifference = 0.5;
     }
-    else if(timeSpan >= 2.5)
+    else if(calculatedTimeSpan >= 2.5)
     {
         timeMarkerDifference = 0.25;
     }
-    else if(timeSpan >= 1.0)
+    else if(calculatedTimeSpan >= 1.0)
     {
         timeMarkerDifference = 0.10;
     }
@@ -107,18 +108,19 @@
     }
     
     // Draw the grid (+ 5 extras so the user doesn't see blank areas)
-    float leftEdgeNearestTimeMaker = [self roundUpNumber:[[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x] toNearestMultipleOfNumber:timeMarkerDifference];
+    float leftEdgeNearestTimeMaker = [self roundUpNumber:[[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2] toNearestMultipleOfNumber:timeMarkerDifference];
     NSBezierPath *timeLines = [NSBezierPath bezierPath];
     for(int i = 0; i < timeSpan / timeMarkerDifference + 6; i ++)
     {
         float timeMarker = (leftEdgeNearestTimeMaker + i * timeMarkerDifference);
+        float x = [[SequenceLogic sharedInstance] timeToX:timeMarker];
+        
         // Draw the time text
         NSString *time = [NSString stringWithFormat:@"%.02f", timeMarker];
-        NSRect textFrame = NSMakeRect([[SequenceLogic sharedInstance] timeToX:timeMarker] - 10, 0, 40, self.frame.size.height / 2);
+        NSRect textFrame = NSMakeRect(x - 10, 0, 40, self.frame.size.height / 2);
         [time drawInRect:textFrame withAttributes:attributes];
         
         // Add timelines
-        float x = [[SequenceLogic sharedInstance] timeToX:timeMarker];
         [timeLines moveToPoint:NSMakePoint(x, self.frame.size.height / 2)];
         [timeLines lineToPoint:NSMakePoint(x, self.frame.size.height)];
     }
