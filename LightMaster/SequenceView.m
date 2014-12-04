@@ -24,8 +24,14 @@
 @property (assign, nonatomic) BOOL sequenceTatumIsSelected;
 @property (strong, nonatomic) SequenceTatum *selectedSequenceTatum;
 
-@property (assign, nonatomic) NSRect mouseGroupSelectionRect;
+@property (assign, nonatomic) float mouseBoxSelectStartTime;
+@property (assign, nonatomic) float mouseBoxSelectEndTime;
+@property (assign, nonatomic) int mouseBoxSelectTopChannel;
+@property (assign, nonatomic) int mouseBoxSelectBottomChannel;
 @property (assign, nonatomic) BOOL mouseGroupSelect;
+@property (assign, nonatomic) BOOL retainMouseGroupSelect;
+@property (assign, nonatomic) BOOL shiftKey;
+@property (assign, nonatomic) BOOL commandKey;
 
 @end
 
@@ -135,17 +141,21 @@
                 }
                 else
                 {
-                    nextStartPointX = startPoint.x + 20;
+                    nextStartPointX = startPoint.x;
                 }
                 if(self.currentMousePoint.x >= startPoint.x && self.currentMousePoint.x < nextStartPointX)
                 {
-                    if(self.mouseGroupSelectionRect.origin.x == -1)
+                    if(self.mouseBoxSelectStartTime < 0)
                     {
-                        self.mouseGroupSelectionRect = NSMakeRect(startPoint.x, ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT)) * CHANNEL_HEIGHT, nextStartPointX - startPoint.x, CHANNEL_HEIGHT);
+                        self.mouseBoxSelectStartTime = [((SequenceTatum *)visibleTatums[i]).startTime floatValue];
+                        self.mouseBoxSelectEndTime = [[SequenceLogic sharedInstance] xToTime:nextStartPointX];
+                        self.mouseBoxSelectTopChannel = ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT));
+                        self.mouseBoxSelectBottomChannel = self.mouseBoxSelectTopChannel + 1;
                     }
                     else
                     {
-                        self.mouseGroupSelectionRect = NSMakeRect(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y, nextStartPointX - self.mouseGroupSelectionRect.origin.x, ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT) + 1) * CHANNEL_HEIGHT - self.mouseGroupSelectionRect.origin.y);
+                        self.mouseBoxSelectEndTime = [[SequenceLogic sharedInstance] xToTime:nextStartPointX];
+                        self.mouseBoxSelectBottomChannel = ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT)) + 1;
                     }
                 }
             }
@@ -178,14 +188,18 @@
 
 - (void)drawMouseGroupSelectionBox
 {
-    if(self.mouseGroupSelect && self.mouseGroupSelectionRect.origin.x >= 0)
+    if((self.mouseGroupSelect || self.retainMouseGroupSelect) && self.mouseBoxSelectStartTime >= 0)
     {
+        float leftX = [[SequenceLogic sharedInstance] timeToX:self.mouseBoxSelectStartTime];
+        float rightX = [[SequenceLogic sharedInstance] timeToX:self.mouseBoxSelectEndTime];
+        float topY = self.mouseBoxSelectTopChannel * CHANNEL_HEIGHT;
+        float bottomY = self.mouseBoxSelectBottomChannel * CHANNEL_HEIGHT;
         NSBezierPath *path = [NSBezierPath bezierPath];
-        [path moveToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y)];
-        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y + self.mouseGroupSelectionRect.size.height)];
-        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x + self.mouseGroupSelectionRect.size.width, self.mouseGroupSelectionRect.origin.y + self.mouseGroupSelectionRect.size.height)];
-        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x + self.mouseGroupSelectionRect.size.width, self.mouseGroupSelectionRect.origin.y)];
-        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y)];
+        [path moveToPoint:NSMakePoint(leftX, topY)];
+        [path lineToPoint:NSMakePoint(leftX, bottomY)];
+        [path lineToPoint:NSMakePoint(rightX, bottomY)];
+        [path lineToPoint:NSMakePoint(rightX, topY)];
+        [path lineToPoint:NSMakePoint(leftX, topY)];
         
         [[NSColor redColor] set];
         [path setLineWidth:3.0];
@@ -213,7 +227,17 @@
     else
     {
         self.mouseGroupSelect = YES;
-        self.mouseGroupSelectionRect = NSMakeRect(-1, -1, -1, -1);
+        self.mouseBoxSelectStartTime = -1;
+        self.mouseBoxSelectEndTime = -1;
+    }
+    
+    if(self.shiftKey || self.commandKey)
+    {
+        self.retainMouseGroupSelect = YES;
+    }
+    else
+    {
+        self.retainMouseGroupSelect = NO;
     }
     
     [self setNeedsDisplay:YES];
@@ -278,5 +302,45 @@
         [self setNeedsDisplay:YES];
     }
 }
+
+#pragma mark - Keyboard Methods
+
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
+- (void) flagsChanged:(NSEvent *)event
+{
+    self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
+    self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
+}
+
+/*- (void)keyDown:(NSEvent *)keyboardEvent
+{
+    // Check for new command clicks
+    if(keyboardEvent.keyCode == 40 && ![keyboardEvent isARepeat])
+    {
+ 
+    }
+    else if(keyboardEvent.keyCode != 40)
+    {
+        [super keyDown:keyboardEvent];
+    }
+}
+
+- (void)keyUp:(NSEvent *)keyboardEvent
+{
+    // Check for new command clicks
+    if(keyboardEvent.keyCode == 40 && ![keyboardEvent isARepeat])
+    {
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+        NSMutableDictionary *commandCluster = [data commandClusterForCurrentSequenceAtIndex:data.mostRecentlySelectedCommandClusterIndex];
+        float time = [data currentTime];
+        int newCommandIndex = [data commandsCountForCommandCluster:commandCluster] - 1;
+        [data setEndTime:time forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandCluster];
+        //});
+    }
+}*/
 
 @end
