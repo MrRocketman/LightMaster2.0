@@ -24,6 +24,9 @@
 @property (assign, nonatomic) BOOL sequenceTatumIsSelected;
 @property (strong, nonatomic) SequenceTatum *selectedSequenceTatum;
 
+@property (assign, nonatomic) NSRect mouseGroupSelectionRect;
+@property (assign, nonatomic) BOOL mouseGroupSelect;
+
 @end
 
 @implementation SequenceView
@@ -59,22 +62,8 @@
     [[NSColor blackColor] set];
     NSRectFill(self.bounds);
     
-    // Horizontal lines
-    NSBezierPath *basicBeatLine = [NSBezierPath bezierPath];
-    
-    int largestY = NSMaxY(self.bounds);
-    for (int i = 0; i < largestY; i += CHANNEL_HEIGHT)
-    {
-        NSPoint startPoint = NSMakePoint(NSMinX(dirtyRect), i);
-        NSPoint endPoint = NSMakePoint(NSMaxX(dirtyRect), i);
-        
-        [basicBeatLine moveToPoint:startPoint];
-        [basicBeatLine lineToPoint:endPoint];
-    }
-    
-    [[NSColor darkGrayColor] set];
-    [basicBeatLine setLineWidth:1.0];
-    [basicBeatLine stroke];
+    // Draw channel seperators
+    [self drawChannelLines];
     
     // Draw Sequence Tatums
     [self drawSequenceTatums];
@@ -82,52 +71,27 @@
     // Draw the currentTimeMarker
     [self drawCurrentTimeMarker];
     
-    /*
-    NSBezierPath *keyRollLine = [NSBezierPath bezierPath];
+    // Draw mouse selection box
+    [self drawMouseGroupSelectionBox];
+}
+
+- (void)drawChannelLines
+{
+    NSBezierPath *linesPath = [NSBezierPath bezierPath];
     
-    int firstKeyRollLine = 0;
-    int currentKeyRollLine = 0;
-    int lastKeyRollLine = NSMaxY(self.editorArea);
-    
-    for (currentKeyRollLine = firstKeyRollLine; currentKeyRollLine <= lastKeyRollLine; currentKeyRollLine += keyRollUnit) {
+    int largestY = NSMaxY(self.bounds);
+    for (int i = 0; i < largestY; i += CHANNEL_HEIGHT)
+    {
+        NSPoint startPoint = NSMakePoint(NSMinX(self.bounds), i);
+        NSPoint endPoint = NSMakePoint(NSMaxX(self.bounds), i);
         
-        NSPoint startPoint = NSMakePoint([[OCConstantsLib sharedLib] pixelExact:NSMinX(self.editorArea)], [[OCConstantsLib sharedLib] pixelExact:currentKeyRollLine]);
-        NSPoint endPoint = NSMakePoint([[OCConstantsLib sharedLib] pixelExact:NSMaxX(self.editorArea)], [[OCConstantsLib sharedLib] pixelExact:currentKeyRollLine]);
-        
-        [keyRollLine moveToPoint:startPoint];
-        [keyRollLine lineToPoint:endPoint];
-        
-        // draw the black key background if needed
-        // This is a filled rect as opposed to a simple line.
-        
-        BOOL blackKeyFlag = [[OCMusicLib sharedLib] isBlackKey:currentKeyRollLine / keyRollUnit];
-        NSBezierPath *blackKey = [NSBezierPath bezierPath];
-        
-        NSPoint bottomLeft = startPoint;
-        NSPoint bottomRight = endPoint;
-        NSPoint topRight = NSMakePoint(bottomRight.x, (float)currentKeyRollLine + keyRollUnit);
-        NSPoint topLeft = NSMakePoint(bottomLeft.x, topRight.y);
-        
-        [blackKey moveToPoint:bottomLeft];
-        [blackKey lineToPoint:bottomRight];
-        [blackKey lineToPoint:topRight];
-        [blackKey lineToPoint:topLeft];
-        [blackKey lineToPoint:bottomLeft];
-        if (blackKeyFlag)
-        {
-            [[NSColor blueColor] set];
-        }
-        else
-        {
-            [[NSColor grayColor] set];
-        }
-        [blackKey fill];
+        [linesPath moveToPoint:startPoint];
+        [linesPath lineToPoint:endPoint];
     }
     
-    [[NSColor redColor] set];
-    [keyRollLine setLineWidth:1.0];
-    [keyRollLine stroke];
-     */
+    [[NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.0] set];
+    [linesPath setLineWidth:1.0];
+    [linesPath stroke];
 }
 
 - (void)drawSequenceTatums
@@ -160,9 +124,34 @@
             {
                 self.selectedSequenceTatum = (SequenceTatum *)visibleTatums[i];
             }
+            
+            // Start a mouse group select
+            if(self.mouseGroupSelect)
+            {
+                float nextStartPointX;
+                if(i < visibleTatums.count - 1)
+                {
+                    nextStartPointX = [[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i + 1]).startTime floatValue]];
+                }
+                else
+                {
+                    nextStartPointX = startPoint.x + 20;
+                }
+                if(self.currentMousePoint.x >= startPoint.x && self.currentMousePoint.x < nextStartPointX)
+                {
+                    if(self.mouseGroupSelectionRect.origin.x == -1)
+                    {
+                        self.mouseGroupSelectionRect = NSMakeRect(startPoint.x, ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT)) * CHANNEL_HEIGHT, nextStartPointX - startPoint.x, CHANNEL_HEIGHT);
+                    }
+                    else
+                    {
+                        self.mouseGroupSelectionRect = NSMakeRect(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y, nextStartPointX - self.mouseGroupSelectionRect.origin.x, ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT) + 1) * CHANNEL_HEIGHT - self.mouseGroupSelectionRect.origin.y);
+                    }
+                }
+            }
         }
     }
-    [[NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0] set];
+    [[NSColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1.0] set];
     //[self.sequenceTatumPaths setLineWidth:1.0];
     [self.sequenceTatumPaths fill];
 }
@@ -187,6 +176,23 @@
     NSRectFill(markerLineFrame);
 }
 
+- (void)drawMouseGroupSelectionBox
+{
+    if(self.mouseGroupSelect && self.mouseGroupSelectionRect.origin.x >= 0)
+    {
+        NSBezierPath *path = [NSBezierPath bezierPath];
+        [path moveToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y)];
+        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y + self.mouseGroupSelectionRect.size.height)];
+        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x + self.mouseGroupSelectionRect.size.width, self.mouseGroupSelectionRect.origin.y + self.mouseGroupSelectionRect.size.height)];
+        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x + self.mouseGroupSelectionRect.size.width, self.mouseGroupSelectionRect.origin.y)];
+        [path lineToPoint:NSMakePoint(self.mouseGroupSelectionRect.origin.x, self.mouseGroupSelectionRect.origin.y)];
+        
+        [[NSColor redColor] set];
+        [path setLineWidth:3.0];
+        [path stroke];
+    }
+}
+
 #pragma mark Mouse Methods
 
 - (void)rightMouseDown:(NSEvent*)theEvent
@@ -204,6 +210,11 @@
         // Select tatum
         self.sequenceTatumIsSelected = YES;
     }
+    else
+    {
+        self.mouseGroupSelect = YES;
+        self.mouseGroupSelectionRect = NSMakeRect(-1, -1, -1, -1);
+    }
     
     [self setNeedsDisplay:YES];
 }
@@ -213,20 +224,6 @@
     NSPoint eventLocation = [theEvent locationInWindow];
     self.currentMousePoint = [self convertPoint:eventLocation fromView:nil];
     self.mouseEvent = theEvent;
-    
-    /*if(self.currentTimeMarkerIsSelected)
-    {
-        // Update the currentTime
-        float newCurrentTime = [[SequenceLogic sharedInstance] xToTime:currentMousePoint.x];
-        // Bind the minimum time to 0
-        if(newCurrentTime < 0.0)
-        {
-            newCurrentTime = 0.0;
-        }
-        [SequenceLogic sharedInstance].currentTime = newCurrentTime;
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
-    }*/
     
     if(self.autoScrollTimer == nil)
     {
@@ -246,6 +243,10 @@
         self.selectedSequenceTatum = nil;
         // Save the sequenceTatum time change
         [[CoreDataManager sharedManager] saveContext];
+    }
+    else if(self.mouseGroupSelect)
+    {
+        self.mouseGroupSelect = NO;
     }
     
     [self.autoScrollTimer invalidate];
