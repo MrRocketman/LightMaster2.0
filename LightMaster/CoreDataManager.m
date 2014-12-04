@@ -266,6 +266,10 @@
         [sequence addTatumsObject:tatum];
     }
     
+    // Add any control boxes that already exist
+    [sequence addControlBoxes:[NSSet setWithArray:[[self.managedObjectContext ofType:@"ControlBox"] toArray]]];;
+    
+    // Save
     [self saveContext];
     
     return sequence;
@@ -338,7 +342,7 @@
     Channel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"Channel" inManagedObjectContext:[self managedObjectContext]];
     channel.title = @"New Channel";
     channel.idNumber = @(controlBox.channels.count);
-    channel.color = [NSColor blueColor];
+    channel.color = [NSColor whiteColor];
     [controlBox addChannelsObject:channel];
     
     [self saveContext];

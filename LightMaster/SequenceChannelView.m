@@ -15,6 +15,7 @@
 #import "UserAudioAnalysisTrackChannel.h"
 #import "Channel.h"
 #import "ControlBox.h"
+#import "Audio.h"
 
 @implementation SequenceChannelView
 
@@ -35,7 +36,7 @@
     self.frame = NSMakeRect(0, 0, self.frame.size.width, [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
     
     // clear the background
-    //[[NSColor darkGrayColor] set];
+    //[[NSColor lightGrayColor] set];
     //NSRectFill(self.bounds);
     
     [self drawHeaders];
@@ -48,12 +49,7 @@
     
     // Audio
     NSBezierPath *audioPath = [NSBezierPath bezierPath];
-    [self drawHeaderWithChannelIndex:channelIndex text:@"Add Audio" textOffset:60 color:[NSColor darkGrayColor] halfWidth:NO andBezierPath:audioPath channelHeight:1];
-    channelIndex ++;
-    
-    // New Analysis Track
-    NSBezierPath *newAnalysisTrack = [NSBezierPath bezierPath];
-    [self drawHeaderWithChannelIndex:channelIndex text:@"Add Analysis Track" textOffset:30 color:[NSColor darkGrayColor] halfWidth:NO andBezierPath:newAnalysisTrack channelHeight:1];
+    [self drawHeaderWithChannelIndex:channelIndex text:([CoreDataManager sharedManager].currentSequence.audio ? [CoreDataManager sharedManager].currentSequence.audio.title : @"Add Audio") textOffset:60 color:[NSColor darkGrayColor] halfWidth:NO andBezierPath:audioPath channelHeight:1];
     channelIndex ++;
     
     // AnalysisTracks
@@ -65,23 +61,39 @@
         channelIndex ++;
     }
     
-    // New ControlBox
-    NSBezierPath *newControlBox = [NSBezierPath bezierPath];
-    [self drawHeaderWithChannelIndex:channelIndex text:@"Add Control Box" textOffset:40 color:[NSColor darkGrayColor] halfWidth:NO andBezierPath:newControlBox channelHeight:1];
-    channelIndex ++;
-    
     // ControlBoxes
-    NSArray *controlBoxes = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] toArray];
-    NSBezierPath *controlBoxPath = [NSBezierPath bezierPath];
+    NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
     for(ControlBox *box in controlBoxes)
     {
+        NSBezierPath *controlBoxPath = [NSBezierPath bezierPath];
         [self drawHeaderWithChannelIndex:channelIndex text:box.title textOffset:10 color:[NSColor grayColor] halfWidth:YES andBezierPath:controlBoxPath channelHeight:(int)box.channels.count];
+        channelIndex += (int)box.channels.count;
     }
 }
 
 - (void)drawChannels
 {
+    // Skip audio
+    int channelIndex = 1;
     
+    // AnalysisTracks
+    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    NSBezierPath *analysisTrackPath = [NSBezierPath bezierPath];
+    for(UserAudioAnalysisTrack *track in userAudioAnalysisTracks)
+    {
+        [self drawHeaderWithChannelIndex:channelIndex text:track.title textOffset:10 color:[NSColor grayColor] halfWidth:YES andBezierPath:analysisTrackPath channelHeight:(int)track.channels.count];
+        channelIndex ++;
+    }
+    
+    // ControlBoxes
+    NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
+    NSArray *channels = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@", controlBoxes] orderBy:@"controlBox.idNumber"] orderBy:@"idNumber"] toArray];
+    for(Channel *channel in channels)
+    {
+        NSBezierPath *channelPath = [NSBezierPath bezierPath];
+        [self drawChannelWithIndex:channelIndex text:channel.title textOffset:10 color:[NSColor lightGrayColor] andBezierPath:channelPath];
+        channelIndex ++;
+    }
 }
 
 #pragma mark - Helper Drawing Methods
@@ -98,6 +110,7 @@
 
 - (void)drawRectWithChannelIndex:(int)index text:(NSString *)text textOffset:(int)textOffset color:(NSColor *)color halfWidth:(BOOL)halfWidth rightHalf:(BOOL)rightHalf andBezierPath:(NSBezierPath *)bezierPath channelHeight:(int)channelMultiples
 {
+    // Draw the box
     [bezierPath moveToPoint:NSMakePoint((rightHalf ? self.bounds.size.width / 2 : 0), CHANNEL_HEIGHT * index)];
     [bezierPath lineToPoint:NSMakePoint((rightHalf ? self.bounds.size.width / 2 : 0), CHANNEL_HEIGHT * (index + channelMultiples))];
     [bezierPath lineToPoint:NSMakePoint(self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1), CHANNEL_HEIGHT * (index + channelMultiples))];
@@ -106,12 +119,11 @@
     [bezierPath fill];
     [[NSColor blackColor] set];
     [bezierPath stroke];
-    if(![CoreDataManager sharedManager].currentSequence.audio)
-    {
-        NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
-        NSRect textFrame = NSMakeRect(textOffset + (rightHalf ? self.bounds.size.width / 2 : 0), CHANNEL_HEIGHT * index, self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1), CHANNEL_HEIGHT);
-        [text drawInRect:textFrame withAttributes:attributes];
-    }
+    
+    // Draw the text
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
+    NSRect textFrame = NSMakeRect(textOffset + (rightHalf ? self.bounds.size.width / 2 : 0), CHANNEL_HEIGHT * index, self.bounds.size.width / (halfWidth ? (rightHalf ? 1 : 2) : 1), CHANNEL_HEIGHT);
+    [text drawInRect:textFrame withAttributes:attributes];
 }
 
 @end

@@ -102,7 +102,7 @@
     {
         channelCount += (int)box.channels.count;
     }
-    return 1 + 1 + audioAnalysisChannelCount + (int)[userAudioAnalysisTracks count] + channelCount + (int)[controlBoxes count] + 1;
+    return 1 + audioAnalysisChannelCount + channelCount;
 }
 
 @end
