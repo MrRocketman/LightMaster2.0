@@ -100,6 +100,7 @@
         [bezierPath lineToPoint:NSMakePoint(leftX, bottomY)];
         [bezierPath lineToPoint:NSMakePoint(rightX, bottomY)];
         [bezierPath lineToPoint:NSMakePoint(rightX, topY)];
+        [bezierPath lineToPoint:NSMakePoint(leftX, topY)];
         [color set];
         [bezierPath fill];
         [[NSColor blackColor] set];

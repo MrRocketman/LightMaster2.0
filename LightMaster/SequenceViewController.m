@@ -11,6 +11,8 @@
 #import "SequenceScrollView.h"
 #import "SequenceChannelScrollView.h"
 #import "SequenceTimelineScrollView.h"
+#import "SequenceAudioAnalysisScrollView.h"
+#import "SequenceAudioAnalysisChannelScrollView.h"
 #import "SequenceLogic.h"
 
 @interface SequenceViewController ()
@@ -49,6 +51,8 @@
     [self.sequenceScrollView updateViews];
     [self.channelScrollView updateViews];
     [self.timelineScrollView updateViews];
+    [self.audioAnalysisScrollView updateViews];
+    [self.audioAnalysisChannelScrollView updateViews];
 }
 
 - (IBAction)skipBackButtonPress:(id)sender

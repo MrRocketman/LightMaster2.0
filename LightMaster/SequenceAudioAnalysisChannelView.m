@@ -45,9 +45,9 @@
     
     // AnalysisTracks
     NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
-    NSBezierPath *analysisTrackPath = [NSBezierPath bezierPath];
     for(UserAudioAnalysisTrack *track in userAudioAnalysisTracks)
     {
+        NSBezierPath *analysisTrackPath = [NSBezierPath bezierPath];
         [self drawHeaderWithChannelIndex:channelIndex text:track.title textOffset:5 color:[NSColor grayColor] halfWidth:YES andBezierPath:analysisTrackPath channelHeight:(int)track.channels.count];
         channelIndex += (int)track.channels.count;
     }
@@ -60,9 +60,9 @@
     // AnalysisTracks
     NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
     NSArray *channels = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track IN %@", userAudioAnalysisTracks] orderBy:@"track.title"] orderBy:@"pitch"] toArray];
-    NSBezierPath *channelPath = [NSBezierPath bezierPath];
     for(UserAudioAnalysisTrackChannel *channel in channels)
     {
+        NSBezierPath *channelPath = [NSBezierPath bezierPath];
         [self drawChannelWithIndex:channelIndex text:channel.title textOffset:5 color:[NSColor lightGrayColor] andBezierPath:channelPath];
         channelIndex ++;
     }
@@ -99,6 +99,7 @@
         [bezierPath lineToPoint:NSMakePoint(leftX, bottomY)];
         [bezierPath lineToPoint:NSMakePoint(rightX, bottomY)];
         [bezierPath lineToPoint:NSMakePoint(rightX, topY)];
+        [bezierPath lineToPoint:NSMakePoint(leftX, topY)];
         [color set];
         [bezierPath fill];
         [[NSColor blackColor] set];

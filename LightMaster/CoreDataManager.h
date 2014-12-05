@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Sequence, ControlBox;
+@class Sequence, ControlBox, UserAudioAnalysisTrack, UserAudioAnalysisTrackChannel;
 
 @interface CoreDataManager : NSObject
 
@@ -33,5 +33,9 @@
 // ControlBox Methods
 - (void)newControlBox;
 - (void)newChannelForControlBox:(ControlBox *)controlBox;
+
+// User Audio Analysis Methods
+- (UserAudioAnalysisTrack *)newAudioAnalysisTrackForSequence:(Sequence *)sequence;
+- (UserAudioAnalysisTrackChannel *)newAudioAnalysisChannelForTrack:(UserAudioAnalysisTrack *)track;
 
 @end
