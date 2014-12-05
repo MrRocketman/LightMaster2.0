@@ -35,7 +35,16 @@
     [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     [self reloadSequence];
     int numberOfAudioChannels = [[SequenceLogic sharedInstance] numberOfAudioChannels];
-    [self.splitView setPosition:(numberOfAudioChannels < 10 ? numberOfAudioChannels * CHANNEL_HEIGHT - 10 : 10 * CHANNEL_HEIGHT - 10) ofDividerAtIndex:0];
+    float startY = CHANNEL_HEIGHT;
+    if(numberOfAudioChannels > 0 && numberOfAudioChannels < 10)
+    {
+        startY = numberOfAudioChannels * CHANNEL_HEIGHT;
+    }
+    else if(numberOfAudioChannels >= 10)
+    {
+        startY = 10 * CHANNEL_HEIGHT;
+    }
+    [self.splitView setPosition:startY ofDividerAtIndex:0];
 }
 
 - (void)reloadSequenceFromNotification:(NSNotification *)notification
