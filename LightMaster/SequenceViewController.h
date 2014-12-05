@@ -29,6 +29,8 @@
 @property (strong, nonatomic) IBOutlet SequenceAudioAnalysisScrollView *audioAnalysisScrollView;
 @property (strong, nonatomic) IBOutlet SequenceAudioAnalysisChannelScrollView *audioAnalysisChannelScrollView;
 
+@property (strong, nonatomic) IBOutlet NSSplitView *splitView;
+
 - (IBAction)skipBackButtonPress:(id)sender;
 - (IBAction)playButtonPress:(id)sender;
 - (IBAction)playSelectionButtonPress:(id)sender;

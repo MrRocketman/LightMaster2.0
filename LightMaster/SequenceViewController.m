@@ -34,6 +34,8 @@
 {
     [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     [self reloadSequence];
+    int numberOfAudioChannels = [[SequenceLogic sharedInstance] numberOfAudioChannels];
+    [self.splitView setPosition:(numberOfAudioChannels < 10 ? numberOfAudioChannels * CHANNEL_HEIGHT - 10 : 10 * CHANNEL_HEIGHT - 10) ofDividerAtIndex:0];
 }
 
 - (void)reloadSequenceFromNotification:(NSNotification *)notification
