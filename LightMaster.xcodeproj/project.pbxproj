@@ -29,7 +29,8 @@
 		1A75ADC21A31248A00D532FB /* SequenceAudioAnalysisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADC11A31248A00D532FB /* SequenceAudioAnalysisView.m */; };
 		1A75ADC71A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADC61A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m */; };
 		1A75ADCA1A3124C800D532FB /* SequenceAudioAnalysisChannelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADC91A3124C800D532FB /* SequenceAudioAnalysisChannelView.m */; };
-		1AB937BF1A28665600A397E3 /* SequenceTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB937BE1A28665600A397E3 /* SequenceTatum.m */; };
+		1A75ADE11A31AC7D00D532FB /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADE01A31AC7D00D532FB /* Command.m */; };
+		1A75ADE41A31AC7E00D532FB /* SequenceTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADE31A31AC7E00D532FB /* SequenceTatum.m */; };
 		1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771171A243E6500C49006 /* CommandFadeUp.m */; };
 		1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */; };
 		1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771201A243E6500C49006 /* EchoNestSegment.m */; };
@@ -45,7 +46,6 @@
 		1AE771571A243E6600C49006 /* EchoNestBeat.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771561A243E6600C49006 /* EchoNestBeat.m */; };
 		1AE7715A1A243E6600C49006 /* EchoNestTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771591A243E6600C49006 /* EchoNestTrack.m */; };
 		1AE771701A2441C600C49006 /* UserAudioAnalysisTrackChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7716F1A2441C600C49006 /* UserAudioAnalysisTrackChannel.m */; };
-		1AE771731A2441C700C49006 /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771721A2441C700C49006 /* Command.m */; };
 		1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771751A24422C00C49006 /* ComplexCommand.m */; };
 		1AE771791A24422C00C49006 /* CommandPulse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771781A24422C00C49006 /* CommandPulse.m */; };
 		1AE7717C1A24422C00C49006 /* CommandTwinkle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7717B1A24422C00C49006 /* CommandTwinkle.m */; };
@@ -115,8 +115,10 @@
 		1A75ADC61A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceAudioAnalysisChannelScrollView.m; sourceTree = "<group>"; };
 		1A75ADC81A3124C800D532FB /* SequenceAudioAnalysisChannelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceAudioAnalysisChannelView.h; sourceTree = "<group>"; };
 		1A75ADC91A3124C800D532FB /* SequenceAudioAnalysisChannelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceAudioAnalysisChannelView.m; sourceTree = "<group>"; };
-		1AB937BD1A28665600A397E3 /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
-		1AB937BE1A28665600A397E3 /* SequenceTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SequenceTatum.m; path = LightMaster/SequenceTatum.m; sourceTree = "<group>"; };
+		1A75ADDF1A31AC7D00D532FB /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Command.h; path = LightMaster/Command.h; sourceTree = "<group>"; };
+		1A75ADE01A31AC7D00D532FB /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Command.m; path = LightMaster/Command.m; sourceTree = "<group>"; };
+		1A75ADE21A31AC7E00D532FB /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
+		1A75ADE31A31AC7E00D532FB /* SequenceTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SequenceTatum.m; path = LightMaster/SequenceTatum.m; sourceTree = "<group>"; };
 		1ADBA28B1A31AB1C0023028C /* LightMaster 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LightMaster 2.xcdatamodel"; sourceTree = "<group>"; };
 		1AE771161A243E6500C49006 /* CommandFadeUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandFadeUp.h; path = LightMaster/CommandFadeUp.h; sourceTree = "<group>"; };
 		1AE771171A243E6500C49006 /* CommandFadeUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandFadeUp.m; path = LightMaster/CommandFadeUp.m; sourceTree = "<group>"; };
@@ -148,8 +150,6 @@
 		1AE771591A243E6600C49006 /* EchoNestTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTrack.m; path = LightMaster/EchoNestTrack.m; sourceTree = "<group>"; };
 		1AE7716E1A2441C600C49006 /* UserAudioAnalysisTrackChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysisTrackChannel.h; path = LightMaster/UserAudioAnalysisTrackChannel.h; sourceTree = "<group>"; };
 		1AE7716F1A2441C600C49006 /* UserAudioAnalysisTrackChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserAudioAnalysisTrackChannel.m; path = LightMaster/UserAudioAnalysisTrackChannel.m; sourceTree = "<group>"; };
-		1AE771711A2441C700C49006 /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Command.h; path = LightMaster/Command.h; sourceTree = "<group>"; };
-		1AE771721A2441C700C49006 /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Command.m; path = LightMaster/Command.m; sourceTree = "<group>"; };
 		1AE771741A24422C00C49006 /* ComplexCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComplexCommand.h; path = LightMaster/ComplexCommand.h; sourceTree = "<group>"; };
 		1AE771751A24422C00C49006 /* ComplexCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComplexCommand.m; path = LightMaster/ComplexCommand.m; sourceTree = "<group>"; };
 		1AE771771A24422C00C49006 /* CommandPulse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandPulse.h; path = LightMaster/CommandPulse.h; sourceTree = "<group>"; };
@@ -317,8 +317,8 @@
 		1AE7715F1A243EF700C49006 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				1AE771711A2441C700C49006 /* Command.h */,
-				1AE771721A2441C700C49006 /* Command.m */,
+				1A75ADDF1A31AC7D00D532FB /* Command.h */,
+				1A75ADE01A31AC7D00D532FB /* Command.m */,
 				1AE771281A243E6500C49006 /* CommandOn.h */,
 				1AE771291A243E6500C49006 /* CommandOn.m */,
 				1AE771161A243E6500C49006 /* CommandFadeUp.h */,
@@ -448,8 +448,8 @@
 				1AE771851A2442C500C49006 /* Playlist.m */,
 				1A5AE5331A2EE0D700AA96DE /* Sequence.h */,
 				1A5AE5341A2EE0D700AA96DE /* Sequence.m */,
-				1AB937BD1A28665600A397E3 /* SequenceTatum.h */,
-				1AB937BE1A28665600A397E3 /* SequenceTatum.m */,
+				1A75ADE21A31AC7E00D532FB /* SequenceTatum.h */,
+				1A75ADE31A31AC7E00D532FB /* SequenceTatum.m */,
 				1A5AE5391A2EE60100AA96DE /* Audio.h */,
 				1A5AE53A1A2EE60100AA96DE /* Audio.m */,
 				1AE771601A243F2000C49006 /* ControlBox */,
@@ -565,13 +565,12 @@
 				1AE830481A21C70D000E297D /* NSManagedObjectContext+Queryable.m in Sources */,
 				1A14CA691A25698600C4FEB0 /* ControlBox.m in Sources */,
 				1A75ADC71A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m in Sources */,
-				1AB937BF1A28665600A397E3 /* SequenceTatum.m in Sources */,
 				1A14CA521A246A3800C4FEB0 /* SequenceViewController.m in Sources */,
-				1AE771731A2441C700C49006 /* Command.m in Sources */,
 				1AE771861A2442C500C49006 /* Playlist.m in Sources */,
 				1A75ADC21A31248A00D532FB /* SequenceAudioAnalysisView.m in Sources */,
 				1A27BEED1A2C0B310043F8C9 /* SequenceView.m in Sources */,
 				1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */,
+				1A75ADE11A31AC7D00D532FB /* Command.m in Sources */,
 				1AE771701A2441C600C49006 /* UserAudioAnalysisTrackChannel.m in Sources */,
 				1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */,
 				1A5AE5381A2EE0F700AA96DE /* UserAudioAnalysisTrack.m in Sources */,
@@ -591,6 +590,7 @@
 				1AE771791A24422C00C49006 /* CommandPulse.m in Sources */,
 				1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */,
 				1AE7717C1A24422C00C49006 /* CommandTwinkle.m in Sources */,
+				1A75ADE41A31AC7E00D532FB /* SequenceTatum.m in Sources */,
 				1A5AE53B1A2EE60100AA96DE /* Audio.m in Sources */,
 				1A27BEF91A2C4FB90043F8C9 /* SequenceLogic.m in Sources */,
 				1A27BEE61A2BF6840043F8C9 /* SequenceTimelineView.m in Sources */,
