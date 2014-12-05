@@ -117,6 +117,7 @@
 		1A75ADC91A3124C800D532FB /* SequenceAudioAnalysisChannelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceAudioAnalysisChannelView.m; sourceTree = "<group>"; };
 		1AB937BD1A28665600A397E3 /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
 		1AB937BE1A28665600A397E3 /* SequenceTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SequenceTatum.m; path = LightMaster/SequenceTatum.m; sourceTree = "<group>"; };
+		1ADBA28B1A31AB1C0023028C /* LightMaster 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LightMaster 2.xcdatamodel"; sourceTree = "<group>"; };
 		1AE771161A243E6500C49006 /* CommandFadeUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandFadeUp.h; path = LightMaster/CommandFadeUp.h; sourceTree = "<group>"; };
 		1AE771171A243E6500C49006 /* CommandFadeUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandFadeUp.m; path = LightMaster/CommandFadeUp.m; sourceTree = "<group>"; };
 		1AE7711C1A243E6500C49006 /* EchoNestTimbre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTimbre.h; path = LightMaster/EchoNestTimbre.h; sourceTree = "<group>"; };
@@ -810,9 +811,10 @@
 		1AE830271A21BA68000E297D /* LightMaster.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				1ADBA28B1A31AB1C0023028C /* LightMaster 2.xcdatamodel */,
 				1AE830281A21BA68000E297D /* LightMaster.xcdatamodel */,
 			);
-			currentVersion = 1AE830281A21BA68000E297D /* LightMaster.xcdatamodel */;
+			currentVersion = 1ADBA28B1A31AB1C0023028C /* LightMaster 2.xcdatamodel */;
 			path = LightMaster.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
