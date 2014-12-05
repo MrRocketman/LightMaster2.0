@@ -30,8 +30,11 @@
 @property (assign, nonatomic) int mouseBoxSelectBottomChannel;
 @property (assign, nonatomic) BOOL mouseGroupSelect;
 @property (assign, nonatomic) BOOL retainMouseGroupSelect;
+
 @property (assign, nonatomic) BOOL shiftKey;
 @property (assign, nonatomic) BOOL commandKey;
+@property (assign, nonatomic) BOOL optionKey;
+@property (assign, nonatomic) BOOL newTatum;
 
 @end
 
@@ -112,11 +115,18 @@
         // Update the tatum position if it's selected
         if(self.sequenceTatumIsSelected && self.selectedSequenceTatum == (SequenceTatum *)visibleTatums[i])
         {
-            ((SequenceTatum *)visibleTatums[i]).startTime = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
-            NSBezierPath *selectedTatumPath = [NSBezierPath bezierPath];
-            [self addSequenceTatum:(SequenceTatum *)visibleTatums[i] toBezierPath:selectedTatumPath];
-            [[NSColor yellowColor] set];
-            [selectedTatumPath fill];
+            if(self.optionKey && !self.newTatum)
+            {
+                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:visibleTatums[i]];
+            }
+            else
+            {
+                ((SequenceTatum *)visibleTatums[i]).startTime = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
+                NSBezierPath *selectedTatumPath = [NSBezierPath bezierPath];
+                [self addSequenceTatum:(SequenceTatum *)visibleTatums[i] toBezierPath:selectedTatumPath];
+                [[NSColor yellowColor] set];
+                [selectedTatumPath fill];
+            }
             
             // Tell any other views to update
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SequenceTatumChange" object:nil];
@@ -241,6 +251,13 @@
         // Select tatum
         self.sequenceTatumIsSelected = YES;
     }
+    else if(self.optionKey)
+    {
+        [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atStartTime:[[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]];
+        [[CoreDataManager sharedManager] saveContext];
+        self.sequenceTatumIsSelected = YES;
+        self.newTatum = YES;
+    }
     else
     {
         self.mouseGroupSelect = YES;
@@ -331,6 +348,11 @@
 {
     self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
     self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
+    self.optionKey = ([event modifierFlags] & NSAlternateKeyMask ? YES : NO);
+    if(!self.optionKey)
+    {
+        self.newTatum = NO;
+    }
 }
 
 @end

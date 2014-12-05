@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Sequence, ControlBox, UserAudioAnalysisTrack, UserAudioAnalysisTrackChannel;
+@class Sequence, SequenceTatum, ControlBox, UserAudioAnalysisTrack, UserAudioAnalysisTrackChannel;
 
 @interface CoreDataManager : NSObject
 
@@ -29,6 +29,7 @@
 - (Sequence *)newSequence;
 - (void)getLatestOrCreateNewSequence;
 - (void)updateSequenceTatumsForNewEndTime:(float)endTime;
+- (SequenceTatum *)addSequenceTatumToSequence:(Sequence *)sequence atStartTime:(float)startTime;
 
 // ControlBox Methods
 - (void)newControlBox;

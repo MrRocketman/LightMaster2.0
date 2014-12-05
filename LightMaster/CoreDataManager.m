@@ -263,9 +263,7 @@
     // Make the default tatum set
     for(int i = 0; i <= [sequence.endTime floatValue] / 0.1; i ++)
     {
-        SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
-        tatum.startTime = @(i * 0.1);
-        [sequence addTatumsObject:tatum];
+        [self addSequenceTatumToSequence:sequence atStartTime:i * 0.1];
     }
     
     // Add any control boxes that already exist
@@ -281,6 +279,15 @@
     [self saveContext];
     
     return sequence;
+}
+
+- (SequenceTatum *)addSequenceTatumToSequence:(Sequence *)sequence atStartTime:(float)startTime
+{
+    SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
+    tatum.startTime = @(startTime);
+    [sequence addTatumsObject:tatum];
+    
+    return tatum;
 }
 
 - (void)getLatestOrCreateNewSequence

@@ -27,6 +27,8 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    NSLog(@"channel draw");
+    
     [super drawRect:dirtyRect];
     
     self.frame = NSMakeRect(0, 0, self.frame.size.width, [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
