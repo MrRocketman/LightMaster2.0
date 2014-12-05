@@ -24,5 +24,6 @@
 - (float)xToTime:(int)x;
 - (float)widthForTimeInterval:(float)timeInterval;
 - (int)numberOfChannels;
+- (int)numberOfAudioChannels;
 
 @end

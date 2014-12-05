@@ -8,14 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SequenceChannelView, SequenceScrollView, SequenceTimelineScrollView;
+@class SequenceChannelView;
+@class SequenceScrollView;
 
 @interface SequenceChannelScrollView : NSScrollView
 
 @property (strong, nonatomic) IBOutlet SequenceChannelView *channelView;
 
 @property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
-@property (strong, nonatomic) IBOutlet SequenceTimelineScrollView *timelineScrollView;
 
 - (void)otherScrollViewBoundsChange:(NSNotification *)notification;
 - (void)updateViews;

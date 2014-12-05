@@ -1,19 +1,19 @@
 //
-//  SequenceChannelView.m
+//  SequenceAudioAnalysisTracksView.m
 //  LightMaster
 //
-//  Created by James Adams on 11/30/14.
+//  Created by James Adams on 12/4/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
-#import "SequenceChannelView.h"
-#import "SequenceLogic.h"
+#import "SequenceAudioAnalysisChannelView.h"
 #import "CoreDataManager.h"
 #import "NSManagedObjectContext+Queryable.h"
-#import "Channel.h"
-#import "ControlBox.h"
+#import "UserAudioAnalysisTrack.h"
+#import "UserAudioAnalysisTrackChannel.h"
+#import "SequenceLogic.h"
 
-@implementation SequenceChannelView
+@implementation SequenceAudioAnalysisChannelView
 
 - (void)awakeFromNib
 {
@@ -29,7 +29,7 @@
 {
     [super drawRect:dirtyRect];
     
-    self.frame = NSMakeRect(0, 0, self.frame.size.width, [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
+    self.frame = NSMakeRect(0, 0, self.frame.size.width, [[SequenceLogic sharedInstance] numberOfAudioChannels] * CHANNEL_HEIGHT);
     
     // clear the background
     //[[NSColor lightGrayColor] set];
@@ -43,28 +43,27 @@
 {
     int channelIndex = 0;
     
-    // ControlBoxes
-    NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
-    for(ControlBox *box in controlBoxes)
+    // AnalysisTracks
+    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    NSBezierPath *analysisTrackPath = [NSBezierPath bezierPath];
+    for(UserAudioAnalysisTrack *track in userAudioAnalysisTracks)
     {
-        NSBezierPath *controlBoxPath = [NSBezierPath bezierPath];
-        [self drawHeaderWithChannelIndex:channelIndex text:box.title textOffset:10 color:[NSColor grayColor] halfWidth:YES andBezierPath:controlBoxPath channelHeight:(int)box.channels.count];
-        channelIndex += (int)box.channels.count;
+        [self drawHeaderWithChannelIndex:channelIndex text:track.title textOffset:5 color:[NSColor grayColor] halfWidth:YES andBezierPath:analysisTrackPath channelHeight:(int)track.channels.count];
+        channelIndex += (int)track.channels.count;
     }
 }
 
 - (void)drawChannels
 {
-    // Skip audio
     int channelIndex = 0;
     
-    // ControlBoxes
-    NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
-    NSArray *channels = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@", controlBoxes] orderBy:@"controlBox.idNumber"] orderBy:@"idNumber"] toArray];
-    for(Channel *channel in channels)
+    // AnalysisTracks
+    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    NSArray *channels = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track IN %@", userAudioAnalysisTracks] orderBy:@"track.title"] orderBy:@"pitch"] toArray];
+    NSBezierPath *channelPath = [NSBezierPath bezierPath];
+    for(UserAudioAnalysisTrackChannel *channel in channels)
     {
-        NSBezierPath *channelPath = [NSBezierPath bezierPath];
-        [self drawChannelWithIndex:channelIndex text:channel.title textOffset:10 color:channel.color andBezierPath:channelPath];
+        [self drawChannelWithIndex:channelIndex text:channel.title textOffset:5 color:[NSColor lightGrayColor] andBezierPath:channelPath];
         channelIndex ++;
     }
 }

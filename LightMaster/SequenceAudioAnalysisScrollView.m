@@ -1,27 +1,26 @@
 //
-//  SequenceScrollView.m
+//  SequenceAudioAnalysisScrollView.m
 //  LightMaster
 //
-//  Created by James Adams on 11/30/14.
+//  Created by James Adams on 12/4/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
-
-#import "SequenceScrollView.h"
-#import "SequenceView.h"
-#import "SequenceChannelScrollView.h"
-#import "SequenceTimelineScrollView.h"
-#import "SequenceLogic.h"
 #import "SequenceAudioAnalysisScrollView.h"
+#import "SequenceScrollView.h"
+#import "SequenceAudioAnalysisChannelScrollView.h"
+#import "SequenceTimelineScrollView.h"
+#import "SequenceAudioAnalysisView.h"
+#import "SequenceLogic.h"
 
-@interface SequenceScrollView()
+@interface SequenceAudioAnalysisScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
 @property (assign, nonatomic) NSRect lastRefreshVisibleRect;
 
 @end
 
-@implementation SequenceScrollView
+@implementation SequenceAudioAnalysisScrollView
 
 - (void)awakeFromNib
 {
@@ -57,14 +56,13 @@
         {
             [self updateViews];
             [self.timelineScrollView updateViews];
-            [self.audioAnalysisScrollView updateViews];
         }
         self.magnification = 1.0;
         self.ignoreBoundsChanges = NO;
         
-        [self.channelScrollView otherScrollViewBoundsChange:notification];
+        [self.sequenceScrollView otherScrollViewBoundsChange:notification scrollX:YES scrollY:NO];
         [self.timelineScrollView otherScrollViewBoundsChange:notification];
-        [self.audioAnalysisScrollView otherScrollViewBoundsChange:notification scrollX:YES scrollY:NO];
+        [self.audioAnalysisChannelScrollView otherScrollViewBoundsChange:notification];
     }
 }
 
@@ -105,13 +103,13 @@
 
 - (void)updateViews
 {
-    [self.sequenceView setNeedsDisplay:YES];
+    [self.audioAnalysisView setNeedsDisplay:YES];
 }
 
 /*- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
-}*/
+ [super drawRect:dirtyRect];
+ 
+ // Drawing code here.
+ }*/
 
 @end

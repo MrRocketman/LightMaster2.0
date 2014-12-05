@@ -12,6 +12,9 @@
 #import "CoreDataManager.h"
 #import "SequenceTimelineScrollView.h"
 #import "SequenceScrollView.h"
+#import "Audio.h"
+#import "EchoNestAudioAnalysis.h"
+#import "EchoNestMeta.h"
 
 @interface SequenceTimelineView()
 
@@ -49,7 +52,40 @@
     //[[NSColor darkGrayColor] set];
     //NSRectFill(dirtyRect);
     
+    [self drawAudio];
+    
     [self drawTimeline];
+}
+
+- (void)drawAudio
+{
+    // Get the audio
+    Audio *audio = [CoreDataManager sharedManager].currentSequence.audio;
+    if(audio)
+    {
+        NSBezierPath *bezierPath = [NSBezierPath bezierPath];
+        float topY = self.frame.size.height / 2 + 1;
+        float bottomY = self.frame.size.height - 1;
+        float leftX = [audio.startOffset floatValue];
+        float rightX = [[SequenceLogic sharedInstance] timeToX:([audio.echoNestAudioAnalysis.meta.seconds floatValue] - [audio.startOffset floatValue] - [audio.endOffset floatValue])];
+        
+        // Draw the box
+        [bezierPath moveToPoint:NSMakePoint(leftX, topY)];
+        [bezierPath lineToPoint:NSMakePoint(leftX, bottomY)];
+        [bezierPath lineToPoint:NSMakePoint(rightX, bottomY)];
+        [bezierPath lineToPoint:NSMakePoint(rightX, topY)];
+        [bezierPath lineToPoint:NSMakePoint(leftX, topY)];
+        [[NSColor greenColor] set];
+        [bezierPath fill];
+        [bezierPath setLineWidth:1.0];
+        [[NSColor blackColor] set];
+        [bezierPath stroke];
+        
+        // Draw the text
+        NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
+        NSRect textFrame = NSMakeRect(10 + leftX, topY, rightX - leftX, CHANNEL_HEIGHT - 2);
+        [audio.title drawInRect:textFrame withAttributes:attributes];
+    }
 }
 
 - (void)drawTimeline
@@ -117,12 +153,12 @@
         
         // Draw the time text
         NSString *time = [NSString stringWithFormat:@"%.02f", timeMarker];
-        NSRect textFrame = NSMakeRect(x - 10, 0, 40, self.frame.size.height / 2);
+        NSRect textFrame = NSMakeRect(x - 10, 0, 40, self.frame.size.height / 4);
         [time drawInRect:textFrame withAttributes:attributes];
         
         // Add timelines
-        [timeLines moveToPoint:NSMakePoint(x, self.frame.size.height / 2)];
-        [timeLines lineToPoint:NSMakePoint(x, self.frame.size.height)];
+        [timeLines moveToPoint:NSMakePoint(x, self.frame.size.height / 4)];
+        [timeLines lineToPoint:NSMakePoint(x, self.frame.size.height / 2)];
     }
     
     // Draw the time lines
@@ -139,9 +175,9 @@
 
 - (void)drawCurrentTimeMarker
 {
-    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime], self.frame.size.height);
-    float width = self.frame.size.height;
-    float height = self.frame.size.height;
+    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime], self.frame.size.height / 2);
+    float width = self.frame.size.height / 2;
+    float height = self.frame.size.height / 2;
     
     NSBezierPath *triangle = [NSBezierPath bezierPath];
     
@@ -162,13 +198,18 @@
     [triangle fill];
     [[NSColor whiteColor] setStroke];
     [triangle stroke];
+    
+    // Draw the line
+    NSRect markerLineFrame = NSMakeRect(point.x, self.frame.size.height / 2, 1, self.frame.size.height / 2);
+    [[NSColor redColor] set];
+    NSRectFill(markerLineFrame);
 }
 
 - (void)drawEndTimeMarker
 {
-    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]], self.frame.size.height);
-    float width = self.frame.size.height;
-    float height = self.frame.size.height;
+    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]], self.frame.size.height / 2);
+    float width = self.frame.size.height / 2;
+    float height = self.frame.size.height / 2;
     
     self.endTimePath = [NSBezierPath bezierPath];
     

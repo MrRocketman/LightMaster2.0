@@ -795,21 +795,21 @@ IA
                                         </segmentedCell>
                                     </segmentedControl>
                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aBD-H1-tpu">
-                                        <rect key="frame" x="-1" y="-5" width="66" height="32"/>
-                                        <buttonCell key="cell" type="push" title="+ Box" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Bd9-Z0-Bzq">
+                                        <rect key="frame" x="-1" y="-5" width="75" height="32"/>
+                                        <buttonCell key="cell" type="push" title="+ Audio" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Bd9-Z0-Bzq">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DHM-v6-y2m">
-                                        <rect key="frame" x="57" y="-5" width="73" height="32"/>
+                                        <rect key="frame" x="67" y="-5" width="73" height="32"/>
                                         <buttonCell key="cell" type="push" title="+ Track" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="teD-ks-9xT">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fKW-iQ-aWp">
-                                        <rect key="frame" x="125" y="-5" width="74" height="32"/>
+                                        <rect key="frame" x="133" y="-5" width="74" height="32"/>
                                         <buttonCell key="cell" type="push" title="+ Pitch" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yY5-um-Pcf">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -860,70 +860,173 @@ IA
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="4Zg-Mw-MgZ" customClass="SequenceScrollView">
-                                <rect key="frame" x="198" y="0.0" width="872" height="515"/>
-                                <clipView key="contentView" id="fRT-ZF-nO6">
-                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h39-Hs-fm9" customClass="SequenceView">
-                                            <rect key="frame" x="0.0" y="1257" width="870" height="514"/>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="h39-Hs-fm9" firstAttribute="top" secondItem="fRT-ZF-nO6" secondAttribute="top" id="VGJ-9h-AW1"/>
-                                        <constraint firstAttribute="bottom" secondItem="h39-Hs-fm9" secondAttribute="bottom" constant="-1" id="elj-OT-Ck1"/>
-                                        <constraint firstItem="h39-Hs-fm9" firstAttribute="leading" secondItem="fRT-ZF-nO6" secondAttribute="leading" id="iqa-3b-qJN"/>
-                                        <constraint firstAttribute="trailing" secondItem="h39-Hs-fm9" secondAttribute="trailing" id="uDh-9f-LXE"/>
-                                    </constraints>
-                                </clipView>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="UkN-As-MZK">
-                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="Ulz-le-bGt">
-                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <connections>
-                                    <outlet property="channelScrollView" destination="fNF-w0-RBU" id="Y5P-pn-aY8"/>
-                                    <outlet property="sequenceView" destination="h39-Hs-fm9" id="WbH-jW-nle"/>
-                                    <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="N5M-cC-G3k"/>
-                                </connections>
-                            </scrollView>
-                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="fNF-w0-RBU" customClass="SequenceChannelScrollView">
-                                <rect key="frame" x="0.0" y="0.0" width="198" height="515"/>
-                                <clipView key="contentView" id="t4x-Q9-xj8">
-                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDU-3M-b4M" customClass="SequenceChannelView">
-                                            <rect key="frame" x="0.0" y="815" width="197" height="514"/>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="iDU-3M-b4M" firstAttribute="top" secondItem="t4x-Q9-xj8" secondAttribute="top" id="6gp-fX-vzU"/>
-                                        <constraint firstAttribute="bottom" secondItem="iDU-3M-b4M" secondAttribute="bottom" constant="-1" id="c59-4e-Nnx"/>
-                                        <constraint firstItem="iDU-3M-b4M" firstAttribute="leading" secondItem="t4x-Q9-xj8" secondAttribute="leading" id="cNk-xq-Q7e"/>
-                                        <constraint firstAttribute="trailing" secondItem="iDU-3M-b4M" secondAttribute="trailing" constant="-1" id="wfs-jJ-AN6"/>
-                                    </constraints>
-                                </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ydo-TY-mLP">
-                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="4Pe-5I-1PI">
-                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <connections>
-                                    <outlet property="channelView" destination="iDU-3M-b4M" id="ywy-gR-sen"/>
-                                    <outlet property="sequenceScrollView" destination="4Zg-Mw-MgZ" id="rRJ-4b-Fj5"/>
-                                    <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="C34-OO-o1z"/>
-                                </connections>
-                            </scrollView>
+                            <splitView translatesAutoresizingMaskIntoConstraints="NO" id="Ctz-13-9DI">
+                                <rect key="frame" x="0.0" y="0.0" width="1070" height="490"/>
+                                <subviews>
+                                    <customView id="Oi1-TZ-p5l">
+                                        <rect key="frame" x="0.0" y="0.0" width="1070" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <subviews>
+                                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="KBw-UR-8Zc" customClass="SequenceAudioAnalysisScrollView">
+                                                <rect key="frame" x="198" y="0.0" width="872" height="30"/>
+                                                <clipView key="contentView" id="Lok-JC-sBb">
+                                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9eZ-fT-91o" customClass="SequenceAudioAnalysisView">
+                                                            <rect key="frame" x="0.0" y="-1" width="870" height="158"/>
+                                                        </view>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="9eZ-fT-91o" secondAttribute="trailing" id="0iR-OC-YdW"/>
+                                                        <constraint firstAttribute="bottom" secondItem="9eZ-fT-91o" secondAttribute="bottom" constant="-1" id="8Ez-e6-3Hf"/>
+                                                        <constraint firstItem="9eZ-fT-91o" firstAttribute="leading" secondItem="Lok-JC-sBb" secondAttribute="leading" id="8MH-ZA-X2b"/>
+                                                        <constraint firstItem="9eZ-fT-91o" firstAttribute="top" secondItem="Lok-JC-sBb" secondAttribute="top" id="Flz-Q1-Cgx"/>
+                                                    </constraints>
+                                                </clipView>
+                                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="xxN-l6-t9r">
+                                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="wVx-am-gGw">
+                                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <connections>
+                                                    <outlet property="audioAnalysisChannelScrollView" destination="ejl-gf-qUR" id="YTt-81-Ovq"/>
+                                                    <outlet property="audioAnalysisView" destination="9eZ-fT-91o" id="U7T-yT-fT4"/>
+                                                    <outlet property="sequenceScrollView" destination="6cL-qx-bct" id="D3C-ZE-qzK"/>
+                                                    <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="ekQ-WA-wfk"/>
+                                                </connections>
+                                            </scrollView>
+                                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="ejl-gf-qUR" customClass="SequenceAudioAnalysisChannelScrollView">
+                                                <rect key="frame" x="0.0" y="0.0" width="198" height="30"/>
+                                                <clipView key="contentView" id="rDW-5h-aPs">
+                                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CBs-dO-hzS" customClass="SequenceAudioAnalysisChannelView">
+                                                            <rect key="frame" x="0.0" y="-1" width="197" height="158"/>
+                                                        </view>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="CBs-dO-hzS" secondAttribute="trailing" constant="-1" id="GwB-67-ifg"/>
+                                                        <constraint firstAttribute="bottom" secondItem="CBs-dO-hzS" secondAttribute="bottom" constant="-1" id="fGW-ra-QAa"/>
+                                                        <constraint firstItem="CBs-dO-hzS" firstAttribute="top" secondItem="rDW-5h-aPs" secondAttribute="top" id="gWZ-2n-IUK"/>
+                                                        <constraint firstItem="CBs-dO-hzS" firstAttribute="leading" secondItem="rDW-5h-aPs" secondAttribute="leading" id="qDD-I3-HVg"/>
+                                                    </constraints>
+                                                </clipView>
+                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="FDX-1J-Ybe">
+                                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="muj-s4-HmL">
+                                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <connections>
+                                                    <outlet property="audioAnalysisChannelView" destination="CBs-dO-hzS" id="kQt-Md-adg"/>
+                                                    <outlet property="audioAnalysisScrollView" destination="KBw-UR-8Zc" id="1V5-hb-iMk"/>
+                                                </connections>
+                                            </scrollView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="KBw-UR-8Zc" firstAttribute="top" secondItem="ejl-gf-qUR" secondAttribute="top" id="0ka-sG-emD"/>
+                                            <constraint firstAttribute="bottom" secondItem="KBw-UR-8Zc" secondAttribute="bottom" id="DVV-5R-ZBI"/>
+                                            <constraint firstItem="KBw-UR-8Zc" firstAttribute="leading" secondItem="ejl-gf-qUR" secondAttribute="trailing" id="Fv7-KF-U6j"/>
+                                            <constraint firstItem="ejl-gf-qUR" firstAttribute="leading" secondItem="Oi1-TZ-p5l" secondAttribute="leading" id="Ny5-qZ-Heo"/>
+                                            <constraint firstItem="KBw-UR-8Zc" firstAttribute="leading" secondItem="Oi1-TZ-p5l" secondAttribute="leading" constant="198" id="TVj-eD-34u"/>
+                                            <constraint firstAttribute="trailing" secondItem="KBw-UR-8Zc" secondAttribute="trailing" id="UUa-Pq-ZCr"/>
+                                            <constraint firstItem="ejl-gf-qUR" firstAttribute="bottom" secondItem="KBw-UR-8Zc" secondAttribute="bottom" id="VuK-RF-3aP"/>
+                                            <constraint firstItem="KBw-UR-8Zc" firstAttribute="top" secondItem="Oi1-TZ-p5l" secondAttribute="top" id="XBa-3L-8f4"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView id="Ns9-1i-oHJ">
+                                        <rect key="frame" x="0.0" y="39" width="1070" height="451"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <subviews>
+                                            <scrollView misplaced="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="6cL-qx-bct" customClass="SequenceScrollView">
+                                                <rect key="frame" x="198" y="1" width="872" height="450"/>
+                                                <clipView key="contentView" misplaced="YES" id="DFp-X5-qqd">
+                                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iLj-Tx-fvP" customClass="SequenceView">
+                                                            <rect key="frame" x="0.0" y="1192" width="870" height="449"/>
+                                                        </view>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="iLj-Tx-fvP" secondAttribute="bottom" constant="-1" id="bUd-Pv-skm"/>
+                                                        <constraint firstItem="iLj-Tx-fvP" firstAttribute="top" secondItem="DFp-X5-qqd" secondAttribute="top" id="dyg-Pc-P8l"/>
+                                                        <constraint firstItem="iLj-Tx-fvP" firstAttribute="leading" secondItem="DFp-X5-qqd" secondAttribute="leading" id="tH9-kK-3ba"/>
+                                                        <constraint firstAttribute="trailing" secondItem="iLj-Tx-fvP" secondAttribute="trailing" id="u1s-dy-kvW"/>
+                                                    </constraints>
+                                                </clipView>
+                                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="xn4-na-bAF">
+                                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="rWh-vT-xIs">
+                                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <connections>
+                                                    <outlet property="audioAnalysisScrollView" destination="KBw-UR-8Zc" id="p70-mP-7fv"/>
+                                                    <outlet property="channelScrollView" destination="2oc-df-p3U" id="BJy-d5-X2R"/>
+                                                    <outlet property="sequenceView" destination="iLj-Tx-fvP" id="FQM-KK-oh8"/>
+                                                    <outlet property="timelineScrollView" destination="3Oz-AZ-EDF" id="7Pb-gy-gtV"/>
+                                                </connections>
+                                            </scrollView>
+                                            <scrollView misplaced="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="2oc-df-p3U" customClass="SequenceChannelScrollView">
+                                                <rect key="frame" x="0.0" y="1" width="198" height="450"/>
+                                                <clipView key="contentView" misplaced="YES" id="RQa-XK-7Sd">
+                                                    <rect key="frame" x="1" y="1" width="181" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oCp-Wn-Scg" customClass="SequenceChannelView">
+                                                            <rect key="frame" x="0.0" y="1169" width="197" height="449"/>
+                                                        </view>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="oCp-Wn-Scg" firstAttribute="top" secondItem="RQa-XK-7Sd" secondAttribute="top" id="PxY-Vx-Fdl"/>
+                                                        <constraint firstAttribute="bottom" secondItem="oCp-Wn-Scg" secondAttribute="bottom" constant="-1" id="aCX-cu-ggx"/>
+                                                        <constraint firstItem="oCp-Wn-Scg" firstAttribute="leading" secondItem="RQa-XK-7Sd" secondAttribute="leading" id="bUc-FL-WO8"/>
+                                                        <constraint firstAttribute="trailing" secondItem="oCp-Wn-Scg" secondAttribute="trailing" constant="-1" id="xGs-WP-ATA"/>
+                                                    </constraints>
+                                                </clipView>
+                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="rfi-rV-Yp4">
+                                                    <rect key="frame" x="1" y="79" width="181" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="zcr-nh-9Me">
+                                                    <rect key="frame" x="166" y="1" width="16" height="94"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </scroller>
+                                                <connections>
+                                                    <outlet property="channelView" destination="oCp-Wn-Scg" id="eAx-cj-iOm"/>
+                                                    <outlet property="sequenceScrollView" destination="6cL-qx-bct" id="407-lv-Ttz"/>
+                                                </connections>
+                                            </scrollView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="2oc-df-p3U" secondAttribute="bottom" id="6Bc-49-pCF"/>
+                                            <constraint firstItem="6cL-qx-bct" firstAttribute="top" secondItem="Ns9-1i-oHJ" secondAttribute="top" id="EXJ-ae-Nkh"/>
+                                            <constraint firstItem="2oc-df-p3U" firstAttribute="leading" secondItem="Ns9-1i-oHJ" secondAttribute="leading" id="Yb4-JW-Q5D"/>
+                                            <constraint firstAttribute="trailing" secondItem="6cL-qx-bct" secondAttribute="trailing" id="d0o-57-MWy"/>
+                                            <constraint firstItem="6cL-qx-bct" firstAttribute="leading" secondItem="Ns9-1i-oHJ" secondAttribute="leading" constant="198" id="lHJ-wa-gmu"/>
+                                            <constraint firstItem="6cL-qx-bct" firstAttribute="bottom" secondItem="2oc-df-p3U" secondAttribute="bottom" id="u22-Q4-2q1"/>
+                                            <constraint firstItem="2oc-df-p3U" firstAttribute="top" secondItem="6cL-qx-bct" secondAttribute="top" id="u4p-ho-ETE"/>
+                                            <constraint firstItem="6cL-qx-bct" firstAttribute="leading" secondItem="2oc-df-p3U" secondAttribute="trailing" id="vYP-uy-XzQ"/>
+                                        </constraints>
+                                    </customView>
+                                </subviews>
+                                <holdingPriorities>
+                                    <real value="250"/>
+                                    <real value="250"/>
+                                </holdingPriorities>
+                            </splitView>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
-                                <rect key="frame" x="198" y="515" width="872" height="25"/>
+                                <rect key="frame" x="198" y="490" width="872" height="50"/>
                                 <clipView key="contentView" id="Gx6-st-cQc">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -940,7 +1043,7 @@ IA
                                     </constraints>
                                 </clipView>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="25" id="fIP-b0-1Il"/>
+                                    <constraint firstAttribute="height" constant="50" id="fIP-b0-1Il"/>
                                 </constraints>
                                 <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="5hu-tg-Ohe">
                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
@@ -951,40 +1054,34 @@ IA
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <connections>
-                                    <outlet property="channelScrollView" destination="fNF-w0-RBU" id="jBb-cB-TLX"/>
-                                    <outlet property="sequenceScrollView" destination="4Zg-Mw-MgZ" id="M0K-qb-eAW"/>
+                                    <outlet property="audioAnalysisScrollView" destination="KBw-UR-8Zc" id="e69-mn-Jm5"/>
+                                    <outlet property="sequenceScrollView" destination="6cL-qx-bct" id="7iT-ps-CS4"/>
                                     <outlet property="timelineView" destination="pnm-RU-I1n" id="n0K-he-06i"/>
                                 </connections>
                             </scrollView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Aan-EI-jZD" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" constant="8" symbolic="YES" id="0iu-WV-2HD"/>
-                            <constraint firstItem="fNF-w0-RBU" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="109" id="7zT-c6-g8O"/>
+                            <constraint firstItem="Ctz-13-9DI" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" id="2Se-BM-xTG"/>
                             <constraint firstItem="IZ1-n6-LCC" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" id="8Pe-uN-Ic8"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" id="8we-EJ-EPl"/>
+                            <constraint firstItem="Ctz-13-9DI" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="134" id="DxO-Vs-pei"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="Aan-EI-jZD" secondAttribute="trailing" constant="8" symbolic="YES" id="GWs-qV-j3e"/>
-                            <constraint firstItem="4Zg-Mw-MgZ" firstAttribute="leading" secondItem="fNF-w0-RBU" secondAttribute="trailing" id="IRH-mI-BeR"/>
+                            <constraint firstAttribute="bottom" secondItem="Ctz-13-9DI" secondAttribute="bottom" id="JXC-pU-Og5"/>
                             <constraint firstItem="Aan-EI-jZD" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="20" symbolic="YES" id="Kic-M0-CZU"/>
-                            <constraint firstItem="fNF-w0-RBU" firstAttribute="leading" secondItem="IZ1-n6-LCC" secondAttribute="leading" id="Nc1-I0-qFD"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="198" id="Ttc-1X-8rt"/>
-                            <constraint firstItem="fNF-w0-RBU" firstAttribute="top" secondItem="4Zg-Mw-MgZ" secondAttribute="top" id="Unt-AL-gDs"/>
+                            <constraint firstAttribute="trailing" secondItem="Ctz-13-9DI" secondAttribute="trailing" id="VId-6l-kdJ"/>
                             <constraint firstAttribute="trailing" secondItem="IZ1-n6-LCC" secondAttribute="trailing" id="Wpz-2G-v22"/>
                             <constraint firstItem="IZ1-n6-LCC" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" id="XBf-so-Pwc"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="trailing" secondItem="IZ1-n6-LCC" secondAttribute="trailing" id="n7c-ue-Zh6"/>
-                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="trailing" secondItem="4Zg-Mw-MgZ" secondAttribute="trailing" id="oRE-fM-I1I"/>
-                            <constraint firstAttribute="bottom" secondItem="fNF-w0-RBU" secondAttribute="bottom" id="r71-7H-gXW"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="84" id="uaA-0M-Q1s"/>
-                            <constraint firstItem="fNF-w0-RBU" firstAttribute="bottom" secondItem="4Zg-Mw-MgZ" secondAttribute="bottom" id="uqb-jU-6lk"/>
-                            <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="4Zg-Mw-MgZ" secondAttribute="leading" id="ySS-6e-bdf"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="channelScrollView" destination="fNF-w0-RBU" id="W1L-X5-wNf"/>
                         <outlet property="commandTypeSegmentedControl" destination="yGR-Xn-nQr" id="Zch-jM-ese"/>
                         <outlet property="playButton" destination="hW0-Qs-xwE" id="oVn-al-wBy"/>
                         <outlet property="playSelectionButton" destination="IQI-CM-lYY" id="Qr3-Sg-NC3"/>
                         <outlet property="sequenceListButton" destination="PIb-yP-RwM" id="th2-LR-QAD"/>
-                        <outlet property="sequenceScrollView" destination="4Zg-Mw-MgZ" id="sgh-c9-t9h"/>
                         <outlet property="serialPortButton" destination="VS1-F9-Vzu" id="klR-tS-ouU"/>
                         <outlet property="skipBackButton" destination="mU0-ML-CRS" id="tCD-6a-81C"/>
                         <outlet property="timeLabel" destination="aBB-OC-aOC" id="kBm-am-Cl8"/>

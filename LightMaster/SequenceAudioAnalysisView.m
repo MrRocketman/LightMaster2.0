@@ -1,19 +1,19 @@
 //
-//  SequenceView.m
+//  SequenceAudioAnalysisView.m
 //  LightMaster
 //
-//  Created by James Adams on 11/30/14.
+//  Created by James Adams on 12/4/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
-#import "SequenceView.h"
+#import "SequenceAudioAnalysisView.h"
 #import "SequenceLogic.h"
 #import "CoreDataManager.h"
 #import "NSManagedObjectContext+Queryable.h"
 #import "Sequence.h"
 #import "SequenceTatum.h"
 
-@interface SequenceView()
+@interface SequenceAudioAnalysisView()
 
 @property (strong, nonatomic) NSBezierPath *sequenceTatumPaths;
 @property (assign, nonatomic) NSPoint currentMousePoint;
@@ -35,7 +35,7 @@
 
 @end
 
-@implementation SequenceView
+@implementation SequenceAudioAnalysisView
 
 - (void)awakeFromNib
 {
@@ -56,7 +56,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
-    self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
+    self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], [[SequenceLogic sharedInstance] numberOfAudioChannels] * CHANNEL_HEIGHT);
     
     if(self.trackingArea)
     {
@@ -316,32 +316,5 @@
     self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
     self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
 }
-
-/*- (void)keyDown:(NSEvent *)keyboardEvent
-{
-    // Check for new command clicks
-    if(keyboardEvent.keyCode == 40 && ![keyboardEvent isARepeat])
-    {
- 
-    }
-    else if(keyboardEvent.keyCode != 40)
-    {
-        [super keyDown:keyboardEvent];
-    }
-}
-
-- (void)keyUp:(NSEvent *)keyboardEvent
-{
-    // Check for new command clicks
-    if(keyboardEvent.keyCode == 40 && ![keyboardEvent isARepeat])
-    {
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        NSMutableDictionary *commandCluster = [data commandClusterForCurrentSequenceAtIndex:data.mostRecentlySelectedCommandClusterIndex];
-        float time = [data currentTime];
-        int newCommandIndex = [data commandsCountForCommandCluster:commandCluster] - 1;
-        [data setEndTime:time forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandCluster];
-        //});
-    }
-}*/
 
 @end

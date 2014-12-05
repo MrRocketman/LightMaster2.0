@@ -1,31 +1,30 @@
 //
-//  SequenceTimelineScrollView.m
+//  SequenceAudioAnalysisTracksScrollView.m
 //  LightMaster
 //
-//  Created by James Adams on 11/30/14.
+//  Created by James Adams on 12/4/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
-#import "SequenceTimelineScrollView.h"
-#import "SequenceTimelineView.h"
-#import "SequenceChannelScrollView.h"
-#import "SequenceScrollView.h"
-#import "SequenceLogic.h"
+#import "SequenceAudioAnalysisChannelScrollView.h"
+#import "SequenceAudioAnalysisChannelView.h"
 #import "SequenceAudioAnalysisScrollView.h"
+#import "SequenceLogic.h"
 
-@interface SequenceTimelineScrollView()
+@interface SequenceAudioAnalysisChannelScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
 @property (assign, nonatomic) NSRect lastRefreshVisibleRect;
 
 @end
 
-
-@implementation SequenceTimelineScrollView
+@implementation SequenceAudioAnalysisChannelScrollView
 
 - (void)awakeFromNib
 {
     [self.contentView setPostsBoundsChangedNotifications:YES];
+    [self setHorizontalLineScroll:0.0];
+    [self setHorizontalPageScroll:0.0];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
     self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
 }
@@ -38,7 +37,7 @@
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
     // Only redraw every 50% width change, since the view draws 200% width
-    if(self.documentVisibleRect.origin.x > self.lastRefreshVisibleRect.origin.x + self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.x < self.lastRefreshVisibleRect.origin.x - self.lastRefreshVisibleRect.size.width / 2)
+    if(self.documentVisibleRect.origin.y > self.lastRefreshVisibleRect.origin.y + self.lastRefreshVisibleRect.size.height / 2 || self.documentVisibleRect.origin.y < self.lastRefreshVisibleRect.origin.y - self.lastRefreshVisibleRect.size.height / 2)
     {
         self.lastRefreshVisibleRect = self.documentVisibleRect;
         
@@ -47,26 +46,14 @@
     
     if(!self.ignoreBoundsChanges)
     {
-        self.ignoreBoundsChanges = YES;
-        [[SequenceLogic sharedInstance] updateMagnification:self.magnification];
-        // Only redraw every 50% width change, since the view draws 200% width
-        if(fabs(self.magnification - 1.0) > 0.0001)
-        {
-            [self updateViews];
-            [self.sequenceScrollView updateViews];
-        }
-        self.magnification = 1.0;
-        self.ignoreBoundsChanges = NO;
-        
-        [self.sequenceScrollView otherScrollViewBoundsChange:notification scrollX:YES scrollY:NO];
-        [self.audioAnalysisScrollView otherScrollViewBoundsChange:notification scrollX:YES scrollY:NO];
+        [self.audioAnalysisScrollView otherScrollViewBoundsChange:notification scrollX:NO scrollY:YES];
     }
 }
 
 - (void)otherScrollViewBoundsChange:(NSNotification *)notification
 {
     // get the changed content view from the notification
-    NSClipView *changedContentView=[notification object];
+    NSClipView *changedContentView = [notification object];
     
     // get the origin of the NSClipView of the scroll view that we're watching
     NSPoint changedBoundsOrigin = [changedContentView documentVisibleRect].origin;;
@@ -75,8 +62,8 @@
     NSPoint curOffset = [[self contentView] bounds].origin;
     NSPoint newOffset = curOffset;
     
-    // scrolling is synchronized in the horizontal plane so only modify the x component of the offset
-    newOffset.x = changedBoundsOrigin.x;
+    // scrolling is synchronized in the vertical plane so only modify the y component of the offset
+    newOffset.y = changedBoundsOrigin.y;
     
     // if our synced position is different from our current position, reposition our content view
     if (!NSEqualPoints(curOffset, changedBoundsOrigin))
@@ -91,9 +78,16 @@
     }
 }
 
+- (void)otherScrollViewMagnificationChange:(float)magnification
+{
+    self.ignoreBoundsChanges = YES;
+    self.magnification = magnification;
+    self.ignoreBoundsChanges = NO;
+}
+
 - (void)updateViews
 {
-    [self.timelineView setNeedsDisplay:YES];
+    [self.audioAnalysisChannelView setNeedsDisplay:YES];
 }
 
 /*- (void)drawRect:(NSRect)dirtyRect {

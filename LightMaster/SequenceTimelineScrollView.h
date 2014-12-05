@@ -8,14 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SequenceTimelineView, SequenceScrollView, SequenceChannelScrollView;
+@class SequenceTimelineView;
+@class SequenceScrollView, SequenceAudioAnalysisScrollView;
 
 @interface SequenceTimelineScrollView : NSScrollView
 
 @property (strong, nonatomic) IBOutlet SequenceTimelineView *timelineView;
 
-@property (strong, nonatomic) IBOutlet SequenceChannelScrollView *channelScrollView;
 @property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
+@property (strong, nonatomic) IBOutlet SequenceAudioAnalysisScrollView *audioAnalysisScrollView;
 
 - (void)otherScrollViewBoundsChange:(NSNotification *)notification;
 - (void)updateViews;

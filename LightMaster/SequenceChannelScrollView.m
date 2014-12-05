@@ -47,7 +47,7 @@
     
     if(!self.ignoreBoundsChanges)
     {
-        [self.sequenceScrollView otherScrollViewBoundsChange:notification];
+        [self.sequenceScrollView otherScrollViewBoundsChange:notification scrollX:NO scrollY:YES];
     }
 }
 

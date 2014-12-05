@@ -13,6 +13,8 @@
 #import "SequenceTatum.h"
 #import "ControlBox.h"
 #import "Channel.h"
+#import "UserAudioAnalysisTrack.h"
+#import "UserAudioAnalysisTrackChannel.h"
 
 @interface CoreDataManager()
 
@@ -267,7 +269,13 @@
     }
     
     // Add any control boxes that already exist
-    [sequence addControlBoxes:[NSSet setWithArray:[[self.managedObjectContext ofType:@"ControlBox"] toArray]]];;
+    [sequence addControlBoxes:[NSSet setWithArray:[[self.managedObjectContext ofType:@"ControlBox"] toArray]]];
+    
+    // Add a default audioAnalysis track
+    UserAudioAnalysisTrack *track = [self newAudioAnalysisTrackForSequence:sequence];
+    
+    // Add a default audioAnalysis channel
+    [self newAudioAnalysisChannelForTrack:track];
     
     // Save
     [self saveContext];
@@ -346,6 +354,29 @@
     [controlBox addChannelsObject:channel];
     
     [self saveContext];
+}
+
+- (UserAudioAnalysisTrack *)newAudioAnalysisTrackForSequence:(Sequence *)sequence
+{
+    UserAudioAnalysisTrack *track = [NSEntityDescription insertNewObjectForEntityForName:@"UserAudioAnalysisTrack" inManagedObjectContext:self.managedObjectContext];
+    track.title = @"New Track";
+    track.sequence = sequence;
+    
+    [self saveContext];
+    
+    return track;
+}
+
+- (UserAudioAnalysisTrackChannel *)newAudioAnalysisChannelForTrack:(UserAudioAnalysisTrack *)track
+{
+    UserAudioAnalysisTrackChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"UserAudioAnalysisTrackChannel" inManagedObjectContext:self.managedObjectContext];
+    channel.title = @"New Channel";
+    channel.track = track;
+    channel.pitch = @([[[[self.managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track == %@", track] toArray] count] - 1);
+    
+    [self saveContext];
+    
+    return channel;
 }
 
 @end
