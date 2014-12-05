@@ -115,22 +115,28 @@
 {
     if([control.identifier isEqualToString:@"boxIDTextField"])
     {
-        [(ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:self.controlBoxTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [(ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:self.controlBoxTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
+            [[CoreDataManager sharedManager] saveContext];
+        });
     }
     else if([control.identifier isEqualToString:@"boxTitleTextField"])
     {
         [(ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:self.controlBoxTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
+        [[CoreDataManager sharedManager] saveContext];
     }
     else if([control.identifier isEqualToString:@"channelIDTextField"])
     {
-        [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
+            [[CoreDataManager sharedManager] saveContext];
+        });
     }
     else if([control.identifier isEqualToString:@"channelTitleTextField"])
     {
         [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
+        [[CoreDataManager sharedManager] saveContext];
     }
-    
-    [[CoreDataManager sharedManager] saveContext];
     
     return YES;
 }

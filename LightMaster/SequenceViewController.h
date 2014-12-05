@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SequenceScrollView, SequenceChannelScrollView, SequenceTimelineScrollView, SequenceAudioAnalysisChannelScrollView, SequenceAudioAnalysisScrollView;
+
 @interface SequenceViewController : NSViewController
 
 @property (strong, nonatomic) IBOutlet NSView *toolbarView;
@@ -20,5 +22,17 @@
 @property (strong, nonatomic) IBOutlet NSButton *sequenceListButton;
 
 @property (strong, nonatomic) IBOutlet NSTextField *titleLabel;
+
+@property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
+@property (strong, nonatomic) IBOutlet SequenceChannelScrollView *channelScrollView;
+@property (strong, nonatomic) IBOutlet SequenceTimelineScrollView *timelineScrollView;
+@property (strong, nonatomic) IBOutlet SequenceAudioAnalysisScrollView *audioAnalysisScrollView;
+@property (strong, nonatomic) IBOutlet SequenceAudioAnalysisChannelScrollView *audioAnalysisChannelScrollView;
+
+@property (strong, nonatomic) IBOutlet NSSplitView *splitView;
+
+- (IBAction)skipBackButtonPress:(id)sender;
+- (IBAction)playButtonPress:(id)sender;
+- (IBAction)playSelectionButtonPress:(id)sender;
 
 @end

@@ -13,6 +13,8 @@
 #import "SequenceTatum.h"
 #import "ControlBox.h"
 #import "Channel.h"
+#import "UserAudioAnalysisTrack.h"
+#import "UserAudioAnalysisTrackChannel.h"
 
 @interface CoreDataManager()
 
@@ -251,22 +253,41 @@
 
 #pragma mark - Sequence Methods
 
-- (void)newSequence
+- (Sequence *)newSequence
 {
     Sequence *sequence = [NSEntityDescription insertNewObjectForEntityForName:@"Sequence" inManagedObjectContext:self.managedObjectContext];
     sequence.modifiedDate = [NSDate date];
     sequence.title = @"New Sequence";
-    sequence.endTime = @60.0;
+    sequence.endTime = @10.0;
     
     // Make the default tatum set
-    for(int i = 0; i < 60.0 / 0.1; i ++)
+    for(int i = 0; i <= [sequence.endTime floatValue] / 0.1; i ++)
     {
-        SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
-        tatum.startTime = @(i * 0.1);
-        [sequence addTatumsObject:tatum];
+        [self addSequenceTatumToSequence:sequence atStartTime:i * 0.1];
     }
     
+    // Add any control boxes that already exist
+    [sequence addControlBoxes:[NSSet setWithArray:[[self.managedObjectContext ofType:@"ControlBox"] toArray]]];
+    
+    // Add a default audioAnalysis track
+    UserAudioAnalysisTrack *track = [self newAudioAnalysisTrackForSequence:sequence];
+    
+    // Add a default audioAnalysis channel
+    [self newAudioAnalysisChannelForTrack:track];
+    
+    // Save
     [self saveContext];
+    
+    return sequence;
+}
+
+- (SequenceTatum *)addSequenceTatumToSequence:(Sequence *)sequence atStartTime:(float)startTime
+{
+    SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
+    tatum.startTime = @(startTime);
+    [sequence addTatumsObject:tatum];
+    
+    return tatum;
 }
 
 - (void)getLatestOrCreateNewSequence
@@ -284,18 +305,49 @@
         }
         else
         {
-            [self newSequence];
+            self.currentSequence = [self newSequence];
         }
     }
     
     self.aSequenceHasBeenLoaded = YES;
 }
 
+- (void)updateSequenceTatumsForNewEndTime:(float)newEndTime
+{
+    // Add tatums
+    if(newEndTime > [self.currentSequence.endTime floatValue])
+    {
+        SequenceTatum *lastTatum = [[[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", self.currentSequence] orderBy:@"startTime"] toArray] lastObject];
+        
+        if(newEndTime > [lastTatum.startTime floatValue] + 0.1)
+        {
+            for(float i = [lastTatum.startTime floatValue] + 0.1; i <= newEndTime; i += 0.1)
+            {
+                SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
+                tatum.startTime = @(i);
+                [self.currentSequence addTatumsObject:tatum];
+            }
+        }
+    }
+    // Remove tatums
+    else if(newEndTime < [self.currentSequence.endTime floatValue])
+    {
+        NSSet *tatumsToRemove = [NSSet setWithArray:[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND startTime > %f", self.currentSequence, newEndTime] toArray]];
+        [self.currentSequence removeTatums:tatumsToRemove];
+    }
+    
+    // Update the endTime
+    self.currentSequence.endTime = @(newEndTime);
+    
+    // Save
+    [self saveContext];
+}
+
 - (void)newControlBox
 {
     ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:[self managedObjectContext]];
     controlBox.title = @"New Box";
-    controlBox.idNumber = @0;
+    controlBox.idNumber = @([[[self.managedObjectContext ofType:@"ControlBox"] toArray] count] - 1);
     
     [self saveContext];
 }
@@ -304,11 +356,34 @@
 {
     Channel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"Channel" inManagedObjectContext:[self managedObjectContext]];
     channel.title = @"New Channel";
-    channel.idNumber = @0;
-    channel.color = [NSColor blueColor];
+    channel.idNumber = @(controlBox.channels.count);
+    channel.color = [NSColor whiteColor];
     [controlBox addChannelsObject:channel];
     
     [self saveContext];
+}
+
+- (UserAudioAnalysisTrack *)newAudioAnalysisTrackForSequence:(Sequence *)sequence
+{
+    UserAudioAnalysisTrack *track = [NSEntityDescription insertNewObjectForEntityForName:@"UserAudioAnalysisTrack" inManagedObjectContext:self.managedObjectContext];
+    track.title = @"New Track";
+    track.sequence = sequence;
+    
+    [self saveContext];
+    
+    return track;
+}
+
+- (UserAudioAnalysisTrackChannel *)newAudioAnalysisChannelForTrack:(UserAudioAnalysisTrack *)track
+{
+    UserAudioAnalysisTrackChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"UserAudioAnalysisTrackChannel" inManagedObjectContext:self.managedObjectContext];
+    channel.title = @"New Channel";
+    channel.track = track;
+    channel.pitch = @([[[[self.managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track == %@", track] toArray] count] - 1);
+    
+    [self saveContext];
+    
+    return channel;
 }
 
 @end

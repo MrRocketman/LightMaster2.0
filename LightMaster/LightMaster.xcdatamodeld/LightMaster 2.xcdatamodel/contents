@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="2" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Audio" representedClassName="Audio" syncable="YES">
         <attribute name="audioFile" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="echoNestUploadProgress" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -24,10 +24,11 @@
         <relationship name="parentChannelPatterns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChannelPattern" inverseName="childrenChannelPatterns" inverseEntity="ChannelPattern" syncable="YES"/>
     </entity>
     <entity name="Command" representedClassName="Command" syncable="YES">
-        <attribute name="endTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sendComplete" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <relationship name="channel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel" inverseName="command" inverseEntity="Channel" syncable="YES"/>
+        <relationship name="endTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="endCommands" inverseEntity="SequenceTatum" syncable="YES"/>
         <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="commands" inverseEntity="Sequence" syncable="YES"/>
+        <relationship name="startTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="startCommands" inverseEntity="SequenceTatum" syncable="YES"/>
         <relationship name="userAudioAnalysisTrackChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrackChannel" inverseName="commands" inverseEntity="UserAudioAnalysisTrackChannel" syncable="YES"/>
     </entity>
     <entity name="CommandFadeDown" representedClassName="CommandFadeDown" parentEntity="Command" syncable="YES"/>
@@ -175,7 +176,9 @@
     </entity>
     <entity name="SequenceTatum" representedClassName="SequenceTatum" syncable="YES">
         <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="endCommands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Command" inverseName="endTatum" inverseEntity="Command" syncable="YES"/>
         <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="tatums" inverseEntity="Sequence" syncable="YES"/>
+        <relationship name="startCommands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Command" inverseName="startTatum" inverseEntity="Command" syncable="YES"/>
     </entity>
     <entity name="UserAudioAnalysisTrack" representedClassName="UserAudioAnalysisTrack" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -192,7 +195,7 @@
         <element name="Audio" positionX="-468" positionY="-124" width="128" height="148"/>
         <element name="Channel" positionX="-965" positionY="153" width="128" height="133"/>
         <element name="ChannelPattern" positionX="-792" positionY="162" width="128" height="103"/>
-        <element name="Command" positionX="-702" positionY="-594" width="128" height="118"/>
+        <element name="Command" positionX="-702" positionY="-594" width="128" height="133"/>
         <element name="CommandFadeDown" positionX="-486" positionY="-513" width="128" height="45"/>
         <element name="CommandFadeUp" positionX="-486" positionY="-585" width="128" height="45"/>
         <element name="CommandOn" positionX="-486" positionY="-661" width="128" height="60"/>
@@ -212,7 +215,7 @@
         <element name="EchoNestTrack" positionX="-380" positionY="261" width="128" height="463"/>
         <element name="Playlist" positionX="-1037" positionY="-207" width="128" height="73"/>
         <element name="Sequence" positionX="-1071" positionY="-72" width="128" height="208"/>
-        <element name="SequenceTatum" positionX="-945" positionY="-585" width="128" height="75"/>
+        <element name="SequenceTatum" positionX="-945" positionY="-585" width="128" height="105"/>
         <element name="UserAudioAnalysisTrack" positionX="160" positionY="-559" width="164" height="88"/>
         <element name="UserAudioAnalysisTrackChannel" positionX="171" positionY="-738" width="189" height="103"/>
     </elements>
