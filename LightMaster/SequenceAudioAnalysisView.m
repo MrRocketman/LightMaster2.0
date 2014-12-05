@@ -135,7 +135,7 @@
             // Start a mouse group select
             if(self.mouseGroupSelect)
             {
-                float nextStartPointX;
+                float nextStartPointX, currentStartPointX;
                 if(i < visibleTatums.count - 1)
                 {
                     nextStartPointX = [[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i + 1]).startTime floatValue]];
@@ -143,6 +143,14 @@
                 else
                 {
                     nextStartPointX = startPoint.x;
+                }
+                if(i >= 0)
+                {
+                    currentStartPointX = [[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i]).startTime floatValue]];
+                }
+                else
+                {
+                    currentStartPointX = 0;
                 }
                 if(self.currentMousePoint.x >= startPoint.x && self.currentMousePoint.x < nextStartPointX)
                 {
@@ -155,8 +163,16 @@
                     }
                     else
                     {
-                        self.mouseBoxSelectEndTime = [[SequenceLogic sharedInstance] xToTime:nextStartPointX];
-                        self.mouseBoxSelectBottomChannel = ((int)((self.currentMousePoint.y < self.frame.size.height ? self.currentMousePoint.y : self.frame.size.height - CHANNEL_HEIGHT) / CHANNEL_HEIGHT)) + 1;
+                        float nextStartPointTime = [[SequenceLogic sharedInstance] xToTime:nextStartPointX];
+                        self.mouseBoxSelectEndTime = (nextStartPointTime > self.mouseBoxSelectStartTime ? nextStartPointTime : [[SequenceLogic sharedInstance] xToTime:currentStartPointX]);
+                        if(self.currentMousePoint.y / CHANNEL_HEIGHT < self.mouseBoxSelectTopChannel)
+                        {
+                            self.mouseBoxSelectBottomChannel = (int)((self.currentMousePoint.y < 0 ? 0 : self.currentMousePoint.y / CHANNEL_HEIGHT));
+                        }
+                        else
+                        {
+                            self.mouseBoxSelectBottomChannel = (int)((self.currentMousePoint.y > self.frame.size.height ? self.frame.size.height / CHANNEL_HEIGHT : self.currentMousePoint.y / CHANNEL_HEIGHT + 1));
+                        }
                     }
                 }
             }
