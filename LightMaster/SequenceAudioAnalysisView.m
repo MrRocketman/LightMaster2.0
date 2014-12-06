@@ -19,7 +19,12 @@
 
 - (void)awakeFromNib
 {
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
+}
+
+- (void)currentTimeChange:(NSNotification *)notification
+{
+    [self setNeedsDisplay:YES];
 }
 
 - (BOOL)isFlipped

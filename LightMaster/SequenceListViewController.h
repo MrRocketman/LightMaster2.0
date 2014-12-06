@@ -8,10 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SNRFetchedResultsController.h"
-#import "ENAPIPostRequest.h"
-#import "ENAPIRequest.h"
 
-@interface SequenceListViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, SNRFetchedResultsControllerDelegate, ENAPIPostRequestDelegate, ENAPIRequestDelegate>
+@interface SequenceListViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, SNRFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet NSButton *createSequenceButton;
 @property (strong, nonatomic) IBOutlet NSButton *loadSequenceButton;

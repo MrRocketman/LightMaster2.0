@@ -15,7 +15,7 @@
 #import "Channel.h"
 #import "UserAudioAnalysisTrack.h"
 #import "UserAudioAnalysisTrackChannel.h"
-#import "ENAPI.h"
+#import "ENAPIRequest.h"
 
 @interface CoreDataManager()
 
@@ -53,7 +53,7 @@
             [self newControlBox];
         }
         
-        [ENAPI initWithApiKey:@"9F52RBALOQTUGKOT5" ConsumerKey:@"470771f3b2787696050f2f4143cb5c33" AndSharedSecret:@"QMa4TZ+PRL+Nq0e3SAR/RQ"];
+        [ENAPIRequest setApiKey:@"9F52RBALOQTUGKOT5"];
     }
     
     return self;
