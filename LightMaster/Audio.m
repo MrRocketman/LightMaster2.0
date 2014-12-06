@@ -2,7 +2,7 @@
 //  Audio.m
 //  LightMaster
 //
-//  Created by James Adams on 12/5/14.
+//  Created by James Adams on 12/6/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -13,7 +13,7 @@
 
 @implementation Audio
 
-@dynamic audioFile;
+@dynamic audioFilePath;
 @dynamic echoNestUploadProgress;
 @dynamic endOffset;
 @dynamic startOffset;

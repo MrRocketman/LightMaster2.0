@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="3" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Audio" representedClassName="Audio" syncable="YES">
-        <attribute name="audioFile" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="audioFilePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="echoNestUploadProgress" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="endOffset" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="startOffset" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -194,7 +194,7 @@
         <relationship name="track" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrack" inverseName="channels" inverseEntity="UserAudioAnalysisTrack" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Audio" positionX="178" positionY="-240" width="128" height="150"/>
+        <element name="Audio" positionX="178" positionY="-240" width="128" height="148"/>
         <element name="Channel" positionX="-965" positionY="153" width="128" height="133"/>
         <element name="ChannelPattern" positionX="-729" positionY="162" width="128" height="103"/>
         <element name="Command" positionX="-702" positionY="-592" width="128" height="133"/>

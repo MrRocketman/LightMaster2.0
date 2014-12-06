@@ -21,11 +21,24 @@
 		1A27BEF01A2C3B730043F8C9 /* SequenceChannelScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEEF1A2C3B730043F8C9 /* SequenceChannelScrollView.m */; };
 		1A27BEF31A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEF21A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m */; };
 		1A27BEF91A2C4FB90043F8C9 /* SequenceLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */; };
-		1A3474341A32D62800736869 /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474331A32D62800736869 /* Audio.m */; };
 		1A3474371A32D71000736869 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474361A32D71000736869 /* Sequence.m */; };
 		1A34743A1A32D73900736869 /* SequenceTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474391A32D73900736869 /* SequenceTatum.m */; };
 		1A34743D1A32D76B00736869 /* Playlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34743C1A32D76B00736869 /* Playlist.m */; };
 		1A3474401A32D8A700736869 /* SequenceDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34743F1A32D8A700736869 /* SequenceDataView.m */; };
+		1A3474BB1A32E46100736869 /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474BA1A32E46100736869 /* Audio.m */; };
+		1A3474C01A32E72200736869 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3474BF1A32E72200736869 /* ApplicationServices.framework */; };
+		1A3474C21A32E72700736869 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3474C11A32E72700736869 /* CoreServices.framework */; };
+		1A3474C41A32E72F00736869 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3474C31A32E72F00736869 /* libz.dylib */; };
+		1A3474C61A32E73900736869 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3474C51A32E73900736869 /* Security.framework */; };
+		1A3474C81A32E74000736869 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3474C71A32E74000736869 /* SystemConfiguration.framework */; };
+		1A3474CA1A32E74600736869 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3474C91A32E74600736869 /* CFNetwork.framework */; };
+		1A3474CC1A32E74E00736869 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3474CB1A32E74E00736869 /* IOKit.framework */; };
+		1A3474D31A32E8AF00736869 /* ORSSerialPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474CE1A32E8AF00736869 /* ORSSerialPort.m */; };
+		1A3474D41A32E8AF00736869 /* ORSSerialPortManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474D01A32E8AF00736869 /* ORSSerialPortManager.m */; };
+		1A3474D51A32E8AF00736869 /* ORSSerialRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474D21A32E8AF00736869 /* ORSSerialRequest.m */; };
+		1A3474E61A32EB2E00736869 /* Base64Transcoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474DE1A32EB2E00736869 /* Base64Transcoder.c */; };
+		1A3474E71A32EB2E00736869 /* ENAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474E11A32EB2E00736869 /* ENAPI.m */; };
+		1A3474E81A32EB2E00736869 /* ENAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474E41A32EB2E00736869 /* ENAPIRequest.m */; };
 		1A5AE5321A2EE0BE00AA96DE /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A5AE5311A2EE0BE00AA96DE /* Channel.m */; };
 		1A5AE5381A2EE0F700AA96DE /* UserAudioAnalysisTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A5AE5371A2EE0F700AA96DE /* UserAudioAnalysisTrack.m */; };
 		1A75ADBF1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADBE1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m */; };
@@ -101,8 +114,6 @@
 		1A27BEF71A2C4FB90043F8C9 /* SequenceLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceLogic.h; sourceTree = "<group>"; };
 		1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceLogic.m; sourceTree = "<group>"; };
 		1A3474311A32D5F900736869 /* LightMaster 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LightMaster 3.xcdatamodel"; sourceTree = "<group>"; };
-		1A3474321A32D62800736869 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = LightMaster/Audio.h; sourceTree = "<group>"; };
-		1A3474331A32D62800736869 /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Audio.m; path = LightMaster/Audio.m; sourceTree = "<group>"; };
 		1A3474351A32D71000736869 /* Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sequence.h; path = LightMaster/Sequence.h; sourceTree = "<group>"; };
 		1A3474361A32D71000736869 /* Sequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Sequence.m; path = LightMaster/Sequence.m; sourceTree = "<group>"; };
 		1A3474381A32D73900736869 /* SequenceTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SequenceTatum.h; path = LightMaster/SequenceTatum.h; sourceTree = "<group>"; };
@@ -111,6 +122,29 @@
 		1A34743C1A32D76B00736869 /* Playlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Playlist.m; path = LightMaster/Playlist.m; sourceTree = "<group>"; };
 		1A34743E1A32D8A700736869 /* SequenceDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceDataView.h; sourceTree = "<group>"; };
 		1A34743F1A32D8A700736869 /* SequenceDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceDataView.m; sourceTree = "<group>"; };
+		1A3474B91A32E46100736869 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = LightMaster/Audio.h; sourceTree = "<group>"; };
+		1A3474BA1A32E46100736869 /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Audio.m; path = LightMaster/Audio.m; sourceTree = "<group>"; };
+		1A3474BF1A32E72200736869 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		1A3474C11A32E72700736869 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		1A3474C31A32E72F00736869 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		1A3474C51A32E73900736869 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		1A3474C71A32E74000736869 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		1A3474C91A32E74600736869 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		1A3474CB1A32E74E00736869 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		1A3474CD1A32E8AF00736869 /* ORSSerialPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSSerialPort.h; path = LightMaster/ORSSerialPort.h; sourceTree = SOURCE_ROOT; };
+		1A3474CE1A32E8AF00736869 /* ORSSerialPort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSSerialPort.m; path = LightMaster/ORSSerialPort.m; sourceTree = SOURCE_ROOT; };
+		1A3474CF1A32E8AF00736869 /* ORSSerialPortManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSSerialPortManager.h; path = LightMaster/ORSSerialPortManager.h; sourceTree = SOURCE_ROOT; };
+		1A3474D01A32E8AF00736869 /* ORSSerialPortManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSSerialPortManager.m; path = LightMaster/ORSSerialPortManager.m; sourceTree = SOURCE_ROOT; };
+		1A3474D11A32E8AF00736869 /* ORSSerialRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSSerialRequest.h; path = LightMaster/ORSSerialRequest.h; sourceTree = SOURCE_ROOT; };
+		1A3474D21A32E8AF00736869 /* ORSSerialRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSSerialRequest.m; path = LightMaster/ORSSerialRequest.m; sourceTree = SOURCE_ROOT; };
+		1A3474DE1A32EB2E00736869 /* Base64Transcoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Base64Transcoder.c; sourceTree = "<group>"; };
+		1A3474DF1A32EB2E00736869 /* Base64Transcoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64Transcoder.h; sourceTree = "<group>"; };
+		1A3474E01A32EB2E00736869 /* ENAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ENAPI.h; sourceTree = "<group>"; };
+		1A3474E11A32EB2E00736869 /* ENAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ENAPI.m; sourceTree = "<group>"; };
+		1A3474E21A32EB2E00736869 /* ENAPILibrary-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ENAPILibrary-Prefix.pch"; sourceTree = "<group>"; };
+		1A3474E31A32EB2E00736869 /* ENAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ENAPIRequest.h; sourceTree = "<group>"; };
+		1A3474E41A32EB2E00736869 /* ENAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ENAPIRequest.m; sourceTree = "<group>"; };
+		1A3474E51A32EB2E00736869 /* ENLibrary-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ENLibrary-Prefix.pch"; sourceTree = "<group>"; };
 		1A5AE5301A2EE0BE00AA96DE /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Channel.h; path = LightMaster/Channel.h; sourceTree = "<group>"; };
 		1A5AE5311A2EE0BE00AA96DE /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Channel.m; path = LightMaster/Channel.m; sourceTree = "<group>"; };
 		1A5AE5361A2EE0F700AA96DE /* UserAudioAnalysisTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserAudioAnalysisTrack.h; path = LightMaster/UserAudioAnalysisTrack.h; sourceTree = "<group>"; };
@@ -184,6 +218,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A3474CC1A32E74E00736869 /* IOKit.framework in Frameworks */,
+				1A3474CA1A32E74600736869 /* CFNetwork.framework in Frameworks */,
+				1A3474C81A32E74000736869 /* SystemConfiguration.framework in Frameworks */,
+				1A3474C61A32E73900736869 /* Security.framework in Frameworks */,
+				1A3474C41A32E72F00736869 /* libz.dylib in Frameworks */,
+				1A3474C21A32E72700736869 /* CoreServices.framework in Frameworks */,
+				1A3474C01A32E72200736869 /* ApplicationServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +310,42 @@
 				1A27BEE51A2BF6840043F8C9 /* SequenceTimelineView.m */,
 			);
 			name = TimelineView;
+			sourceTree = "<group>";
+		};
+		1A3474AB1A32E14C00736869 /* Serial Port */ = {
+			isa = PBXGroup;
+			children = (
+				1A3474CD1A32E8AF00736869 /* ORSSerialPort.h */,
+				1A3474CE1A32E8AF00736869 /* ORSSerialPort.m */,
+				1A3474CF1A32E8AF00736869 /* ORSSerialPortManager.h */,
+				1A3474D01A32E8AF00736869 /* ORSSerialPortManager.m */,
+				1A3474D11A32E8AF00736869 /* ORSSerialRequest.h */,
+				1A3474D21A32E8AF00736869 /* ORSSerialRequest.m */,
+			);
+			path = "Serial Port";
+			sourceTree = "<group>";
+		};
+		1A3474DC1A32EB2E00736869 /* ENAPILibrary */ = {
+			isa = PBXGroup;
+			children = (
+				1A3474DD1A32EB2E00736869 /* Base64 */,
+				1A3474E01A32EB2E00736869 /* ENAPI.h */,
+				1A3474E11A32EB2E00736869 /* ENAPI.m */,
+				1A3474E21A32EB2E00736869 /* ENAPILibrary-Prefix.pch */,
+				1A3474E31A32EB2E00736869 /* ENAPIRequest.h */,
+				1A3474E41A32EB2E00736869 /* ENAPIRequest.m */,
+				1A3474E51A32EB2E00736869 /* ENLibrary-Prefix.pch */,
+			);
+			path = ENAPILibrary;
+			sourceTree = "<group>";
+		};
+		1A3474DD1A32EB2E00736869 /* Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				1A3474DE1A32EB2E00736869 /* Base64Transcoder.c */,
+				1A3474DF1A32EB2E00736869 /* Base64Transcoder.h */,
+			);
+			path = Base64;
 			sourceTree = "<group>";
 		};
 		1A75ADC31A31248F00D532FB /* AudioAnalysisView */ = {
@@ -376,6 +453,13 @@
 		1AE830111A21BA68000E297D = {
 			isa = PBXGroup;
 			children = (
+				1A3474CB1A32E74E00736869 /* IOKit.framework */,
+				1A3474C91A32E74600736869 /* CFNetwork.framework */,
+				1A3474C71A32E74000736869 /* SystemConfiguration.framework */,
+				1A3474C51A32E73900736869 /* Security.framework */,
+				1A3474C31A32E72F00736869 /* libz.dylib */,
+				1A3474C11A32E72700736869 /* CoreServices.framework */,
+				1A3474BF1A32E72200736869 /* ApplicationServices.framework */,
 				1AE8301C1A21BA68000E297D /* LightMaster */,
 				1AE830361A21BA68000E297D /* LightMasterTests */,
 				1AE8301B1A21BA68000E297D /* Products */,
@@ -396,6 +480,8 @@
 			children = (
 				1AE8301F1A21BA68000E297D /* AppDelegate.h */,
 				1AE830201A21BA68000E297D /* AppDelegate.m */,
+				1A3474AB1A32E14C00736869 /* Serial Port */,
+				1A3474DC1A32EB2E00736869 /* ENAPILibrary */,
 				1AE830491A21C725000E297D /* Data Model */,
 				1A14CA5F1A253E6200C4FEB0 /* SequenceTab */,
 				1A14CA631A25411F00C4FEB0 /* ControlBoxTab */,
@@ -456,8 +542,8 @@
 				1A3474361A32D71000736869 /* Sequence.m */,
 				1A3474381A32D73900736869 /* SequenceTatum.h */,
 				1A3474391A32D73900736869 /* SequenceTatum.m */,
-				1A3474321A32D62800736869 /* Audio.h */,
-				1A3474331A32D62800736869 /* Audio.m */,
+				1A3474B91A32E46100736869 /* Audio.h */,
+				1A3474BA1A32E46100736869 /* Audio.m */,
 				1AE771601A243F2000C49006 /* ControlBox */,
 				1AE771611A243F2900C49006 /* UserAudioAnalysis */,
 				1AE7715E1A243EED00C49006 /* EchoNest */,
@@ -569,10 +655,12 @@
 				1AE771571A243E6600C49006 /* EchoNestBeat.m in Sources */,
 				1AE771511A243E6600C49006 /* EchoNestMeta.m in Sources */,
 				1AE830481A21C70D000E297D /* NSManagedObjectContext+Queryable.m in Sources */,
+				1A3474E71A32EB2E00736869 /* ENAPI.m in Sources */,
 				1A14CA691A25698600C4FEB0 /* ControlBox.m in Sources */,
 				1A75ADC71A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m in Sources */,
 				1A14CA521A246A3800C4FEB0 /* SequenceViewController.m in Sources */,
 				1A75ADC21A31248A00D532FB /* SequenceAudioAnalysisView.m in Sources */,
+				1A3474BB1A32E46100736869 /* Audio.m in Sources */,
 				1A34743D1A32D76B00736869 /* Playlist.m in Sources */,
 				1A27BEED1A2C0B310043F8C9 /* SequenceView.m in Sources */,
 				1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */,
@@ -593,22 +681,26 @@
 				1A27BEF31A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m in Sources */,
 				1A14CA551A246CB100C4FEB0 /* SequenceListViewController.m in Sources */,
 				1AE830291A21BA68000E297D /* LightMaster.xcdatamodeld in Sources */,
+				1A3474D51A32E8AF00736869 /* ORSSerialRequest.m in Sources */,
+				1A3474D41A32E8AF00736869 /* ORSSerialPortManager.m in Sources */,
 				1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */,
 				1AE7715A1A243E6600C49006 /* EchoNestTrack.m in Sources */,
 				1AE771791A24422C00C49006 /* CommandPulse.m in Sources */,
 				1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */,
+				1A3474E81A32EB2E00736869 /* ENAPIRequest.m in Sources */,
+				1A3474E61A32EB2E00736869 /* Base64Transcoder.c in Sources */,
 				1A34743A1A32D73900736869 /* SequenceTatum.m in Sources */,
 				1AE7717C1A24422C00C49006 /* CommandTwinkle.m in Sources */,
 				1A27BEF91A2C4FB90043F8C9 /* SequenceLogic.m in Sources */,
 				1A27BEE61A2BF6840043F8C9 /* SequenceTimelineView.m in Sources */,
 				1A27BEE31A2BF66D0043F8C9 /* SequenceChannelView.m in Sources */,
 				1AE7713F1A243E6600C49006 /* EchoNestTatum.m in Sources */,
-				1A3474341A32D62800736869 /* Audio.m in Sources */,
 				1AE771391A243E6600C49006 /* EchoNestAudioAnalysis.m in Sources */,
 				1A14CA621A25411B00C4FEB0 /* ControlBoxViewController.m in Sources */,
 				1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */,
 				1AE830231A21BA68000E297D /* main.m in Sources */,
 				1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */,
+				1A3474D31A32E8AF00736869 /* ORSSerialPort.m in Sources */,
 				1A75ADCA1A3124C800D532FB /* SequenceAudioAnalysisChannelView.m in Sources */,
 				1AE771181A243E6500C49006 /* CommandFadeUp.m in Sources */,
 				1AE830211A21BA68000E297D /* AppDelegate.m in Sources */,
