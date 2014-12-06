@@ -21,9 +21,14 @@
 @property (strong, nonatomic) IBOutlet NSButton *createTrackChannelButton;
 @property (strong, nonatomic) IBOutlet NSTableView *trackChannelTableView;
 
+@property (strong, nonatomic) IBOutlet NSButton *chooseAudioFileButton;
+@property (strong, nonatomic) IBOutlet NSTextField *audioDescriptionTextField;
+@property (strong, nonatomic) IBOutlet NSTextField *audioAnlysisProgress;
+
 - (IBAction)createSequenceButtonPress:(id)sender;
 - (IBAction)loadSequenceButtonPress:(id)sender;
 - (IBAction)createTrackButtonPress:(id)sender;
 - (IBAction)createTrackChannelButtonPress:(id)sender;
+- (IBAction)chooseAudioFileButtonPress:(id)sender;
 
 @end

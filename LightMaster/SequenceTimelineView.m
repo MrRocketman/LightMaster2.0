@@ -60,7 +60,7 @@
 - (void)drawAudio
 {
     // Get the audio
-    Audio *audio = [CoreDataManager sharedManager].currentSequence.audio;
+    Audio *audio = [[CoreDataManager sharedManager].currentSequence.audio anyObject];
     if(audio)
     {
         NSBezierPath *bezierPath = [NSBezierPath bezierPath];

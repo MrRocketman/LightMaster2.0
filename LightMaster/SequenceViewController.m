@@ -15,6 +15,8 @@
 #import "SequenceAudioAnalysisChannelScrollView.h"
 #import "SequenceLogic.h"
 
+#import "NSManagedObjectContext+Queryable.h"
+
 @interface SequenceViewController ()
 
 @end

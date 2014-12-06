@@ -105,7 +105,6 @@
 
 - (void)updateViews
 {
-    NSLog(@"main update");
     [self.sequenceView setNeedsDisplay:YES];
 }
 

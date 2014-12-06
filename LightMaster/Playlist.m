@@ -2,7 +2,7 @@
 //  Playlist.m
 //  LightMaster
 //
-//  Created by James Adams on 11/24/14.
+//  Created by James Adams on 12/5/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -13,6 +13,8 @@
 @implementation Playlist
 
 @dynamic title;
+@dynamic startTime;
+@dynamic endTime;
 @dynamic sequences;
 
 @end

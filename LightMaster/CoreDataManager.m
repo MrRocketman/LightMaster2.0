@@ -46,6 +46,11 @@
     {
         [self managedObjectContext]; // Create the managedObjectContext
         
+        // Add a default control box and channel
+        if([[[self.managedObjectContext ofType:@"ControlBox"] toArray] count] == 0)
+        {
+            [self newControlBox];
+        }
     }
     
     return self;
@@ -263,7 +268,7 @@
     // Make the default tatum set
     for(int i = 0; i <= [sequence.endTime floatValue] / 0.1; i ++)
     {
-        [self addSequenceTatumToSequence:sequence atStartTime:i * 0.1];
+        [self addSequenceTatumToSequence:sequence atTime:i * 0.1];
     }
     
     // Add any control boxes that already exist
@@ -281,10 +286,10 @@
     return sequence;
 }
 
-- (SequenceTatum *)addSequenceTatumToSequence:(Sequence *)sequence atStartTime:(float)startTime
+- (SequenceTatum *)addSequenceTatumToSequence:(Sequence *)sequence atTime:(float)time
 {
     SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
-    tatum.startTime = @(startTime);
+    tatum.time = @(time);
     [sequence addTatumsObject:tatum];
     
     return tatum;
@@ -317,14 +322,14 @@
     // Add tatums
     if(newEndTime > [self.currentSequence.endTime floatValue])
     {
-        SequenceTatum *lastTatum = [[[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", self.currentSequence] orderBy:@"startTime"] toArray] lastObject];
+        SequenceTatum *lastTatum = [[[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", self.currentSequence] orderBy:@"time"] toArray] lastObject];
         
-        if(newEndTime > [lastTatum.startTime floatValue] + 0.1)
+        if(newEndTime > [lastTatum.time floatValue] + 0.1)
         {
-            for(float i = [lastTatum.startTime floatValue] + 0.1; i <= newEndTime; i += 0.1)
+            for(float i = [lastTatum.time floatValue] + 0.1; i <= newEndTime; i += 0.1)
             {
                 SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
-                tatum.startTime = @(i);
+                tatum.time = @(i);
                 [self.currentSequence addTatumsObject:tatum];
             }
         }
@@ -332,7 +337,7 @@
     // Remove tatums
     else if(newEndTime < [self.currentSequence.endTime floatValue])
     {
-        NSSet *tatumsToRemove = [NSSet setWithArray:[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND startTime > %f", self.currentSequence, newEndTime] toArray]];
+        NSSet *tatumsToRemove = [NSSet setWithArray:[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f", self.currentSequence, newEndTime] toArray]];
         [self.currentSequence removeTatums:tatumsToRemove];
     }
     
@@ -343,16 +348,28 @@
     [self saveContext];
 }
 
-- (void)newControlBox
+- (ControlBox *)newControlBox
 {
     ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:[self managedObjectContext]];
     controlBox.title = @"New Box";
-    controlBox.idNumber = @([[[self.managedObjectContext ofType:@"ControlBox"] toArray] count] - 1);
+    controlBox.idNumber = @([[[self.managedObjectContext ofType:@"ControlBox"] toArray] count]);
+    
+    // Make a default channel
+    [self newChannelForControlBox: controlBox];
+    
+    // Add the new box to all the sequences
+    NSArray *sequences = [[self.managedObjectContext ofType:@"Sequence"] toArray];
+    for(Sequence *sequence in sequences)
+    {
+        [sequence addControlBoxesObject:controlBox];
+    }
     
     [self saveContext];
+    
+    return controlBox;
 }
 
-- (void)newChannelForControlBox:(ControlBox *)controlBox
+- (Channel *)newChannelForControlBox:(ControlBox *)controlBox
 {
     Channel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"Channel" inManagedObjectContext:[self managedObjectContext]];
     channel.title = @"New Channel";
@@ -361,6 +378,8 @@
     [controlBox addChannelsObject:channel];
     
     [self saveContext];
+    
+    return channel;
 }
 
 - (UserAudioAnalysisTrack *)newAudioAnalysisTrackForSequence:(Sequence *)sequence

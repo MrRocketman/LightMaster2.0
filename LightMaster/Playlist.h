@@ -2,7 +2,7 @@
 //  Playlist.h
 //  LightMaster
 //
-//  Created by James Adams on 11/24/14.
+//  Created by James Adams on 12/5/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -14,6 +14,8 @@
 @interface Playlist : NSManagedObject
 
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSDate * startTime;
+@property (nonatomic, retain) NSDate * endTime;
 @property (nonatomic, retain) NSSet *sequences;
 @end
 

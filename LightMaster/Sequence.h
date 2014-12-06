@@ -2,7 +2,7 @@
 //  Sequence.h
 //  LightMaster
 //
-//  Created by James Adams on 12/2/14.
+//  Created by James Adams on 12/5/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -18,7 +18,7 @@
 @property (nonatomic, retain) NSDate * modifiedDate;
 @property (nonatomic, retain) NSNumber * startOffset;
 @property (nonatomic, retain) NSString * title;
-@property (nonatomic, retain) Audio *audio;
+@property (nonatomic, retain) NSSet *audio;
 @property (nonatomic, retain) NSSet *commands;
 @property (nonatomic, retain) NSSet *controlBoxes;
 @property (nonatomic, retain) NSSet *playlists;
@@ -27,6 +27,11 @@
 @end
 
 @interface Sequence (CoreDataGeneratedAccessors)
+
+- (void)addAudioObject:(Audio *)value;
+- (void)removeAudioObject:(Audio *)value;
+- (void)addAudio:(NSSet *)values;
+- (void)removeAudio:(NSSet *)values;
 
 - (void)addCommandsObject:(Command *)value;
 - (void)removeCommandsObject:(Command *)value;

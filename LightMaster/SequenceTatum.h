@@ -13,7 +13,7 @@
 
 @interface SequenceTatum : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * startTime;
+@property (nonatomic, retain) NSNumber *time;
 @property (nonatomic, retain) NSSet *endCommands;
 @property (nonatomic, retain) Sequence *sequence;
 @property (nonatomic, retain) NSSet *startCommands;

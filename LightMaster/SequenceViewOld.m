@@ -421,7 +421,7 @@
     [color setFill];
     for(int i = 0; i <= visibleTatums.count; i ++)
     {
-        NSRect line = NSMakeRect([self timeToX:[((SequenceTatum *)visibleTatums[i]).startTime floatValue]], topBarFrame.origin.y, 1, self.frame.size.height);
+        NSRect line = NSMakeRect([self timeToX:[((SequenceTatum *)visibleTatums[i]).time floatValue]], topBarFrame.origin.y, 1, self.frame.size.height);
         
         NSRectFill(line);
     }

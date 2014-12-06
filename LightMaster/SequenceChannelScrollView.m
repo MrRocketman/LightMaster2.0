@@ -88,7 +88,6 @@
 
 - (void)updateViews
 {
-    NSLog(@"channel update");
     [self.channelView setNeedsDisplay:YES];
 }
 

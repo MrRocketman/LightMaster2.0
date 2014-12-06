@@ -13,7 +13,7 @@
 
 @implementation SequenceTatum
 
-@dynamic startTime;
+@dynamic time;
 @dynamic endCommands;
 @dynamic sequence;
 @dynamic startCommands;

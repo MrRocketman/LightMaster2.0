@@ -11,12 +11,15 @@
 #import "Sequence.h"
 #import "UserAudioAnalysisTrack.h"
 #import "UserAudioAnalysisTrackChannel.h"
+#import "Audio.h"
 
 @interface SequenceListViewController ()
 
 @property (strong, nonatomic) SNRFetchedResultsController *sequenceFetchedResultsController;
 @property (strong, nonatomic) SNRFetchedResultsController *trackFetchedResultsController;
 @property (strong, nonatomic) SNRFetchedResultsController *trackChannelFetchedResultsController;
+
+@property (strong, nonatomic) NSOpenPanel *openPanel;
 
 @end
 
@@ -137,6 +140,40 @@
 - (IBAction)createTrackChannelButtonPress:(id)sender
 {
     [[CoreDataManager sharedManager] newAudioAnalysisChannelForTrack:[self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow]];
+}
+
+- (IBAction)chooseAudioFileButtonPress:(id)sender
+{
+    // Load the open panel if neccessary
+    if(!self.openPanel)
+    {
+        self.openPanel = [NSOpenPanel openPanel];
+        self.openPanel.canChooseDirectories = NO;
+        self.openPanel.canChooseFiles = YES;
+        self.openPanel.resolvesAliases = YES;
+        self.openPanel.allowsMultipleSelection = NO;
+        self.openPanel.allowedFileTypes = @[@"aac", @"aif", @"aiff", @"alac", @"mp3", @"m4a", @"wav"];
+        self.openPanel.directoryURL = [NSURL fileURLWithPathComponents:@[@"~", @"Music"]];
+    }
+    
+    [self.openPanel beginWithCompletionHandler:^(NSInteger result)
+     {
+         if(result == NSFileHandlingPanelOKButton)
+         {
+             NSString *filePath = [[self.openPanel URL] path];
+             //NSLog(@"filePath:%@", filePath);
+             // [filePath lastPathComponent]
+             Audio *audio = [NSEntityDescription insertNewObjectForEntityForName:@"Audio" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+             audio.title = [filePath lastPathComponent];
+             audio.audioFile = [NSData dataWithContentsOfURL:self.openPanel.URL];
+             audio.sequence = [CoreDataManager sharedManager].currentSequence;
+             
+             [[CoreDataManager sharedManager] saveContext];
+             
+             [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
+         }
+     }
+     ];
 }
 
 #pragma mark - NSTextFieldDelegate Methods
