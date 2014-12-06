@@ -804,7 +804,7 @@ IA
                                             <font key="font" metaFont="system" size="29"/>
                                         </buttonCell>
                                         <connections>
-                                            <segue destination="ix5-GP-Gjg" kind="popover" popoverAnchorView="PIb-yP-RwM" popoverBehavior="t" preferredEdge="maxY" id="4jY-gd-hlC"/>
+                                            <segue destination="ix5-GP-Gjg" kind="show" id="4jY-gd-hlC"/>
                                         </connections>
                                     </button>
                                 </subviews>

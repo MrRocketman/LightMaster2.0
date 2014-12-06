@@ -60,7 +60,10 @@
     [self.trackTableView reloadData];
     [self.trackChannelTableView reloadData];
     
-    self.audioDescriptionTextField.stringValue = ((Audio *)[[CoreDataManager sharedManager].currentSequence.audio anyObject]).title;
+    if((Audio *)[[CoreDataManager sharedManager].currentSequence.audio anyObject])
+    {
+        self.audioDescriptionTextField.stringValue = ((Audio *)[[CoreDataManager sharedManager].currentSequence.audio anyObject]).title;
+    }
 }
 
 - (BOOL)acceptsFirstResponder
