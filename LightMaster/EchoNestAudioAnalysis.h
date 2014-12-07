@@ -2,7 +2,7 @@
 //  EchoNestAudioAnalysis.h
 //  LightMaster
 //
-//  Created by James Adams on 12/6/14.
+//  Created by James Adams on 12/7/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -22,7 +22,7 @@
 @property (nonatomic, retain) NSString * analyzerVersion;
 @property (nonatomic, retain) NSString * artist;
 @property (nonatomic, retain) NSString * artistID;
-@property (nonatomic, retain) NSString * audioMD5;
+@property (nonatomic, retain) NSString * sampleMD5;
 @property (nonatomic, retain) NSNumber * bitrate;
 @property (nonatomic, retain) NSString * codeString;
 @property (nonatomic, retain) NSNumber * codeVersion;
@@ -66,6 +66,8 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSNumber * valence;
 @property (nonatomic, retain) NSNumber * windowSeconds;
+@property (nonatomic, retain) NSString * platform;
+@property (nonatomic, retain) NSString * decoderVersion;
 @property (nonatomic, retain) Audio *audio;
 @property (nonatomic, retain) NSSet *bars;
 @property (nonatomic, retain) NSSet *beats;

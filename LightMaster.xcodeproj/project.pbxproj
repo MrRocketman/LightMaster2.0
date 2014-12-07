@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A0D21611A34141C00E5B3E8 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D21601A34141C00E5B3E8 /* Sequence.m */; };
 		1A0D21641A34141D00E5B3E8 /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D21631A34141D00E5B3E8 /* Audio.m */; };
-		1A0D21671A342E9C00E5B3E8 /* EchoNestAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D21661A342E9C00E5B3E8 /* EchoNestAudioAnalysis.m */; };
+		1A0D21731A344E9800E5B3E8 /* EchoNestAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D21721A344E9800E5B3E8 /* EchoNestAudioAnalysis.m */; };
 		1A14CA521A246A3800C4FEB0 /* SequenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */; };
 		1A14CA551A246CB100C4FEB0 /* SequenceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA541A246CB100C4FEB0 /* SequenceListViewController.m */; };
 		1A14CA581A25232C00C4FEB0 /* SNRFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA571A25232C00C4FEB0 /* SNRFetchedResultsController.m */; };
@@ -87,8 +87,8 @@
 		1A0D21601A34141C00E5B3E8 /* Sequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Sequence.m; path = LightMaster/Sequence.m; sourceTree = "<group>"; };
 		1A0D21621A34141D00E5B3E8 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = LightMaster/Audio.h; sourceTree = "<group>"; };
 		1A0D21631A34141D00E5B3E8 /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Audio.m; path = LightMaster/Audio.m; sourceTree = "<group>"; };
-		1A0D21651A342E9C00E5B3E8 /* EchoNestAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestAudioAnalysis.h; path = LightMaster/EchoNestAudioAnalysis.h; sourceTree = "<group>"; };
-		1A0D21661A342E9C00E5B3E8 /* EchoNestAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestAudioAnalysis.m; path = LightMaster/EchoNestAudioAnalysis.m; sourceTree = "<group>"; };
+		1A0D21711A344E9800E5B3E8 /* EchoNestAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestAudioAnalysis.h; path = LightMaster/EchoNestAudioAnalysis.h; sourceTree = "<group>"; };
+		1A0D21721A344E9800E5B3E8 /* EchoNestAudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestAudioAnalysis.m; path = LightMaster/EchoNestAudioAnalysis.m; sourceTree = "<group>"; };
 		1A14CA501A246A3800C4FEB0 /* SequenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceViewController.h; sourceTree = "<group>"; };
 		1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceViewController.m; sourceTree = "<group>"; };
 		1A14CA531A246CB100C4FEB0 /* SequenceListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceListViewController.h; sourceTree = "<group>"; };
@@ -381,8 +381,8 @@
 		1AE7715E1A243EED00C49006 /* EchoNest */ = {
 			isa = PBXGroup;
 			children = (
-				1A0D21651A342E9C00E5B3E8 /* EchoNestAudioAnalysis.h */,
-				1A0D21661A342E9C00E5B3E8 /* EchoNestAudioAnalysis.m */,
+				1A0D21711A344E9800E5B3E8 /* EchoNestAudioAnalysis.h */,
+				1A0D21721A344E9800E5B3E8 /* EchoNestAudioAnalysis.m */,
 				1AE771341A243E6500C49006 /* EchoNestSection.h */,
 				1AE771351A243E6500C49006 /* EchoNestSection.m */,
 				1AE771221A243E6500C49006 /* EchoNestBar.h */,
@@ -656,7 +656,7 @@
 				1A14CA691A25698600C4FEB0 /* ControlBox.m in Sources */,
 				1A75ADC71A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m in Sources */,
 				1A0D21611A34141C00E5B3E8 /* Sequence.m in Sources */,
-				1A0D21671A342E9C00E5B3E8 /* EchoNestAudioAnalysis.m in Sources */,
+				1A0D21731A344E9800E5B3E8 /* EchoNestAudioAnalysis.m in Sources */,
 				1A14CA521A246A3800C4FEB0 /* SequenceViewController.m in Sources */,
 				1A75ADC21A31248A00D532FB /* SequenceAudioAnalysisView.m in Sources */,
 				1A34743D1A32D76B00736869 /* Playlist.m in Sources */,

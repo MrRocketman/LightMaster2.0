@@ -2,7 +2,7 @@
 //  EchoNestAudioAnalysis.m
 //  LightMaster
 //
-//  Created by James Adams on 12/6/14.
+//  Created by James Adams on 12/7/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -26,7 +26,7 @@
 @dynamic analyzerVersion;
 @dynamic artist;
 @dynamic artistID;
-@dynamic audioMD5;
+@dynamic sampleMD5;
 @dynamic bitrate;
 @dynamic codeString;
 @dynamic codeVersion;
@@ -70,6 +70,8 @@
 @dynamic title;
 @dynamic valence;
 @dynamic windowSeconds;
+@dynamic platform;
+@dynamic decoderVersion;
 @dynamic audio;
 @dynamic bars;
 @dynamic beats;

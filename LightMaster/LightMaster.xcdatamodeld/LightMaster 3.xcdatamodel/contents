@@ -60,12 +60,12 @@
         <attribute name="analyzerVersion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="artist" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="artistID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="audioMD5" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bitrate" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="codeString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="codeVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="danceability" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="decoder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="decoderVersion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="detailedStatus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="echoPrintString" optional="YES" attributeType="String" syncable="YES"/>
@@ -85,8 +85,10 @@
         <attribute name="modeConfidence" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="numberOfSamples" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="offsetSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="platform" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rhythmString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rhythmVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sampleMD5" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sampleRate" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="seconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="songID" optional="YES" attributeType="String" syncable="YES"/>
@@ -211,7 +213,7 @@
         <element name="CommandTwinkle" positionX="-335" positionY="-369" width="128" height="58"/>
         <element name="ComplexCommand" positionX="-506" positionY="-414" width="128" height="45"/>
         <element name="ControlBox" positionX="-1170" positionY="207" width="128" height="103"/>
-        <element name="EchoNestAudioAnalysis" positionX="187" positionY="-19" width="128" height="928"/>
+        <element name="EchoNestAudioAnalysis" positionX="187" positionY="-19" width="128" height="958"/>
         <element name="EchoNestBar" positionX="63" positionY="261" width="128" height="103"/>
         <element name="EchoNestBeat" positionX="214" positionY="261" width="128" height="103"/>
         <element name="EchoNestPitch" positionX="601" positionY="557" width="128" height="73"/>
