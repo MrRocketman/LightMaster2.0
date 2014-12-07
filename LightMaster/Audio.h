@@ -13,6 +13,7 @@
 
 @interface Audio : NSManagedObject
 
+@property (nonatomic, retain) NSData * audioFile;
 @property (nonatomic, retain) NSString * audioFilePath;
 @property (nonatomic, retain) NSNumber * echoNestUploadProgress;
 @property (nonatomic, retain) NSNumber * endOffset;

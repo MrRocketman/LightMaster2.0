@@ -103,6 +103,7 @@ NSString *ENEscapeStringForURL (NSString *str) {
 }
 
 + (NSDictionary *)parseJSONDataToDictionary:(NSData *)data {
+    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *result = nil;
     NSError *error = nil;
     NSObject *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];

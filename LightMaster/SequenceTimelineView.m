@@ -14,7 +14,6 @@
 #import "SequenceScrollView.h"
 #import "Audio.h"
 #import "EchoNestAudioAnalysis.h"
-#import "EchoNestMeta.h"
 
 @interface SequenceTimelineView()
 
@@ -60,14 +59,14 @@
 - (void)drawAudio
 {
     // Get the audio
-    Audio *audio = [[CoreDataManager sharedManager].currentSequence.audio anyObject];
+    Audio *audio = [CoreDataManager sharedManager].currentSequence.audio;
     if(audio)
     {
         NSBezierPath *bezierPath = [NSBezierPath bezierPath];
         float topY = self.frame.size.height / 2 + 1;
         float bottomY = self.frame.size.height - 1;
         float leftX = [audio.startOffset floatValue];
-        float rightX = [[SequenceLogic sharedInstance] timeToX:([audio.echoNestAudioAnalysis.meta.seconds floatValue] - [audio.startOffset floatValue] - [audio.endOffset floatValue])];
+        float rightX = [[SequenceLogic sharedInstance] timeToX:([audio.echoNestAudioAnalysis.duration floatValue] - [audio.startOffset floatValue] - [audio.endOffset floatValue])];
         
         // Draw the box
         [bezierPath moveToPoint:NSMakePoint(leftX, topY)];

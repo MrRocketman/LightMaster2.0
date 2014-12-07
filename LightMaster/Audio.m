@@ -13,6 +13,7 @@
 
 @implementation Audio
 
+@dynamic audioFile;
 @dynamic audioFilePath;
 @dynamic echoNestUploadProgress;
 @dynamic endOffset;

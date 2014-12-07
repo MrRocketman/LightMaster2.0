@@ -166,11 +166,10 @@ static NSMutableArray *EN_SECURED_ENDPOINTS = nil;
     }
 }
 
-- (void)initiateGetRequest {
-        
-    self.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?%@", ECHONEST_API_URL, self.endpoint, [ENAPI encodeDictionaryAsQueryString:self.parameters]]];
-    //NSLog(@"request url:%@", self.url);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url];
+- (void)initiateAnalysisDownloadForURLString:(NSString *)analysisURL {
+    
+    self.url = [NSURL URLWithString:analysisURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:requestTimeoutInterval];
     
     [request setTimeoutInterval:requestTimeoutInterval];
     
@@ -184,12 +183,27 @@ static NSMutableArray *EN_SECURED_ENDPOINTS = nil;
     
 }
 
+- (void)initiateGetRequest {
+        
+    self.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?%@", ECHONEST_API_URL, self.endpoint, [ENAPI encodeDictionaryAsQueryString:self.parameters]]];
+    //NSLog(@"request url:%@", self.url);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:requestTimeoutInterval];
+    
+    self.connection =[[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if (self.connection == nil) {
+        self.error = [NSError errorWithDomain:@"domain?" code:-1 userInfo:nil];
+        [self executeCompletionBlock];
+    } else {
+    }
+    
+}
 
 - (void)initiatePostRequest {
     
     self.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", ECHONEST_API_URL, self.endpoint]];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:requestTimeoutInterval];
     request.HTTPMethod = @"POST";
     
     [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary] forHTTPHeaderField:@"Content-Type"];
@@ -238,6 +252,17 @@ static NSMutableArray *EN_SECURED_ENDPOINTS = nil;
 
 + (void)cancelAllRequests {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ENAPIRequest.cancel" object:nil userInfo:nil];
+}
+
++ (ENAPIRequest *)downloadAnalysisURL:(NSString *)analysisURL withCompletionBlock:(ENAPIRequestCompletionBlock)completionBlock
+{
+    ENAPIRequest *request = [[ENAPIRequest alloc] init];
+    request.completionBlock = completionBlock;
+    request.data = [NSMutableData new];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSendCancelNotification:) name:@"ENTasteProfileLibrary.cancel" object:nil];
+    
+    [request initiateAnalysisDownloadForURLString:analysisURL];
+    return request;
 }
 
 + (ENAPIRequest *)GETWithEndpoint:(NSString *)endpoint
@@ -387,9 +412,8 @@ static NSMutableArray *EN_SECURED_ENDPOINTS = nil;
     [((NSMutableData *)self.data) setLength:0];
 }
 
-
 - (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ENAPIRequest.didSendBodyData" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:bytesWritten], @"totalBytesWritten", [NSNumber numberWithInteger:totalBytesExpectedToWrite], @"totalBytesExpectedToWrite", nil]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ENAPIRequest.didSendBodyData" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalBytesWritten], @"totalBytesWritten", [NSNumber numberWithInteger:totalBytesExpectedToWrite], @"totalBytesExpectedToWrite", nil]];
 }
 
 - (NSInputStream *)connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request {

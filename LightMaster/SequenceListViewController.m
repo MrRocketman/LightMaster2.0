@@ -14,6 +14,7 @@
 #import "Audio.h"
 #import "ENAPIRequest.h"
 #import "ENAPI.h"
+#import "EchoNestAudioAnalysis.h"
 
 @interface SequenceListViewController ()
 
@@ -22,6 +23,7 @@
 @property (strong, nonatomic) SNRFetchedResultsController *trackChannelFetchedResultsController;
 
 @property (strong, nonatomic) NSOpenPanel *openPanel;
+@property (strong, nonatomic) Audio *currentAudio;
 
 @end
 
@@ -30,6 +32,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(echoNestUploadUpdate:) name:@"ENAPIRequest.didSendBodyData" object:nil];
     
     // Sequences
     NSError *error;
@@ -54,6 +58,8 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         [[NSApplication sharedApplication] presentError:error];
     }
+    
+    [self updateAudioAnlysisProgressLabel];
 }
 
 - (void)viewWillAppear
@@ -62,9 +68,9 @@
     [self.trackTableView reloadData];
     [self.trackChannelTableView reloadData];
     
-    if((Audio *)[[CoreDataManager sharedManager].currentSequence.audio anyObject])
+    if([CoreDataManager sharedManager].currentSequence.audio.title.length > 0)
     {
-        self.audioDescriptionTextField.stringValue = ((Audio *)[[CoreDataManager sharedManager].currentSequence.audio anyObject]).title;
+        self.audioDescriptionTextField.stringValue = [CoreDataManager sharedManager].currentSequence.audio.title;
     }
 }
 
@@ -169,19 +175,22 @@
          {
              NSString *filePath = [[self.openPanel URL] path];
              //NSLog(@"filePath:%@", filePath);
-             Audio *audio = [NSEntityDescription insertNewObjectForEntityForName:@"Audio" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-             audio.title = [filePath lastPathComponent];
-             self.audioDescriptionTextField.stringValue = audio.title;
-             // Make a copy of the audioClip file and store it in the library
-             NSString *newFilePath = [NSString stringWithFormat:@"%@/%@", [[[CoreDataManager sharedManager] applicationDocumentsDirectory] path], [filePath lastPathComponent]];
-             NSFileManager *fileManager = [NSFileManager defaultManager];
-             NSError *error = nil;
-             [fileManager copyItemAtPath:filePath toPath:newFilePath error:&error];
-             //NSLog(@"Copy Audio error error %@, %@", error, [error userInfo]);
-             //[[NSApplication sharedApplication] presentError:error];
+             Sequence *selectedSequence = (Sequence *)[self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow];
+             Audio *audio;
+             if(!selectedSequence.audio)
+             {
+                 audio = [NSEntityDescription insertNewObjectForEntityForName:@"Audio" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+                 audio.sequence = selectedSequence;
+             }
+             else
+             {
+                 audio = selectedSequence.audio;
+             }
+             
              // Set the data
              audio.audioFilePath = [filePath lastPathComponent];
-             audio.sequence = [CoreDataManager sharedManager].currentSequence;
+             audio.audioFile = [NSData dataWithContentsOfFile:filePath];
+             self.currentAudio = audio;
              
              [[CoreDataManager sharedManager] saveContext];
              
@@ -190,32 +199,113 @@
              // Search EchoNest for analysis
              if([filePath length] > 1)
              {
-                 if([audio.echoNestUploadProgress floatValue] < 0.99)
-                 {
-                     NSLog(@"fetching audio summary");
-                     NSData *audioFile = [NSData dataWithContentsOfFile:newFilePath];
-                     
-                     // Get the audio summary
-                     NSDictionary *parameters = @{@"md5" : [ENAPI calculateMD5DigestFromData:audioFile], @"bucket" : @"audio_summary"};
-                     [ENAPIRequest GETWithEndpoint:@"track/profile" andParameters:parameters andCompletionBlock:
-                      ^(ENAPIRequest *request)
+                 // Get the audio summary
+                 NSDictionary *parameters = @{@"track" : audio.audioFile, @"filetype" : [filePath pathExtension]};
+                 [ENAPIRequest POSTWithEndpoint:@"track/upload" andParameters:parameters andCompletionBlock:
+                  ^(ENAPIRequest *request)
+                  {
+                      NSLog(@"upload request response:%@", request.response);
+                      
+                      // A valid summary exists
+                      if(request.echonestStatusCode == 0)
                       {
-                          NSLog(@"summary request response:%@", request.response);
+                          EchoNestAudioAnalysis *echonestAudioAnalysis = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestAudioAnalysis" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+                          echonestAudioAnalysis.audio = audio;
+                          echonestAudioAnalysis.idString = request.response[@"response"][@"track"][@"id"];
+                          audio.title = request.response[@"response"][@"track"][@"title"];
+                          self.audioDescriptionTextField.stringValue = audio.title;
+                          audio.echoNestUploadProgress = @(0.91);
+                          [self updateAudioAnlysisProgressLabel];
                           
-                          // Doesn't exist yet, needs uploading
-                          if(request.echonestStatusCode == 5)
+                          [[CoreDataManager sharedManager] saveContext];
+                          
+                          // Continue polling until the analysis is ready
+                          NSString *status = request.response[@"response"][@"track"][@"status"];
+                          if(![status isEqualToString:@"complete"])
                           {
-                              NSLog(@"uploading");
-                              NSDictionary *parameters = @{@"track" : audioFile, @"filetype" : [newFilePath pathExtension]};
-                              [ENAPIRequest GETWithEndpoint:@"track/upload" andParameters:parameters andCompletionBlock:
-                               ^(ENAPIRequest *request)
-                               {
-                                   NSLog(@"upload request response:%@", request.response);
-                               }];
+                              [self performSelector:@selector(checkForAudioAnalysisCompletionWithAudio:) withObject:audio afterDelay:0.1];
                           }
-                      }];
-                 }
+                      }
+                  }];
              }
+         }
+     }];
+}
+
+- (void)echoNestUploadUpdate:(NSNotification *)notification
+{
+    int bytesWritten = [notification.userInfo[@"totalBytesWritten"] intValue];
+    int totalBytesToWrite = [notification.userInfo[@"totalBytesExpectedToWrite"] intValue];
+    self.currentAudio.echoNestUploadProgress = @(0.8 * (float)bytesWritten / totalBytesToWrite);
+    
+    [self updateAudioAnlysisProgressLabel];
+}
+
+- (void)updateAudioAnlysisProgressLabel
+{
+    self.audioAnlysisProgress.stringValue = [NSString stringWithFormat:@"%.1f%%", 100 * [self.currentAudio.echoNestUploadProgress floatValue]];
+}
+
+- (void)checkForAudioAnalysisCompletionWithAudio:(Audio *)audio
+{
+    if([audio.echoNestUploadProgress floatValue] < 0.95)
+    {
+        audio.echoNestUploadProgress = @([audio.echoNestUploadProgress floatValue] + 0.01);
+        [self updateAudioAnlysisProgressLabel];
+    }
+    
+    NSLog(@"Poll");
+    NSDictionary *parameters = @{@"id" : audio.echoNestAudioAnalysis.idString, @"bucket" : @"audio_summary"};
+    [ENAPIRequest GETWithEndpoint:@"track/profile" andParameters:parameters andCompletionBlock:
+     ^(ENAPIRequest *request)
+     {
+         NSLog(@"summary request response:%@", request.response);
+         
+         // Analysis is ready for download
+         if(request.echonestStatusCode == 0 && [request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
+         {
+             NSLog(@"ready for download");
+             audio.echoNestUploadProgress = @(0.95);
+             [self updateAudioAnlysisProgressLabel];
+             
+             // Store the analysisSummary data
+             audio.echoNestAudioAnalysis.statusCode = @(request.echonestStatusCode);
+             audio.echoNestAudioAnalysis.artist = request.response[@"response"][@"track"][@"artist"];
+             audio.echoNestAudioAnalysis.analyzerVersion = request.response[@"response"][@"track"][@"analyzer_version"];
+             audio.echoNestAudioAnalysis.artistID = request.response[@"response"][@"track"][@"artist_id"];
+             audio.echoNestAudioAnalysis.audioMD5 = request.response[@"response"][@"track"][@"audio_md5"];
+             audio.echoNestAudioAnalysis.idString = request.response[@"response"][@"track"][@"id"];
+             audio.echoNestAudioAnalysis.md5 = request.response[@"response"][@"track"][@"md5"];
+             audio.echoNestAudioAnalysis.songID = request.response[@"response"][@"track"][@"song_id"];
+             audio.echoNestAudioAnalysis.status = request.response[@"response"][@"track"][@"status"];
+             audio.echoNestAudioAnalysis.title = request.response[@"response"][@"track"][@"title"];
+             audio.echoNestAudioAnalysis.md5 = request.response[@"response"][@"track"][@"audio_summary"][@"md5"];
+             audio.echoNestAudioAnalysis.acousticness = request.response[@"response"][@"track"][@"audio_summary"][@"acousticness"];
+             audio.echoNestAudioAnalysis.analysisURL = request.response[@"response"][@"track"][@"audio_summary"][@"analysis_url"];
+             audio.echoNestAudioAnalysis.danceability = request.response[@"response"][@"track"][@"audio_summary"][@"danceability"];
+             audio.echoNestAudioAnalysis.duration = request.response[@"response"][@"track"][@"audio_summary"][@"duration"];
+             audio.echoNestAudioAnalysis.energy = request.response[@"response"][@"track"][@"audio_summary"][@"energy"];
+             audio.echoNestAudioAnalysis.instrumentalness = request.response[@"response"][@"track"][@"audio_summary"][@"instrumentalness"];
+             audio.echoNestAudioAnalysis.key = request.response[@"response"][@"track"][@"audio_summary"][@"key"];
+             audio.echoNestAudioAnalysis.liveness = request.response[@"response"][@"track"][@"audio_summary"][@"liveness"];
+             audio.echoNestAudioAnalysis.loudness = request.response[@"response"][@"track"][@"audio_summary"][@"loudness"];
+             audio.echoNestAudioAnalysis.mode = request.response[@"response"][@"track"][@"audio_summary"][@"mode"];
+             audio.echoNestAudioAnalysis.speechiness = request.response[@"response"][@"track"][@"audio_summary"][@"speechiness"];
+             audio.echoNestAudioAnalysis.tempo = request.response[@"response"][@"track"][@"audio_summary"][@"tempo"];
+             audio.echoNestAudioAnalysis.timeSignature = request.response[@"response"][@"track"][@"audio_summary"][@"time_signature"];
+             audio.echoNestAudioAnalysis.valence = request.response[@"response"][@"track"][@"audio_summary"][@"valence"];
+             
+             // Download the full analysis
+             [ENAPIRequest downloadAnalysisURL:audio.echoNestAudioAnalysis.analysisURL withCompletionBlock:
+              ^(ENAPIRequest *request)
+              {
+                  NSLog(@"analysis:%@", request.response);
+              }];
+         }
+         // Analysis isn't ready, keep polling
+         else
+         {
+             [self performSelector:@selector(checkForAudioAnalysisCompletionWithAudio:) withObject:audio afterDelay:2.0];
          }
      }];
 }
@@ -337,6 +427,8 @@
             [[NSApplication sharedApplication] presentError:error];
         }
         [self.trackTableView reloadData];
+        
+        [self updateAudioAnlysisProgressLabel];
     }
     else if(tableView == self.trackTableView)
     {

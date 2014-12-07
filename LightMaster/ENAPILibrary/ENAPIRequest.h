@@ -88,6 +88,8 @@ static NSString __attribute__((unused)) * const ECHONEST_API_URL = @"http://deve
 + (NSArray *)securedEndpoints;
 + (BOOL)isSecuredEndpoint:(NSString *)endpoint;
 
+// download a full analysis
++ (ENAPIRequest *)downloadAnalysisURL:(NSString *)analysisURL withCompletionBlock:(ENAPIRequestCompletionBlock)completionBlock;
 
 /**
  * Execute a Echo Nest Web Service GET request and represent the JSON response as a dictionary object.
