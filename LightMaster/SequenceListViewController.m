@@ -250,6 +250,12 @@
 
 - (void)prepareForAudioAnalysisDownloadWithENAPIRequest:(ENAPIRequest *)request andAudio:(Audio *)audio
 {
+    // Delete any old data
+    if(audio.echoNestAudioAnalysis)
+    {
+        [[CoreDataManager sharedManager].managedObjectContext deleteObject:audio.echoNestAudioAnalysis];
+    }
+    
     EchoNestAudioAnalysis *echonestAudioAnalysis = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestAudioAnalysis" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
     echonestAudioAnalysis.audio = audio;
     echonestAudioAnalysis.idString = request.response[@"response"][@"track"][@"id"];
