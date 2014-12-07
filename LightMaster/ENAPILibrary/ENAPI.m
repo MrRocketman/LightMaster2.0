@@ -77,6 +77,60 @@ NSString *ENEscapeStringForURL (NSString *str) {
     return returnString;
 }
 
+@implementation NSMutableArray (StripNulls)
+
+- (void)stripNullValues
+{
+    for (int i = [self count] - 1; i >= 0; i--)
+    {
+        id value = [self objectAtIndex:i];
+        if (value == [NSNull null])
+        {
+            [self removeObjectAtIndex:i];
+        }
+        else if ([value isKindOfClass:[NSArray class]] ||
+                 [value isKindOfClass:[NSDictionary class]])
+        {
+            if (![value respondsToSelector:@selector(setObject:forKey:)] &&
+                ![value respondsToSelector:@selector(addObject:)])
+            {
+                value = [value mutableCopy];
+                [self replaceObjectAtIndex:i withObject:value];
+            }
+            [value stripNullValues];
+        }
+    }
+}
+
+@end
+
+@implementation NSMutableDictionary (StripNulls)
+
+- (void)stripNullValues
+{
+    for (NSString *key in [self allKeys])
+    {
+        id value = [self objectForKey:key];
+        if (value == [NSNull null])
+        {
+            [self removeObjectForKey:key];
+        }
+        else if ([value isKindOfClass:[NSArray class]] ||
+                 [value isKindOfClass:[NSDictionary class]])
+        {
+            if (![value respondsToSelector:@selector(setObject:forKey:)] &&
+                ![value respondsToSelector:@selector(addObject:)])
+            {
+                value = [value mutableCopy];
+                [self setObject:value forKey:key];
+            }
+            [value stripNullValues];
+        }
+    }
+}
+
+@end
+
 @implementation ENAPI
 
 + (NSString *)encodeObjectAsJSON:(NSObject *)object {
@@ -103,16 +157,24 @@ NSString *ENEscapeStringForURL (NSString *str) {
 }
 
 + (NSDictionary *)parseJSONDataToDictionary:(NSData *)data {
-    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *result = nil;
     NSError *error = nil;
-    NSObject *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     if (error != nil) {
         NSLog(@"ENAPI error parsing JSON data %@", error);;
-    } else if (![jsonObject isKindOfClass:[NSDictionary class]]) {
+    } else if (![json isKindOfClass:[NSDictionary class]]) {
         NSLog(@"ENAPI parsed JSON data is not a NSDictionary");
     } else {
-        result = (NSDictionary *)jsonObject;
+       /* // Remove all NSNull values so they don't cause crashes
+        NSSet *nullSet = [json keysOfEntriesWithOptions:NSEnumerationConcurrent passingTest:^BOOL(id key, id obj, BOOL *stop) {
+            NSLog(@"obj:%@", obj);
+            return (obj == [NSNull null] ? YES : NO);
+            //return [obj isEqual:[NSNull null]] ? YES : NO;
+        }];
+        [json removeObjectsForKeys:[nullSet allObjects]];*/
+        [json stripNullValues];
+        
+        result = (NSDictionary *)json;
     }
     return result;
 }
@@ -141,7 +203,7 @@ NSString *ENEscapeStringForURL (NSString *str) {
     unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
     
     // Create 16 byte MD5 hash value, store in buffer
-    CC_MD5(data.bytes, data.length, md5Buffer);
+    CC_MD5(data.bytes, (CC_LONG)data.length, md5Buffer);
     
     // Convert unsigned char buffer to NSString of hex values
     NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
