@@ -165,13 +165,6 @@ NSString *ENEscapeStringForURL (NSString *str) {
     } else if (![json isKindOfClass:[NSDictionary class]]) {
         NSLog(@"ENAPI parsed JSON data is not a NSDictionary");
     } else {
-       /* // Remove all NSNull values so they don't cause crashes
-        NSSet *nullSet = [json keysOfEntriesWithOptions:NSEnumerationConcurrent passingTest:^BOOL(id key, id obj, BOOL *stop) {
-            NSLog(@"obj:%@", obj);
-            return (obj == [NSNull null] ? YES : NO);
-            //return [obj isEqual:[NSNull null]] ? YES : NO;
-        }];
-        [json removeObjectsForKeys:[nullSet allObjects]];*/
         [json stripNullValues];
         
         result = (NSDictionary *)json;
