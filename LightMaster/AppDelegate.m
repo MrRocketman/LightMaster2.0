@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "CoreDataManager.h"
+#import "ENAPIRequest.h"
 
 @interface AppDelegate ()
 
@@ -21,6 +22,7 @@
     
     // Initialize the coreDataManager now! Very important!
     [CoreDataManager sharedManager];
+    [ENAPIRequest setApiKey:@"9F52RBALOQTUGKOT5" andConsumerKey:@"470771f3b2787696050f2f4143cb5c33" andSharedSecret:@"QMa4TZ+PRL+Nq0e3SAR/RQ"];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification

@@ -12,6 +12,8 @@
 #import "UserAudioAnalysisTrack.h"
 #import "UserAudioAnalysisTrackChannel.h"
 #import "Audio.h"
+#import "ENAPIRequest.h"
+#import "ENAPI.h"
 
 @interface SequenceListViewController ()
 
@@ -175,7 +177,7 @@
              NSFileManager *fileManager = [NSFileManager defaultManager];
              NSError *error = nil;
              [fileManager copyItemAtPath:filePath toPath:newFilePath error:&error];
-             NSLog(@"Copy Audio error error %@, %@", error, [error userInfo]);
+             //NSLog(@"Copy Audio error error %@, %@", error, [error userInfo]);
              //[[NSApplication sharedApplication] presentError:error];
              // Set the data
              audio.audioFilePath = [filePath lastPathComponent];
@@ -189,20 +191,33 @@
              if([filePath length] > 1)
              {
                  if([audio.echoNestUploadProgress floatValue] < 0.99)
-                 {   
-                     /*ENAPIRequest *enRequest = [ENAPIRequest requestWithEndpoint:@"track/profile"];
-                     NSData *fileData = [NSData dataWithContentsOfFile:filePath];
-                     [enRequest setValue:[fileData enapi_MD5] forParameter:@"md5"];
-                     [enRequest setValue:@"audio_summary" forParameter:@"bucket"];
-                     [enRequest setUserInfo:@{@"filePath" : audio.audioFilePath}];
-                     //[enRequests addObject:enRequest];
-                     [enRequest setDelegate:self];
-                     [enRequest startAsynchronous];*/
+                 {
+                     NSLog(@"fetching audio summary");
+                     NSData *audioFile = [NSData dataWithContentsOfFile:newFilePath];
+                     
+                     // Get the audio summary
+                     NSDictionary *parameters = @{@"md5" : [ENAPI calculateMD5DigestFromData:audioFile], @"bucket" : @"audio_summary"};
+                     [ENAPIRequest GETWithEndpoint:@"track/profile" andParameters:parameters andCompletionBlock:
+                      ^(ENAPIRequest *request)
+                      {
+                          NSLog(@"summary request response:%@", request.response);
+                          
+                          // Doesn't exist yet, needs uploading
+                          if(request.echonestStatusCode == 5)
+                          {
+                              NSLog(@"uploading");
+                              NSDictionary *parameters = @{@"track" : audioFile, @"filetype" : [newFilePath pathExtension]};
+                              [ENAPIRequest GETWithEndpoint:@"track/upload" andParameters:parameters andCompletionBlock:
+                               ^(ENAPIRequest *request)
+                               {
+                                   NSLog(@"upload request response:%@", request.response);
+                               }];
+                          }
+                      }];
                  }
              }
          }
-     }
-     ];
+     }];
 }
 
 #pragma mark - NSTextFieldDelegate Methods

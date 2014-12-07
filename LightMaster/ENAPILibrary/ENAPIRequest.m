@@ -169,7 +169,7 @@ static NSMutableArray *EN_SECURED_ENDPOINTS = nil;
 - (void)initiateGetRequest {
         
     self.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?%@", ECHONEST_API_URL, self.endpoint, [ENAPI encodeDictionaryAsQueryString:self.parameters]]];
-    
+    //NSLog(@"request url:%@", self.url);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url];
     
     [request setTimeoutInterval:requestTimeoutInterval];
