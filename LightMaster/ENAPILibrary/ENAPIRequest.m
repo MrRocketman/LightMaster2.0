@@ -457,7 +457,7 @@ static NSMutableArray *EN_SECURED_ENDPOINTS = nil;
 }
 
 - (BOOL)connectionShouldUseCredentialStorage:(NSURLConnection *)connection {
-    NSLog(@"ENAPIRequest: unexpected connectionShouldUseCredentialStorage");
+    //NSLog(@"ENAPIRequest: unexpected connectionShouldUseCredentialStorage");
     return YES;
 }
 

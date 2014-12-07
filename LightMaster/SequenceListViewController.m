@@ -321,7 +321,6 @@
                   audio.echoNestAudioAnalysis.timestamp = request.response[@"meta"][@"timestamp"];
                   audio.echoNestAudioAnalysis.title = request.response[@"meta"][@"title"];
                   self.audioDescriptionTextField.stringValue = audio.echoNestAudioAnalysis.title;
-                  NSLog(@"title:%@", audio.echoNestAudioAnalysis.title);
                   
                   audio.echoNestAudioAnalysis.analysisChannels = request.response[@"track"][@"analysis_channels"];
                   audio.echoNestAudioAnalysis.analysisSampleRate = request.response[@"track"][@"analysis_sample_rate"];
@@ -445,7 +444,7 @@
          // Analysis isn't ready, keep polling
          else
          {
-             [self performSelector:@selector(checkForAudioAnalysisCompletionWithAudio:) withObject:audio afterDelay:2.0];
+             [self performSelector:@selector(checkForAudioAnalysisCompletionWithAudio:) withObject:audio afterDelay:1.0];
          }
      }];
 }
