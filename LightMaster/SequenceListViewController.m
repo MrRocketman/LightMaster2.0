@@ -150,7 +150,6 @@
     Sequence *sequence = [self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow];
     [CoreDataManager sharedManager].currentSequence = sequence;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
-    [self dismissViewController:self];
 }
 
 - (IBAction)createTrackButtonPress:(id)sender
@@ -221,12 +220,7 @@
                            ^(ENAPIRequest *request)
                            {
                                //NSLog(@"upload request response:%@", request.response);
-                               
-                               // A valid summary exists
-                               if([request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
-                               {
-                                   [self prepareForAudioAnalysisDownloadWithENAPIRequest:request andAudio:audio];
-                               }
+                               [self prepareForAudioAnalysisDownloadWithENAPIRequest:request andAudio:audio];
                            }];
                       }
                       // Already exists, skip to downloading analysis

@@ -844,22 +844,22 @@ IA
                                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9eZ-fT-91o" customClass="SequenceAudioAnalysisView">
+                                                        <view translatesAutoresizingMaskIntoConstraints="NO" id="9eZ-fT-91o" customClass="SequenceAudioAnalysisView">
                                                             <rect key="frame" x="0.0" y="-1" width="870" height="158"/>
                                                         </view>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="9eZ-fT-91o" secondAttribute="trailing" id="0iR-OC-YdW"/>
-                                                        <constraint firstAttribute="bottom" secondItem="9eZ-fT-91o" secondAttribute="bottom" constant="-1" id="8Ez-e6-3Hf"/>
+                                                        <constraint firstAttribute="bottom" secondItem="9eZ-fT-91o" secondAttribute="bottom" id="8Ez-e6-3Hf"/>
                                                         <constraint firstItem="9eZ-fT-91o" firstAttribute="leading" secondItem="Lok-JC-sBb" secondAttribute="leading" id="8MH-ZA-X2b"/>
-                                                        <constraint firstItem="9eZ-fT-91o" firstAttribute="top" secondItem="Lok-JC-sBb" secondAttribute="top" id="Flz-Q1-Cgx"/>
+                                                        <constraint firstItem="9eZ-fT-91o" firstAttribute="top" secondItem="Lok-JC-sBb" secondAttribute="top" constant="-130" id="Flz-Q1-Cgx"/>
                                                     </constraints>
                                                 </clipView>
                                                 <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="xxN-l6-t9r">
                                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
-                                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.49230769230769234" horizontal="NO" id="wVx-am-gGw">
+                                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="wVx-am-gGw">
                                                     <rect key="frame" x="166" y="1" width="16" height="94"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
