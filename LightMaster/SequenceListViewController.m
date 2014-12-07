@@ -207,32 +207,32 @@
              // Search EchoNest for analysis
              if([filePath length] > 1)
              {
-                 // Get the audio summary
-                 NSDictionary *parameters = @{@"track" : audio.audioFile, @"filetype" : [filePath pathExtension]};
-                 [ENAPIRequest POSTWithEndpoint:@"track/upload" andParameters:parameters andCompletionBlock:
+                 // See if the analysis has already been done
+                 NSDictionary *parameters = @{@"md5" : [ENAPI calculateMD5DigestFromData:audio.audioFile], @"bucket" : @"audio_summary"};
+                 [ENAPIRequest GETWithEndpoint:@"track/profile" andParameters:parameters andCompletionBlock:
                   ^(ENAPIRequest *request)
                   {
-                      //NSLog(@"upload request response:%@", request.response);
-                      
-                      // A valid summary exists
-                      if(request.echonestStatusCode == 0)
+                      // Doesn't exist yet, needs uploading
+                      if(![request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
                       {
-                          EchoNestAudioAnalysis *echonestAudioAnalysis = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestAudioAnalysis" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                          echonestAudioAnalysis.audio = audio;
-                          echonestAudioAnalysis.idString = request.response[@"response"][@"track"][@"id"];
-                          audio.title = request.response[@"response"][@"track"][@"title"];
-                          self.audioDescriptionTextField.stringValue = audio.title;
-                          audio.echoNestUploadProgress = @(0.91);
-                          [self updateAudioAnlysisProgressLabel];
-                          
-                          [[CoreDataManager sharedManager] saveContext];
-                          
-                          // Continue polling until the analysis is ready
-                          NSString *status = request.response[@"response"][@"track"][@"status"];
-                          if(![status isEqualToString:@"complete"])
-                          {
-                              [self performSelector:@selector(checkForAudioAnalysisCompletionWithAudio:) withObject:audio afterDelay:0.1];
-                          }
+                          // Upload the track
+                          NSDictionary *parameters = @{@"track" : audio.audioFile, @"filetype" : [filePath pathExtension]};
+                          [ENAPIRequest POSTWithEndpoint:@"track/upload" andParameters:parameters andCompletionBlock:
+                           ^(ENAPIRequest *request)
+                           {
+                               //NSLog(@"upload request response:%@", request.response);
+                               
+                               // A valid summary exists
+                               if([request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
+                               {
+                                   [self prepareForAudioAnalysisDownloadWithENAPIRequest:request andAudio:audio];
+                               }
+                           }];
+                      }
+                      // Already exists, skip to downloading analysis
+                      else
+                      {
+                          [self prepareForAudioAnalysisDownloadWithENAPIRequest:request andAudio:audio];
                       }
                   }];
              }
@@ -254,6 +254,22 @@
     self.audioAnlysisProgress.stringValue = [NSString stringWithFormat:@"%.1f%%", 100 * [self.currentAudio.echoNestUploadProgress floatValue]];
 }
 
+- (void)prepareForAudioAnalysisDownloadWithENAPIRequest:(ENAPIRequest *)request andAudio:(Audio *)audio
+{
+    EchoNestAudioAnalysis *echonestAudioAnalysis = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestAudioAnalysis" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+    echonestAudioAnalysis.audio = audio;
+    echonestAudioAnalysis.idString = request.response[@"response"][@"track"][@"id"];
+    audio.title = request.response[@"response"][@"track"][@"title"];
+    self.audioDescriptionTextField.stringValue = audio.title;
+    audio.echoNestUploadProgress = @(0.85);
+    [self updateAudioAnlysisProgressLabel];
+    
+    [[CoreDataManager sharedManager] saveContext];
+    
+    // Download the audioanalysis
+    [self checkForAudioAnalysisCompletionWithAudio:audio];
+}
+
 - (void)checkForAudioAnalysisCompletionWithAudio:(Audio *)audio
 {
     if([audio.echoNestUploadProgress floatValue] < 0.95)
@@ -269,7 +285,7 @@
          //NSLog(@"summary request response:%@", request.response);
          
          // Analysis is ready for download
-         if(request.echonestStatusCode == 0 && [request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
+         if([request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
          {
              audio.echoNestUploadProgress = @(0.95);
              [self updateAudioAnlysisProgressLabel];
@@ -310,6 +326,8 @@
                   audio.echoNestAudioAnalysis.statusCode = request.response[@"meta"][@"status_code"];
                   audio.echoNestAudioAnalysis.timestamp = request.response[@"meta"][@"timestamp"];
                   audio.echoNestAudioAnalysis.title = request.response[@"meta"][@"title"];
+                  self.audioDescriptionTextField.stringValue = audio.echoNestAudioAnalysis.title;
+                  NSLog(@"title:%@", audio.echoNestAudioAnalysis.title);
                   
                   audio.echoNestAudioAnalysis.analysisChannels = request.response[@"track"][@"analysis_channels"];
                   audio.echoNestAudioAnalysis.analysisSampleRate = request.response[@"track"][@"analysis_sample_rate"];
@@ -426,6 +444,8 @@
                   audio.echoNestUploadProgress = @(1.0);
                   [self updateAudioAnlysisProgressLabel];
                   [[CoreDataManager sharedManager] saveContext];
+                  
+                  [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
               }];
          }
          // Analysis isn't ready, keep polling
