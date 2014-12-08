@@ -39,6 +39,7 @@
     {
         self.magnification = 1.0;
         self.currentTime = 1.0;
+        self.commandType = CommandTypeOn;
     }
     
     return self;

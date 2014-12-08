@@ -97,13 +97,35 @@
 
 - (void)addCommandsForMouseGroupSelect
 {
-    CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-    command.startTatum = self.mouseBoxSelectStartTatum;
-    command.endTatum = self.mouseBoxSelectEndTatum;
-    command.brightness = @(self.newCommandBrightness);
-    
     NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
-    command.channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@ AND idNumber == %d", controlBoxes, self.mouseBoxSelectTopChannel] toArray] firstObject];
+    Channel *channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@ AND idNumber == %d", controlBoxes, self.mouseBoxSelectTopChannel] toArray] firstObject];
+    
+    if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+    {
+        CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+        command.startTatum = self.mouseBoxSelectStartTatum;
+        command.endTatum = self.mouseBoxSelectEndTatum;
+        command.brightness = @(self.newCommandBrightness);
+        command.channel = channel;
+    }
+    else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+    {
+        CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+        command.startTatum = self.mouseBoxSelectStartTatum;
+        command.endTatum = self.mouseBoxSelectEndTatum;
+        command.startBrightness = @(0.0);
+        command.endBrightness = @(self.newCommandBrightness);
+        command.channel = channel;
+    }
+    else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
+    {
+        CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+        command.startTatum = self.mouseBoxSelectStartTatum;
+        command.endTatum = self.mouseBoxSelectEndTatum;
+        command.startBrightness = @(self.newCommandBrightness);
+        command.endBrightness = @(0.0);
+        command.channel = channel;
+    }
     
     [[CoreDataManager sharedManager] saveContext];
 }
@@ -137,8 +159,7 @@
                         CommandOn *command = commands[i];
                         float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
                         float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                        float modifiedBrightness = 1.0 - [command.brightness floatValue];//([command.brightness floatValue] > 0.25 ? 1.0 - [command.brightness floatValue] : 0.75);
-                        float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedBrightness);
+                        float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.brightness floatValue]));
                         float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
                         [commandPath moveToPoint:NSMakePoint(leftX, topY)];
                         [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
@@ -151,8 +172,8 @@
                         CommandFade *command = commands[i];
                         float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
                         float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                        float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.startBrightness floatValue]);
-                        float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.endBrightness floatValue]);
+                        float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.startBrightness floatValue]));
+                        float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.endBrightness floatValue]));
                         float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
                         [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
                         [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
@@ -456,7 +477,7 @@
     return YES;
 }
 
-- (void) flagsChanged:(NSEvent *)event
+- (void)flagsChanged:(NSEvent *)event
 {
     self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
     self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
@@ -507,6 +528,42 @@
         else if(keyboardEvent.keyCode == 25 || keyboardEvent.keyCode == 92) // '9'
         {
             self.newCommandBrightness = 0.9;
+        }
+        else if(keyboardEvent.keyCode == 51) // 'delete'
+        {
+            // delete
+            [SequenceLogic sharedInstance].commandType = CommandTypeDelete;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+        }
+        else if(keyboardEvent.keyCode == 31) // 'o'
+        {
+            // command on
+            [SequenceLogic sharedInstance].commandType = CommandTypeOn;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+        }
+        else if(keyboardEvent.keyCode == 32) // 'u'
+        {
+            // fade up
+            [SequenceLogic sharedInstance].commandType = CommandTypeUp;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+        }
+        else if(keyboardEvent.keyCode == 2) // 'd'
+        {
+            // fade down
+            [SequenceLogic sharedInstance].commandType = CommandTypeDown;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+        }
+        else if(keyboardEvent.keyCode == 17) // 't'
+        {
+            // twinkle
+            [SequenceLogic sharedInstance].commandType = CommandTypeTwinkle;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+        }
+        else if(keyboardEvent.keyCode == 35) // 'p'
+        {
+            // pulse
+            [SequenceLogic sharedInstance].commandType = CommandTypePulse;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else
         {

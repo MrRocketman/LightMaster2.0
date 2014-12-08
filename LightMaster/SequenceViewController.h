@@ -34,5 +34,6 @@
 - (IBAction)skipBackButtonPress:(id)sender;
 - (IBAction)playButtonPress:(id)sender;
 - (IBAction)playSelectionButtonPress:(id)sender;
+- (IBAction)commandTypeSegmentedControlChange:(id)sender;
 
 @end

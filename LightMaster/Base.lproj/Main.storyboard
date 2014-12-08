@@ -709,11 +709,11 @@
             <objects>
                 <viewController title="Sequences" id="JHR-DC-ihs" customClass="SequenceViewController" sceneMemberID="viewController">
                     <view key="view" id="egB-YG-W3y">
-                        <rect key="frame" x="0.0" y="0.0" width="1070" height="624"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1117" height="624"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="IZ1-n6-LCC">
-                                <rect key="frame" x="0.0" y="540" width="1070" height="84"/>
+                                <rect key="frame" x="0.0" y="540" width="1117" height="84"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VS1-F9-Vzu">
                                         <rect key="frame" x="18" y="40" width="233" height="26"/>
@@ -732,8 +732,8 @@
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
-                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="hW0-Qs-xwE">
-                                        <rect key="frame" x="322" y="9" width="64" height="65"/>
+                                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hW0-Qs-xwE">
+                                        <rect key="frame" x="322" y="11" width="64" height="63"/>
                                         <buttonCell key="cell" type="bevel" title="Play" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="95R-YM-hpO">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="system" size="21"/>
@@ -753,8 +753,8 @@ IA
                                             <color key="backgroundColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="mU0-ML-CRS">
-                                        <rect key="frame" x="254" y="9" width="64" height="65"/>
+                                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mU0-ML-CRS">
+                                        <rect key="frame" x="254" y="11" width="64" height="63"/>
                                         <buttonCell key="cell" type="bevel" title="Back To 0" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zSj-ev-PBB">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system" size="8"/>
@@ -764,8 +764,8 @@ IA
                                             <action selector="skipBackButtonPress:" target="JHR-DC-ihs" id="oUO-UW-LpS"/>
                                         </connections>
                                     </button>
-                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="IQI-CM-lYY">
-                                        <rect key="frame" x="390" y="9" width="64" height="65"/>
+                                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IQI-CM-lYY">
+                                        <rect key="frame" x="390" y="11" width="64" height="63"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="Yy3-99-b09"/>
                                         </constraints>
@@ -779,23 +779,27 @@ IA
                                         </connections>
                                     </button>
                                     <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Xn-nQr">
-                                        <rect key="frame" x="652" y="30" width="332" height="22"/>
+                                        <rect key="frame" x="645" y="30" width="386" height="24"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="330" id="hSV-8E-gMk"/>
+                                            <constraint firstAttribute="width" constant="384" id="hSV-8E-gMk"/>
                                         </constraints>
                                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="roundRect" trackingMode="selectOne" id="XlB-dn-7Fr">
                                             <font key="font" metaFont="titleBar" size="12"/>
                                             <segments>
-                                                <segment label="On" width="70" selected="YES"/>
-                                                <segment label="Fade Up" width="69" tag="1"/>
-                                                <segment label="Fade Down" width="69"/>
+                                                <segment label="Delete" width="70"/>
+                                                <segment label="On" width="69" selected="YES" tag="1"/>
+                                                <segment label="Up" width="69"/>
+                                                <segment label="Down"/>
                                                 <segment label="Twinkle"/>
                                                 <segment label="Pulse"/>
                                             </segments>
                                         </segmentedCell>
+                                        <connections>
+                                            <action selector="commandTypeSegmentedControlChange:" target="JHR-DC-ihs" id="9U5-pO-uGf"/>
+                                        </connections>
                                     </segmentedControl>
-                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="PIb-yP-RwM">
-                                        <rect key="frame" x="989" y="10" width="64" height="65"/>
+                                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PIb-yP-RwM">
+                                        <rect key="frame" x="1036" y="12" width="64" height="63"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="VCk-iA-K5a"/>
                                         </constraints>
@@ -811,10 +815,10 @@ IA
                                 <constraints>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="leading" secondItem="VS1-F9-Vzu" secondAttribute="trailing" constant="8" symbolic="YES" id="6pM-kz-wzE"/>
                                     <constraint firstAttribute="trailing" secondItem="yGR-Xn-nQr" secondAttribute="trailing" constant="87" id="HNO-ha-9Dq"/>
-                                    <constraint firstItem="yGR-Xn-nQr" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="33" id="Hj5-to-pYQ"/>
+                                    <constraint firstItem="yGR-Xn-nQr" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="31" id="Hj5-to-pYQ"/>
                                     <constraint firstItem="IQI-CM-lYY" firstAttribute="bottom" secondItem="PIb-yP-RwM" secondAttribute="bottom" constant="1" id="Ijs-vC-94S"/>
                                     <constraint firstItem="IQI-CM-lYY" firstAttribute="top" secondItem="hW0-Qs-xwE" secondAttribute="top" id="IpW-RP-zii"/>
-                                    <constraint firstAttribute="centerX" secondItem="aBB-OC-aOC" secondAttribute="centerX" constant="-12" id="JSe-NW-Eka"/>
+                                    <constraint firstAttribute="centerX" secondItem="aBB-OC-aOC" secondAttribute="centerX" constant="11.5" id="JSe-NW-Eka"/>
                                     <constraint firstItem="aBB-OC-aOC" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="16" id="Sj5-Yz-e5O"/>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="bottom" secondItem="hW0-Qs-xwE" secondAttribute="bottom" id="UgU-aQ-gMz"/>
                                     <constraint firstItem="hW0-Qs-xwE" firstAttribute="leading" secondItem="mU0-ML-CRS" secondAttribute="trailing" constant="8" symbolic="YES" id="WD8-ae-PqP"/>
@@ -822,7 +826,7 @@ IA
                                     <constraint firstItem="PIb-yP-RwM" firstAttribute="leading" secondItem="yGR-Xn-nQr" secondAttribute="trailing" constant="8" symbolic="YES" id="aR9-uh-55v"/>
                                     <constraint firstItem="IQI-CM-lYY" firstAttribute="leading" secondItem="hW0-Qs-xwE" secondAttribute="trailing" constant="8" symbolic="YES" id="cMC-3I-bTk"/>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="centerY" secondItem="IZ1-n6-LCC" secondAttribute="centerY" id="eII-gv-Vr3"/>
-                                    <constraint firstItem="PIb-yP-RwM" firstAttribute="centerY" secondItem="yGR-Xn-nQr" secondAttribute="centerY" constant="-2" id="mAk-5B-Yfj"/>
+                                    <constraint firstItem="PIb-yP-RwM" firstAttribute="centerY" secondItem="yGR-Xn-nQr" secondAttribute="centerY" constant="-1" id="mAk-5B-Yfj"/>
                                     <constraint firstItem="IQI-CM-lYY" firstAttribute="bottom" secondItem="hW0-Qs-xwE" secondAttribute="bottom" id="ruF-b3-UaF"/>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="12" id="sdc-hL-zNs"/>
                                     <constraint firstItem="hW0-Qs-xwE" firstAttribute="top" secondItem="mU0-ML-CRS" secondAttribute="top" id="u2z-CQ-ppQ"/>
@@ -832,20 +836,20 @@ IA
                                 </constraints>
                             </customView>
                             <splitView translatesAutoresizingMaskIntoConstraints="NO" id="Ctz-13-9DI">
-                                <rect key="frame" x="0.0" y="0.0" width="1070" height="490"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1117" height="490"/>
                                 <subviews>
                                     <customView id="Oi1-TZ-p5l">
-                                        <rect key="frame" x="0.0" y="0.0" width="1070" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1117" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="KBw-UR-8Zc" customClass="SequenceAudioAnalysisScrollView">
-                                                <rect key="frame" x="198" y="0.0" width="872" height="30"/>
+                                                <rect key="frame" x="198" y="0.0" width="919" height="30"/>
                                                 <clipView key="contentView" id="Lok-JC-sBb">
                                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <view translatesAutoresizingMaskIntoConstraints="NO" id="9eZ-fT-91o" customClass="SequenceAudioAnalysisView">
-                                                            <rect key="frame" x="0.0" y="-1" width="870" height="158"/>
+                                                        <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9eZ-fT-91o" customClass="SequenceAudioAnalysisView">
+                                                            <rect key="frame" x="0.0" y="-67" width="917" height="158"/>
                                                         </view>
                                                     </subviews>
                                                     <constraints>
@@ -859,7 +863,7 @@ IA
                                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
-                                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="wVx-am-gGw">
+                                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.49230769230769234" horizontal="NO" id="wVx-am-gGw">
                                                     <rect key="frame" x="166" y="1" width="16" height="94"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
@@ -915,17 +919,17 @@ IA
                                         </constraints>
                                     </customView>
                                     <customView id="Ns9-1i-oHJ">
-                                        <rect key="frame" x="0.0" y="39" width="1070" height="451"/>
+                                        <rect key="frame" x="0.0" y="39" width="1117" height="451"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="6cL-qx-bct" customClass="SequenceScrollView">
-                                                <rect key="frame" x="198" y="1" width="872" height="450"/>
+                                                <rect key="frame" x="198" y="1" width="919" height="450"/>
                                                 <clipView key="contentView" id="DFp-X5-qqd">
                                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iLj-Tx-fvP" customClass="SequenceView">
-                                                            <rect key="frame" x="0.0" y="1192" width="870" height="449"/>
+                                                            <rect key="frame" x="0.0" y="1546" width="917" height="449"/>
                                                         </view>
                                                     </subviews>
                                                     <constraints>
@@ -1001,13 +1005,13 @@ IA
                                 </holdingPriorities>
                             </splitView>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
-                                <rect key="frame" x="198" y="490" width="872" height="50"/>
+                                <rect key="frame" x="198" y="490" width="919" height="50"/>
                                 <clipView key="contentView" id="Gx6-st-cQc">
                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pnm-RU-I1n" customClass="SequenceTimelineView">
-                                            <rect key="frame" x="0.0" y="-260" width="872" height="24"/>
+                                            <rect key="frame" x="0.0" y="-306" width="919" height="24"/>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -1068,7 +1072,7 @@ IA
                 </viewController>
                 <customObject id="ocF-mK-GXc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1764" y="1144"/>
+            <point key="canvasLocation" x="1787.5" y="1144"/>
         </scene>
         <!--Sequence List View Controller-->
         <scene sceneID="OWO-dR-Iyy">

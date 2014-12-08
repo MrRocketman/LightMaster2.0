@@ -38,6 +38,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSequenceFromNotification:) name:@"CurrentSequenceChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeCommandtype:) name:@"ChangeCommandType" object:nil];
     
     self.isPlayButton = YES;
     [self reloadAudio];
@@ -64,6 +65,11 @@
 - (void)reloadSequenceFromNotification:(NSNotification *)notification
 {
     [self reloadSequence];
+}
+
+- (void)changeCommandtype:(NSNotification *)notification
+{
+    [self.commandTypeSegmentedControl setSelectedSegment:[SequenceLogic sharedInstance].commandType];
 }
 
 - (void)currentTimeChange:(NSNotification *)notification
@@ -159,6 +165,11 @@
 {
     [SequenceLogic sharedInstance].currentTime = [[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+}
+
+- (IBAction)commandTypeSegmentedControlChange:(id)sender
+{
+    [SequenceLogic sharedInstance].commandType = (int)self.commandTypeSegmentedControl.selectedSegment;
 }
 
 @end
