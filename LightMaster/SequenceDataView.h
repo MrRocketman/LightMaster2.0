@@ -12,4 +12,6 @@
 
 @property (assign, nonatomic) BOOL isAudioAnalysisView;
 
+- (void)setup;
+
 @end

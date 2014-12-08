@@ -40,10 +40,16 @@
 @property (assign, nonatomic) BOOL commandKey;
 @property (assign, nonatomic) BOOL optionKey;
 @property (assign, nonatomic) BOOL newTatum;
+@property (assign, nonatomic) float newCommandBrightness;
 
 @end
 
 @implementation SequenceDataView
+
+- (void)setup
+{
+    self.newCommandBrightness = 1.0;
+}
 
 - (BOOL)isFlipped
 {
@@ -94,7 +100,7 @@
     CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
     command.startTatum = self.mouseBoxSelectStartTatum;
     command.endTatum = self.mouseBoxSelectEndTatum;
-    command.brightness = @(0.5);
+    command.brightness = @(self.newCommandBrightness);
     
     NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
     command.channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@ AND idNumber == %d", controlBoxes, self.mouseBoxSelectTopChannel] toArray] firstObject];
@@ -131,8 +137,8 @@
                         CommandOn *command = commands[i];
                         float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
                         float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                        float modifiedBrightness = ([command.brightness floatValue] > 0.25 ? 1.0 - [command.brightness floatValue] : 0.25);
-                        float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedBrightness) + 1;
+                        float modifiedBrightness = 1.0 - [command.brightness floatValue];//([command.brightness floatValue] > 0.25 ? 1.0 - [command.brightness floatValue] : 0.75);
+                        float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedBrightness);
                         float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
                         [commandPath moveToPoint:NSMakePoint(leftX, topY)];
                         [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
@@ -145,8 +151,8 @@
                         CommandFade *command = commands[i];
                         float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
                         float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                        float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.startBrightness floatValue]) + 1;
-                        float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.endBrightness floatValue]) + 1;
+                        float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.startBrightness floatValue]);
+                        float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.endBrightness floatValue]);
                         float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
                         [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
                         [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
@@ -461,31 +467,59 @@
     }
 }
 
-/*- (void)keyDown:(NSEvent *)keyboardEvent
- {
- // Check for new command clicks
- if(keyboardEvent.keyCode == 40 && ![keyboardEvent isARepeat])
- {
- 
- }
- else if(keyboardEvent.keyCode != 40)
- {
- [super keyDown:keyboardEvent];
- }
- }
- 
- - (void)keyUp:(NSEvent *)keyboardEvent
- {
- // Check for new command clicks
- if(keyboardEvent.keyCode == 40 && ![keyboardEvent isARepeat])
- {
- //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
- NSMutableDictionary *commandCluster = [data commandClusterForCurrentSequenceAtIndex:data.mostRecentlySelectedCommandClusterIndex];
- float time = [data currentTime];
- int newCommandIndex = [data commandsCountForCommandCluster:commandCluster] - 1;
- [data setEndTime:time forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandCluster];
- //});
- }
- }*/
+- (void)keyDown:(NSEvent *)keyboardEvent
+{
+    // Check for new command clicks
+    if(!keyboardEvent.isARepeat)
+    {
+        if(keyboardEvent.keyCode == 18 || keyboardEvent.keyCode == 83) // '1'
+        {
+            self.newCommandBrightness = 0.1;
+        }
+        else if(keyboardEvent.keyCode == 19 || keyboardEvent.keyCode == 84) // '2'
+        {
+            self.newCommandBrightness = 0.2;
+        }
+        else if(keyboardEvent.keyCode == 20 || keyboardEvent.keyCode == 85) // '3'
+        {
+            self.newCommandBrightness = 0.3;
+        }
+        else if(keyboardEvent.keyCode == 21 || keyboardEvent.keyCode == 86) // '4'
+        {
+            self.newCommandBrightness = 0.4;
+        }
+        else if(keyboardEvent.keyCode == 23 || keyboardEvent.keyCode == 87) // '5'
+        {
+            self.newCommandBrightness = 0.5;
+        }
+        else if(keyboardEvent.keyCode == 22 || keyboardEvent.keyCode == 88) // '6'
+        {
+            self.newCommandBrightness = 0.6;
+        }
+        else if(keyboardEvent.keyCode == 26 || keyboardEvent.keyCode == 89) // '7'
+        {
+            self.newCommandBrightness = 0.7;
+        }
+        else if(keyboardEvent.keyCode == 28 || keyboardEvent.keyCode == 91) // '8'
+        {
+            self.newCommandBrightness = 0.8;
+        }
+        else if(keyboardEvent.keyCode == 25 || keyboardEvent.keyCode == 92) // '9'
+        {
+            self.newCommandBrightness = 0.9;
+        }
+        else
+        {
+            [super keyDown:keyboardEvent];
+        }
+    }
+}
+
+- (void)keyUp:(NSEvent *)keyboardEvent
+{
+    self.newCommandBrightness = 1.0;
+    
+    [super keyUp:keyboardEvent];
+}
 
 @end

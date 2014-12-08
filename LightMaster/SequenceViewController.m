@@ -52,11 +52,11 @@
     float startY = CHANNEL_HEIGHT;
     if(numberOfAudioChannels > 0 && numberOfAudioChannels < 10)
     {
-        startY = numberOfAudioChannels * CHANNEL_HEIGHT;
+        startY = numberOfAudioChannels * CHANNEL_HEIGHT + 5;
     }
     else if(numberOfAudioChannels >= 10)
     {
-        startY = 10 * CHANNEL_HEIGHT;
+        startY = 10 * CHANNEL_HEIGHT + 5;
     }
     [self.splitView setPosition:startY ofDividerAtIndex:0];
 }
