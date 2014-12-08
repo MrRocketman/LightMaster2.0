@@ -72,32 +72,34 @@
     self.playStartDate = [NSDate date];
     self.playStartTime = [SequenceLogic sharedInstance].currentTime;
     
-    // Scroll to center
-    NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
-    float leftEdgeTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
-    float rightEdgeTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width];
-    if([SequenceLogic sharedInstance].currentTime > (rightEdgeTime - leftEdgeTime) / 2.0 || [SequenceLogic sharedInstance].currentTime < (rightEdgeTime - leftEdgeTime) / 2.0)
-    {
-        float newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime - (rightEdgeTime - leftEdgeTime) / 2.0];
-        if(newLeftX < 0)
-        {
-            newLeftX = 0;
-        }
-        
-        NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];
-        NSRect audioAnalysisVisibleRect = [self.audioAnalysisScrollView documentVisibleRect];
-        [self.sequenceScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, sequenceVisibleRect.origin.y)];
-        [self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
-        [self.timelineScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, visibleRect.origin.y)];
-        [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
-        [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
-        [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
-    }
-    
     // Only update the audio if the user dragged the time marker
     if(notification.object != self)
     {
         self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
+    }
+    else
+    {
+        // Scroll to center
+        NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
+        float leftEdgeTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
+        float rightEdgeTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width];
+        if([SequenceLogic sharedInstance].currentTime > (rightEdgeTime - leftEdgeTime) / 2.0 || [SequenceLogic sharedInstance].currentTime < (rightEdgeTime - leftEdgeTime) / 2.0)
+        {
+            float newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime - (rightEdgeTime - leftEdgeTime) / 2.0];
+            if(newLeftX < 0)
+            {
+                newLeftX = 0;
+            }
+            
+            NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];
+            NSRect audioAnalysisVisibleRect = [self.audioAnalysisScrollView documentVisibleRect];
+            [self.sequenceScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, sequenceVisibleRect.origin.y)];
+            [self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
+            [self.timelineScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, visibleRect.origin.y)];
+            [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
+            [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
+            [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
+        }
     }
 }
 
@@ -124,12 +126,11 @@
 {
     [SequenceLogic sharedInstance].currentTime = 0;
     self.audioPlayer.currentTime = 0;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
 }
 
 - (IBAction)playButtonPress:(id)sender
 {
-    NSLog(@"play/pause");
     if(self.isPlayButton)
     {
         [self.audioPlayer play];

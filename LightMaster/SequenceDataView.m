@@ -12,6 +12,9 @@
 #import "NSManagedObjectContext+Queryable.h"
 #import "Sequence.h"
 #import "SequenceTatum.h"
+#import "CommandOn.h"
+#import "CommandFade.h"
+#import "Channel.h"
 
 @interface SequenceDataView()
 
@@ -24,9 +27,11 @@
 @property (assign, nonatomic) BOOL sequenceTatumIsSelected;
 @property (strong, nonatomic) SequenceTatum *selectedSequenceTatum;
 
-@property (assign, nonatomic) float mouseBoxSelectStartTime;
-@property (assign, nonatomic) float mouseBoxSelectEndTime;
+@property (strong, nonatomic) SequenceTatum *mouseBoxSelectStartTatum;
+@property (strong, nonatomic) SequenceTatum *mouseBoxSelectOriginalStartTatum;
+@property (strong, nonatomic) SequenceTatum *mouseBoxSelectEndTatum;
 @property (assign, nonatomic) int mouseBoxSelectTopChannel;
+@property (assign, nonatomic) int mouseBoxSelectOriginalTopChannel;
 @property (assign, nonatomic) int mouseBoxSelectBottomChannel;
 @property (assign, nonatomic) BOOL mouseGroupSelect;
 @property (assign, nonatomic) BOOL retainMouseGroupSelect;
@@ -42,7 +47,8 @@
 
 - (void)awakeFromNib
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"SequenceTatumChange" object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"SequenceTatumChange" object:nil];
 }
 
 - (void)currentTimeChange:(NSNotification *)notification
@@ -58,7 +64,14 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
-    //self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
+    if(self.isAudioAnalysisView)
+    {
+        self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], [[SequenceLogic sharedInstance] numberOfAudioChannels] * CHANNEL_HEIGHT);
+    }
+    else
+    {
+        self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
+    }
     
     if(self.trackingArea)
     {
@@ -71,6 +84,9 @@
     [[NSColor blackColor] set];
     NSRectFill(self.bounds);
     
+    // Draw commands
+    [self drawCommands];
+    
     // Draw channel seperators
     [self drawChannelLines];
     
@@ -82,6 +98,75 @@
     
     // Draw mouse selection box
     [self drawMouseGroupSelectionBox];
+}
+
+- (void)addCommandsForMouseGroupSelect
+{
+    //CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+    //command.star
+}
+
+- (void)drawCommands
+{
+    if(self.isAudioAnalysisView)
+    {
+        
+    }
+    else
+    {
+        int channelIndex = 0;
+        NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+        float leftTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2];
+        float rightTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5];
+        
+        // ControlBoxes
+        NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
+        for(ControlBox *controlBox in controlBoxes)
+        {
+            NSArray *channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox == %@", controlBox] orderBy:@"idNumber"] toArray];
+            for(Channel *channel in channels)
+            {
+                NSBezierPath *commandPath = [NSBezierPath bezierPath];
+                NSArray *commands = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time >= %f AND startTatum.time <= %f) || (endTatum.time >= %f AND endTatum.time <= %f))", channel, leftTime, rightTime] orderBy:@"startTatum.time"] toArray];
+                for(int i = 0; i < commands.count; i ++)
+                {
+                    if([commands[i] isMemberOfClass:[CommandOn class]])
+                    {
+                        CommandOn *command = commands[i];
+                        float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+                        float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+                        float topY = channelIndex * CHANNEL_HEIGHT;
+                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT;
+                        [commandPath moveToPoint:NSMakePoint(leftX, topY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, topY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, topY)];
+                    }
+                    else if([commands[i] isMemberOfClass:[CommandFade class]])
+                    {
+                        CommandFade *command = commands[i];
+                        float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+                        float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+                        float leftY = (channelIndex - 1) * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.startBrightness floatValue]);
+                        float rightY = (channelIndex - 1) * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.endBrightness floatValue]);
+                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT;
+                        [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, rightY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, leftY)];
+                    }
+                }
+                
+                [(NSColor *)(channel.color) set];
+                [commandPath setLineWidth:3.0];
+                [commandPath stroke];
+                
+                channelIndex ++;
+            }
+        }
+    }
 }
 
 - (void)drawChannelLines
@@ -111,18 +196,20 @@
     self.sequenceTatumPaths = [NSBezierPath bezierPath];
     for(int i = 0; i < visibleTatums.count; i ++)
     {
+        SequenceTatum *tatum = (SequenceTatum *)visibleTatums[i];
+        
         // Update the tatum position if it's selected
-        if(self.sequenceTatumIsSelected && self.selectedSequenceTatum == (SequenceTatum *)visibleTatums[i])
+        if(self.sequenceTatumIsSelected && self.selectedSequenceTatum == tatum)
         {
             if(self.optionKey && !self.newTatum)
             {
-                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:visibleTatums[i]];
+                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:tatum];
             }
             else
             {
-                ((SequenceTatum *)visibleTatums[i]).time = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
+                tatum.time = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
                 NSBezierPath *selectedTatumPath = [NSBezierPath bezierPath];
-                [self addSequenceTatum:(SequenceTatum *)visibleTatums[i] toBezierPath:selectedTatumPath];
+                [self addSequenceTatum:tatum toBezierPath:selectedTatumPath];
                 [[NSColor yellowColor] set];
                 [selectedTatumPath fill];
             }
@@ -133,60 +220,78 @@
         else
         {
             // Draw the normal sequence Tatums
-            NSPoint startPoint = [self addSequenceTatum:(SequenceTatum *)visibleTatums[i] toBezierPath:self.sequenceTatumPaths];
+            NSPoint startPoint = [self addSequenceTatum:tatum toBezierPath:self.sequenceTatumPaths];
             
             // Select a sequenceTatum
             if(self.sequenceTatumIsSelected && !self.selectedSequenceTatum && self.currentMousePoint.x >= startPoint.x - 1 && self.currentMousePoint.x <= startPoint.x + 1)
             {
-                self.selectedSequenceTatum = (SequenceTatum *)visibleTatums[i];
+                self.selectedSequenceTatum = tatum;
             }
             
             // Start a mouse group select
             if(self.mouseGroupSelect)
             {
-                float nextStartPointX, currentStartPointX;
+                SequenceTatum *nextTatum;
+                float tatumX, nextTatumX;
                 if(i < visibleTatums.count - 1)
                 {
-                    nextStartPointX = [[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i + 1]).time floatValue]];
+                    nextTatum = (SequenceTatum *)visibleTatums[i + 1];
                 }
                 else
                 {
-                    nextStartPointX = startPoint.x;
+                    nextTatum = tatum;
                 }
-                if(i >= 0)
+                tatumX = [[SequenceLogic sharedInstance] timeToX:[tatum.time floatValue]];
+                nextTatumX = [[SequenceLogic sharedInstance] timeToX:[nextTatum.time floatValue]];
+                
+                if(self.currentMousePoint.x >= tatumX && self.currentMousePoint.x < nextTatumX)
                 {
-                    currentStartPointX = [[SequenceLogic sharedInstance] timeToX:[((SequenceTatum *)visibleTatums[i]).time floatValue]];
-                }
-                else
-                {
-                    currentStartPointX = 0;
-                }
-                if(self.currentMousePoint.x >= startPoint.x && self.currentMousePoint.x < nextStartPointX)
-                {
-                    if(self.mouseBoxSelectStartTime < 0)
+                    // Initial click
+                    if(!self.mouseBoxSelectStartTatum)
                     {
-                        self.mouseBoxSelectStartTime = [((SequenceTatum *)visibleTatums[i]).time floatValue];
-                        self.mouseBoxSelectEndTime = [[SequenceLogic sharedInstance] xToTime:nextStartPointX];
+                        self.mouseBoxSelectStartTatum = tatum;
+                        self.mouseBoxSelectEndTatum = nextTatum;
+                        self.mouseBoxSelectOriginalStartTatum = self.mouseBoxSelectStartTatum;
                         self.mouseBoxSelectTopChannel = ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT));
+                        self.mouseBoxSelectOriginalTopChannel = self.mouseBoxSelectTopChannel;
                         self.mouseBoxSelectBottomChannel = self.mouseBoxSelectTopChannel + 1;
                     }
+                    // Dragging update
                     else
                     {
-                        float nextStartPointTime = [[SequenceLogic sharedInstance] xToTime:nextStartPointX];
-                        self.mouseBoxSelectEndTime = (nextStartPointTime > self.mouseBoxSelectStartTime ? nextStartPointTime : [[SequenceLogic sharedInstance] xToTime:currentStartPointX]);
-                        if(self.currentMousePoint.y / CHANNEL_HEIGHT < self.mouseBoxSelectTopChannel)
+                        // Left and right checking
+                        if([nextTatum.time floatValue] > [self.mouseBoxSelectOriginalStartTatum.time floatValue])
                         {
-                            self.mouseBoxSelectBottomChannel = (int)((self.currentMousePoint.y < 0 ? 0 : self.currentMousePoint.y / CHANNEL_HEIGHT));
+                            self.mouseBoxSelectEndTatum = nextTatum;
+                            if(self.mouseBoxSelectOriginalStartTatum != self.mouseBoxSelectStartTatum)
+                            {
+                                self.mouseBoxSelectStartTatum = self.mouseBoxSelectOriginalStartTatum;
+                            }
                         }
                         else
                         {
+                            self.mouseBoxSelectStartTatum = tatum;
+                        }
+                        
+                        // Up and down checking
+                        if(self.currentMousePoint.y / CHANNEL_HEIGHT > self.mouseBoxSelectOriginalTopChannel)
+                        {
                             self.mouseBoxSelectBottomChannel = (int)((self.currentMousePoint.y > self.frame.size.height ? self.frame.size.height / CHANNEL_HEIGHT : self.currentMousePoint.y / CHANNEL_HEIGHT + 1));
+                            if(self.mouseBoxSelectOriginalTopChannel != self.mouseBoxSelectTopChannel)
+                            {
+                                self.mouseBoxSelectTopChannel = self.mouseBoxSelectOriginalTopChannel;
+                            }
+                        }
+                        else
+                        {
+                            self.mouseBoxSelectTopChannel = (int)((self.currentMousePoint.y < 0 ? 0 : self.currentMousePoint.y / CHANNEL_HEIGHT));
                         }
                     }
                 }
             }
         }
     }
+    
     [[NSColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1.0] set];
     //[self.sequenceTatumPaths setLineWidth:1.0];
     [self.sequenceTatumPaths fill];
@@ -214,10 +319,10 @@
 
 - (void)drawMouseGroupSelectionBox
 {
-    if((self.mouseGroupSelect || self.retainMouseGroupSelect) && self.mouseBoxSelectStartTime >= 0)
+    if((self.mouseGroupSelect || self.retainMouseGroupSelect) && self.mouseBoxSelectStartTatum)
     {
-        float leftX = [[SequenceLogic sharedInstance] timeToX:self.mouseBoxSelectStartTime];
-        float rightX = [[SequenceLogic sharedInstance] timeToX:self.mouseBoxSelectEndTime];
+        float leftX = [[SequenceLogic sharedInstance] timeToX:[self.mouseBoxSelectStartTatum.time floatValue]];
+        float rightX = [[SequenceLogic sharedInstance] timeToX:[self.mouseBoxSelectEndTatum.time floatValue]];
         float topY = self.mouseBoxSelectTopChannel * CHANNEL_HEIGHT;
         float bottomY = self.mouseBoxSelectBottomChannel * CHANNEL_HEIGHT;
         NSBezierPath *path = [NSBezierPath bezierPath];
@@ -260,8 +365,8 @@
     else
     {
         self.mouseGroupSelect = YES;
-        self.mouseBoxSelectStartTime = -1;
-        self.mouseBoxSelectEndTime = -1;
+        self.mouseBoxSelectStartTatum = nil;
+        self.mouseBoxSelectEndTatum = nil;
     }
     
     if(self.shiftKey || self.commandKey)
@@ -304,6 +409,12 @@
     else if(self.mouseGroupSelect)
     {
         self.mouseGroupSelect = NO;
+        
+        // If this is a create command click, add the command
+        if(!self.retainMouseGroupSelect)
+        {
+            [self addCommandsForMouseGroupSelect];
+        }
     }
     
     [self.autoScrollTimer invalidate];

@@ -82,7 +82,7 @@
         
         // Draw the text
         NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
-        NSRect textFrame = NSMakeRect(10 + leftX, topY, rightX - leftX, CHANNEL_HEIGHT - 2);
+        NSRect textFrame = NSMakeRect(10 + [(NSScrollView *)self.superview.superview documentVisibleRect].origin.x, topY, rightX - leftX, CHANNEL_HEIGHT - 2);
         [audio.title drawInRect:textFrame withAttributes:attributes];
     }
 }

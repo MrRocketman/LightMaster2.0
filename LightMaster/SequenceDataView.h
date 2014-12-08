@@ -10,4 +10,6 @@
 
 @interface SequenceDataView : NSView
 
+@property (assign, nonatomic) BOOL isAudioAnalysisView;
+
 @end

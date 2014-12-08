@@ -32,8 +32,10 @@
         <relationship name="startTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="startCommands" inverseEntity="SequenceTatum" syncable="YES"/>
         <relationship name="userAudioAnalysisTrackChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrackChannel" inverseName="commands" inverseEntity="UserAudioAnalysisTrackChannel" syncable="YES"/>
     </entity>
-    <entity name="CommandFadeDown" representedClassName="CommandFadeDown" parentEntity="Command" syncable="YES"/>
-    <entity name="CommandFadeUp" representedClassName="CommandFadeUp" parentEntity="Command" syncable="YES"/>
+    <entity name="CommandFade" representedClassName="CommandFade" parentEntity="Command" syncable="YES">
+        <attribute name="endBrightness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="startBrightness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <entity name="CommandOn" representedClassName="CommandOn" parentEntity="Command" syncable="YES">
         <attribute name="brightness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
@@ -206,9 +208,7 @@
         <element name="Channel" positionX="-965" positionY="153" width="128" height="133"/>
         <element name="ChannelPattern" positionX="-729" positionY="162" width="128" height="103"/>
         <element name="Command" positionX="-702" positionY="-592" width="128" height="133"/>
-        <element name="CommandFadeDown" positionX="-486" positionY="-513" width="128" height="45"/>
-        <element name="CommandFadeUp" positionX="-486" positionY="-585" width="128" height="45"/>
-        <element name="CommandOn" positionX="-486" positionY="-661" width="128" height="60"/>
+        <element name="CommandOn" positionX="-342" positionY="-661" width="128" height="60"/>
         <element name="CommandPulse" positionX="-335" positionY="-441" width="128" height="58"/>
         <element name="CommandTwinkle" positionX="-335" positionY="-369" width="128" height="58"/>
         <element name="ComplexCommand" positionX="-506" positionY="-414" width="128" height="45"/>
@@ -226,5 +226,6 @@
         <element name="SequenceTatum" positionX="-1026" positionY="-576" width="128" height="105"/>
         <element name="UserAudioAnalysisTrack" positionX="-666" positionY="-108" width="164" height="88"/>
         <element name="UserAudioAnalysisTrackChannel" positionX="-693" positionY="-243" width="189" height="103"/>
+        <element name="CommandFade" positionX="-335" positionY="-576" width="128" height="73"/>
     </elements>
 </model>
