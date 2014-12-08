@@ -207,6 +207,7 @@
 		1AE830871A21C7F4000E297D /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		1AE830881A21C7F4000E297D /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		1AEB4CF71A3553A9002ED256 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1AEB4CF91A356B16002ED256 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +260,7 @@
 		1A2652531A3409C200D9A32D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1AEB4CF91A356B16002ED256 /* AudioToolbox.framework */,
 				1AEB4CF71A3553A9002ED256 /* AVFoundation.framework */,
 				1A3474CB1A32E74E00736869 /* IOKit.framework */,
 				1A3474C91A32E74600736869 /* CFNetwork.framework */,

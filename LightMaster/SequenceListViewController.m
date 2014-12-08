@@ -440,6 +440,10 @@
                       [audio.echoNestAudioAnalysis addSegmentsObject:segment];
                   }
                   
+                  //audio.endOffset = audio.echoNestAudioAnalysis.startOfFadeOut;
+                  //audio.startOffset = audio.echoNestAudioAnalysis.endOfFadeIn;
+                  audio.sequence.endTime = audio.echoNestAudioAnalysis.duration;
+                  
                   audio.echoNestUploadProgress = @(1.0);
                   [self updateAudioAnlysisProgressLabel];
                   [[CoreDataManager sharedManager] saveContext];
