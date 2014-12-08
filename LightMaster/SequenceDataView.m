@@ -15,6 +15,8 @@
 #import "CommandOn.h"
 #import "CommandFade.h"
 #import "Channel.h"
+#import "UserAudioAnalysisTrack.h"
+#import "UserAudioAnalysisTrackChannel.h"
 
 @interface SequenceDataView()
 
@@ -97,34 +99,69 @@
 
 - (void)addCommandsForMouseGroupSelect
 {
-    NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
-    Channel *channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@ AND idNumber == %d", controlBoxes, self.mouseBoxSelectTopChannel] toArray] firstObject];
-    
-    if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+    if(self.isAudioAnalysisView)
     {
-        CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-        command.startTatum = self.mouseBoxSelectStartTatum;
-        command.endTatum = self.mouseBoxSelectEndTatum;
-        command.brightness = @(self.newCommandBrightness);
-        command.channel = channel;
+        NSArray *tracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
+        UserAudioAnalysisTrackChannel *channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track IN %@ AND pitch == %d", tracks, self.mouseBoxSelectTopChannel] toArray] firstObject];
+        
+        if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+        {
+            CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.brightness = @(self.newCommandBrightness);
+            command.userAudioAnalysisTrackChannel = channel;
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(0.0);
+            command.endBrightness = @(self.newCommandBrightness);
+            command.userAudioAnalysisTrackChannel = channel;
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(self.newCommandBrightness);
+            command.endBrightness = @(0.0);
+            command.userAudioAnalysisTrackChannel = channel;
+        }
     }
-    else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+    else
     {
-        CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-        command.startTatum = self.mouseBoxSelectStartTatum;
-        command.endTatum = self.mouseBoxSelectEndTatum;
-        command.startBrightness = @(0.0);
-        command.endBrightness = @(self.newCommandBrightness);
-        command.channel = channel;
-    }
-    else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
-    {
-        CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-        command.startTatum = self.mouseBoxSelectStartTatum;
-        command.endTatum = self.mouseBoxSelectEndTatum;
-        command.startBrightness = @(self.newCommandBrightness);
-        command.endBrightness = @(0.0);
-        command.channel = channel;
+        NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
+        Channel *channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@ AND idNumber == %d", controlBoxes, self.mouseBoxSelectTopChannel] toArray] firstObject];
+        
+        if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+        {
+            CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.brightness = @(self.newCommandBrightness);
+            command.channel = channel;
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(0.0);
+            command.endBrightness = @(self.newCommandBrightness);
+            command.channel = channel;
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(self.newCommandBrightness);
+            command.endBrightness = @(0.0);
+            command.channel = channel;
+        }
     }
     
     [[CoreDataManager sharedManager] saveContext];
@@ -134,7 +171,57 @@
 {
     if(self.isAudioAnalysisView)
     {
+        int channelIndex = 0;
+        NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+        float leftTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2];
+        float rightTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5];
         
+        // ControlBoxes
+        NSArray *tracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
+        for(UserAudioAnalysisTrack *track in tracks)
+        {
+            NSArray *channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track == %@", track] orderBy:@"pitch"] toArray];
+            for(UserAudioAnalysisTrackChannel *channel in channels)
+            {
+                NSBezierPath *commandPath = [NSBezierPath bezierPath];
+                NSArray *commands = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"userAudioAnalysisTrackChannel == %@ AND ((startTatum.time >= %f AND startTatum.time <= %f) || (endTatum.time >= %f AND endTatum.time <= %f))", channel, leftTime, rightTime] orderBy:@"startTatum.time"] toArray];
+                for(int i = 0; i < commands.count; i ++)
+                {
+                    if([commands[i] isMemberOfClass:[CommandOn class]])
+                    {
+                        CommandOn *command = commands[i];
+                        float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+                        float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+                        float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.brightness floatValue]));
+                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
+                        [commandPath moveToPoint:NSMakePoint(leftX, topY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, topY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, topY)];
+                    }
+                    else if([commands[i] isMemberOfClass:[CommandFade class]])
+                    {
+                        CommandFade *command = commands[i];
+                        float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+                        float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+                        float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.startBrightness floatValue]));
+                        float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.endBrightness floatValue]));
+                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
+                        [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
+                        [commandPath lineToPoint:NSMakePoint(rightX, rightY)];
+                        [commandPath lineToPoint:NSMakePoint(leftX, leftY)];
+                    }
+                }
+                
+                [[NSColor lightGrayColor] set];
+                [commandPath fill];
+                
+                channelIndex ++;
+            }
+        }
     }
     else
     {

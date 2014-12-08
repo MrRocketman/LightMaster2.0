@@ -44,7 +44,7 @@
     int channelIndex = 0;
     
     // AnalysisTracks
-    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    NSArray *userAudioAnalysisTracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
     for(UserAudioAnalysisTrack *track in userAudioAnalysisTracks)
     {
         NSBezierPath *analysisTrackPath = [NSBezierPath bezierPath];
@@ -58,7 +58,7 @@
     int channelIndex = 0;
     
     // AnalysisTracks
-    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    NSArray *userAudioAnalysisTracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
     NSArray *channels = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track IN %@", userAudioAnalysisTracks] orderBy:@"track.title"] orderBy:@"pitch"] toArray];
     for(UserAudioAnalysisTrackChannel *channel in channels)
     {
