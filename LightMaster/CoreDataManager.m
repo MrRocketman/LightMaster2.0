@@ -13,8 +13,6 @@
 #import "SequenceTatum.h"
 #import "ControlBox.h"
 #import "Channel.h"
-#import "UserAudioAnalysisTrack.h"
-#import "UserAudioAnalysisTrackChannel.h"
 
 @interface CoreDataManager()
 
@@ -274,11 +272,8 @@
     // Add any control boxes that already exist
     [sequence addControlBoxes:[NSSet setWithArray:[[self.managedObjectContext ofType:@"ControlBox"] toArray]]];
     
-    // Add a default audioAnalysis track
-    UserAudioAnalysisTrack *track = [self newAudioAnalysisTrackForSequence:sequence];
-    
-    // Add a default audioAnalysis channel
-    [self newAudioAnalysisChannelForTrack:track];
+    // Add a default analysisControlBox
+    [self newAnalysisControlBoxForSequence:sequence];
     
     // Save
     [self saveContext];
@@ -352,10 +347,10 @@
 {
     ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:[self managedObjectContext]];
     controlBox.title = @"New Box";
-    controlBox.idNumber = @([[[self.managedObjectContext ofType:@"ControlBox"] toArray] count]);
+    controlBox.idNumber = @([[[[self.managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == nil"] toArray] count]);
     
     // Make a default channel
-    [self newChannelForControlBox: controlBox];
+    [self newChannelForControlBox:controlBox];
     
     // Add the new box to all the sequences
     NSArray *sequences = [[self.managedObjectContext ofType:@"Sequence"] toArray];
@@ -369,6 +364,22 @@
     return controlBox;
 }
 
+- (ControlBox *)newAnalysisControlBoxForSequence:(Sequence *)sequence;
+{
+    ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:self.managedObjectContext];
+    controlBox.title = @"New Track";
+    controlBox.idNumber = @([[[[self.managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence != nil"] toArray] count]);
+    NSLog(@"idNumber:%d", [controlBox.idNumber intValue]);
+    controlBox.analysisSequence = sequence;
+    
+    // Make a default channel
+    [self newChannelForControlBox:controlBox];
+    
+    [self saveContext];
+    
+    return controlBox;
+}
+
 - (Channel *)newChannelForControlBox:(ControlBox *)controlBox
 {
     Channel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"Channel" inManagedObjectContext:[self managedObjectContext]];
@@ -376,29 +387,6 @@
     channel.idNumber = @(controlBox.channels.count);
     channel.color = [NSColor whiteColor];
     [controlBox addChannelsObject:channel];
-    
-    [self saveContext];
-    
-    return channel;
-}
-
-- (UserAudioAnalysisTrack *)newAudioAnalysisTrackForSequence:(Sequence *)sequence
-{
-    UserAudioAnalysisTrack *track = [NSEntityDescription insertNewObjectForEntityForName:@"UserAudioAnalysisTrack" inManagedObjectContext:self.managedObjectContext];
-    track.title = @"New Track";
-    track.sequence = sequence;
-    
-    [self saveContext];
-    
-    return track;
-}
-
-- (UserAudioAnalysisTrackChannel *)newAudioAnalysisChannelForTrack:(UserAudioAnalysisTrack *)track
-{
-    UserAudioAnalysisTrackChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"UserAudioAnalysisTrackChannel" inManagedObjectContext:self.managedObjectContext];
-    channel.title = @"New Channel";
-    channel.track = track;
-    channel.pitch = @([[[[self.managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track == %@", track] toArray] count] - 1);
     
     [self saveContext];
     

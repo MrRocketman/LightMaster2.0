@@ -29,7 +29,6 @@
         <relationship name="endTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="endCommands" inverseEntity="SequenceTatum" syncable="YES"/>
         <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="commands" inverseEntity="Sequence" syncable="YES"/>
         <relationship name="startTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="startCommands" inverseEntity="SequenceTatum" syncable="YES"/>
-        <relationship name="userAudioAnalysisTrackChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrackChannel" inverseName="commands" inverseEntity="UserAudioAnalysisTrackChannel" syncable="YES"/>
     </entity>
     <entity name="CommandFadeDown" representedClassName="CommandFadeDown" parentEntity="Command" syncable="YES"/>
     <entity name="CommandFadeUp" representedClassName="CommandFadeUp" parentEntity="Command" syncable="YES"/>
@@ -188,14 +187,14 @@
     <entity name="UserAudioAnalysisTrackChannel" representedClassName="UserAudioAnalysisTrackChannel" syncable="YES">
         <attribute name="pitch" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="userAudioAnalysisTrackChannel" inverseEntity="Command" syncable="YES"/>
+        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" syncable="YES"/>
         <relationship name="track" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrack" inverseName="channels" inverseEntity="UserAudioAnalysisTrack" syncable="YES"/>
     </entity>
     <elements>
         <element name="Audio" positionX="-468" positionY="-124" width="128" height="148"/>
         <element name="Channel" positionX="-965" positionY="153" width="128" height="133"/>
         <element name="ChannelPattern" positionX="-792" positionY="162" width="128" height="103"/>
-        <element name="Command" positionX="-702" positionY="-594" width="128" height="133"/>
+        <element name="Command" positionX="-702" positionY="-594" width="128" height="120"/>
         <element name="CommandFadeDown" positionX="-486" positionY="-513" width="128" height="45"/>
         <element name="CommandFadeUp" positionX="-486" positionY="-585" width="128" height="45"/>
         <element name="CommandOn" positionX="-486" positionY="-661" width="128" height="60"/>

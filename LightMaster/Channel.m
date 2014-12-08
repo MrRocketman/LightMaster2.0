@@ -2,7 +2,7 @@
 //  Channel.m
 //  LightMaster
 //
-//  Created by James Adams on 12/2/14.
+//  Created by James Adams on 12/8/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -18,7 +18,7 @@
 @dynamic idNumber;
 @dynamic title;
 @dynamic channelPatterns;
-@dynamic command;
+@dynamic commands;
 @dynamic controlBox;
 
 @end

@@ -9,8 +9,8 @@
 #import "SequenceAudioAnalysisChannelView.h"
 #import "CoreDataManager.h"
 #import "NSManagedObjectContext+Queryable.h"
-#import "UserAudioAnalysisTrack.h"
-#import "UserAudioAnalysisTrackChannel.h"
+#import "ControlBox.h"
+#import "Channel.h"
 #import "SequenceLogic.h"
 
 @implementation SequenceAudioAnalysisChannelView
@@ -44,8 +44,8 @@
     int channelIndex = 0;
     
     // AnalysisTracks
-    NSArray *userAudioAnalysisTracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
-    for(UserAudioAnalysisTrack *track in userAudioAnalysisTracks)
+    NSArray *userAudioAnalysisTracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
+    for(ControlBox *track in userAudioAnalysisTracks)
     {
         NSBezierPath *analysisTrackPath = [NSBezierPath bezierPath];
         [self drawHeaderWithChannelIndex:channelIndex text:track.title textOffset:5 color:[NSColor grayColor] halfWidth:YES andBezierPath:analysisTrackPath channelHeight:(int)track.channels.count];
@@ -58,9 +58,9 @@
     int channelIndex = 0;
     
     // AnalysisTracks
-    NSArray *userAudioAnalysisTracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
-    NSArray *channels = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrackChannel"] where:@"track IN %@", userAudioAnalysisTracks] orderBy:@"track.title"] orderBy:@"pitch"] toArray];
-    for(UserAudioAnalysisTrackChannel *channel in channels)
+    NSArray *userAudioAnalysisTracks = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"title"] toArray];
+    NSArray *channels = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@", userAudioAnalysisTracks] orderBy:@"controlBox.idNumber"] orderBy:@"idNumber"] toArray];
+    for(Channel *channel in channels)
     {
         NSBezierPath *channelPath = [NSBezierPath bezierPath];
         [self drawChannelWithIndex:channelIndex text:channel.title textOffset:5 color:[NSColor lightGrayColor] andBezierPath:channelPath];

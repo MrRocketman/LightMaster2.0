@@ -2,14 +2,14 @@
 //  Sequence.h
 //  LightMaster
 //
-//  Created by James Adams on 12/6/14.
+//  Created by James Adams on 12/8/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Audio, Command, ControlBox, Playlist, SequenceTatum, UserAudioAnalysisTrack;
+@class Audio, ControlBox, Playlist, SequenceTatum;
 
 @interface Sequence : NSManagedObject
 
@@ -19,19 +19,13 @@
 @property (nonatomic, retain) NSNumber * startOffset;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) Audio *audio;
-@property (nonatomic, retain) NSSet *commands;
 @property (nonatomic, retain) NSSet *controlBoxes;
 @property (nonatomic, retain) NSSet *playlists;
 @property (nonatomic, retain) NSSet *tatums;
-@property (nonatomic, retain) NSSet *userAudioAnalysisTracks;
+@property (nonatomic, retain) NSSet *analysisControlBoxes;
 @end
 
 @interface Sequence (CoreDataGeneratedAccessors)
-
-- (void)addCommandsObject:(Command *)value;
-- (void)removeCommandsObject:(Command *)value;
-- (void)addCommands:(NSSet *)values;
-- (void)removeCommands:(NSSet *)values;
 
 - (void)addControlBoxesObject:(ControlBox *)value;
 - (void)removeControlBoxesObject:(ControlBox *)value;
@@ -48,9 +42,9 @@
 - (void)addTatums:(NSSet *)values;
 - (void)removeTatums:(NSSet *)values;
 
-- (void)addUserAudioAnalysisTracksObject:(UserAudioAnalysisTrack *)value;
-- (void)removeUserAudioAnalysisTracksObject:(UserAudioAnalysisTrack *)value;
-- (void)addUserAudioAnalysisTracks:(NSSet *)values;
-- (void)removeUserAudioAnalysisTracks:(NSSet *)values;
+- (void)addAnalysisControlBoxesObject:(ControlBox *)value;
+- (void)removeAnalysisControlBoxesObject:(ControlBox *)value;
+- (void)addAnalysisControlBoxes:(NSSet *)values;
+- (void)removeAnalysisControlBoxes:(NSSet *)values;
 
 @end

@@ -2,7 +2,7 @@
 //  Channel.h
 //  LightMaster
 //
-//  Created by James Adams on 12/2/14.
+//  Created by James Adams on 12/8/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -17,7 +17,7 @@
 @property (nonatomic, retain) NSNumber * idNumber;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSSet *channelPatterns;
-@property (nonatomic, retain) NSSet *command;
+@property (nonatomic, retain) NSSet *commands;
 @property (nonatomic, retain) ControlBox *controlBox;
 @end
 
@@ -28,9 +28,9 @@
 - (void)addChannelPatterns:(NSSet *)values;
 - (void)removeChannelPatterns:(NSSet *)values;
 
-- (void)addCommandObject:(Command *)value;
-- (void)removeCommandObject:(Command *)value;
-- (void)addCommand:(NSSet *)values;
-- (void)removeCommand:(NSSet *)values;
+- (void)addCommandsObject:(Command *)value;
+- (void)removeCommandsObject:(Command *)value;
+- (void)addCommands:(NSSet *)values;
+- (void)removeCommands:(NSSet *)values;
 
 @end

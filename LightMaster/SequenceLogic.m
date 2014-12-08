@@ -14,8 +14,6 @@
 #import "ControlBox.h"
 #import "Channel.h"
 #import "Audio.h"
-#import "UserAudioAnalysisTrack.h"
-#import "UserAudioAnalysisTrackChannel.h"
 
 #define SECONDS_TO_PIXELS 25.0
 
@@ -101,9 +99,9 @@
 
 - (int)numberOfAudioChannels
 {
-    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"UserAudioAnalysisTrack"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
     int audioAnalysisChannelCount = 0;
-    for(UserAudioAnalysisTrack *track in userAudioAnalysisTracks)
+    for(ControlBox *track in userAudioAnalysisTracks)
     {
         audioAnalysisChannelCount += (int)track.channels.count;
     }

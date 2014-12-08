@@ -9,8 +9,6 @@
 #import "SequenceListViewController.h"
 #import "CoreDataManager.h"
 #import "Sequence.h"
-#import "UserAudioAnalysisTrack.h"
-#import "UserAudioAnalysisTrackChannel.h"
 #import "Audio.h"
 #import "ENAPIRequest.h"
 #import "ENAPI.h"
@@ -22,6 +20,8 @@
 #import "EchoNestSegment.h"
 #import "EchoNestTimbre.h"
 #import "EchoNestPitch.h"
+#import "ControlBox.h"
+#import "Channel.h"
 
 @interface SequenceListViewController ()
 
@@ -114,8 +114,8 @@
             // Delete track
             else if (self.trackTableView == self.trackTableView.window.firstResponder)
             {
-                UserAudioAnalysisTrack *track = [self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow];
-                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:track];
+                ControlBox *controlBox = [self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow];
+                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:controlBox];
                 [[CoreDataManager sharedManager] saveContext];
                 
                 if(self.trackFetchedResultsController.count == 0)
@@ -126,8 +126,8 @@
             // Delete track channel
             else if (self.trackChannelTableView == self.trackChannelTableView.window.firstResponder)
             {
-                UserAudioAnalysisTrackChannel *track = [self.trackChannelFetchedResultsController objectAtIndex:self.trackChannelTableView.selectedRow];
-                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:track];
+                Channel *channel = [self.trackChannelFetchedResultsController objectAtIndex:self.trackChannelTableView.selectedRow];
+                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:channel];
                 [[CoreDataManager sharedManager] saveContext];
             }
         }
@@ -154,12 +154,12 @@
 
 - (IBAction)createTrackButtonPress:(id)sender
 {
-    [[CoreDataManager sharedManager] newAudioAnalysisTrackForSequence:[self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow]];
+    [[CoreDataManager sharedManager] newAnalysisControlBoxForSequence:[self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow]];
 }
 
 - (IBAction)createTrackChannelButtonPress:(id)sender
 {
-    [[CoreDataManager sharedManager] newAudioAnalysisChannelForTrack:[self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow]];
+    [[CoreDataManager sharedManager] newChannelForControlBox:[self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow]];
 }
 
 - (IBAction)chooseAudioFileButtonPress:(id)sender
@@ -473,21 +473,21 @@
     else if([control.identifier isEqualToString:@"trackTitleTextField"])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [(UserAudioAnalysisTrack *)[self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
+            [(ControlBox *)[self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
             [[CoreDataManager sharedManager] saveContext];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
         });
     }
     else if([control.identifier isEqualToString:@"trackChannelTextField"])
     {
-        [(UserAudioAnalysisTrackChannel *)[self.trackChannelFetchedResultsController objectAtIndex:self.trackChannelTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
+        [(Channel *)[self.trackChannelFetchedResultsController objectAtIndex:self.trackChannelTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
         [[CoreDataManager sharedManager] saveContext];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
     }
     else if([control.identifier isEqualToString:@"trackChannelPitchTextField"])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [(UserAudioAnalysisTrackChannel *)[self.trackChannelFetchedResultsController objectAtIndex:self.trackChannelTableView.selectedRow] setPitch:@([(NSTextField *)control intValue])];
+            [(Channel *)[self.trackChannelFetchedResultsController objectAtIndex:self.trackChannelTableView.selectedRow] setIdNumber:@([(NSTextField *)control intValue])];
             [[CoreDataManager sharedManager] saveContext];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
         });
@@ -534,7 +534,7 @@
         if([tableColumn.identifier isEqualToString:@"trackTitle"])
         {
             NSTableCellView *result = [tableView makeViewWithIdentifier:@"trackTitleView" owner:self];
-            result.textField.stringValue = [(UserAudioAnalysisTrack *)[self.trackFetchedResultsController objectAtIndex:row] title];
+            result.textField.stringValue = [(ControlBox *)[self.trackFetchedResultsController objectAtIndex:row] title];
             return result;
         }
     }
@@ -544,14 +544,14 @@
         if([tableColumn.identifier isEqualToString:@"trackChannelPitch"])
         {
             NSTableCellView *result = [tableView makeViewWithIdentifier:@"trackChannelPitchView" owner:self];
-            result.textField.integerValue = [[(UserAudioAnalysisTrackChannel *)[self.trackChannelFetchedResultsController objectAtIndex:row] pitch] integerValue];
+            result.textField.integerValue = [[(Channel *)[self.trackChannelFetchedResultsController objectAtIndex:row] idNumber] integerValue];
             return result;
         }
         // Title column
         else if([tableColumn.identifier isEqualToString:@"trackChannelTitle"])
         {
             NSTableCellView *result = [tableView makeViewWithIdentifier:@"trackChannelTitleView" owner:self];
-            result.textField.stringValue = [(UserAudioAnalysisTrackChannel *)[self.trackChannelFetchedResultsController objectAtIndex:row] title];
+            result.textField.stringValue = [(Channel *)[self.trackChannelFetchedResultsController objectAtIndex:row] title];
             return result;
         }
     }
@@ -593,7 +593,7 @@
     {
         self.createTrackChannelButton.enabled = YES;
         
-        [self updateTrackChannelFetchedResultsControllerForTrack:(UserAudioAnalysisTrack *)[self.trackFetchedResultsController objectAtIndex:row]];
+        [self updateTrackChannelFetchedResultsControllerForTrack:(ControlBox *)[self.trackFetchedResultsController objectAtIndex:row]];
         NSError *error = nil;
         if (![[self trackChannelFetchedResultsController] performFetch:&error])
         {
@@ -636,8 +636,8 @@
     }
     
     // Create and configure a fetch request with the Book entity.
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"UserAudioAnalysisTrack"];
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES]];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ControlBox"];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"idNumber" ascending:YES]];
     
     // Create and initialize the fetch results controller.
     _trackFetchedResultsController = [[SNRFetchedResultsController alloc] initWithManagedObjectContext:[[CoreDataManager sharedManager] managedObjectContext] fetchRequest:fetchRequest];
@@ -655,8 +655,8 @@
     }
     
     // Create and configure a fetch request with the Book entity.
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"UserAudioAnalysisTrackChannel"];
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"pitch" ascending:YES]];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Channel"];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"idNumber" ascending:YES]];
     
     // Create and initialize the fetch results controller.
     _trackChannelFetchedResultsController = [[SNRFetchedResultsController alloc] initWithManagedObjectContext:[[CoreDataManager sharedManager] managedObjectContext] fetchRequest:fetchRequest];
@@ -667,12 +667,12 @@
 
 - (void)updateTrackFetchedResultsControllerForSequence:(Sequence *)sequence
 {
-    self.trackFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sequence == %@", sequence];
+    self.trackFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"analysisSequence == %@", sequence];
 }
 
-- (void)updateTrackChannelFetchedResultsControllerForTrack:(UserAudioAnalysisTrack *)track
+- (void)updateTrackChannelFetchedResultsControllerForTrack:(ControlBox *)track
 {
-    self.trackChannelFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"track == %@", track];
+    self.trackChannelFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"controlBox == %@", track];
 }
 
 // NSFetchedResultsController delegate methods to respond to additions, removals and so on.

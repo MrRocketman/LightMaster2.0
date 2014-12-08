@@ -15,7 +15,7 @@
         <attribute name="idNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="channelPatterns" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ChannelPattern" inverseName="channels" inverseEntity="ChannelPattern" syncable="YES"/>
-        <relationship name="command" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="channel" inverseEntity="Command" syncable="YES"/>
+        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="channel" inverseEntity="Command" syncable="YES"/>
         <relationship name="controlBox" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ControlBox" inverseName="channels" inverseEntity="ControlBox" syncable="YES"/>
     </entity>
     <entity name="ChannelPattern" representedClassName="ChannelPattern" syncable="YES">
@@ -26,11 +26,9 @@
     </entity>
     <entity name="Command" representedClassName="Command" syncable="YES">
         <attribute name="sendComplete" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <relationship name="channel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel" inverseName="command" inverseEntity="Channel" syncable="YES"/>
+        <relationship name="channel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel" inverseName="commands" inverseEntity="Channel" syncable="YES"/>
         <relationship name="endTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="endCommands" inverseEntity="SequenceTatum" syncable="YES"/>
-        <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="commands" inverseEntity="Sequence" syncable="YES"/>
         <relationship name="startTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="startCommands" inverseEntity="SequenceTatum" syncable="YES"/>
-        <relationship name="userAudioAnalysisTrackChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrackChannel" inverseName="commands" inverseEntity="UserAudioAnalysisTrackChannel" syncable="YES"/>
     </entity>
     <entity name="CommandFade" representedClassName="CommandFade" parentEntity="Command" syncable="YES">
         <attribute name="endBrightness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -49,6 +47,7 @@
     <entity name="ControlBox" representedClassName="ControlBox" syncable="YES">
         <attribute name="idNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="analysisSequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="analysisControlBoxes" inverseEntity="Sequence" syncable="YES"/>
         <relationship name="channels" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Channel" inverseName="controlBox" inverseEntity="Channel" syncable="YES"/>
         <relationship name="sequence" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Sequence" inverseName="controlBoxes" inverseEntity="Sequence" syncable="YES"/>
     </entity>
@@ -179,12 +178,11 @@
         <attribute name="modifiedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="startOffset" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="analysisControlBoxes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ControlBox" inverseName="analysisSequence" inverseEntity="ControlBox" syncable="YES"/>
         <relationship name="audio" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Audio" inverseName="sequence" inverseEntity="Audio" syncable="YES"/>
-        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="sequence" inverseEntity="Command" syncable="YES"/>
         <relationship name="controlBoxes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ControlBox" inverseName="sequence" inverseEntity="ControlBox" syncable="YES"/>
         <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Playlist" inverseName="sequences" inverseEntity="Playlist" syncable="YES"/>
         <relationship name="tatums" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SequenceTatum" inverseName="sequence" inverseEntity="SequenceTatum" syncable="YES"/>
-        <relationship name="userAudioAnalysisTracks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserAudioAnalysisTrack" inverseName="sequence" inverseEntity="UserAudioAnalysisTrack" syncable="YES"/>
     </entity>
     <entity name="SequenceTatum" representedClassName="SequenceTatum" syncable="YES">
         <attribute name="time" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -192,27 +190,16 @@
         <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="tatums" inverseEntity="Sequence" syncable="YES"/>
         <relationship name="startCommands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Command" inverseName="startTatum" inverseEntity="Command" syncable="YES"/>
     </entity>
-    <entity name="UserAudioAnalysisTrack" representedClassName="UserAudioAnalysisTrack" syncable="YES">
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserAudioAnalysisTrackChannel" inverseName="track" inverseEntity="UserAudioAnalysisTrackChannel" syncable="YES"/>
-        <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="userAudioAnalysisTracks" inverseEntity="Sequence" syncable="YES"/>
-    </entity>
-    <entity name="UserAudioAnalysisTrackChannel" representedClassName="UserAudioAnalysisTrackChannel" syncable="YES">
-        <attribute name="pitch" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="userAudioAnalysisTrackChannel" inverseEntity="Command" syncable="YES"/>
-        <relationship name="track" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrack" inverseName="channels" inverseEntity="UserAudioAnalysisTrack" syncable="YES"/>
-    </entity>
     <elements>
         <element name="Audio" positionX="178" positionY="-240" width="128" height="165"/>
         <element name="Channel" positionX="-965" positionY="153" width="128" height="133"/>
         <element name="ChannelPattern" positionX="-729" positionY="162" width="128" height="103"/>
-        <element name="Command" positionX="-702" positionY="-592" width="128" height="133"/>
+        <element name="Command" positionX="-702" positionY="-592" width="128" height="103"/>
         <element name="CommandOn" positionX="-342" positionY="-661" width="128" height="60"/>
         <element name="CommandPulse" positionX="-335" positionY="-441" width="128" height="58"/>
         <element name="CommandTwinkle" positionX="-335" positionY="-369" width="128" height="58"/>
         <element name="ComplexCommand" positionX="-506" positionY="-414" width="128" height="45"/>
-        <element name="ControlBox" positionX="-1170" positionY="207" width="128" height="103"/>
+        <element name="ControlBox" positionX="-1170" positionY="207" width="128" height="118"/>
         <element name="EchoNestAudioAnalysis" positionX="187" positionY="-19" width="128" height="958"/>
         <element name="EchoNestBar" positionX="63" positionY="261" width="128" height="103"/>
         <element name="EchoNestBeat" positionX="214" positionY="261" width="128" height="103"/>
@@ -222,10 +209,8 @@
         <element name="EchoNestTatum" positionX="367" positionY="257" width="128" height="103"/>
         <element name="EchoNestTimbre" positionX="441" positionY="557" width="128" height="73"/>
         <element name="Playlist" positionX="-1314" positionY="-141" width="128" height="105"/>
-        <element name="Sequence" positionX="-1062" positionY="-72" width="128" height="210"/>
+        <element name="Sequence" positionX="-1062" positionY="-72" width="128" height="193"/>
         <element name="SequenceTatum" positionX="-1026" positionY="-576" width="128" height="105"/>
-        <element name="UserAudioAnalysisTrack" positionX="-666" positionY="-108" width="164" height="88"/>
-        <element name="UserAudioAnalysisTrackChannel" positionX="-693" positionY="-243" width="189" height="103"/>
         <element name="CommandFade" positionX="-335" positionY="-576" width="128" height="73"/>
     </elements>
 </model>

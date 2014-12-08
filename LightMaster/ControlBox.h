@@ -2,7 +2,7 @@
 //  ControlBox.h
 //  LightMaster
 //
-//  Created by James Adams on 11/25/14.
+//  Created by James Adams on 12/8/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSSet *channels;
 @property (nonatomic, retain) NSSet *sequence;
+@property (nonatomic, retain) Sequence *analysisSequence;
 @end
 
 @interface ControlBox (CoreDataGeneratedAccessors)

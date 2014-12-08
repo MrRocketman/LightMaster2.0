@@ -2,7 +2,7 @@
 //  ControlBox.m
 //  LightMaster
 //
-//  Created by James Adams on 11/25/14.
+//  Created by James Adams on 12/8/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -17,5 +17,6 @@
 @dynamic title;
 @dynamic channels;
 @dynamic sequence;
+@dynamic analysisSequence;
 
 @end

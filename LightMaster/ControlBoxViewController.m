@@ -240,7 +240,7 @@
     // Create and configure a fetch request with the Book entity.
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ControlBox"];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"idNumber" ascending:YES]];
-    //fetchRequest.predicate = [NSPredicate predicateWithFormat:@"parentItem == %@", nil];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"analysisSequence == %@", nil];
     
     // Create and initialize the fetch results controller.
     _controlBoxFetchedResultsController = [[SNRFetchedResultsController alloc] initWithManagedObjectContext:[[CoreDataManager sharedManager] managedObjectContext] fetchRequest:fetchRequest];
