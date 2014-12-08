@@ -45,17 +45,6 @@
 
 @implementation SequenceDataView
 
-- (void)awakeFromNib
-{
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"SequenceTatumChange" object:nil];
-}
-
-- (void)currentTimeChange:(NSNotification *)notification
-{
-    [self setNeedsDisplay:YES];
-}
-
 - (BOOL)isFlipped
 {
     return YES;
@@ -94,7 +83,7 @@
     [self drawSequenceTatums];
     
     // Draw the currentTimeMarker
-    [self drawCurrentTimeMarker];
+    //[self drawCurrentTimeMarker];
     
     // Draw mouse selection box
     [self drawMouseGroupSelectionBox];
@@ -102,8 +91,15 @@
 
 - (void)addCommandsForMouseGroupSelect
 {
-    //CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-    //command.star
+    CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+    command.startTatum = self.mouseBoxSelectStartTatum;
+    command.endTatum = self.mouseBoxSelectEndTatum;
+    command.brightness = @(0.5);
+    
+    NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
+    command.channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox IN %@ AND idNumber == %d", controlBoxes, self.mouseBoxSelectTopChannel] toArray] firstObject];
+    
+    [[CoreDataManager sharedManager] saveContext];
 }
 
 - (void)drawCommands
@@ -135,8 +131,9 @@
                         CommandOn *command = commands[i];
                         float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
                         float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                        float topY = channelIndex * CHANNEL_HEIGHT;
-                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT;
+                        float modifiedBrightness = ([command.brightness floatValue] > 0.25 ? 1.0 - [command.brightness floatValue] : 0.25);
+                        float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedBrightness) + 1;
+                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
                         [commandPath moveToPoint:NSMakePoint(leftX, topY)];
                         [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
                         [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
@@ -148,9 +145,9 @@
                         CommandFade *command = commands[i];
                         float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
                         float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                        float leftY = (channelIndex - 1) * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.startBrightness floatValue]);
-                        float rightY = (channelIndex - 1) * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.endBrightness floatValue]);
-                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT;
+                        float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.startBrightness floatValue]) + 1;
+                        float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * [command.endBrightness floatValue]) + 1;
+                        float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
                         [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
                         [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
                         [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
@@ -160,8 +157,7 @@
                 }
                 
                 [(NSColor *)(channel.color) set];
-                [commandPath setLineWidth:3.0];
-                [commandPath stroke];
+                [commandPath fill];
                 
                 channelIndex ++;
             }

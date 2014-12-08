@@ -23,7 +23,11 @@
 
 - (void)currentTimeChange:(NSNotification *)notification
 {
-    [self setNeedsDisplay:YES];
+    // don't redraw if this is a time change
+    if(!notification.object)
+    {
+        [self setNeedsDisplay:YES];
+    }
 }
 
 @end
