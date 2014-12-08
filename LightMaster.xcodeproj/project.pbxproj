@@ -70,6 +70,7 @@
 		1AE8303A1A21BA68000E297D /* LightMasterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830391A21BA68000E297D /* LightMasterTests.m */; };
 		1AE830481A21C70D000E297D /* NSManagedObjectContext+Queryable.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830461A21C70D000E297D /* NSManagedObjectContext+Queryable.m */; };
 		1AE830891A21C7F4000E297D /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE830881A21C7F4000E297D /* CoreDataManager.m */; };
+		1AEB4CF81A3553A9002ED256 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AEB4CF71A3553A9002ED256 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -205,6 +206,7 @@
 		1AE830461A21C70D000E297D /* NSManagedObjectContext+Queryable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Queryable.m"; sourceTree = "<group>"; };
 		1AE830871A21C7F4000E297D /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		1AE830881A21C7F4000E297D /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
+		1AEB4CF71A3553A9002ED256 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AEB4CF81A3553A9002ED256 /* AVFoundation.framework in Frameworks */,
 				1A3474CC1A32E74E00736869 /* IOKit.framework in Frameworks */,
 				1A3474CA1A32E74600736869 /* CFNetwork.framework in Frameworks */,
 				1A3474C81A32E74000736869 /* SystemConfiguration.framework in Frameworks */,
@@ -256,6 +259,7 @@
 		1A2652531A3409C200D9A32D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1AEB4CF71A3553A9002ED256 /* AVFoundation.framework */,
 				1A3474CB1A32E74E00736869 /* IOKit.framework */,
 				1A3474C91A32E74600736869 /* CFNetwork.framework */,
 				1A3474C71A32E74000736869 /* SystemConfiguration.framework */,
