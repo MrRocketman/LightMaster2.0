@@ -130,6 +130,8 @@
                 [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:channel];
                 [[CoreDataManager sharedManager] saveContext];
             }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
         }
         else
         {
@@ -155,11 +157,13 @@
 - (IBAction)createTrackButtonPress:(id)sender
 {
     [[CoreDataManager sharedManager] newAnalysisControlBoxForSequence:[self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
 }
 
 - (IBAction)createTrackChannelButtonPress:(id)sender
 {
     [[CoreDataManager sharedManager] newChannelForControlBox:[self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
 }
 
 - (IBAction)chooseAudioFileButtonPress:(id)sender
@@ -200,8 +204,6 @@
              self.currentAudio = audio;
              
              [[CoreDataManager sharedManager] saveContext];
-             
-             [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
              
              // Search EchoNest for analysis
              if([filePath length] > 1)

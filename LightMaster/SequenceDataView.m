@@ -45,7 +45,6 @@
 
 @property (strong, nonatomic) NSArray *controlBoxes;
 @property (strong, nonatomic) NSMutableArray *channels;
-@property (strong, nonatomic) NSMutableArray *commands;
 
 @end
 
@@ -53,10 +52,9 @@
 
 - (void)setup
 {
-    self.newCommandBrightness = 1.0;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceChange:) name:@"CurrentSequenceChange" object:nil];
     
-    self.channels = [NSMutableArray new];
-    self.commands = [NSMutableArray new];
+    self.newCommandBrightness = 1.0;
     
     if(![CoreDataManager sharedManager].currentSequence)
     {
@@ -64,6 +62,12 @@
     }
     [self fetchControlBoxAndChannelData];
     //[self fetchCommandData];
+}
+
+- (void)sequenceChange:(NSNotification *)notification
+{
+    [self fetchControlBoxAndChannelData];
+    [self setNeedsDisplay:YES];
 }
 
 - (BOOL)isFlipped
@@ -85,6 +89,8 @@
         self.controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
     }
     
+    self.channels = nil;
+    self.channels = [NSMutableArray new];
     // Fetch channels
     for(ControlBox *controlBox in self.controlBoxes)
     {
@@ -92,7 +98,7 @@
     }
 }
 
-- (void)fetchCommandData
+/*- (void)fetchCommandData
 {
     // Fetch commands
     for(Channel *channel in self.channels[self.channels.count - 1])
@@ -100,7 +106,7 @@
         NSArray *commands = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@", channel] orderBy:@"startTatum.time"] toArray];
         [self.commands addObject:(commands ? commands : [NSArray new])];
     }
-}
+}*/
 
 #pragma mark - Drawing
 

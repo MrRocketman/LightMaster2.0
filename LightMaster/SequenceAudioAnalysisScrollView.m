@@ -102,7 +102,6 @@
 - (void)updateViews
 {
     [self.audioAnalysisView setNeedsDisplay:YES];
-    [self.audioAnalysisView fetchCommandData];
 }
 
 /*- (void)drawRect:(NSRect)dirtyRect {

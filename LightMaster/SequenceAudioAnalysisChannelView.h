@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SequenceHeaderView.h"
 
-@interface SequenceAudioAnalysisChannelView : NSView
+@interface SequenceAudioAnalysisChannelView : SequenceHeaderView
 
 @end

@@ -48,6 +48,7 @@
 		1AB6169F1A36C14D0065A050 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB6169E1A36C14D0065A050 /* Sequence.m */; };
 		1AB616A21A36E5C60065A050 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616A11A36E5C60065A050 /* Channel.m */; };
 		1AB616A51A36E5ED0065A050 /* LightMaster.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616A31A36E5ED0065A050 /* LightMaster.xcdatamodeld */; };
+		1AB616AB1A3705D00065A050 /* SequenceHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616AA1A3705D00065A050 /* SequenceHeaderView.m */; };
 		1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */; };
 		1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771201A243E6500C49006 /* EchoNestSegment.m */; };
 		1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771231A243E6500C49006 /* EchoNestBar.m */; };
@@ -156,6 +157,8 @@
 		1AB616A01A36E5C60065A050 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Channel.h; path = LightMaster/Channel.h; sourceTree = "<group>"; };
 		1AB616A11A36E5C60065A050 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Channel.m; path = LightMaster/Channel.m; sourceTree = "<group>"; };
 		1AB616A41A36E5ED0065A050 /* LightMaster.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LightMaster.xcdatamodel; sourceTree = "<group>"; };
+		1AB616A91A3705D00065A050 /* SequenceHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceHeaderView.h; sourceTree = "<group>"; };
+		1AB616AA1A3705D00065A050 /* SequenceHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceHeaderView.m; sourceTree = "<group>"; };
 		1AE7711C1A243E6500C49006 /* EchoNestTimbre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTimbre.h; path = LightMaster/EchoNestTimbre.h; sourceTree = "<group>"; };
 		1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTimbre.m; path = LightMaster/EchoNestTimbre.m; sourceTree = "<group>"; };
 		1AE7711F1A243E6500C49006 /* EchoNestSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestSegment.h; path = LightMaster/EchoNestSegment.h; sourceTree = "<group>"; };
@@ -266,8 +269,7 @@
 				1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */,
 				1A14CA501A246A3800C4FEB0 /* SequenceViewController.h */,
 				1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */,
-				1A34743E1A32D8A700736869 /* SequenceDataView.h */,
-				1A34743F1A32D8A700736869 /* SequenceDataView.m */,
+				1AB616AC1A3709620065A050 /* Drawing */,
 				1A75ADCB1A3124CE00D532FB /* AudioAnalysisChannelView */,
 				1A75ADC31A31248F00D532FB /* AudioAnalysisView */,
 				1A27BEF41A2C465E0043F8C9 /* SequenceView */,
@@ -366,6 +368,17 @@
 				1A75ADC91A3124C800D532FB /* SequenceAudioAnalysisChannelView.m */,
 			);
 			name = AudioAnalysisChannelView;
+			sourceTree = "<group>";
+		};
+		1AB616AC1A3709620065A050 /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				1AB616A91A3705D00065A050 /* SequenceHeaderView.h */,
+				1AB616AA1A3705D00065A050 /* SequenceHeaderView.m */,
+				1A34743E1A32D8A700736869 /* SequenceDataView.h */,
+				1A34743F1A32D8A700736869 /* SequenceDataView.m */,
+			);
+			name = Drawing;
 			sourceTree = "<group>";
 		};
 		1AE7715E1A243EED00C49006 /* EchoNest */ = {
@@ -646,6 +659,7 @@
 				1A3474401A32D8A700736869 /* SequenceDataView.m in Sources */,
 				1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */,
 				1AEB4CFD1A357D32002ED256 /* CommandFade.m in Sources */,
+				1AB616AB1A3705D00065A050 /* SequenceHeaderView.m in Sources */,
 				1A27BEDD1A2BF6480043F8C9 /* SequenceScrollView.m in Sources */,
 				1A27BEF31A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m in Sources */,
 				1A14CA551A246CB100C4FEB0 /* SequenceListViewController.m in Sources */,

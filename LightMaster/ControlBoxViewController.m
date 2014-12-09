@@ -82,6 +82,8 @@
                 [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:channel];
                 [[CoreDataManager sharedManager] saveContext];
             }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
         }
         else
         {
@@ -95,11 +97,13 @@
 - (IBAction)createControlBoxButtonPress:(id)sender
 {
     [[CoreDataManager sharedManager] newControlBox];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
 }
 
 - (IBAction)createChannelButtonPress:(id)sender
 {
     [[CoreDataManager sharedManager] newChannelForControlBox:(ControlBox *)[self.controlBoxFetchedResultsController objectAtIndex:self.controlBoxTableView.selectedRow]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
 }
 
 - (IBAction)colorChange:(id)sender
@@ -147,6 +151,8 @@
         [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
         [[CoreDataManager sharedManager] saveContext];
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
     
     return YES;
 }

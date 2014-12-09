@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SequenceHeaderView.h"
 
-@interface SequenceChannelView : NSView
+@interface SequenceChannelView : SequenceHeaderView
 
 @end
