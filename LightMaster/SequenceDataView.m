@@ -468,7 +468,7 @@
     {
         self.retainMouseGroupSelect = YES;
     }
-    else
+    else if(!self.sequenceTatumIsSelected)
     {
         self.retainMouseGroupSelect = NO;
     }
