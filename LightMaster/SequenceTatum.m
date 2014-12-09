@@ -2,7 +2,7 @@
 //  SequenceTatum.m
 //  LightMaster
 //
-//  Created by James Adams on 12/5/14.
+//  Created by James Adams on 12/8/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @implementation SequenceTatum
 
 @dynamic time;
+@dynamic uuid;
 @dynamic endCommands;
 @dynamic sequence;
 @dynamic startCommands;

@@ -117,7 +117,7 @@
     {
         // Figure out which control box
         int channelCount = 0;
-        int controlBoxID = 0;
+        NSString *controlBoxID;
         for(ControlBox *controlBox in controlBoxes)
         {
             if(currentMouseIndex > controlBox.channels.count - 1 + channelCount)
@@ -126,20 +126,21 @@
             }
             else
             {
-                controlBoxID = [controlBox.idNumber intValue];
+                controlBoxID = controlBox.uuid;
                 break;
             }
         }
         // Figure out which channel
-        Channel *channel;
+        NSArray *channels;
         if(self.isAudioAnalysisView)
         {
-            channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.idNumber == %d AND controlBox.analysisSequence != nil AND idNumber == %d", controlBoxID, currentMouseIndex - channelCount] toArray] firstObject];
+            channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.uuid == %@ AND controlBox.analysisSequence != nil", controlBoxID] orderBy:@"idNumber"] toArray];
         }
         else
         {
-            channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.idNumber == %d AND idNumber == %d", controlBoxID, currentMouseIndex - channelCount] toArray] firstObject];
+            channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.uuid == %@", controlBoxID] orderBy:@"idNumber"] toArray];
         }
+        Channel *channel = channels[currentMouseIndex - channelCount];
         // Add the appropriate command
         if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
         {
@@ -148,6 +149,7 @@
             command.endTatum = self.mouseBoxSelectEndTatum;
             command.brightness = @(self.newCommandBrightness);
             command.channel = channel;
+            command.uuid = [[NSUUID UUID] UUIDString];
         }
         else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
         {
@@ -157,6 +159,7 @@
             command.startBrightness = @(0.0);
             command.endBrightness = @(self.newCommandBrightness);
             command.channel = channel;
+            command.uuid = [[NSUUID UUID] UUIDString];
         }
         else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
         {
@@ -166,6 +169,7 @@
             command.startBrightness = @(self.newCommandBrightness);
             command.endBrightness = @(0.0);
             command.channel = channel;
+            command.uuid = [[NSUUID UUID] UUIDString];
         }
         
         currentMouseIndex ++;

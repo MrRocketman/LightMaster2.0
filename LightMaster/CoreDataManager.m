@@ -262,6 +262,7 @@
     sequence.modifiedDate = [NSDate date];
     sequence.title = @"New Sequence";
     sequence.endTime = @10.0;
+    sequence.uuid = [[NSUUID UUID] UUIDString];
     
     // Make the default tatum set
     for(int i = 0; i <= [sequence.endTime floatValue] / 0.1; i ++)
@@ -285,6 +286,7 @@
 {
     SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
     tatum.time = @(time);
+    tatum.uuid = [[NSUUID UUID] UUIDString];
     [sequence addTatumsObject:tatum];
     
     return tatum;
@@ -325,6 +327,7 @@
             {
                 SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
                 tatum.time = @(i);
+                tatum.uuid = [[NSUUID UUID] UUIDString];
                 [self.currentSequence addTatumsObject:tatum];
             }
         }
@@ -347,6 +350,7 @@
 {
     ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:[self managedObjectContext]];
     controlBox.title = @"New Box";
+    controlBox.uuid = [[NSUUID UUID] UUIDString];
     controlBox.idNumber = @([[[[self.managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == nil"] toArray] count]);
     
     // Make a default channel
@@ -368,6 +372,7 @@
 {
     ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:self.managedObjectContext];
     controlBox.title = @"New Track";
+    controlBox.uuid = [[NSUUID UUID] UUIDString];
     controlBox.idNumber = @([[[[self.managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence != nil"] toArray] count]);
     NSLog(@"idNumber:%d", [controlBox.idNumber intValue]);
     controlBox.analysisSequence = sequence;
@@ -385,6 +390,7 @@
     Channel *channel = [NSEntityDescription insertNewObjectForEntityForName:@"Channel" inManagedObjectContext:[self managedObjectContext]];
     channel.title = @"New Channel";
     channel.idNumber = @(controlBox.channels.count);
+    channel.uuid = [[NSUUID UUID] UUIDString];
     channel.color = [NSColor whiteColor];
     [controlBox addChannelsObject:channel];
     

@@ -16,6 +16,7 @@
 @property (nonatomic, retain) id color;
 @property (nonatomic, retain) NSNumber * idNumber;
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSString * uuid;
 @property (nonatomic, retain) NSSet *channelPatterns;
 @property (nonatomic, retain) NSSet *commands;
 @property (nonatomic, retain) ControlBox *controlBox;

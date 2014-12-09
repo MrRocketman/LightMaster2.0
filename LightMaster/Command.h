@@ -14,6 +14,7 @@
 @interface Command : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * sendComplete;
+@property (nonatomic, retain) NSString * uuid;
 @property (nonatomic, retain) Channel *channel;
 @property (nonatomic, retain) SequenceTatum *endTatum;
 @property (nonatomic, retain) SequenceTatum *startTatum;

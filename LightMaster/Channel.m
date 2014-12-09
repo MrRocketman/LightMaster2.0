@@ -17,6 +17,7 @@
 @dynamic color;
 @dynamic idNumber;
 @dynamic title;
+@dynamic uuid;
 @dynamic channelPatterns;
 @dynamic commands;
 @dynamic controlBox;

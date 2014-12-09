@@ -15,8 +15,9 @@
 
 @dynamic idNumber;
 @dynamic title;
+@dynamic uuid;
+@dynamic analysisSequence;
 @dynamic channels;
 @dynamic sequence;
-@dynamic analysisSequence;
 
 @end

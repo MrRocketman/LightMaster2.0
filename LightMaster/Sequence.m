@@ -20,10 +20,11 @@
 @dynamic modifiedDate;
 @dynamic startOffset;
 @dynamic title;
+@dynamic uuid;
+@dynamic analysisControlBoxes;
 @dynamic audio;
 @dynamic controlBoxes;
 @dynamic playlists;
 @dynamic tatums;
-@dynamic analysisControlBoxes;
 
 @end

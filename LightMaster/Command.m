@@ -14,6 +14,7 @@
 @implementation Command
 
 @dynamic sendComplete;
+@dynamic uuid;
 @dynamic channel;
 @dynamic endTatum;
 @dynamic startTatum;

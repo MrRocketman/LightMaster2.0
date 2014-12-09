@@ -15,9 +15,10 @@
 
 @property (nonatomic, retain) NSNumber * idNumber;
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSString * uuid;
+@property (nonatomic, retain) Sequence *analysisSequence;
 @property (nonatomic, retain) NSSet *channels;
 @property (nonatomic, retain) NSSet *sequence;
-@property (nonatomic, retain) Sequence *analysisSequence;
 @end
 
 @interface ControlBox (CoreDataGeneratedAccessors)

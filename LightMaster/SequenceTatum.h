@@ -2,7 +2,7 @@
 //  SequenceTatum.h
 //  LightMaster
 //
-//  Created by James Adams on 12/5/14.
+//  Created by James Adams on 12/8/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -13,7 +13,8 @@
 
 @interface SequenceTatum : NSManagedObject
 
-@property (nonatomic, retain) NSNumber *time;
+@property (nonatomic, retain) NSNumber * time;
+@property (nonatomic, retain) NSString * uuid;
 @property (nonatomic, retain) NSSet *endCommands;
 @property (nonatomic, retain) Sequence *sequence;
 @property (nonatomic, retain) NSSet *startCommands;
