@@ -53,6 +53,7 @@
         {
             [self updateViews];
             [self.timelineScrollView updateViews];
+            [self.sequenceScrollView updateViews];
         }
         self.magnification = 1.0;
         self.ignoreBoundsChanges = NO;

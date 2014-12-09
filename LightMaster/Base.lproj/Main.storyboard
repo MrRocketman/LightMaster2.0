@@ -842,7 +842,7 @@ IA
                                         <rect key="frame" x="0.0" y="0.0" width="1117" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="KBw-UR-8Zc" customClass="SequenceAudioAnalysisScrollView">
+                                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="KBw-UR-8Zc" customClass="SequenceAudioAnalysisScrollView">
                                                 <rect key="frame" x="198" y="0.0" width="919" height="30"/>
                                                 <clipView key="contentView" id="Lok-JC-sBb">
                                                     <rect key="frame" x="1" y="1" width="181" height="94"/>
@@ -859,7 +859,7 @@ IA
                                                         <constraint firstItem="9eZ-fT-91o" firstAttribute="top" secondItem="Lok-JC-sBb" secondAttribute="top" constant="-130" id="Flz-Q1-Cgx"/>
                                                     </constraints>
                                                 </clipView>
-                                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="xxN-l6-t9r">
+                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="xxN-l6-t9r">
                                                     <rect key="frame" x="1" y="79" width="181" height="16"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>

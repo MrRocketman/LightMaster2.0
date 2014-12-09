@@ -54,6 +54,7 @@
         {
             [self updateViews];
             [self.sequenceScrollView updateViews];
+            [self.audioAnalysisScrollView updateViews];
         }
         self.magnification = 1.0;
         self.ignoreBoundsChanges = NO;
