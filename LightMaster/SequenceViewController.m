@@ -31,6 +31,8 @@
 @property (assign, nonatomic) float playStartTime;
 @property (assign, nonatomic) BOOL isPlaySelectionButton;
 
+@property (strong, nonatomic) Audio *currentAudio;
+
 @end
 
 @implementation SequenceViewController
@@ -158,6 +160,7 @@
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[CoreDataManager sharedManager].currentSequence.audio.audioFile fileTypeHint:[[CoreDataManager sharedManager].currentSequence.audio.audioFilePath pathExtension] error:&error];
     //NSLog(@"Audio error %@, %@", error, [error userInfo]);
     self.audioPlayer.currentTime = 1.0;
+    self.currentAudio = [CoreDataManager sharedManager].currentSequence.audio;
 }
 
 - (void)reloadSequence
@@ -168,7 +171,10 @@
     [self.audioAnalysisScrollView updateViews];
     [self.audioAnalysisChannelScrollView updateViews];
     
-    [self reloadAudio];
+    if(self.currentAudio != [CoreDataManager sharedManager].currentSequence.audio)
+    {
+        [self reloadAudio];
+    }
 }
 
 - (IBAction)skipBackButtonPress:(id)sender
