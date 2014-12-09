@@ -146,7 +146,7 @@
 -(int) count
 {
     NSFetchRequest* fetchRequest = [self getFetchRequest];
-    int theCount = [self.context countForFetchRequest:fetchRequest error:nil];
+    int theCount = (int)[self.context countForFetchRequest:fetchRequest error:nil];
     return theCount;
 }
 

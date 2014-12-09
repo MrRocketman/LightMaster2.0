@@ -57,6 +57,8 @@
     return YES;
 }
 
+#pragma mark - Drawing
+
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
@@ -94,88 +96,6 @@
     
     // Draw mouse selection box
     [self drawMouseGroupSelectionBox];
-}
-
-- (void)addCommandsForMouseGroupSelect
-{
-    // ControlBoxes
-    NSArray *controlBoxes;
-    
-    if(self.isAudioAnalysisView)
-    {
-        // Analysis ControlBoxes
-        controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
-    }
-    else
-    {
-        // ControlBoxes
-        controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
-    }
-    
-    int currentMouseIndex = self.mouseBoxSelectTopChannel;
-    while(currentMouseIndex < self.mouseBoxSelectBottomChannel)
-    {
-        // Figure out which control box
-        int channelCount = 0;
-        NSString *controlBoxID;
-        for(ControlBox *controlBox in controlBoxes)
-        {
-            if(currentMouseIndex > controlBox.channels.count - 1 + channelCount)
-            {
-                channelCount += controlBox.channels.count;
-            }
-            else
-            {
-                controlBoxID = controlBox.uuid;
-                break;
-            }
-        }
-        // Figure out which channel
-        NSArray *channels;
-        if(self.isAudioAnalysisView)
-        {
-            channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.uuid == %@ AND controlBox.analysisSequence != nil", controlBoxID] orderBy:@"idNumber"] toArray];
-        }
-        else
-        {
-            channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.uuid == %@", controlBoxID] orderBy:@"idNumber"] toArray];
-        }
-        Channel *channel = channels[currentMouseIndex - channelCount];
-        // Add the appropriate command
-        if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
-        {
-            CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-            command.startTatum = self.mouseBoxSelectStartTatum;
-            command.endTatum = self.mouseBoxSelectEndTatum;
-            command.brightness = @(self.newCommandBrightness);
-            command.channel = channel;
-            command.uuid = [[NSUUID UUID] UUIDString];
-        }
-        else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
-        {
-            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-            command.startTatum = self.mouseBoxSelectStartTatum;
-            command.endTatum = self.mouseBoxSelectEndTatum;
-            command.startBrightness = @(0.0);
-            command.endBrightness = @(self.newCommandBrightness);
-            command.channel = channel;
-            command.uuid = [[NSUUID UUID] UUIDString];
-        }
-        else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
-        {
-            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-            command.startTatum = self.mouseBoxSelectStartTatum;
-            command.endTatum = self.mouseBoxSelectEndTatum;
-            command.startBrightness = @(self.newCommandBrightness);
-            command.endBrightness = @(0.0);
-            command.channel = channel;
-            command.uuid = [[NSUUID UUID] UUIDString];
-        }
-        
-        currentMouseIndex ++;
-    }
-    
-    [[CoreDataManager sharedManager] saveContext];
 }
 
 - (void)drawCommands
@@ -412,6 +332,100 @@
         [path setLineWidth:3.0];
         [path stroke];
     }
+}
+
+#pragma mark Logic
+
+- (void)addCommandsForMouseGroupSelect
+{
+    // ControlBoxes
+    NSArray *controlBoxes;
+    
+    if(self.isAudioAnalysisView)
+    {
+        // Analysis ControlBoxes
+        controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
+    }
+    else
+    {
+        // ControlBoxes
+        controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
+    }
+    
+    int currentMouseIndex = self.mouseBoxSelectTopChannel;
+    while(currentMouseIndex < self.mouseBoxSelectBottomChannel)
+    {
+        // Figure out which control box
+        int channelCount = 0;
+        NSString *controlBoxID;
+        for(ControlBox *controlBox in controlBoxes)
+        {
+            if(currentMouseIndex > controlBox.channels.count - 1 + channelCount)
+            {
+                channelCount += controlBox.channels.count;
+            }
+            else
+            {
+                controlBoxID = controlBox.uuid;
+                break;
+            }
+        }
+        // Figure out which channel
+        NSArray *channels;
+        if(self.isAudioAnalysisView)
+        {
+            channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.uuid == %@ AND controlBox.analysisSequence != nil", controlBoxID] orderBy:@"idNumber"] toArray];
+        }
+        else
+        {
+            channels = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.uuid == %@", controlBoxID] orderBy:@"idNumber"] toArray];
+        }
+        Channel *channel = channels[currentMouseIndex - channelCount];
+        
+        // See if we are replacing any commands
+        float startTatumTime = [self.mouseBoxSelectStartTatum.time floatValue];
+        float endTatumTime = [self.mouseBoxSelectEndTatum.time floatValue];
+        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime] orderBy:@"startTatum.time"] toArray];
+        for(Command *command in commandsToRemove)
+        {
+            [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
+        }
+        
+        // Add the appropriate command
+        if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+        {
+            CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.brightness = @(self.newCommandBrightness);
+            command.channel = channel;
+            command.uuid = [[NSUUID UUID] UUIDString];
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(0.0);
+            command.endBrightness = @(self.newCommandBrightness);
+            command.channel = channel;
+            command.uuid = [[NSUUID UUID] UUIDString];
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(self.newCommandBrightness);
+            command.endBrightness = @(0.0);
+            command.channel = channel;
+            command.uuid = [[NSUUID UUID] UUIDString];
+        }
+        
+        currentMouseIndex ++;
+    }
+    
+    [[CoreDataManager sharedManager] saveContext];
 }
 
 #pragma mark Mouse Methods
