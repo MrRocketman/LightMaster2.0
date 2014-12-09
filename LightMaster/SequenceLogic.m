@@ -35,7 +35,7 @@
     self = [super init];
     if(self)
     {
-        self.magnification = 1.0;
+        self.magnification = 5.0;
         self.currentTime = 1.0;
         self.commandType = CommandTypeOn;
     }
