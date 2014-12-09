@@ -385,41 +385,44 @@
         // See if we are replacing any commands
         float startTatumTime = [self.mouseBoxSelectStartTatum.time floatValue];
         float endTatumTime = [self.mouseBoxSelectEndTatum.time floatValue];
-        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime] orderBy:@"startTatum.time"] toArray];
+        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time >= %f AND endTatum.time <= %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime] orderBy:@"startTatum.time"] toArray];
         for(Command *command in commandsToRemove)
         {
             [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
         }
         
         // Add the appropriate command
-        if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+        if([SequenceLogic sharedInstance].commandType != CommandTypeDelete)
         {
-            CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-            command.startTatum = self.mouseBoxSelectStartTatum;
-            command.endTatum = self.mouseBoxSelectEndTatum;
-            command.brightness = @(self.newCommandBrightness);
-            command.channel = channel;
-            command.uuid = [[NSUUID UUID] UUIDString];
-        }
-        else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
-        {
-            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-            command.startTatum = self.mouseBoxSelectStartTatum;
-            command.endTatum = self.mouseBoxSelectEndTatum;
-            command.startBrightness = @(0.0);
-            command.endBrightness = @(self.newCommandBrightness);
-            command.channel = channel;
-            command.uuid = [[NSUUID UUID] UUIDString];
-        }
-        else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
-        {
-            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-            command.startTatum = self.mouseBoxSelectStartTatum;
-            command.endTatum = self.mouseBoxSelectEndTatum;
-            command.startBrightness = @(self.newCommandBrightness);
-            command.endBrightness = @(0.0);
-            command.channel = channel;
-            command.uuid = [[NSUUID UUID] UUIDString];
+            if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+            {
+                CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+                command.startTatum = self.mouseBoxSelectStartTatum;
+                command.endTatum = self.mouseBoxSelectEndTatum;
+                command.brightness = @(self.newCommandBrightness);
+                command.channel = channel;
+                command.uuid = [[NSUUID UUID] UUIDString];
+            }
+            else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+            {
+                CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+                command.startTatum = self.mouseBoxSelectStartTatum;
+                command.endTatum = self.mouseBoxSelectEndTatum;
+                command.startBrightness = @(0.0);
+                command.endBrightness = @(self.newCommandBrightness);
+                command.channel = channel;
+                command.uuid = [[NSUUID UUID] UUIDString];
+            }
+            else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
+            {
+                CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+                command.startTatum = self.mouseBoxSelectStartTatum;
+                command.endTatum = self.mouseBoxSelectEndTatum;
+                command.startBrightness = @(self.newCommandBrightness);
+                command.endBrightness = @(0.0);
+                command.channel = channel;
+                command.uuid = [[NSUUID UUID] UUIDString];
+            }
         }
         
         currentMouseIndex ++;
