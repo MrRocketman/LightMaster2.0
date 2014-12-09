@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Audio" representedClassName="Audio" syncable="YES">
         <attribute name="audioFile" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="audioFilePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="echoNestUploadProgress" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="endOffset" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="startOffset" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="echoNestAudioAnalysis" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EchoNestAudioAnalysis" inverseName="audio" inverseEntity="EchoNestAudioAnalysis" syncable="YES"/>
-        <relationship name="sequence" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Sequence" inverseName="audio" inverseEntity="Sequence" syncable="YES"/>
+        <relationship name="echoNestAudioAnalysis" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="EchoNestAudioAnalysis" inverseName="audio" inverseEntity="EchoNestAudioAnalysis" syncable="YES"/>
+        <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="audio" inverseEntity="Sequence" syncable="YES"/>
     </entity>
     <entity name="Channel" representedClassName="Channel" syncable="YES">
         <attribute name="color" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="idNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberOfLights" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="channelPatterns" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ChannelPattern" inverseName="channels" inverseEntity="ChannelPattern" syncable="YES"/>
-        <relationship name="command" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="channel" inverseEntity="Command" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="volts" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="watts" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="channelPatterns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChannelPattern" inverseName="channels" inverseEntity="ChannelPattern" syncable="YES"/>
+        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="channel" inverseEntity="Command" syncable="YES"/>
         <relationship name="controlBox" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ControlBox" inverseName="channels" inverseEntity="ControlBox" syncable="YES"/>
     </entity>
     <entity name="ChannelPattern" representedClassName="ChannelPattern" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="channels" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Channel" inverseName="channelPatterns" inverseEntity="Channel" syncable="YES"/>
-        <relationship name="childrenChannelPatterns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChannelPattern" inverseName="parentChannelPatterns" inverseEntity="ChannelPattern" syncable="YES"/>
+        <relationship name="childrenChannelPatterns" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ChannelPattern" inverseName="parentChannelPatterns" inverseEntity="ChannelPattern" syncable="YES"/>
         <relationship name="parentChannelPatterns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChannelPattern" inverseName="childrenChannelPatterns" inverseEntity="ChannelPattern" syncable="YES"/>
     </entity>
     <entity name="Command" representedClassName="Command" syncable="YES">
-        <attribute name="endTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="channel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel" inverseName="command" inverseEntity="Channel" syncable="YES"/>
-        <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="commands" inverseEntity="Sequence" syncable="YES"/>
-        <relationship name="userAudioAnalysisTrackChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrackChannel" inverseName="commands" inverseEntity="UserAudioAnalysisTrackChannel" syncable="YES"/>
+        <attribute name="sendComplete" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="channel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel" inverseName="commands" inverseEntity="Channel" syncable="YES"/>
+        <relationship name="endTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="endCommands" inverseEntity="SequenceTatum" syncable="YES"/>
+        <relationship name="startTatum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SequenceTatum" inverseName="startCommands" inverseEntity="SequenceTatum" syncable="YES"/>
     </entity>
-    <entity name="CommandFadeDown" representedClassName="CommandFadeDown" parentEntity="Command" syncable="YES"/>
-    <entity name="CommandFadeUp" representedClassName="CommandFadeUp" parentEntity="Command" syncable="YES"/>
+    <entity name="CommandFade" representedClassName="CommandFade" parentEntity="Command" syncable="YES">
+        <attribute name="endBrightness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="startBrightness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <entity name="CommandOn" representedClassName="CommandOn" parentEntity="Command" syncable="YES">
         <attribute name="brightness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
@@ -45,18 +53,73 @@
     <entity name="ControlBox" representedClassName="ControlBox" syncable="YES">
         <attribute name="idNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="analysisSequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="analysisControlBoxes" inverseEntity="Sequence" syncable="YES"/>
         <relationship name="channels" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Channel" inverseName="controlBox" inverseEntity="Channel" syncable="YES"/>
         <relationship name="sequence" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Sequence" inverseName="controlBoxes" inverseEntity="Sequence" syncable="YES"/>
     </entity>
     <entity name="EchoNestAudioAnalysis" representedClassName="EchoNestAudioAnalysis" syncable="YES">
+        <attribute name="acousticness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="album" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="analysisChannels" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="analysisSampleRate" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="analysisTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="analysisURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="analyzerVersion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="artist" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="artistID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bitrate" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="codeString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="codeVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="danceability" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="decoder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="decoderVersion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="detailedStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="duration" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="echoPrintString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="echoPrintVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="endOfFadeIn" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="energy" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="genre" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="idString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="instrumentalness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="keyConfidence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="liveness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="loudness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="md5" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mode" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="modeConfidence" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberOfSamples" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="offsetSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="platform" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rhythmString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rhythmVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sampleMD5" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sampleRate" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="seconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="songID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="speechiness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="startOfFadeOut" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="statusCode" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="synchString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="synchVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tempo" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tempoConfidence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timeSignature" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="timeSignatureConfidence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="valence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="windowSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="audio" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Audio" inverseName="echoNestAudioAnalysis" inverseEntity="Audio" syncable="YES"/>
         <relationship name="bars" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EchoNestBar" inverseName="echoNestAudioAnalysis" inverseEntity="EchoNestBar" syncable="YES"/>
         <relationship name="beats" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EchoNestBeat" inverseName="echoNestAudioAnalysis" inverseEntity="EchoNestBeat" syncable="YES"/>
-        <relationship name="meta" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EchoNestMeta" inverseName="echoNestAudioAnalysis" inverseEntity="EchoNestMeta" syncable="YES"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EchoNestSection" inverseName="echoNestAudioAnalysis" inverseEntity="EchoNestSection" syncable="YES"/>
         <relationship name="segments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EchoNestSegment" inverseName="echoNestAudioAnalysis" inverseEntity="EchoNestSegment" syncable="YES"/>
         <relationship name="tatums" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EchoNestTatum" inverseName="echoNestAudioAnalysis" inverseEntity="EchoNestTatum" syncable="YES"/>
-        <relationship name="trackData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EchoNestTrack" inverseName="echoNestAudioAnalysis" inverseEntity="EchoNestTrack" syncable="YES"/>
     </entity>
     <entity name="EchoNestBar" representedClassName="EchoNestBar" syncable="YES">
         <attribute name="confidence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -69,22 +132,6 @@
         <attribute name="duration" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="start" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="echoNestAudioAnalysis" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EchoNestAudioAnalysis" inverseName="beats" inverseEntity="EchoNestAudioAnalysis" syncable="YES"/>
-    </entity>
-    <entity name="EchoNestMeta" representedClassName="EchoNestMeta" syncable="YES">
-        <attribute name="album" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="analysisTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="analyzerVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="artist" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="bitrate" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="detailedStatus" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="genre" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sampleRate" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="seconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="statusCode" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="timestamp" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="echoNestAudioAnalysis" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EchoNestAudioAnalysis" inverseName="meta" inverseEntity="EchoNestAudioAnalysis" syncable="YES"/>
     </entity>
     <entity name="EchoNestPitch" representedClassName="EchoNestPitch" syncable="YES">
         <attribute name="pitch" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -126,38 +173,11 @@
         <attribute name="timbre" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="segment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EchoNestSegment" inverseName="timbres" inverseEntity="EchoNestSegment" syncable="YES"/>
     </entity>
-    <entity name="EchoNestTrack" representedClassName="EchoNestTrack" syncable="YES">
-        <attribute name="analysisChannels" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="analysisSampleRate" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="codeString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="codeVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="decoder" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="duration" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="echoPrintString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="echoPrintVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="endOfFadeIn" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="key" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="keyConfidence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="loudness" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="mode" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="modeConfidence" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="numberOfSamples" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="offsetSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="rhythmString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rhythmVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="sampleMD5" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="startOfFadeOut" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="synchString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="synchVersion" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="tempo" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="tempoConfidence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="timeSignature" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="timeSignatureConfidence" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="windowSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="echoNestAudioAnalysis" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EchoNestAudioAnalysis" inverseName="trackData" inverseEntity="EchoNestAudioAnalysis" syncable="YES"/>
-    </entity>
     <entity name="Playlist" representedClassName="Playlist" syncable="YES">
+        <attribute name="endTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="sequences" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Sequence" inverseName="playlists" inverseEntity="Sequence" syncable="YES"/>
     </entity>
     <entity name="Sequence" representedClassName="Sequence" syncable="YES">
@@ -166,54 +186,41 @@
         <attribute name="modifiedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="startOffset" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="audio" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Audio" inverseName="sequence" inverseEntity="Audio" syncable="YES"/>
-        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="sequence" inverseEntity="Command" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="analysisControlBoxes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ControlBox" inverseName="analysisSequence" inverseEntity="ControlBox" syncable="YES"/>
+        <relationship name="audio" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Audio" inverseName="sequence" inverseEntity="Audio" syncable="YES"/>
         <relationship name="controlBoxes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ControlBox" inverseName="sequence" inverseEntity="ControlBox" syncable="YES"/>
         <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Playlist" inverseName="sequences" inverseEntity="Playlist" syncable="YES"/>
         <relationship name="tatums" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SequenceTatum" inverseName="sequence" inverseEntity="SequenceTatum" syncable="YES"/>
-        <relationship name="userAudioAnalysisTracks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserAudioAnalysisTrack" inverseName="sequence" inverseEntity="UserAudioAnalysisTrack" syncable="YES"/>
     </entity>
     <entity name="SequenceTatum" representedClassName="SequenceTatum" syncable="YES">
-        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="endCommands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="endTatum" inverseEntity="Command" syncable="YES"/>
         <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="tatums" inverseEntity="Sequence" syncable="YES"/>
-    </entity>
-    <entity name="UserAudioAnalysisTrack" representedClassName="UserAudioAnalysisTrack" syncable="YES">
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserAudioAnalysisTrackChannel" inverseName="track" inverseEntity="UserAudioAnalysisTrackChannel" syncable="YES"/>
-        <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="userAudioAnalysisTracks" inverseEntity="Sequence" syncable="YES"/>
-    </entity>
-    <entity name="UserAudioAnalysisTrackChannel" representedClassName="UserAudioAnalysisTrackChannel" syncable="YES">
-        <attribute name="pitch" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="commands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="userAudioAnalysisTrackChannel" inverseEntity="Command" syncable="YES"/>
-        <relationship name="track" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAudioAnalysisTrack" inverseName="channels" inverseEntity="UserAudioAnalysisTrack" syncable="YES"/>
+        <relationship name="startCommands" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Command" inverseName="startTatum" inverseEntity="Command" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Audio" positionX="-468" positionY="-124" width="128" height="148"/>
-        <element name="Channel" positionX="-965" positionY="153" width="128" height="133"/>
-        <element name="ChannelPattern" positionX="-792" positionY="162" width="128" height="103"/>
-        <element name="Command" positionX="-702" positionY="-594" width="128" height="118"/>
-        <element name="CommandFadeDown" positionX="-486" positionY="-513" width="128" height="45"/>
-        <element name="CommandFadeUp" positionX="-486" positionY="-585" width="128" height="45"/>
-        <element name="CommandOn" positionX="-486" positionY="-661" width="128" height="60"/>
-        <element name="CommandPulse" positionX="-486" positionY="-441" width="128" height="58"/>
-        <element name="CommandTwinkle" positionX="-486" positionY="-369" width="128" height="58"/>
-        <element name="ComplexCommand" positionX="-927" positionY="-567" width="128" height="45"/>
-        <element name="ControlBox" positionX="-1152" positionY="158" width="128" height="103"/>
-        <element name="EchoNestAudioAnalysis" positionX="187" positionY="-19" width="128" height="163"/>
-        <element name="EchoNestBar" positionX="63" positionY="261" width="128" height="103"/>
-        <element name="EchoNestBeat" positionX="214" positionY="261" width="128" height="103"/>
-        <element name="EchoNestMeta" positionX="-245" positionY="260" width="128" height="253"/>
-        <element name="EchoNestPitch" positionX="601" positionY="557" width="128" height="73"/>
-        <element name="EchoNestSection" positionX="-90" positionY="257" width="128" height="238"/>
-        <element name="EchoNestSegment" positionX="520" positionY="263" width="128" height="178"/>
-        <element name="EchoNestTatum" positionX="367" positionY="257" width="128" height="103"/>
-        <element name="EchoNestTimbre" positionX="441" positionY="557" width="128" height="73"/>
-        <element name="EchoNestTrack" positionX="-380" positionY="261" width="128" height="463"/>
-        <element name="Playlist" positionX="-1037" positionY="-207" width="128" height="73"/>
-        <element name="Sequence" positionX="-1071" positionY="-72" width="128" height="208"/>
-        <element name="SequenceTatum" positionX="-945" positionY="-585" width="128" height="75"/>
-        <element name="UserAudioAnalysisTrack" positionX="160" positionY="-559" width="164" height="88"/>
-        <element name="UserAudioAnalysisTrackChannel" positionX="171" positionY="-738" width="189" height="103"/>
+        <element name="EchoNestBeat" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="ChannelPattern" positionX="-54" positionY="-9" width="128" height="118"/>
+        <element name="EchoNestSection" positionX="-36" positionY="9" width="128" height="238"/>
+        <element name="CommandPulse" positionX="-18" positionY="27" width="128" height="60"/>
+        <element name="Command" positionX="0" positionY="45" width="128" height="118"/>
+        <element name="EchoNestSegment" positionX="18" positionY="63" width="128" height="178"/>
+        <element name="EchoNestAudioAnalysis" positionX="36" positionY="81" width="128" height="958"/>
+        <element name="ControlBox" positionX="-9" positionY="36" width="128" height="133"/>
+        <element name="CommandOn" positionX="0" positionY="45" width="128" height="60"/>
+        <element name="EchoNestBar" positionX="9" positionY="54" width="128" height="103"/>
+        <element name="CommandTwinkle" positionX="18" positionY="63" width="128" height="60"/>
+        <element name="Playlist" positionX="27" positionY="72" width="128" height="118"/>
+        <element name="EchoNestTatum" positionX="36" positionY="81" width="128" height="103"/>
+        <element name="Sequence" positionX="45" positionY="90" width="128" height="208"/>
+        <element name="SequenceTatum" positionX="-9" positionY="36" width="128" height="118"/>
+        <element name="EchoNestTimbre" positionX="0" positionY="45" width="128" height="73"/>
+        <element name="ComplexCommand" positionX="9" positionY="54" width="128" height="45"/>
+        <element name="Audio" positionX="18" positionY="63" width="128" height="163"/>
+        <element name="CommandFade" positionX="27" positionY="72" width="128" height="75"/>
+        <element name="Channel" positionX="36" positionY="81" width="128" height="193"/>
+        <element name="EchoNestPitch" positionX="45" positionY="90" width="128" height="73"/>
     </elements>
 </model>

@@ -340,7 +340,7 @@
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained []) stackbuf count:(NSUInteger)len
 {
     NSArray* items = [self toArray];
-    uint count = [items countByEnumeratingWithState:state objects:stackbuf count:len];
+    uint count = (uint)[items countByEnumeratingWithState:state objects:stackbuf count:len];
     return count;
 }
 

@@ -81,7 +81,7 @@ NSString *ENEscapeStringForURL (NSString *str) {
 
 - (void)stripNullValues
 {
-    for (int i = [self count] - 1; i >= 0; i--)
+    for (int i = (int)[self count] - 1; i >= 0; i--)
     {
         id value = [self objectAtIndex:i];
         if (value == [NSNull null])

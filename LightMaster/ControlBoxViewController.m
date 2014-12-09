@@ -132,6 +132,16 @@
             [[CoreDataManager sharedManager] saveContext];
         });
     }
+    else if([control.identifier isEqualToString:@"channelWattsTextField"])
+    {
+        [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setWatts:@([(NSTextField *)control intValue])];
+        [[CoreDataManager sharedManager] saveContext];
+    }
+    else if([control.identifier isEqualToString:@"channelLightsTextField"])
+    {
+        [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setNumberOfLights:@([(NSTextField *)control intValue])];
+        [[CoreDataManager sharedManager] saveContext];
+    }
     else if([control.identifier isEqualToString:@"channelTitleTextField"])
     {
         [(Channel *)[self.channelFetchedResultsController objectAtIndex:self.channelsTableView.selectedRow] setTitle:[(NSTextField *)control stringValue]];
@@ -183,6 +193,20 @@
         {
             NSTableCellView *result = [tableView makeViewWithIdentifier:@"channelID" owner:self];
             result.textField.integerValue = [[(Channel *)[self.channelFetchedResultsController objectAtIndex:row] idNumber] integerValue];
+            return result;
+        }
+        // Watts column
+        if([tableColumn.identifier isEqualToString:@"watts"])
+        {
+            NSTableCellView *result = [tableView makeViewWithIdentifier:@"channelWatts" owner:self];
+            result.textField.integerValue = [[(Channel *)[self.channelFetchedResultsController objectAtIndex:row] watts] integerValue];
+            return result;
+        }
+        // Lights column
+        if([tableColumn.identifier isEqualToString:@"lights"])
+        {
+            NSTableCellView *result = [tableView makeViewWithIdentifier:@"channelLights" owner:self];
+            result.textField.integerValue = [[(Channel *)[self.channelFetchedResultsController objectAtIndex:row] numberOfLights] integerValue];
             return result;
         }
         // Description column

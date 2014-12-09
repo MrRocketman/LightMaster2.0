@@ -473,7 +473,6 @@
     }
     
     // start new shift drag
-    NSLog(@"new shift:%d", self.shiftKey);
     if(self.shiftKey || self.commandKey)
     {
         self.retainMouseGroupSelect = YES;
@@ -563,7 +562,6 @@
 - (void)flagsChanged:(NSEvent *)event
 {
     self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
-    NSLog(@"shift:%d", self.shiftKey);
     self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
     self.optionKey = ([event modifierFlags] & NSAlternateKeyMask ? YES : NO);
     if(!self.optionKey)

@@ -2,7 +2,7 @@
 //  Channel.h
 //  LightMaster
 //
-//  Created by James Adams on 12/8/14.
+//  Created by James Adams on 12/9/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -17,6 +17,9 @@
 @property (nonatomic, retain) NSNumber * idNumber;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSString * uuid;
+@property (nonatomic, retain) NSNumber * watts;
+@property (nonatomic, retain) NSNumber * volts;
+@property (nonatomic, retain) NSNumber * numberOfLights;
 @property (nonatomic, retain) NSSet *channelPatterns;
 @property (nonatomic, retain) NSSet *commands;
 @property (nonatomic, retain) ControlBox *controlBox;
