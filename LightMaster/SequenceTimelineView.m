@@ -329,11 +329,16 @@
 
 - (void)autoScroll:(NSTimer *)theTimer;
 {
-    BOOL didAutoscroll = [self autoscroll:self.mouseEvent];
-    if(didAutoscroll)
+    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+    NSPoint eventLocation = [self.mouseEvent locationInWindow];
+    NSPoint currentMousePoint = [self convertPoint:eventLocation fromView:nil];
+    if(currentMousePoint.x > visibleRect.origin.x + visibleRect.size.width - 10 || currentMousePoint.x < visibleRect.origin.x + 10)
     {
-        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance] xToTime:[SequenceLogic sharedInstance].currentTime + self.mouseEvent.deltaX];
-        [self setNeedsDisplay:YES];
+        BOOL didAutoscroll = [self autoscroll:self.mouseEvent];
+        if(didAutoscroll)
+        {
+            [self setNeedsDisplay:YES];
+        }
     }
 }
 

@@ -478,10 +478,14 @@
 
 - (void)autoScroll:(NSTimer *)theTimer;
 {
-    BOOL didAutoscroll = [self autoscroll:self.mouseEvent];
-    if(didAutoscroll)
+    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+    if(self.currentMousePoint.x > visibleRect.origin.x + visibleRect.size.width - 10 || self.currentMousePoint.x < visibleRect.origin.x + 10)
     {
-        [self setNeedsDisplay:YES];
+        BOOL didAutoscroll = [self autoscroll:self.mouseEvent];
+        if(didAutoscroll)
+        {
+            [self setNeedsDisplay:YES];
+        }
     }
 }
 
