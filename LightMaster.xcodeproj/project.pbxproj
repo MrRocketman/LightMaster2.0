@@ -48,6 +48,7 @@
 		1AB6169F1A36C14D0065A050 /* Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB6169E1A36C14D0065A050 /* Sequence.m */; };
 		1AB616A21A36E5C60065A050 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616A11A36E5C60065A050 /* Channel.m */; };
 		1AB616A51A36E5ED0065A050 /* LightMaster.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616A31A36E5ED0065A050 /* LightMaster.xcdatamodeld */; };
+		1AB616A81A36ED270065A050 /* TabbingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616A71A36ED270065A050 /* TabbingTableView.m */; };
 		1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */; };
 		1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771201A243E6500C49006 /* EchoNestSegment.m */; };
 		1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771231A243E6500C49006 /* EchoNestBar.m */; };
@@ -156,6 +157,8 @@
 		1AB616A01A36E5C60065A050 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Channel.h; path = LightMaster/Channel.h; sourceTree = "<group>"; };
 		1AB616A11A36E5C60065A050 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Channel.m; path = LightMaster/Channel.m; sourceTree = "<group>"; };
 		1AB616A41A36E5ED0065A050 /* LightMaster.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LightMaster.xcdatamodel; sourceTree = "<group>"; };
+		1AB616A61A36ED270065A050 /* TabbingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabbingTableView.h; sourceTree = "<group>"; };
+		1AB616A71A36ED270065A050 /* TabbingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabbingTableView.m; sourceTree = "<group>"; };
 		1AE7711C1A243E6500C49006 /* EchoNestTimbre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTimbre.h; path = LightMaster/EchoNestTimbre.h; sourceTree = "<group>"; };
 		1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTimbre.m; path = LightMaster/EchoNestTimbre.m; sourceTree = "<group>"; };
 		1AE7711F1A243E6500C49006 /* EchoNestSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestSegment.h; path = LightMaster/EchoNestSegment.h; sourceTree = "<group>"; };
@@ -237,6 +240,8 @@
 			children = (
 				1A14CA601A25411B00C4FEB0 /* ControlBoxViewController.h */,
 				1A14CA611A25411B00C4FEB0 /* ControlBoxViewController.m */,
+				1AB616A61A36ED270065A050 /* TabbingTableView.h */,
+				1AB616A71A36ED270065A050 /* TabbingTableView.m */,
 				1A14CA6D1A25797D00C4FEB0 /* ChannelColorTableCellView.h */,
 				1A14CA6E1A25797D00C4FEB0 /* ChannelColorTableCellView.m */,
 			);
@@ -637,6 +642,7 @@
 				1A27BEED1A2C0B310043F8C9 /* SequenceView.m in Sources */,
 				1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */,
 				1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */,
+				1AB616A81A36ED270065A050 /* TabbingTableView.m in Sources */,
 				1A14CA6F1A25797D00C4FEB0 /* ChannelColorTableCellView.m in Sources */,
 				1A27BEF01A2C3B730043F8C9 /* SequenceChannelScrollView.m in Sources */,
 				1AB6168D1A36C0BD0065A050 /* ControlBox.m in Sources */,
