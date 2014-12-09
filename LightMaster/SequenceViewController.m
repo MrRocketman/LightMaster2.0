@@ -30,7 +30,7 @@
 @property (strong, nonatomic) NSDate *playStartDate;
 @property (assign, nonatomic) float playStartTime;
 @property (assign, nonatomic) BOOL isPlaySelectionButton;
-
+@property (assign, nonatomic) float splitViewY;
 @property (strong, nonatomic) Audio *currentAudio;
 
 @end
@@ -61,17 +61,37 @@
 {
     [self reloadSequence];
     int numberOfAudioChannels = [[SequenceLogic sharedInstance] numberOfAudioChannels];
-    float startY = CHANNEL_HEIGHT;
+    self.splitViewY = CHANNEL_HEIGHT;
     if(numberOfAudioChannels > 0 && numberOfAudioChannels < 10)
     {
-        startY = numberOfAudioChannels * CHANNEL_HEIGHT + 5;
+        self.splitViewY = numberOfAudioChannels * (CHANNEL_HEIGHT - 5);
     }
     else if(numberOfAudioChannels >= 10)
     {
-        startY = 10 * CHANNEL_HEIGHT + 5;
+        self.splitViewY = 10 * (CHANNEL_HEIGHT - 5);
     }
-    [self.splitView setPosition:startY ofDividerAtIndex:0];
+    [self.splitView setPosition:self.splitViewY ofDividerAtIndex:0];
 }
+
+#pragma mark - SplitViewDelegate
+
+-(CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+    int numberOfAudioChannels = [[SequenceLogic sharedInstance] numberOfAudioChannels];
+    float maxY = numberOfAudioChannels * CHANNEL_HEIGHT + 2;
+    if(maxY > self.view.frame.size.height - 200)
+    {
+        maxY = self.view.frame.size.height - 200;
+    }
+    return maxY; //controls the MAX position of a split (use an if else or switch block to deal with the dividerIndex)
+}
+
+-(CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex{
+    return 20;//controls the MIN position of a split (use an if else or switch block to deal with the dividerIndex)
+    
+}
+
+#pragma mark - Other
 
 - (void)reloadSequenceFromNotification:(NSNotification *)notification
 {

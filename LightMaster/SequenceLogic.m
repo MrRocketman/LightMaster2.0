@@ -88,9 +88,9 @@
 
 - (int)numberOfChannels
 {
-    NSArray *controlBoxes = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    NSSet *audioAnalysisControlBoxes = [CoreDataManager sharedManager].currentSequence.controlBoxes;
     int channelCount = 0;
-    for(ControlBox *box in controlBoxes)
+    for(ControlBox *box in audioAnalysisControlBoxes)
     {
         channelCount += (int)box.channels.count;
     }
@@ -99,13 +99,14 @@
 
 - (int)numberOfAudioChannels
 {
-    NSArray *userAudioAnalysisTracks = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
-    int audioAnalysisChannelCount = 0;
-    for(ControlBox *track in userAudioAnalysisTracks)
+    
+    NSSet *audioAnalysisControlBoxes = [CoreDataManager sharedManager].currentSequence.analysisControlBoxes;
+    int channelCount = 0;
+    for(ControlBox *box in audioAnalysisControlBoxes)
     {
-        audioAnalysisChannelCount += (int)track.channels.count;
+        channelCount += (int)box.channels.count;
     }
-    return audioAnalysisChannelCount;
+    return channelCount;
 }
 
 @end

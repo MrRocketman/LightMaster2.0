@@ -10,7 +10,7 @@
 
 @class SequenceScrollView, SequenceChannelScrollView, SequenceTimelineScrollView, SequenceAudioAnalysisChannelScrollView, SequenceAudioAnalysisScrollView;
 
-@interface SequenceViewController : NSViewController
+@interface SequenceViewController : NSViewController <NSSplitViewDelegate>
 
 @property (strong, nonatomic) IBOutlet NSView *toolbarView;
 @property (strong, nonatomic) IBOutlet NSPopUpButton *serialPortButton;

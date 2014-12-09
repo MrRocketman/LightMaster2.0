@@ -1007,6 +1007,9 @@ DQ
                                     <real value="250"/>
                                     <real value="250"/>
                                 </holdingPriorities>
+                                <connections>
+                                    <outlet property="delegate" destination="JHR-DC-ihs" id="c60-Ty-JTy"/>
+                                </connections>
                             </splitView>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" maxMagnification="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Oz-AZ-EDF" customClass="SequenceTimelineScrollView">
                                 <rect key="frame" x="198" y="490" width="919" height="50"/>
