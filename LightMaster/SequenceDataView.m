@@ -678,13 +678,11 @@
                 SequenceTatum *endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
                 if(nextCommand)
                 {
-                    NSLog(@"merge end");
                     endTatum = nextCommand.endTatum;
                     [[CoreDataManager sharedManager].managedObjectContext deleteObject:nextCommand];
                 }
                 if(previousCommand)
                 {
-                    NSLog(@"merge start");
                     startTatum = previousCommand.startTatum;
                     [[CoreDataManager sharedManager].managedObjectContext deleteObject:previousCommand];
                 }

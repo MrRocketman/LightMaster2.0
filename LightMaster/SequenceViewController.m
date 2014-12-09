@@ -64,11 +64,11 @@
     self.splitViewY = CHANNEL_HEIGHT;
     if(numberOfAudioChannels > 0 && numberOfAudioChannels < 10)
     {
-        self.splitViewY = numberOfAudioChannels * (CHANNEL_HEIGHT - 5);
+        self.splitViewY = numberOfAudioChannels * CHANNEL_HEIGHT + 2;
     }
     else if(numberOfAudioChannels >= 10)
     {
-        self.splitViewY = 10 * (CHANNEL_HEIGHT - 5);
+        self.splitViewY = 10 * CHANNEL_HEIGHT + 2;
     }
     [self.splitView setPosition:self.splitViewY ofDividerAtIndex:0];
 }
