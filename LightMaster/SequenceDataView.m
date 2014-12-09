@@ -112,55 +112,63 @@
         controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
     }
     
-    int channelCount = 0;
-    int controlBoxID = 0;
-    for(ControlBox *controlBox in controlBoxes)
+    int currentMouseIndex = self.mouseBoxSelectTopChannel;
+    while(currentMouseIndex < self.mouseBoxSelectBottomChannel)
     {
-        if(self.mouseBoxSelectTopChannel > controlBox.channels.count - 1 + channelCount)
+        // Figure out which control box
+        int channelCount = 0;
+        int controlBoxID = 0;
+        for(ControlBox *controlBox in controlBoxes)
         {
-            channelCount += controlBox.channels.count;
+            if(currentMouseIndex > controlBox.channels.count - 1 + channelCount)
+            {
+                channelCount += controlBox.channels.count;
+            }
+            else
+            {
+                controlBoxID = [controlBox.idNumber intValue];
+                break;
+            }
+        }
+        // Figure out which channel
+        Channel *channel;
+        if(self.isAudioAnalysisView)
+        {
+            channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.idNumber == %d AND controlBox.analysisSequence != nil AND idNumber == %d", controlBoxID, currentMouseIndex - channelCount] toArray] firstObject];
         }
         else
         {
-            controlBoxID = [controlBox.idNumber intValue];
-            break;
+            channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.idNumber == %d AND idNumber == %d", controlBoxID, currentMouseIndex - channelCount] toArray] firstObject];
         }
-    }
-    Channel *channel;
-    if(self.isAudioAnalysisView)
-    {
-        channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.idNumber == %d AND controlBox.analysisSequence != nil AND idNumber == %d", controlBoxID, self.mouseBoxSelectTopChannel - channelCount] toArray] firstObject];
-    }
-    else
-    {
-        channel = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox.idNumber == %d AND idNumber == %d", controlBoxID, self.mouseBoxSelectTopChannel - channelCount] toArray] firstObject];
-    }
-    
-    if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
-    {
-        CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-        command.startTatum = self.mouseBoxSelectStartTatum;
-        command.endTatum = self.mouseBoxSelectEndTatum;
-        command.brightness = @(self.newCommandBrightness);
-        command.channel = channel;
-    }
-    else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
-    {
-        CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-        command.startTatum = self.mouseBoxSelectStartTatum;
-        command.endTatum = self.mouseBoxSelectEndTatum;
-        command.startBrightness = @(0.0);
-        command.endBrightness = @(self.newCommandBrightness);
-        command.channel = channel;
-    }
-    else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
-    {
-        CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-        command.startTatum = self.mouseBoxSelectStartTatum;
-        command.endTatum = self.mouseBoxSelectEndTatum;
-        command.startBrightness = @(self.newCommandBrightness);
-        command.endBrightness = @(0.0);
-        command.channel = channel;
+        // Add the appropriate command
+        if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+        {
+            CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.brightness = @(self.newCommandBrightness);
+            command.channel = channel;
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(0.0);
+            command.endBrightness = @(self.newCommandBrightness);
+            command.channel = channel;
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
+        {
+            CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+            command.startTatum = self.mouseBoxSelectStartTatum;
+            command.endTatum = self.mouseBoxSelectEndTatum;
+            command.startBrightness = @(self.newCommandBrightness);
+            command.endBrightness = @(0.0);
+            command.channel = channel;
+        }
+        
+        currentMouseIndex ++;
     }
     
     [[CoreDataManager sharedManager] saveContext];
