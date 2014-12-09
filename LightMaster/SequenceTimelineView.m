@@ -22,6 +22,7 @@
 @property (strong, nonatomic) NSBezierPath *endTimePath;
 @property (strong, nonatomic) NSTimer *autoScrollTimer;
 @property (strong, nonatomic) NSEvent *mouseEvent;
+@property (assign, nonatomic) NSPoint currentMousePoint;
 
 @end
 
@@ -206,7 +207,7 @@
 
 - (void)drawEndTimeMarker
 {
-    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue]], self.frame.size.height / 2);
+    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:(self.endTimeMarkerIsSelected ? [[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x] : [[CoreDataManager sharedManager].currentSequence.endTime floatValue])], self.frame.size.height / 2);
     float width = self.frame.size.height / 2;
     float height = self.frame.size.height / 2;
     
@@ -256,9 +257,9 @@
 - (void)mouseDown:(NSEvent *)theEvent
 {
     NSPoint eventLocation = [theEvent locationInWindow];
-    NSPoint currentMousePoint = [self convertPoint:eventLocation fromView:nil];
+    self.currentMousePoint = [self convertPoint:eventLocation fromView:nil];
     
-    if([self.endTimePath containsPoint:currentMousePoint])
+    if([self.endTimePath containsPoint:self.currentMousePoint])
     {
         self.endTimeMarkerIsSelected = YES;
     }
@@ -266,7 +267,7 @@
     {
         // Update the currentTime
         self.currentTimeMarkerIsSelected = YES;
-        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance] xToTime:currentMousePoint.x];
+        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
     }
@@ -277,19 +278,19 @@
 - (void)mouseDragged:(NSEvent *)theEvent
 {
     NSPoint eventLocation = [theEvent locationInWindow];
-    NSPoint currentMousePoint = [self convertPoint:eventLocation fromView:nil];
+    self.currentMousePoint = [self convertPoint:eventLocation fromView:nil];
     self.mouseEvent = theEvent;
     
     if(self.endTimeMarkerIsSelected)
     {
-        [[CoreDataManager sharedManager] updateSequenceTatumsForNewEndTime:[[SequenceLogic sharedInstance] xToTime:currentMousePoint.x]];
+        [[CoreDataManager sharedManager] updateSequenceTatumsForNewEndTime:[[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
     }
     else if(self.currentTimeMarkerIsSelected)
     {
         // Update the currentTime
-        float newCurrentTime = [[SequenceLogic sharedInstance] xToTime:currentMousePoint.x];
+        float newCurrentTime = [[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x];
         // Bind the minimum time to 0
         if(newCurrentTime < 0.0)
         {
@@ -312,9 +313,14 @@
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
+    NSPoint eventLocation = [theEvent locationInWindow];
+    self.currentMousePoint = [self convertPoint:eventLocation fromView:nil];
+    
     if(self.endTimeMarkerIsSelected)
     {
         self.endTimeMarkerIsSelected = NO;
+        // Update the endTime
+        [CoreDataManager sharedManager].currentSequence.endTime = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
     }
     if(self.currentTimeMarkerIsSelected)
     {

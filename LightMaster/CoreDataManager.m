@@ -324,14 +324,24 @@
     {
         SequenceTatum *lastTatum = [[[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", self.currentSequence] orderBy:@"time"] toArray] lastObject];
         
-        if(newEndTime > [lastTatum.time floatValue] + 0.1)
+        // If we are past the last tatum, add audio data
+        if(newEndTime > [lastTatum.time floatValue])
         {
-            for(float i = [lastTatum.time floatValue] + 0.1; i <= newEndTime; i += 0.1)
+            // If we have audio data , add back in the audio tatums
+            if(self.currentSequence.audio.echoNestAudioAnalysis)
             {
-                SequenceTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"SequenceTatum" inManagedObjectContext:self.managedObjectContext];
-                tatum.time = @(i);
-                tatum.uuid = [[NSUUID UUID] UUIDString];
-                [self.currentSequence addTatumsObject:tatum];
+                NSArray *echoNestTatums = [[[[self.managedObjectContext ofType:@"EchoNestTatum"] where:@"echoNestAudioAnalysis == %@ AND start > %f AND start <= %f", self.currentSequence.audio.echoNestAudioAnalysis, [lastTatum.time floatValue], newEndTime] orderBy:@"start"] toArray];
+                for(EchoNestTatum *echoTatum in echoNestTatums)
+                {
+                    [self addSequenceTatumToSequence:self.currentSequence atTime:[echoTatum.start floatValue]];
+                }
+            }
+            else if(newEndTime > [lastTatum.time floatValue] + 0.1)
+            {
+                for(float i = [lastTatum.time floatValue] + 0.1; i <= newEndTime; i += 0.1)
+                {
+                    [self addSequenceTatumToSequence:self.currentSequence atTime:i];
+                }
             }
         }
     }
@@ -341,9 +351,6 @@
         NSSet *tatumsToRemove = [NSSet setWithArray:[[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f", self.currentSequence, newEndTime] toArray]];
         [self.currentSequence removeTatums:tatumsToRemove];
     }
-    
-    // Update the endTime
-    self.currentSequence.endTime = @(newEndTime);
     
     // Save
     [self saveContext];
