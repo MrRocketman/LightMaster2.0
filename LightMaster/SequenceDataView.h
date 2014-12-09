@@ -14,9 +14,6 @@
 
 @property (assign, nonatomic) BOOL isAudioAnalysisView;
 
-@property (strong, readonly, nonatomic) SequenceTatum *mouseBoxSelectStartTatum;
-@property (strong, readonly, nonatomic) SequenceTatum *mouseBoxSelectEndTatum;
-
 - (void)setup;
 - (void)fetchControlBoxAndChannelData;
 

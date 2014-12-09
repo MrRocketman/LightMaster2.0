@@ -28,9 +28,7 @@
 @property (assign, nonatomic) BOOL sequenceTatumIsSelected;
 @property (strong, nonatomic) SequenceTatum *selectedSequenceTatum;
 
-@property (strong, nonatomic) SequenceTatum *mouseBoxSelectStartTatum;
 @property (strong, nonatomic) SequenceTatum *mouseBoxSelectOriginalStartTatum;
-@property (strong, nonatomic) SequenceTatum *mouseBoxSelectEndTatum;
 @property (assign, nonatomic) int mouseBoxSelectTopChannel;
 @property (assign, nonatomic) int mouseBoxSelectOriginalTopChannel;
 @property (assign, nonatomic) int mouseBoxSelectBottomChannel;
@@ -277,11 +275,11 @@
                 if(self.currentMousePoint.x >= tatumX && self.currentMousePoint.x < nextTatumX)
                 {
                     // Initial click
-                    if(!self.mouseBoxSelectStartTatum)
+                    if(![SequenceLogic sharedInstance].mouseBoxSelectStartTatum)
                     {
-                        self.mouseBoxSelectStartTatum = tatum;
-                        self.mouseBoxSelectEndTatum = nextTatum;
-                        self.mouseBoxSelectOriginalStartTatum = self.mouseBoxSelectStartTatum;
+                        [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = tatum;
+                        [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nextTatum;
+                        self.mouseBoxSelectOriginalStartTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
                         self.mouseBoxSelectTopChannel = ((int)(self.currentMousePoint.y / CHANNEL_HEIGHT));
                         self.mouseBoxSelectOriginalTopChannel = self.mouseBoxSelectTopChannel;
                         self.mouseBoxSelectBottomChannel = self.mouseBoxSelectTopChannel + 1;
@@ -292,15 +290,15 @@
                         // Left and right checking
                         if([nextTatum.time floatValue] > [self.mouseBoxSelectOriginalStartTatum.time floatValue])
                         {
-                            self.mouseBoxSelectEndTatum = nextTatum;
-                            if(self.mouseBoxSelectOriginalStartTatum != self.mouseBoxSelectStartTatum)
+                            [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nextTatum;
+                            if(self.mouseBoxSelectOriginalStartTatum != [SequenceLogic sharedInstance].mouseBoxSelectStartTatum)
                             {
-                                self.mouseBoxSelectStartTatum = self.mouseBoxSelectOriginalStartTatum;
+                                [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = self.mouseBoxSelectOriginalStartTatum;
                             }
                         }
                         else
                         {
-                            self.mouseBoxSelectStartTatum = tatum;
+                            [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = tatum;
                         }
                         
                         // Up and down checking
@@ -349,10 +347,10 @@
 
 - (void)drawMouseGroupSelectionBox
 {
-    if((self.mouseGroupSelect || self.retainMouseGroupSelect) && self.mouseBoxSelectStartTatum)
+    if((self.mouseGroupSelect || self.retainMouseGroupSelect) && [SequenceLogic sharedInstance].mouseBoxSelectStartTatum)
     {
-        float leftX = [[SequenceLogic sharedInstance] timeToX:[self.mouseBoxSelectStartTatum.time floatValue]];
-        float rightX = [[SequenceLogic sharedInstance] timeToX:[self.mouseBoxSelectEndTatum.time floatValue]];
+        float leftX = [[SequenceLogic sharedInstance] timeToX:[[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue]];
+        float rightX = [[SequenceLogic sharedInstance] timeToX:[[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue]];
         float topY = self.mouseBoxSelectTopChannel * CHANNEL_HEIGHT;
         float bottomY = self.mouseBoxSelectBottomChannel * CHANNEL_HEIGHT;
         NSBezierPath *path = [NSBezierPath bezierPath];
@@ -403,8 +401,8 @@
     else
     {
         self.mouseGroupSelect = YES;
-        self.mouseBoxSelectStartTatum = nil;
-        self.mouseBoxSelectEndTatum = nil;
+        [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = nil;
+        [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nil;
     }
     
     // start new shift drag
@@ -625,8 +623,8 @@
         Channel *channel = channels[currentMouseIndex - channelCount];
         
         // See if we are replacing any commands
-        float startTatumTime = [self.mouseBoxSelectStartTatum.time floatValue];
-        float endTatumTime = [self.mouseBoxSelectEndTatum.time floatValue];
+        float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
+        float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
         NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time >= %f AND endTatum.time <= %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime] orderBy:@"startTatum.time"] toArray];
         for(Command *command in commandsToRemove)
         {
@@ -639,8 +637,8 @@
             if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
             {
                 CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                command.startTatum = self.mouseBoxSelectStartTatum;
-                command.endTatum = self.mouseBoxSelectEndTatum;
+                command.startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+                command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
                 command.brightness = @(self.newCommandBrightness);
                 command.channel = channel;
                 command.uuid = [[NSUUID UUID] UUIDString];
@@ -648,8 +646,8 @@
             else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
             {
                 CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                command.startTatum = self.mouseBoxSelectStartTatum;
-                command.endTatum = self.mouseBoxSelectEndTatum;
+                command.startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+                command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
                 command.startBrightness = @(0.0);
                 command.endBrightness = @(self.newCommandBrightness);
                 command.channel = channel;
@@ -658,8 +656,8 @@
             else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
             {
                 CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                command.startTatum = self.mouseBoxSelectStartTatum;
-                command.endTatum = self.mouseBoxSelectEndTatum;
+                command.startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+                command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
                 command.startBrightness = @(self.newCommandBrightness);
                 command.endBrightness = @(0.0);
                 command.channel = channel;

@@ -11,6 +11,8 @@
 #define CHANNEL_HEIGHT 20.0
 #define AUTO_SCROLL_REFRESH_RATE 0.03
 
+@class SequenceTatum;
+
 enum
 {
     CommandTypeDelete,
@@ -28,6 +30,8 @@ enum
 @property (assign, nonatomic) float magnification;
 @property (assign, nonatomic) float currentTime;
 @property (assign, nonatomic) int commandType;
+@property (strong, nonatomic) SequenceTatum *mouseBoxSelectStartTatum;
+@property (strong, nonatomic) SequenceTatum *mouseBoxSelectEndTatum;
 
 - (void)updateMagnification:(float)newMagnification;
 
