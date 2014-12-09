@@ -445,11 +445,13 @@
     NSPoint eventLocation = [theEvent locationInWindow];
     self.currentMousePoint = [self convertPoint:eventLocation fromView:nil];
     
+    // clicking a tatum
     if([self.sequenceTatumPaths containsPoint:self.currentMousePoint])
     {
         // Select tatum
         self.sequenceTatumIsSelected = YES;
     }
+    // new/delete tatum
     else if(self.optionKey)
     {
         [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:[[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]];
@@ -457,6 +459,12 @@
         self.sequenceTatumIsSelected = YES;
         self.newTatum = YES;
     }
+    // deselect shift drag selection
+    else if(self.retainMouseGroupSelect)
+    {
+        self.mouseGroupSelect = NO;
+    }
+    // start new drag
     else
     {
         self.mouseGroupSelect = YES;
@@ -464,10 +472,13 @@
         self.mouseBoxSelectEndTatum = nil;
     }
     
+    // start new shift drag
+    NSLog(@"new shift:%d", self.shiftKey);
     if(self.shiftKey || self.commandKey)
     {
         self.retainMouseGroupSelect = YES;
     }
+    // deselect shift drag if we aren't dragging a tatum
     else if(!self.sequenceTatumIsSelected)
     {
         self.retainMouseGroupSelect = NO;
@@ -552,6 +563,7 @@
 - (void)flagsChanged:(NSEvent *)event
 {
     self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
+    NSLog(@"shift:%d", self.shiftKey);
     self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
     self.optionKey = ([event modifierFlags] & NSAlternateKeyMask ? YES : NO);
     if(!self.optionKey)
