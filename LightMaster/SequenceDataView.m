@@ -657,9 +657,10 @@
         Channel *channel = channels[currentMouseIndex - channelCount];
         
         // See if we are replacing any commands
+        const float epsilon = 0.0001;
         float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
         float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
-        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time >= %f AND endTatum.time <= %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime] orderBy:@"startTatum.time"] toArray];
+        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime - epsilon, startTatumTime + epsilon, endTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
         for(Command *command in commandsToRemove)
         {
             [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
@@ -670,9 +671,27 @@
         {
             if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
             {
+                // See if we are merging commands
+                CommandOn *nextCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND startTatum.time > %f AND startTatum.time < %f AND brightness > %f AND brightness < %f", channel, endTatumTime - epsilon, endTatumTime + epsilon, self.newCommandBrightness - epsilon, self.newCommandBrightness + epsilon] toArray] firstObject];
+                CommandOn *previousCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND endTatum.time > %f AND endTatum.time < %f AND brightness > %f AND brightness < %f", channel, startTatumTime - epsilon, startTatumTime + epsilon, self.newCommandBrightness - epsilon, self.newCommandBrightness + epsilon] toArray] firstObject];
+                SequenceTatum *startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+                SequenceTatum *endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
+                if(nextCommand)
+                {
+                    NSLog(@"merge end");
+                    endTatum = nextCommand.endTatum;
+                    [[CoreDataManager sharedManager].managedObjectContext deleteObject:nextCommand];
+                }
+                if(previousCommand)
+                {
+                    NSLog(@"merge start");
+                    startTatum = previousCommand.startTatum;
+                    [[CoreDataManager sharedManager].managedObjectContext deleteObject:previousCommand];
+                }
+                
                 CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                command.startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
-                command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
+                command.startTatum = startTatum;
+                command.endTatum = endTatum;
                 command.brightness = @(self.newCommandBrightness);
                 command.channel = channel;
                 command.uuid = [[NSUUID UUID] UUIDString];
