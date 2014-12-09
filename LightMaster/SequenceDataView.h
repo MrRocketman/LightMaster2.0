@@ -19,6 +19,5 @@
 
 - (void)setup;
 - (void)fetchControlBoxAndChannelData;
-- (void)fetchCommandData;
 
 @end

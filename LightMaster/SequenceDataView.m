@@ -61,7 +61,6 @@
         [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     }
     [self fetchControlBoxAndChannelData];
-    //[self fetchCommandData];
 }
 
 - (void)sequenceChange:(NSNotification *)notification
@@ -97,16 +96,6 @@
         [self.channels addObject:[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox == %@", controlBox] orderBy:@"idNumber"] toArray]];
     }
 }
-
-/*- (void)fetchCommandData
-{
-    // Fetch commands
-    for(Channel *channel in self.channels[self.channels.count - 1])
-    {
-        NSArray *commands = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@", channel] orderBy:@"startTatum.time"] toArray];
-        [self.commands addObject:(commands ? commands : [NSArray new])];
-    }
-}*/
 
 #pragma mark - Drawing
 
