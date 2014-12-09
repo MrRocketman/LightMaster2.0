@@ -8,9 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SequenceTatum;
+
 @interface SequenceDataView : NSView
 
 @property (assign, nonatomic) BOOL isAudioAnalysisView;
+
+@property (strong, readonly, nonatomic) SequenceTatum *mouseBoxSelectStartTatum;
+@property (strong, readonly, nonatomic) SequenceTatum *mouseBoxSelectEndTatum;
 
 - (void)setup;
 

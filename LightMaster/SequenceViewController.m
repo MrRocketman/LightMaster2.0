@@ -9,6 +9,7 @@
 #import "SequenceViewController.h"
 #import "CoreDataManager.h"
 #import "SequenceScrollView.h"
+#import "SequenceView.h"
 #import "SequenceChannelScrollView.h"
 #import "SequenceTimelineScrollView.h"
 #import "SequenceTimelineView.h"
@@ -19,6 +20,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Audio.h"
 #import "Sequence.h"
+#import "SequenceTatum.h"
 
 @interface SequenceViewController ()
 
@@ -27,6 +29,7 @@
 @property (strong, nonatomic) NSTimer *audioTimer;
 @property (strong, nonatomic) NSDate *playStartDate;
 @property (assign, nonatomic) float playStartTime;
+@property (assign, nonatomic) BOOL isPlaySelectionButton;
 
 @end
 
@@ -42,6 +45,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeCommandtype:) name:@"ChangeCommandType" object:nil];
     
     self.isPlayButton = YES;
+    self.isPlaySelectionButton = YES;
     [self reloadAudio];
     [self currentTimeChange:nil];
 }
@@ -95,6 +99,21 @@
             [SequenceLogic sharedInstance].currentTime = 0;
             self.playStartDate = [NSDate date];
             self.playStartTime = [SequenceLogic sharedInstance].currentTime;
+        }
+        // If we are playing a selection
+        else if(!self.isPlaySelectionButton && [SequenceLogic sharedInstance].currentTime > [((SequenceView *)(self.sequenceScrollView.documentView)).mouseBoxSelectEndTatum.time floatValue])
+        {
+            /*float newTime = [((SequenceView *)(self.sequenceScrollView.documentView)).mouseBoxSelectStartTatum.time floatValue];
+            self.audioPlayer.currentTime = newTime;
+            [SequenceLogic sharedInstance].currentTime = newTime;
+            self.playStartDate = [NSDate date];
+            self.playStartTime = [SequenceLogic sharedInstance].currentTime;*/
+            self.isPlaySelectionButton = !self.isPlaySelectionButton;
+            [self.playSelectionButton setState:0];
+            self.playSelectionButton.title = @"Play";
+            [self.audioPlayer pause];
+            [self.audioTimer invalidate];
+            self.audioTimer = nil;
         }
         
         // Scroll to center
@@ -178,7 +197,25 @@
 
 - (IBAction)playSelectionButtonPress:(id)sender
 {
-    NSLog(@"play selection");
+    if(self.isPlaySelectionButton)
+    {
+        [SequenceLogic sharedInstance].currentTime = [((SequenceView *)(self.sequenceScrollView.documentView)).mouseBoxSelectStartTatum.time floatValue];
+        self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
+        [self.audioPlayer play];
+        self.playButton.title = @"Pause";
+        self.playStartDate = [NSDate date];
+        self.playStartTime = [SequenceLogic sharedInstance].currentTime;
+        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.03 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
+    }
+    else
+    {
+        [self.audioPlayer pause];
+        self.playButton.title = @"Play";
+        [self.audioTimer invalidate];
+        self.audioTimer = nil;
+    }
+    
+    self.isPlaySelectionButton = !self.isPlaySelectionButton;
 }
 
 - (void)audioTimerFire:(NSTimer *)timer
