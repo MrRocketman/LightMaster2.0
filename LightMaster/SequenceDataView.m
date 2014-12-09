@@ -146,8 +146,10 @@
                     CommandFade *command = commands[i];
                     float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
                     float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                    float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.startBrightness floatValue]));
-                    float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.endBrightness floatValue]));
+                    float modifiedStartBrightness = ([command.startBrightness floatValue] > 0.1 ? (1.0 - [command.startBrightness floatValue]) : (0.9 - [command.startBrightness floatValue]));
+                    float modifiedEndBrightness = ([command.endBrightness floatValue] > 0.1 ? (1.0 - [command.endBrightness floatValue]) : (0.9 - [command.endBrightness floatValue]));
+                    float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedStartBrightness);
+                    float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedEndBrightness);
                     float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
                     [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
                     [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
