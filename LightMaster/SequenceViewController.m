@@ -11,6 +11,7 @@
 #import "SequenceScrollView.h"
 #import "SequenceChannelScrollView.h"
 #import "SequenceTimelineScrollView.h"
+#import "SequenceTimelineView.h"
 #import "SequenceAudioAnalysisScrollView.h"
 #import "SequenceAudioAnalysisChannelScrollView.h"
 #import "SequenceLogic.h"
@@ -85,27 +86,46 @@
     }
     else
     {
+        // Loop back to beginning
+        if([SequenceLogic sharedInstance].currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
+        {
+            [self.audioPlayer stop];
+            self.audioPlayer.currentTime = 0;
+            [self.audioPlayer play];
+            [SequenceLogic sharedInstance].currentTime = 0;
+            self.playStartDate = [NSDate date];
+            self.playStartTime = [SequenceLogic sharedInstance].currentTime;
+        }
+        
         // Scroll to center
         NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
-        float leftEdgeTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
-        float rightEdgeTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width];
-        if([SequenceLogic sharedInstance].currentTime > (rightEdgeTime - leftEdgeTime) / 2.0 || [SequenceLogic sharedInstance].currentTime < (rightEdgeTime - leftEdgeTime) / 2.0)
+        NSRect viewFrame = ((SequenceTimelineView *)self.timelineScrollView.documentView).frame;
+        float smallestTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.size.width / 2];
+        float largestTime = [[SequenceLogic sharedInstance] xToTime:viewFrame.size.width - visibleRect.size.width / 2];
+        float newLeftX;
+        if([SequenceLogic sharedInstance].currentTime > smallestTime && [SequenceLogic sharedInstance].currentTime < largestTime)
         {
-            float newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime - (rightEdgeTime - leftEdgeTime) / 2.0];
-            if(newLeftX < 0)
-            {
-                newLeftX = 0;
-            }
-            
-            NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];
-            NSRect audioAnalysisVisibleRect = [self.audioAnalysisScrollView documentVisibleRect];
-            [self.sequenceScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, sequenceVisibleRect.origin.y)];
-            [self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
-            [self.timelineScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, visibleRect.origin.y)];
-            [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
-            [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
-            [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
+            newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0;
         }
+        else if([SequenceLogic sharedInstance].currentTime < smallestTime)
+        {
+            // left edge
+            newLeftX = 0;
+        }
+        else
+        {
+            // right edge
+            newLeftX = viewFrame.size.width - visibleRect.size.width;
+        }
+        
+        NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];
+        NSRect audioAnalysisVisibleRect = [self.audioAnalysisScrollView documentVisibleRect];
+        [self.sequenceScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, sequenceVisibleRect.origin.y)];
+        [self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
+        [self.timelineScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, visibleRect.origin.y)];
+        [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
+        [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
+        [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
     }
 }
 

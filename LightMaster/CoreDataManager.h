@@ -30,6 +30,7 @@
 - (void)getLatestOrCreateNewSequence;
 - (void)updateSequenceTatumsForNewEndTime:(float)endTime;
 - (SequenceTatum *)addSequenceTatumToSequence:(Sequence *)sequence atTime:(float)time;
+- (void)updateSequenceTatumsForNewAudioForSequence:(Sequence *)sequence;
 
 // ControlBox Methods
 - (ControlBox *)newControlBox;

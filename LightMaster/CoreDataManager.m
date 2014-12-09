@@ -13,6 +13,9 @@
 #import "SequenceTatum.h"
 #import "ControlBox.h"
 #import "Channel.h"
+#import "Audio.h"
+#import "EchoNestAudioAnalysis.h"
+#import "EchoNestTatum.h"
 
 @interface CoreDataManager()
 
@@ -341,6 +344,26 @@
     
     // Update the endTime
     self.currentSequence.endTime = @(newEndTime);
+    
+    // Save
+    [self saveContext];
+}
+
+- (void)updateSequenceTatumsForNewAudioForSequence:(Sequence *)sequence
+{
+    // Remove all the old tatums
+    NSArray *tatums = [[[self.managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", sequence] toArray];
+    for(SequenceTatum *tatum in tatums)
+    {
+        [self.managedObjectContext deleteObject:tatum];
+    }
+    
+    // Make the new tatums
+    NSSet *echoTatums = sequence.audio.echoNestAudioAnalysis.tatums;
+    for(EchoNestTatum *echoTatum in echoTatums)
+    {
+        [self addSequenceTatumToSequence:sequence atTime:[echoTatum.start floatValue]];
+    }
     
     // Save
     [self saveContext];
