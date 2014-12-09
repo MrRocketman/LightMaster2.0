@@ -40,6 +40,11 @@
     [super viewDidLoad];
     // Do view setup here.
     
+    if(![CoreDataManager sharedManager].currentSequence)
+    {
+        [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSequenceFromNotification:) name:@"CurrentSequenceChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeCommandtype:) name:@"ChangeCommandType" object:nil];
@@ -52,7 +57,6 @@
 
 - (void)viewWillAppear
 {
-    [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     [self reloadSequence];
     int numberOfAudioChannels = [[SequenceLogic sharedInstance] numberOfAudioChannels];
     float startY = CHANNEL_HEIGHT;

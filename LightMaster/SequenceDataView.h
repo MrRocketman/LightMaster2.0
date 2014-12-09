@@ -18,5 +18,7 @@
 @property (strong, readonly, nonatomic) SequenceTatum *mouseBoxSelectEndTatum;
 
 - (void)setup;
+- (void)fetchControlBoxAndChannelData;
+- (void)fetchCommandData;
 
 @end
