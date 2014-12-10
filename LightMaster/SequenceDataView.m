@@ -724,11 +724,31 @@
         {
             command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
         }
-        // We overlap the whole thing or are in the middle of it, so delete it
-        commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f))", channel, startTatumTime - epsilon, endTatumTime + epsilon, startTatumTime + epsilon, endTatumTime - epsilon] orderBy:@"startTatum.time"] toArray];
+        // We overlap the whole thing so delete it
+        commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
         for(Command *command in commandsToModify)
         {
             [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
+        }
+        // We are in the middle of a command, so split it
+        commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time < %f AND endTatum.time > %f", channel, startTatumTime + epsilon, endTatumTime - epsilon] orderBy:@"startTatum.time"] toArray];
+        for(Command *command in commandsToModify)
+        {
+            SequenceTatum *oldEndTatum = command.endTatum;
+            command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+            if([command isMemberOfClass:[CommandOn class]])
+            {
+                CommandOn *commandOn = (CommandOn *)command;
+                [[CoreDataManager sharedManager] addCommandOnWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum endTatum:oldEndTatum brightness:[commandOn.brightness floatValue] channel:command.channel];
+            }
+            else if ([command isMemberOfClass:[CommandFade class]])
+            {
+                CommandFade *commandFade = (CommandFade *)command;
+                float newCommandStartBrightness = ([commandFade.endBrightness floatValue] > [commandFade.startBrightness floatValue] ? 0 : [commandFade.startBrightness floatValue]);
+                float newCommandEndBrightness = ([commandFade.endBrightness floatValue] > [commandFade.startBrightness floatValue] ? [commandFade.endBrightness floatValue] : 0);
+                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum endTatum:oldEndTatum startBrightness:newCommandStartBrightness endBrightness:newCommandEndBrightness channel:command.channel];
+                commandFade.endBrightness = @(newCommandEndBrightness);
+            }
         }
         
         // Add the appropriate command
