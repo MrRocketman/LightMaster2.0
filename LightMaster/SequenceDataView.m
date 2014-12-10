@@ -559,9 +559,23 @@
         }
         else if(keyboardEvent.keyCode == 51) // 'delete'
         {
-            // delete
             [self deleteCommandsForSelection];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+        }
+        else if(keyboardEvent.keyCode == 49) // 'space'
+        {
+            if(self.optionKey)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPauseFromCurrentTime" object:nil];
+            }
+            else if(self.shiftKey)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPauseSelection" object:nil];
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPause" object:nil];
+            }
         }
         else if(keyboardEvent.keyCode == 31) // 'o'
         {
@@ -606,62 +620,11 @@
         {
             if(!self.shiftKey)
             {
-                // Pase data
-                NSLog(@"Paste And Bring Tatums");
-                const float epsilon = 0.0001;
-                float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
-                float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
-                float pasteStartTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
-                float pasteEndTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] + (copyEndTime - copyStartTime);
-                
-                // Delete the tatums in the paste area. Except the first tatum
-                NSArray *tatumsToDelete = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, pasteStartTime + epsilon, pasteEndTime + epsilon] orderBy:@"time"] toArray];
-                for(SequenceTatum *tatum in tatumsToDelete)
-                {
-                    [[CoreDataManager sharedManager].managedObjectContext deleteObject:tatum];
-                }
-                
-                // Paste tatums from the copy area, exept the first tatum
-                NSArray *tatumsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime + epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
-                for(SequenceTatum *tatum in tatumsToCopy)
-                {
-                    float timeOffsetFromCopyStart = [tatum.time floatValue] - copyStartTime;
-                    [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:pasteStartTime + timeOffsetFromCopyStart];
-                }
-                
-                // Paste commands from the copy area
-                NSArray *commandsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND startTatum.time > %f AND endTatum.time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime - epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
-                for(Command *command in commandsToCopy)
-                {
-                    // Find the command to copy channel index
-                    int commandToCopyChannelIndex = 0;
-                    for(NSArray *channels in self.channels)
-                    {
-                        for(Channel *channel in channels)
-                        {
-                            if(channel == command.channel)
-                            {
-                                break;
-                            }
-                            
-                            commandToCopyChannelIndex ++;
-                        }
-                    }
-                    
-                    if([command isMemberOfClass:[CommandOn class]])
-                    {
-                        
-                    }
-                    else if([command isMemberOfClass:[CommandFade class]])
-                    {
-                        
-                    }
-                }
+                [self pasteData];
             }
             else
             {
-                // Pase data
-                NSLog(@"Paste And Copy To Tatums");
+                [self pasteDataToExistingTatums];
             }
             
             self.retainMouseGroupSelect = NO;
@@ -826,6 +789,67 @@
     [[CoreDataManager sharedManager] saveContext];
     self.retainMouseGroupSelect = NO;
     [self setNeedsDisplay:YES];
+}
+
+- (void)pasteData
+{
+    // Pase data
+    NSLog(@"Paste And Bring Tatums");
+    const float epsilon = 0.0001;
+    float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
+    float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
+    float pasteStartTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
+    float pasteEndTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] + (copyEndTime - copyStartTime);
+    
+    // Delete the tatums in the paste area. Except the first tatum
+    NSArray *tatumsToDelete = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, pasteStartTime + epsilon, pasteEndTime + epsilon] orderBy:@"time"] toArray];
+    for(SequenceTatum *tatum in tatumsToDelete)
+    {
+        [[CoreDataManager sharedManager].managedObjectContext deleteObject:tatum];
+    }
+    
+    // Paste tatums from the copy area, exept the first tatum
+    NSArray *tatumsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime + epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
+    for(SequenceTatum *tatum in tatumsToCopy)
+    {
+        float timeOffsetFromCopyStart = [tatum.time floatValue] - copyStartTime;
+        [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:pasteStartTime + timeOffsetFromCopyStart];
+    }
+    
+    // Paste commands from the copy area
+    NSArray *commandsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND startTatum.time > %f AND endTatum.time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime - epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
+    for(Command *command in commandsToCopy)
+    {
+        // Find the command to copy channel index
+        int commandToCopyChannelIndex = 0;
+        for(NSArray *channels in self.channels)
+        {
+            for(Channel *channel in channels)
+            {
+                if(channel == command.channel)
+                {
+                    break;
+                }
+                
+                commandToCopyChannelIndex ++;
+            }
+        }
+        
+        if([command isMemberOfClass:[CommandOn class]])
+        {
+            
+        }
+        else if([command isMemberOfClass:[CommandFade class]])
+        {
+            
+        }
+    }
+}
+
+- (void)pasteDataToExistingTatums
+{
+    // Pase data
+    NSLog(@"Paste And Copy To Tatums");
 }
 
 @end

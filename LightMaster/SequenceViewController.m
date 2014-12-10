@@ -26,10 +26,11 @@
 
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 @property (assign, nonatomic) BOOL isPlayButton;
+@property (assign, nonatomic) BOOL isPlaySelection;
+@property (assign, nonatomic) BOOL isPlayFromCurrentTime;
 @property (strong, nonatomic) NSTimer *audioTimer;
 @property (strong, nonatomic) NSDate *playStartDate;
 @property (assign, nonatomic) float playStartTime;
-@property (assign, nonatomic) BOOL isPlaySelectionButton;
 @property (assign, nonatomic) float splitViewY;
 @property (strong, nonatomic) Audio *currentAudio;
 
@@ -50,9 +51,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSequenceFromNotification:) name:@"CurrentSequenceChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeCommandtype:) name:@"ChangeCommandType" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPause:) name:@"PlayPause" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseSelection:) name:@"PlayPauseSelection" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseFromCurrentTime:) name:@"PlayPauseFromCurrentTime" object:nil];
     
     self.isPlayButton = YES;
-    self.isPlaySelectionButton = YES;
     [self reloadAudio];
     [self currentTimeChange:nil];
 }
@@ -127,11 +130,12 @@
             self.playStartTime = [SequenceLogic sharedInstance].currentTime;
         }
         // If we are playing a selection
-        else if(!self.isPlaySelectionButton && [SequenceLogic sharedInstance].currentTime >= [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
+        else if(self.isPlaySelection && [SequenceLogic sharedInstance].currentTime >= [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
         {
-            self.isPlaySelectionButton = !self.isPlaySelectionButton;
-            [self.playSelectionButton setState:0];
-            self.playSelectionButton.title = @"Play";
+            self.isPlaySelection = NO;
+            self.isPlayButton = !self.isPlayButton;
+            [self.playButton setState:0];
+            self.playButton.title = @"Play";
             [self.audioPlayer pause];
             [self.audioTimer invalidate];
             self.audioTimer = nil;
@@ -202,6 +206,11 @@
 
 - (IBAction)playButtonPress:(id)sender
 {
+    [self playPause:nil];
+}
+
+- (void)playPause:(NSNotification *)notification
+{
     if(self.isPlayButton)
     {
         [self.audioPlayer play];
@@ -221,27 +230,30 @@
     self.isPlayButton = !self.isPlayButton;
 }
 
-- (IBAction)playSelectionButtonPress:(id)sender
+- (void)playPauseSelection:(NSNotification *)notification
 {
-    if(self.isPlaySelectionButton)
+    self.isPlaySelection = YES;
+    
+    if(self.isPlayButton)
     {
         [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
         self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
-        [self.audioPlayer play];
-        self.playButton.title = @"Pause";
-        self.playStartDate = [NSDate date];
-        self.playStartTime = [SequenceLogic sharedInstance].currentTime;
-        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
-    }
-    else
-    {
-        [self.audioPlayer pause];
-        self.playButton.title = @"Play";
-        [self.audioTimer invalidate];
-        self.audioTimer = nil;
     }
     
-    self.isPlaySelectionButton = !self.isPlaySelectionButton;
+    [self playPause:notification];
+}
+
+- (void)playPauseFromCurrentTime:(NSNotification *)notification
+{
+    self.isPlayFromCurrentTime = YES;
+    
+    if(self.isPlayButton)
+    {
+        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
+        self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
+    }
+    
+    [self playPause:notification];
 }
 
 - (void)audioTimerFire:(NSTimer *)timer

@@ -16,12 +16,10 @@
 @property (strong, nonatomic) IBOutlet NSPopUpButton *serialPortButton;
 @property (strong, nonatomic) IBOutlet NSButton *skipBackButton;
 @property (strong, nonatomic) IBOutlet NSButton *playButton;
-@property (strong, nonatomic) IBOutlet NSButton *playSelectionButton;
 @property (strong, nonatomic) IBOutlet NSTextField *timeLabel;
 @property (strong, nonatomic) IBOutlet NSSegmentedControl *commandTypeSegmentedControl;
 @property (strong, nonatomic) IBOutlet NSButton *sequenceListButton;
 
-@property (strong, nonatomic) IBOutlet NSTextField *titleLabel;
 
 @property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
 @property (strong, nonatomic) IBOutlet SequenceChannelScrollView *channelScrollView;
@@ -33,7 +31,6 @@
 
 - (IBAction)skipBackButtonPress:(id)sender;
 - (IBAction)playButtonPress:(id)sender;
-- (IBAction)playSelectionButtonPress:(id)sender;
 - (IBAction)commandTypeSegmentedControlChange:(id)sender;
 
 @end
