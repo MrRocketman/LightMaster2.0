@@ -707,12 +707,29 @@
         // Figure out which channel
         NSArray *channels = self.channels[controlBoxIndex];
         Channel *channel = channels[currentMouseIndex - channelCount];
+        
+        // Modify any commands that we are overlapping
         const float epsilon = 0.0001;
         float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
         float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
-        
-        // Delete any commands that we are overlapping
-        [self deleteCommandsInSelectedRangeForChannel:channel];
+        // We overlap the start, so adjust the start
+        NSArray *commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND startTatum.time < %f", channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+        for(Command *command in commandsToModify)
+        {
+            command.startTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
+        }
+        // We overlap the end so adjust the end
+        commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND endTatum.time > %f AND endTatum.time < %f", channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+        for(Command *command in commandsToModify)
+        {
+            command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+        }
+        // We overlap the whole thing or are in the middle of it, so delete it
+        commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f))", channel, startTatumTime - epsilon, endTatumTime + epsilon, startTatumTime + epsilon, endTatumTime - epsilon] orderBy:@"startTatum.time"] toArray];
+        for(Command *command in commandsToModify)
+        {
+            [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
+        }
         
         // Add the appropriate command
         if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
@@ -754,19 +771,6 @@
     [self setNeedsDisplay:YES];
 }
 
-- (void)deleteCommandsInSelectedRangeForChannel:(Channel *)channel
-{
-    // See if we are replacing any commands
-    const float epsilon = 0.0001;
-    float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
-    float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
-    NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime - epsilon, startTatumTime + epsilon, endTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
-    for(Command *command in commandsToRemove)
-    {
-        [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
-    }
-}
-
 - (void)deleteCommandsForSelection
 {
     int currentMouseIndex = self.mouseBoxSelectTopChannel;
@@ -794,7 +798,15 @@
         Channel *channel = channels[currentMouseIndex - channelCount];
         
         // Delete any commands that we are overlapping
-        [self deleteCommandsInSelectedRangeForChannel:channel];
+        // See if we are replacing any commands
+        const float epsilon = 0.0001;
+        float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
+        float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
+        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime - epsilon, startTatumTime + epsilon, endTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+        for(Command *command in commandsToRemove)
+        {
+            [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
+        }
         
         currentMouseIndex ++;
     }
