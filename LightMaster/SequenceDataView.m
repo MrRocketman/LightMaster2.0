@@ -608,12 +608,66 @@
             {
                 // Pase data
                 NSLog(@"Paste And Bring Tatums");
+                const float epsilon = 0.0001;
+                float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
+                float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
+                float pasteStartTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
+                float pasteEndTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] + (copyEndTime - copyStartTime);
+                
+                // Delete the tatums in the paste area. Except the first tatum
+                NSArray *tatumsToDelete = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, pasteStartTime + epsilon, pasteEndTime + epsilon] orderBy:@"time"] toArray];
+                for(SequenceTatum *tatum in tatumsToDelete)
+                {
+                    [[CoreDataManager sharedManager].managedObjectContext deleteObject:tatum];
+                }
+                
+                // Paste tatums from the copy area, exept the first tatum
+                NSArray *tatumsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime + epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
+                for(SequenceTatum *tatum in tatumsToCopy)
+                {
+                    float timeOffsetFromCopyStart = [tatum.time floatValue] - copyStartTime;
+                    [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:pasteStartTime + timeOffsetFromCopyStart];
+                }
+                
+                // Paste commands from the copy area
+                NSArray *commandsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND startTatum.time > %f AND endTatum.time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime - epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
+                for(Command *command in commandsToCopy)
+                {
+                    // Find the command to copy channel index
+                    int commandToCopyChannelIndex = 0;
+                    for(NSArray *channels in self.channels)
+                    {
+                        for(Channel *channel in channels)
+                        {
+                            if(channel == command.channel)
+                            {
+                                break;
+                            }
+                            
+                            commandToCopyChannelIndex ++;
+                        }
+                    }
+                    
+                    if([command isMemberOfClass:[CommandOn class]])
+                    {
+                        
+                    }
+                    else if([command isMemberOfClass:[CommandFade class]])
+                    {
+                        
+                    }
+                }
             }
             else
             {
                 // Pase data
                 NSLog(@"Paste And Copy To Tatums");
             }
+            
+            self.retainMouseGroupSelect = NO;
+            [[CoreDataManager sharedManager] saveContext];
+            [self setNeedsDisplay:YES];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SequenceTatumChange" object:nil];
         }
         else
         {
@@ -709,32 +763,18 @@
                     [[CoreDataManager sharedManager].managedObjectContext deleteObject:previousCommand];
                 }
                 
-                CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                command.startTatum = startTatum;
-                command.endTatum = endTatum;
-                command.brightness = @(self.newCommandBrightness);
-                command.channel = channel;
-                command.uuid = [[NSUUID UUID] UUIDString];
+                // Add the command on
+                [[CoreDataManager sharedManager] addCommandOnWithStartTatum:startTatum endTatum:endTatum brightness:self.newCommandBrightness channel:channel];
             }
             else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
             {
-                CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                command.startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
-                command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
-                command.startBrightness = @(0.0);
-                command.endBrightness = @(self.newCommandBrightness);
-                command.channel = channel;
-                command.uuid = [[NSUUID UUID] UUIDString];
+                // Add command fade up
+                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectStartTatum endTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum startBrightness:0.0 endBrightness:self.newCommandBrightness channel:channel];
             }
             else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
             {
-                CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                command.startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
-                command.endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
-                command.startBrightness = @(self.newCommandBrightness);
-                command.endBrightness = @(0.0);
-                command.channel = channel;
-                command.uuid = [[NSUUID UUID] UUIDString];
+                // Add command fade down
+                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectStartTatum endTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum startBrightness:self.newCommandBrightness endBrightness:0.0 channel:channel];
             }
         }
         

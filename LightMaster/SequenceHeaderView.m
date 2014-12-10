@@ -103,7 +103,6 @@
             totalChannelIndex ++;
         }
     }
-
 }
 
 #pragma mark - Helper Drawing Methods

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Sequence, SequenceTatum, ControlBox, Channel, ControlBox;
+@class Sequence, SequenceTatum, ControlBox, Channel, ControlBox, CommandOn, CommandFade;
 
 @interface CoreDataManager : NSObject
 
@@ -36,5 +36,9 @@
 - (ControlBox *)newControlBox;
 - (ControlBox *)newAnalysisControlBoxForSequence:(Sequence *)sequence;
 - (Channel *)newChannelForControlBox:(ControlBox *)controlBox;
+
+// Command Methods
+- (CommandOn *)addCommandOnWithStartTatum:(SequenceTatum *)startTatum endTatum:(SequenceTatum *)endTatum brightness:(float)brightness channel:(Channel *)channel;
+- (CommandFade *)addCommandFadeWithStartTatum:(SequenceTatum *)startTatum endTatum:(SequenceTatum *)endTatum startBrightness:(float)startBrightness endBrightness:(float)endBrightness channel:(Channel *)channel;
 
 @end

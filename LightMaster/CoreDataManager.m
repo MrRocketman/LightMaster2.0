@@ -16,6 +16,8 @@
 #import "Audio.h"
 #import "EchoNestAudioAnalysis.h"
 #import "EchoNestTatum.h"
+#import "CommandOn.h"
+#import "CommandFade.h"
 
 @interface CoreDataManager()
 
@@ -376,6 +378,8 @@
     [self saveContext];
 }
 
+#pragma mark - ControlBox Methods
+
 - (ControlBox *)newControlBox
 {
     ControlBox *controlBox = [NSEntityDescription insertNewObjectForEntityForName:@"ControlBox" inManagedObjectContext:[self managedObjectContext]];
@@ -427,6 +431,33 @@
     [self saveContext];
     
     return channel;
+}
+
+#pragma mark - Command Methods
+
+- (CommandOn *)addCommandOnWithStartTatum:(SequenceTatum *)startTatum endTatum:(SequenceTatum *)endTatum brightness:(float)brightness channel:(Channel *)channel
+{
+    CommandOn *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandOn" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+    command.startTatum = startTatum;
+    command.endTatum = endTatum;
+    command.brightness = @(brightness);
+    command.channel = channel;
+    command.uuid = [[NSUUID UUID] UUIDString];
+    
+    return command;
+}
+
+- (CommandFade *)addCommandFadeWithStartTatum:(SequenceTatum *)startTatum endTatum:(SequenceTatum *)endTatum startBrightness:(float)startBrightness endBrightness:(float)endBrightness channel:(Channel *)channel
+{
+    CommandFade *command = [NSEntityDescription insertNewObjectForEntityForName:@"CommandFade" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
+    command.startTatum = startTatum;
+    command.endTatum = endTatum;
+    command.startBrightness = @(startBrightness);
+    command.endBrightness = @(endBrightness);
+    command.channel = channel;
+    command.uuid = [[NSUUID UUID] UUIDString];
+    
+    return command;
 }
 
 @end
