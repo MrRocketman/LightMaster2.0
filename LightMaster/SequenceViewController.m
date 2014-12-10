@@ -147,26 +147,31 @@
         float smallestTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
         float middleTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width / 2];
         float largestTime = [[SequenceLogic sharedInstance] xToTime:viewFrame.size.width - visibleRect.size.width / 2];
-        //NSLog(@"current:%f left:%f middle:%f right:%f", [SequenceLogic sharedInstance].currentTime, smallestTime, middleTime,  largestTime);
         float newLeftX;
+        // Current time is from the middle of the screen onward
         if([SequenceLogic sharedInstance].currentTime >= middleTime && [SequenceLogic sharedInstance].currentTime < largestTime)
         {
+            // Go to center
             float xDifference = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0 - visibleRect.origin.x;
             newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0;
+            // Accelerate forward if the current time is beyond the center
             if(xDifference > 10)
             {
-                newLeftX -= xDifference - (xDifference / (xDifference / 20.0));
+                newLeftX -= xDifference - (xDifference / 5.0);
             }
         }
+        // Current time if from the left of the screen to the middle
         else if([SequenceLogic sharedInstance].currentTime < middleTime && [SequenceLogic sharedInstance].currentTime >= smallestTime)
         {
             newLeftX = visibleRect.origin.x;
         }
+        // Current time is less than the left edge
         else if([SequenceLogic sharedInstance].currentTime < smallestTime)
         {
             // left edge
             newLeftX = 0;
         }
+        // Current time is greater than the far edge
         else
         {
             NSLog(@"right");
