@@ -15,7 +15,6 @@
 
 enum
 {
-    CommandTypeDelete,
     CommandTypeOn,
     CommandTypeUp,
     CommandTypeDown,

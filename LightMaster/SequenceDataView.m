@@ -560,7 +560,7 @@
         else if(keyboardEvent.keyCode == 51) // 'delete'
         {
             // delete
-            [SequenceLogic sharedInstance].commandType = CommandTypeDelete;
+            [self deleteCommandsForSelection];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else if(keyboardEvent.keyCode == 31) // 'o'
@@ -731,57 +731,101 @@
         // Figure out which channel
         NSArray *channels = self.channels[controlBoxIndex];
         Channel *channel = channels[currentMouseIndex - channelCount];
-        
-        // See if we are replacing any commands
         const float epsilon = 0.0001;
         float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
         float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
-        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime - epsilon, startTatumTime + epsilon, endTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
-        for(Command *command in commandsToRemove)
-        {
-            [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
-        }
+        
+        // Delete any commands that we are overlapping
+        [self deleteCommandsInSelectedRangeForChannel:channel];
         
         // Add the appropriate command
-        if([SequenceLogic sharedInstance].commandType != CommandTypeDelete)
+        if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
         {
-            if([SequenceLogic sharedInstance].commandType == CommandTypeOn)
+            // See if we are merging commands
+            CommandOn *nextCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND startTatum.time > %f AND startTatum.time < %f AND brightness > %f AND brightness < %f", channel, endTatumTime - epsilon, endTatumTime + epsilon, self.newCommandBrightness - epsilon, self.newCommandBrightness + epsilon] toArray] firstObject];
+            CommandOn *previousCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND endTatum.time > %f AND endTatum.time < %f AND brightness > %f AND brightness < %f", channel, startTatumTime - epsilon, startTatumTime + epsilon, self.newCommandBrightness - epsilon, self.newCommandBrightness + epsilon] toArray] firstObject];
+            SequenceTatum *startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+            SequenceTatum *endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
+            if(nextCommand)
             {
-                // See if we are merging commands
-                CommandOn *nextCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND startTatum.time > %f AND startTatum.time < %f AND brightness > %f AND brightness < %f", channel, endTatumTime - epsilon, endTatumTime + epsilon, self.newCommandBrightness - epsilon, self.newCommandBrightness + epsilon] toArray] firstObject];
-                CommandOn *previousCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND endTatum.time > %f AND endTatum.time < %f AND brightness > %f AND brightness < %f", channel, startTatumTime - epsilon, startTatumTime + epsilon, self.newCommandBrightness - epsilon, self.newCommandBrightness + epsilon] toArray] firstObject];
-                SequenceTatum *startTatum = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
-                SequenceTatum *endTatum = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
-                if(nextCommand)
-                {
-                    endTatum = nextCommand.endTatum;
-                    [[CoreDataManager sharedManager].managedObjectContext deleteObject:nextCommand];
-                }
-                if(previousCommand)
-                {
-                    startTatum = previousCommand.startTatum;
-                    [[CoreDataManager sharedManager].managedObjectContext deleteObject:previousCommand];
-                }
-                
-                // Add the command on
-                [[CoreDataManager sharedManager] addCommandOnWithStartTatum:startTatum endTatum:endTatum brightness:self.newCommandBrightness channel:channel];
+                endTatum = nextCommand.endTatum;
+                [[CoreDataManager sharedManager].managedObjectContext deleteObject:nextCommand];
             }
-            else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+            if(previousCommand)
             {
-                // Add command fade up
-                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectStartTatum endTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum startBrightness:0.0 endBrightness:self.newCommandBrightness channel:channel];
+                startTatum = previousCommand.startTatum;
+                [[CoreDataManager sharedManager].managedObjectContext deleteObject:previousCommand];
             }
-            else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
-            {
-                // Add command fade down
-                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectStartTatum endTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum startBrightness:self.newCommandBrightness endBrightness:0.0 channel:channel];
-            }
+            
+            // Add the command on
+            [[CoreDataManager sharedManager] addCommandOnWithStartTatum:startTatum endTatum:endTatum brightness:self.newCommandBrightness channel:channel];
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeUp)
+        {
+            // Add command fade up
+            [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectStartTatum endTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum startBrightness:0.0 endBrightness:self.newCommandBrightness channel:channel];
+        }
+        else if([SequenceLogic sharedInstance].commandType == CommandTypeDown)
+        {
+            // Add command fade down
+            [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:[SequenceLogic sharedInstance].mouseBoxSelectStartTatum endTatum:[SequenceLogic sharedInstance].mouseBoxSelectEndTatum startBrightness:self.newCommandBrightness endBrightness:0.0 channel:channel];
         }
         
         currentMouseIndex ++;
     }
     
     [[CoreDataManager sharedManager] saveContext];
+    [self setNeedsDisplay:YES];
+}
+
+- (void)deleteCommandsInSelectedRangeForChannel:(Channel *)channel
+{
+    // See if we are replacing any commands
+    const float epsilon = 0.0001;
+    float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
+    float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
+    NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime - epsilon, startTatumTime + epsilon, endTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+    for(Command *command in commandsToRemove)
+    {
+        [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
+    }
+}
+
+- (void)deleteCommandsForSelection
+{
+    int currentMouseIndex = self.mouseBoxSelectTopChannel;
+    while(currentMouseIndex < self.mouseBoxSelectBottomChannel)
+    {
+        // Figure out which control box
+        int channelCount = 0;
+        int controlBoxIndex;
+        for(int i = 0; i < self.controlBoxes.count; i ++)
+        {
+            ControlBox *controlBox = self.controlBoxes[i];
+            
+            if(currentMouseIndex > controlBox.channels.count - 1 + channelCount)
+            {
+                channelCount += controlBox.channels.count;
+            }
+            else
+            {
+                controlBoxIndex = i;
+                break;
+            }
+        }
+        // Figure out which channel
+        NSArray *channels = self.channels[controlBoxIndex];
+        Channel *channel = channels[currentMouseIndex - channelCount];
+        
+        // Delete any commands that we are overlapping
+        [self deleteCommandsInSelectedRangeForChannel:channel];
+        
+        currentMouseIndex ++;
+    }
+    
+    [[CoreDataManager sharedManager] saveContext];
+    self.retainMouseGroupSelect = NO;
+    [self setNeedsDisplay:YES];
 }
 
 @end
