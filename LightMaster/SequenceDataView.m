@@ -857,8 +857,7 @@
 - (void)pasteData
 {
     // Pase data
-    NSLog(@"Paste And Bring Tatums");
-    const float epsilon = 0.0001;
+    const float epsilon = 0.001;
     float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
     float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
     float pasteStartTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
@@ -871,40 +870,98 @@
         [[CoreDataManager sharedManager].managedObjectContext deleteObject:tatum];
     }*/
     
-    // Paste tatums from the copy area, exept the first tatum
-    NSArray *tatumsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime + epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
+    // Paste tatums from the copy area. Don't replace existing tatums in the same spot
+    NSArray *tatumsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime - epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
     for(SequenceTatum *tatum in tatumsToCopy)
     {
-        float timeOffsetFromCopyStart = [tatum.time floatValue] - copyStartTime;
-        [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:pasteStartTime + timeOffsetFromCopyStart];
+        float newTatumTime = pasteStartTime + [tatum.time floatValue] - copyStartTime;
+        SequenceTatum *sameTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - epsilon, newTatumTime + epsilon] orderBy:@"time"] toArray] firstObject];
+        // Add the tatum if one doesn't already exist
+        if(!sameTatum)
+        {
+            [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:newTatumTime];
+        }
     }
     
-    // Paste commands from the copy area
-    NSArray *commandsToCopy = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND startTatum.time > %f AND endTatum.time < %f", [CoreDataManager sharedManager].currentSequence, copyStartTime - epsilon, copyEndTime + epsilon] orderBy:@"time"] toArray];
-    for(Command *command in commandsToCopy)
+    // Paste commands from the copy area, one channel at a time
+    int i = 0;
+    for(NSArray *channels in self.channels)
     {
-        // Find the command to copy channel index
-        int commandToCopyChannelIndex = 0;
-        for(NSArray *channels in self.channels)
+        for(Channel *channel in channels)
         {
-            for(Channel *channel in channels)
+            // Only use the selected channels
+            if(i >= self.mouseBoxSelectTopChannel && i < [SequenceLogic sharedInstance].bottomChannelForCopy)
             {
-                if(channel == command.channel)
+                NSArray *commandsToCopy = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                for(Command *command in commandsToCopy)
                 {
-                    break;
+                    // Find the channel index of the command to copy. Offset by the paste selection top channel
+                    int newChannelIndexForCommand = self.mouseBoxSelectTopChannel;
+                    BOOL done = NO;
+                    for(NSArray *channels in self.channels)
+                    {
+                        for(Channel *channel in channels)
+                        {
+                            if(channel == command.channel)
+                            {
+                                done = YES;
+                                break;
+                            }
+                            
+                            newChannelIndexForCommand ++;
+                            if(newChannelIndexForCommand >= channels.count)
+                            {
+                                newChannelIndexForCommand = (int)channels.count - 1;
+                            }
+                        }
+                        
+                        if(done)
+                        {
+                            break;
+                        }
+                    }
+                    // Find the new channel
+                    done = NO;
+                    Channel *newChannel;
+                    int index = 0;
+                    for(NSArray *channels in self.channels)
+                    {
+                        for(Channel *channel in channels)
+                        {
+                            if(index == newChannelIndexForCommand)
+                            {
+                                done = YES;
+                                newChannel = channel;
+                                break;
+                            }
+                            
+                            index ++;
+                        }
+                        
+                        if(done)
+                        {
+                            break;
+                        }
+                    }
+                    // Find the new startTatum
+                    float newTatumTime = pasteStartTime + [command.startTatum.time floatValue] - copyStartTime;
+                    SequenceTatum *startTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - epsilon, newTatumTime + epsilon] orderBy:@"time"] toArray] firstObject];
+                    // Find the new endTatum
+                    newTatumTime = pasteStartTime + [command.endTatum.time floatValue] - copyStartTime;
+                    SequenceTatum *endTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - epsilon, newTatumTime + epsilon] orderBy:@"time"] toArray] firstObject];
+                    
+                    if([command isMemberOfClass:[CommandOn class]])
+                    {
+                        [self addCommandForChannel:channel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandOn *)command).brightness floatValue] endBrightness:[((CommandOn *)command).brightness floatValue]];
+                    }
+                    else if([command isMemberOfClass:[CommandFade class]])
+                    {
+                        [self addCommandForChannel:channel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandFade *)command).startBrightness floatValue] endBrightness:[((CommandFade *)command).endBrightness floatValue]];
+                    }
                 }
-                
-                commandToCopyChannelIndex ++;
             }
-        }
-        
-        if([command isMemberOfClass:[CommandOn class]])
-        {
             
-        }
-        else if([command isMemberOfClass:[CommandFade class]])
-        {
-            
+            i ++;
         }
     }
 }
