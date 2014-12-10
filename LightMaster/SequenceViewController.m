@@ -144,12 +144,23 @@
         // Scroll to center
         NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
         NSRect viewFrame = ((SequenceTimelineView *)self.timelineScrollView.documentView).frame;
-        float smallestTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.size.width / 2];
+        float smallestTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
+        float middleTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width / 2];
         float largestTime = [[SequenceLogic sharedInstance] xToTime:viewFrame.size.width - visibleRect.size.width / 2];
+        //NSLog(@"current:%f left:%f middle:%f right:%f", [SequenceLogic sharedInstance].currentTime, smallestTime, middleTime,  largestTime);
         float newLeftX;
-        if([SequenceLogic sharedInstance].currentTime > smallestTime && [SequenceLogic sharedInstance].currentTime < largestTime)
+        if([SequenceLogic sharedInstance].currentTime >= middleTime && [SequenceLogic sharedInstance].currentTime < largestTime)
         {
+            float xDifference = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0 - visibleRect.origin.x;
             newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0;
+            if(xDifference > 10)
+            {
+                newLeftX -= xDifference - (xDifference / (xDifference / 20.0));
+            }
+        }
+        else if([SequenceLogic sharedInstance].currentTime < middleTime && [SequenceLogic sharedInstance].currentTime >= smallestTime)
+        {
+            newLeftX = visibleRect.origin.x;
         }
         else if([SequenceLogic sharedInstance].currentTime < smallestTime)
         {
@@ -158,6 +169,7 @@
         }
         else
         {
+            NSLog(@"right");
             // right edge
             newLeftX = viewFrame.size.width - visibleRect.size.width;
         }
