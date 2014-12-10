@@ -33,6 +33,11 @@ enum
 @property (strong, nonatomic) SequenceTatum *mouseBoxSelectStartTatum;
 @property (strong, nonatomic) SequenceTatum *mouseBoxSelectEndTatum;
 
+@property (strong, nonatomic) SequenceTatum *startTatumForCopy;
+@property (strong, nonatomic) SequenceTatum *endTatumForCopy;
+@property (assign, nonatomic) int topChannelForCopy;
+@property (assign, nonatomic) int bottomChannelForCopy;
+
 - (void)updateMagnification:(float)newMagnification;
 
 - (float)timeToX:(float)time;

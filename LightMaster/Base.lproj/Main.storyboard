@@ -669,7 +669,7 @@
         <!--Tab View Controller-->
         <scene sceneID="pBB-Wo-hmu">
             <objects>
-                <tabViewController selectedTabViewItemIndex="2" tabStyle="unspecified" id="QAB-tN-vhw" sceneMemberID="viewController">
+                <tabViewController selectedTabViewItemIndex="1" tabStyle="unspecified" id="QAB-tN-vhw" sceneMemberID="viewController">
                     <tabViewItems>
                         <tabViewItem identifier="" id="7wH-dj-GJr"/>
                         <tabViewItem id="oag-h1-fwM"/>

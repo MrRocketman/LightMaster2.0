@@ -127,13 +127,8 @@
             self.playStartTime = [SequenceLogic sharedInstance].currentTime;
         }
         // If we are playing a selection
-        else if(!self.isPlaySelectionButton && [SequenceLogic sharedInstance].currentTime > [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
+        else if(!self.isPlaySelectionButton && [SequenceLogic sharedInstance].currentTime >= [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
         {
-            /*float newTime = [((SequenceView *)(self.sequenceScrollView.documentView)).mouseBoxSelectStartTatum.time floatValue];
-            self.audioPlayer.currentTime = newTime;
-            [SequenceLogic sharedInstance].currentTime = newTime;
-            self.playStartDate = [NSDate date];
-            self.playStartTime = [SequenceLogic sharedInstance].currentTime;*/
             self.isPlaySelectionButton = !self.isPlaySelectionButton;
             [self.playSelectionButton setState:0];
             self.playSelectionButton.title = @"Play";
@@ -236,7 +231,7 @@
         self.playButton.title = @"Pause";
         self.playStartDate = [NSDate date];
         self.playStartTime = [SequenceLogic sharedInstance].currentTime;
-        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.03 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
+        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
     }
     else
     {

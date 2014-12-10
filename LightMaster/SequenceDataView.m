@@ -406,7 +406,7 @@
     }
     
     // start new shift drag
-    if(self.shiftKey || self.commandKey)
+    if(self.shiftKey)
     {
         self.retainMouseGroupSelect = YES;
     }
@@ -592,6 +592,28 @@
             // pulse
             [SequenceLogic sharedInstance].commandType = CommandTypePulse;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+        }
+        else if(keyboardEvent.keyCode == 8 && self.commandKey && self.retainMouseGroupSelect) // 'c'
+        {
+            // Copy data
+            NSLog(@"copy");
+            [SequenceLogic sharedInstance].startTatumForCopy = [SequenceLogic sharedInstance].mouseBoxSelectStartTatum;
+            [SequenceLogic sharedInstance].endTatumForCopy = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
+            [SequenceLogic sharedInstance].topChannelForCopy = self.mouseBoxSelectTopChannel;
+            [SequenceLogic sharedInstance].bottomChannelForCopy = self.mouseBoxSelectBottomChannel;
+        }
+        else if(keyboardEvent.keyCode == 9 && self.commandKey && self.retainMouseGroupSelect && [SequenceLogic sharedInstance].startTatumForCopy) // 'v'
+        {
+            if(!self.shiftKey)
+            {
+                // Pase data
+                NSLog(@"Paste And Bring Tatums");
+            }
+            else
+            {
+                // Pase data
+                NSLog(@"Paste And Copy To Tatums");
+            }
         }
         else
         {
