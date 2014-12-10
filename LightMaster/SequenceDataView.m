@@ -384,25 +384,38 @@
         // Select tatum
         self.sequenceTatumIsSelected = YES;
     }
-    // new/delete tatum
-    else if(self.optionKey)
-    {
-        [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:[[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]];
-        [[CoreDataManager sharedManager] saveContext];
-        self.sequenceTatumIsSelected = YES;
-        self.newTatum = YES;
-    }
-    // deselect shift drag selection
-    else if(self.retainMouseGroupSelect)
-    {
-        self.mouseGroupSelect = NO;
-    }
-    // start new drag
     else
     {
-        self.mouseGroupSelect = YES;
-        [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = nil;
-        [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nil;
+        // new/delete tatum
+        if(self.optionKey)
+        {
+            [[CoreDataManager sharedManager] addSequenceTatumToSequence:[CoreDataManager sharedManager].currentSequence atTime:[[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]];
+            [[CoreDataManager sharedManager] saveContext];
+            self.sequenceTatumIsSelected = YES;
+            self.newTatum = YES;
+        }
+        // start new box select
+        else
+        {
+            // deselect shift drag selection
+            if(self.retainMouseGroupSelect)
+            {
+                self.mouseGroupSelect = NO;
+                
+                if(self.shiftKey)
+                {
+                    self.mouseGroupSelect = YES;
+                    [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = nil;
+                    [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nil;
+                }
+            }
+            else
+            {
+                self.mouseGroupSelect = YES;
+                [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = nil;
+                [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nil;
+            }
+        }
     }
     
     // start new shift drag
