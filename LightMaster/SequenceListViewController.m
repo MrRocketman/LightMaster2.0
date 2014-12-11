@@ -22,6 +22,7 @@
 #import "EchoNestPitch.h"
 #import "ControlBox.h"
 #import "Channel.h"
+#import "ChannelColorTableCellView.h"
 
 @interface SequenceListViewController ()
 
@@ -509,6 +510,13 @@
     return YES;
 }
 
+- (IBAction)colorChange:(id)sender
+{
+    int tableRow = [(ChannelColorTableCellView *)[(NSColorWell *)sender superview] tableRow];
+    [(Channel *)[self.trackChannelFetchedResultsController objectAtIndex:tableRow] setColor:[(NSColorWell *)sender color]];
+    [[CoreDataManager sharedManager] saveContext];
+}
+
 #pragma mark - NSTableViewDataSource Methods
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
@@ -566,6 +574,14 @@
             NSTableCellView *result = [tableView makeViewWithIdentifier:@"trackChannelTitleView" owner:self];
             result.textField.stringValue = [(Channel *)[self.trackChannelFetchedResultsController objectAtIndex:row] title];
             return result;
+        }
+        // Color column
+        else if([tableColumn.identifier isEqualToString:@"color"])
+        {
+            ChannelColorTableCellView *result = [tableView makeViewWithIdentifier:@"channelColor" owner:self];
+            result.colorWell.color = [(Channel *)[self.trackChannelFetchedResultsController objectAtIndex:row] color];
+            result.tableRow = (int)row;
+            return  result;
         }
     }
     

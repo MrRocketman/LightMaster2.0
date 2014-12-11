@@ -30,5 +30,6 @@
 - (IBAction)createTrackButtonPress:(id)sender;
 - (IBAction)createTrackChannelButtonPress:(id)sender;
 - (IBAction)chooseAudioFileButtonPress:(id)sender;
+- (IBAction)colorChange:(id)sender;
 
 @end
