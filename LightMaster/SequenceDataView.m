@@ -590,32 +590,57 @@
         else if(keyboardEvent.keyCode == 31) // 'o'
         {
             // command on
+            int previousCommandType = [SequenceLogic sharedInstance].commandType;
             [SequenceLogic sharedInstance].commandType = CommandTypeOn;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+            [self addCommandsForMouseGroupSelect];
+            [SequenceLogic sharedInstance].commandType = previousCommandType;
+            self.retainMouseGroupSelect = NO;
+            
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else if(keyboardEvent.keyCode == 32) // 'u'
         {
             // fade up
+            int previousCommandType = [SequenceLogic sharedInstance].commandType;
             [SequenceLogic sharedInstance].commandType = CommandTypeUp;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+            [self addCommandsForMouseGroupSelect];
+            [SequenceLogic sharedInstance].commandType = previousCommandType;
+            self.retainMouseGroupSelect = NO;
+            
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else if(keyboardEvent.keyCode == 2) // 'd'
         {
             // fade down
+            int previousCommandType = [SequenceLogic sharedInstance].commandType;
             [SequenceLogic sharedInstance].commandType = CommandTypeDown;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+            [self addCommandsForMouseGroupSelect];
+            [SequenceLogic sharedInstance].commandType = previousCommandType;
+            self.retainMouseGroupSelect = NO;
+            
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else if(keyboardEvent.keyCode == 17) // 't'
         {
             // twinkle
+            int previousCommandType = [SequenceLogic sharedInstance].commandType;
             [SequenceLogic sharedInstance].commandType = CommandTypeTwinkle;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+            [self addCommandsForMouseGroupSelect];
+            [SequenceLogic sharedInstance].commandType = previousCommandType;
+            self.retainMouseGroupSelect = NO;
+            
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else if(keyboardEvent.keyCode == 35) // 'p'
         {
             // pulse
+            int previousCommandType = [SequenceLogic sharedInstance].commandType;
             [SequenceLogic sharedInstance].commandType = CommandTypePulse;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
+            [self addCommandsForMouseGroupSelect];
+            [SequenceLogic sharedInstance].commandType = previousCommandType;
+            self.retainMouseGroupSelect = NO;
+            
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else if(keyboardEvent.keyCode == 8 && self.commandKey && self.retainMouseGroupSelect) // 'c'
         {
