@@ -583,7 +583,7 @@
         }
         else if(keyboardEvent.keyCode == 1) // 's'
         {
-            // command on
+            // select mode
             [SequenceLogic sharedInstance].commandType = CommandTypeSelect;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
