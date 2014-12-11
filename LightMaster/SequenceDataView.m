@@ -16,10 +16,6 @@
 #import "CommandFade.h"
 #import "ControlBox.h"
 #import "Channel.h"
-#import "Audio.h"
-#import "EchoNestAudioAnalysis.h"
-#import "EchoNestTatum.h"
-#import "EchoNestBeat.h"
 
 @interface SequenceDataView()
 
@@ -132,12 +128,6 @@
     
     // Draw Sequence Tatums
     [self drawSequenceTatums];
-    
-    // Draw echo tatums
-    [self drawEchoNestTatums];
-    
-    // Draw echo beats
-    [self drawEchoNestBeats];
     
     // Draw the currentTimeMarker
     //[self drawCurrentTimeMarker];
@@ -333,34 +323,6 @@
     [[NSColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1.0] set];
     //[self.sequenceTatumPaths setLineWidth:1.0];
     [self.sequenceTatumPaths fill];
-}
-
-- (void)drawEchoNestTatums
-{
-    NSSet *echoNestTatums = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis.tatums;
-    
-    NSBezierPath *echoNestTatumPath = [NSBezierPath bezierPath];
-    for(EchoNestTatum *echoTatum in echoNestTatums)
-    {
-        [self addSequenceTatumWithTime:[echoTatum.start floatValue] toBezierPath:echoNestTatumPath];
-    }
-    
-    [[NSColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0] set];
-    [echoNestTatumPath fill];
-}
-
-- (void)drawEchoNestBeats
-{
-    NSSet *echoNestBeats = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis.beats;
-    
-    NSBezierPath *echoNestBeatPath = [NSBezierPath bezierPath];
-    for(EchoNestBeat *echoBeat in echoNestBeats)
-    {
-        [self addSequenceTatumWithTime:[echoBeat.start floatValue] toBezierPath:echoNestBeatPath];
-    }
-    
-    [[NSColor colorWithRed:0.0 green:0.0 blue:0.7 alpha:1.0] set];
-    [echoNestBeatPath fill];
 }
 
 - (NSPoint)addSequenceTatumWithTime:(float)time toBezierPath:(NSBezierPath *)path

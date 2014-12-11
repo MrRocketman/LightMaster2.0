@@ -14,6 +14,10 @@
 #import "SequenceScrollView.h"
 #import "Audio.h"
 #import "EchoNestAudioAnalysis.h"
+#import "Audio.h"
+#import "EchoNestAudioAnalysis.h"
+#import "EchoNestTatum.h"
+#import "EchoNestBeat.h"
 
 @interface SequenceTimelineView()
 
@@ -53,6 +57,12 @@
     //NSRectFill(dirtyRect);
     
     [self drawAudio];
+    
+    // Draw echo tatums
+    [self drawEchoNestTatums];
+    
+    // Draw echo beats
+    [self drawEchoNestBeats];
     
     [self drawTimeline];
 }
@@ -230,6 +240,47 @@
     [self.endTimePath fill];
     [[NSColor whiteColor] setStroke];
     [self.endTimePath stroke];
+}
+
+- (void)drawEchoNestTatums
+{
+    NSSet *echoNestTatums = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis.tatums;
+    
+    NSBezierPath *echoNestTatumPath = [NSBezierPath bezierPath];
+    for(EchoNestTatum *echoTatum in echoNestTatums)
+    {
+        [self addLineWithTime:[echoTatum.start floatValue] toBezierPath:echoNestTatumPath];
+    }
+    
+    [[NSColor colorWithRed:0.0 green:0.7 blue:0.7 alpha:1.0] set];
+    [echoNestTatumPath fill];
+}
+
+- (void)drawEchoNestBeats
+{
+    NSSet *echoNestBeats = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis.beats;
+    
+    NSBezierPath *echoNestBeatPath = [NSBezierPath bezierPath];
+    for(EchoNestBeat *echoBeat in echoNestBeats)
+    {
+        [self addLineWithTime:[echoBeat.start floatValue] toBezierPath:echoNestBeatPath];
+    }
+    
+    [[NSColor colorWithRed:0.0 green:0.0 blue:0.7 alpha:1.0] set];
+    [echoNestBeatPath fill];
+}
+
+- (NSPoint)addLineWithTime:(float)time toBezierPath:(NSBezierPath *)path
+{
+    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], self.frame.size.height / 2 + 1);
+    NSPoint endPoint = NSMakePoint(startPoint.x, NSMaxY(self.bounds));
+    
+    [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x - 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x + 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(startPoint.x + 1, startPoint.y)];
+    
+    return startPoint;
 }
 
 - (float)roundUpNumber:(float)numberToRound toNearestMultipleOfNumber:(float)multiple
