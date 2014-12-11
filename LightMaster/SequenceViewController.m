@@ -119,74 +119,7 @@
     }
     else
     {
-        // Loop back to beginning
-        if([SequenceLogic sharedInstance].currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
-        {
-            [self.audioPlayer stop];
-            self.audioPlayer.currentTime = 0;
-            [self.audioPlayer play];
-            [SequenceLogic sharedInstance].currentTime = 0;
-            self.playStartDate = [NSDate date];
-            self.playStartTime = [SequenceLogic sharedInstance].currentTime;
-        }
-        // If we are playing a selection
-        else if(self.isPlaySelection && [SequenceLogic sharedInstance].currentTime >= [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
-        {
-            self.isPlaySelection = NO;
-            self.isPlayButton = !self.isPlayButton;
-            [self.playButton setState:0];
-            self.playButton.title = @"Play";
-            [self.audioPlayer pause];
-            [self.audioTimer invalidate];
-            self.audioTimer = nil;
-        }
-        
-        // Scroll to center
-        NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
-        NSRect viewFrame = ((SequenceTimelineView *)self.timelineScrollView.documentView).frame;
-        float smallestTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
-        float middleTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width / 2];
-        float largestTime = [[SequenceLogic sharedInstance] xToTime:viewFrame.size.width - visibleRect.size.width / 2];
-        float newLeftX;
-        // Current time is from the middle of the screen onward
-        if([SequenceLogic sharedInstance].currentTime >= middleTime && [SequenceLogic sharedInstance].currentTime < largestTime)
-        {
-            // Go to center
-            float xDifference = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0 - visibleRect.origin.x;
-            newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0;
-            // Accelerate forward if the current time is beyond the center
-            if(xDifference > 10)
-            {
-                newLeftX -= xDifference - (xDifference / 5.0);
-            }
-        }
-        // Current time if from the left of the screen to the middle
-        else if([SequenceLogic sharedInstance].currentTime < middleTime && [SequenceLogic sharedInstance].currentTime >= smallestTime)
-        {
-            newLeftX = visibleRect.origin.x;
-        }
-        // Current time is less than the left edge
-        else if([SequenceLogic sharedInstance].currentTime < smallestTime)
-        {
-            // left edge
-            newLeftX = 0;
-        }
-        // Current time is greater than the far edge
-        else
-        {
-            NSLog(@"right");
-            // right edge
-            newLeftX = viewFrame.size.width - visibleRect.size.width;
-        }
-        
-        NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];
-        NSRect audioAnalysisVisibleRect = [self.audioAnalysisScrollView documentVisibleRect];
-        [self.sequenceScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, sequenceVisibleRect.origin.y)];
-        [self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
-        [self.timelineScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, visibleRect.origin.y)];
-        [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
-        [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
-        [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
+        [self updateTime];
     }
 }
 
@@ -234,7 +167,7 @@
         self.playButton.title = @"Pause";
         self.playStartDate = [NSDate date];
         self.playStartTime = [SequenceLogic sharedInstance].currentTime;
-        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.03 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
+        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.002 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
     }
     else
     {
@@ -276,7 +209,96 @@
 - (void)audioTimerFire:(NSTimer *)timer
 {
     [SequenceLogic sharedInstance].currentTime = [[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
+    [self updateTime];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+}
+
+- (void)updateTime
+{
+    // Loop back to beginning
+    if([SequenceLogic sharedInstance].currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
+    {
+        [self.audioPlayer stop];
+        self.audioPlayer.currentTime = 0;
+        [self.audioPlayer play];
+        [SequenceLogic sharedInstance].currentTime = 0;
+        self.playStartDate = [NSDate date];
+        self.playStartTime = [SequenceLogic sharedInstance].currentTime;
+    }
+    // If we are playing a selection
+    else if(self.isPlaySelection && [SequenceLogic sharedInstance].currentTime >= [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
+    {
+        self.isPlaySelection = NO;
+        self.isPlayButton = !self.isPlayButton;
+        [self.playButton setState:0];
+        self.playButton.title = @"Play";
+        [self.audioPlayer pause];
+        [self.audioTimer invalidate];
+        self.audioTimer = nil;
+    }
+    
+    // Scroll to center
+    NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
+    NSRect viewFrame = ((SequenceTimelineView *)self.timelineScrollView.documentView).frame;
+    float smallestTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
+    float middleTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width / 2];
+    float largestTime = [[SequenceLogic sharedInstance] xToTime:viewFrame.size.width - visibleRect.size.width / 2];
+    float newLeftX;
+    // Current time is from the middle of the screen onward
+    if([SequenceLogic sharedInstance].currentTime >= middleTime && [SequenceLogic sharedInstance].currentTime < largestTime)
+    {
+        // Go to center
+        float xDifference = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0 - visibleRect.origin.x;
+        newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0;
+        // Accelerate forward if the current time is beyond the center
+        if(xDifference > 10)
+        {
+            if(xDifference < 50)
+            {
+                newLeftX -= xDifference - (xDifference / 10.0);
+            }
+            else if(xDifference < 100)
+            {
+                newLeftX -= xDifference - (xDifference / 20.0);
+            }
+            else if(xDifference < 200)
+            {
+                newLeftX -= xDifference - (xDifference / 30.0);
+            }
+            else
+            {
+                newLeftX -= xDifference - (xDifference / 40.0);
+            
+            }
+        }
+    }
+    // Current time if from the left of the screen to the middle
+    else if([SequenceLogic sharedInstance].currentTime < middleTime && [SequenceLogic sharedInstance].currentTime >= smallestTime)
+    {
+        newLeftX = visibleRect.origin.x;
+    }
+    // Current time is less than the left edge
+    else if([SequenceLogic sharedInstance].currentTime < smallestTime)
+    {
+        // left edge
+        newLeftX = 0;
+    }
+    // Current time is greater than the far edge
+    else
+    {
+        NSLog(@"right");
+        // right edge
+        newLeftX = viewFrame.size.width - visibleRect.size.width;
+    }
+    
+    NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];
+    NSRect audioAnalysisVisibleRect = [self.audioAnalysisScrollView documentVisibleRect];
+    [self.sequenceScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, sequenceVisibleRect.origin.y)];
+    [self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
+    [self.timelineScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, visibleRect.origin.y)];
+    [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
+    [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
+    [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
 }
 
 - (IBAction)commandTypeSegmentedControlChange:(id)sender
