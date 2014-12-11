@@ -58,6 +58,7 @@
     // Draw echo beats
     [self drawEchoNestBeats];
     
+    // Draw echo tatums
     [self drawTimeline];
 }
 
