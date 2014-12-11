@@ -10,6 +10,7 @@
 #import "CoreDataManager.h"
 #import "Sequence.h"
 #import "Audio.h"
+#import "AudioLyric.h"
 #import "ENAPIRequest.h"
 #import "ENAPI.h"
 #import "EchoNestAudioAnalysis.h"
@@ -29,6 +30,7 @@
 @property (strong, nonatomic) SNRFetchedResultsController *sequenceFetchedResultsController;
 @property (strong, nonatomic) SNRFetchedResultsController *trackFetchedResultsController;
 @property (strong, nonatomic) SNRFetchedResultsController *trackChannelFetchedResultsController;
+@property (strong, nonatomic) SNRFetchedResultsController *audioLyricFetchedResultsController;
 
 @property (strong, nonatomic) NSOpenPanel *openPanel;
 @property (strong, nonatomic) Audio *currentAudio;
@@ -66,6 +68,14 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         [[NSApplication sharedApplication] presentError:error];
     }
+    
+    // Track Channels
+    error = nil;
+    if (![[self audioLyricFetchedResultsController] performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        [[NSApplication sharedApplication] presentError:error];
+    }
 }
 
 - (void)viewWillAppear
@@ -73,6 +83,7 @@
     [self.sequenceTableView reloadData];
     [self.trackTableView reloadData];
     [self.trackChannelTableView reloadData];
+    [self.lyricTableView reloadData];
     
     [self updateAudioTitleLabelForSequenceAtRow:(int)self.sequenceTableView.selectedRow];
     [self updateAudioAnlysisProgressLabel];
@@ -140,6 +151,13 @@
                 [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:channel];
                 [[CoreDataManager sharedManager] saveContext];
             }
+            // Delete lyric
+            else if (self.lyricTableView == self.lyricTableView.window.firstResponder)
+            {
+                AudioLyric *lyric = [self.audioLyricFetchedResultsController objectAtIndex:self.lyricTableView.selectedRow];
+                [[[CoreDataManager sharedManager] managedObjectContext] deleteObject:lyric];
+                [[CoreDataManager sharedManager] saveContext];
+            }
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
         }
@@ -173,6 +191,12 @@
 - (IBAction)createTrackChannelButtonPress:(id)sender
 {
     [[CoreDataManager sharedManager] newChannelForControlBox:[self.trackFetchedResultsController objectAtIndex:self.trackTableView.selectedRow]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
+}
+
+- (IBAction)createLyricButtonPress:(id)sender
+{
+    [[CoreDataManager sharedManager] newAudioLyricForSequence:[self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow]];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
 }
 
@@ -506,6 +530,20 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
         });
     }
+    else if([control.identifier isEqualToString:@"timeTextField"])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [(AudioLyric *)[self.audioLyricFetchedResultsController objectAtIndex:self.lyricTableView.selectedRow] setTime:@([(NSTextField *)control floatValue])];
+            [[CoreDataManager sharedManager] saveContext];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
+        });
+    }
+    else if([control.identifier isEqualToString:@"lyricTextField"])
+    {
+        [(AudioLyric *)[self.audioLyricFetchedResultsController objectAtIndex:self.lyricTableView.selectedRow] setText:[(NSTextField *)control stringValue]];
+        [[CoreDataManager sharedManager] saveContext];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
+    }
     
     return YES;
 }
@@ -532,6 +570,10 @@
     else if(aTableView == self.trackChannelTableView)
     {
         return [self.trackChannelFetchedResultsController count];
+    }
+    else if(aTableView == self.lyricTableView)
+    {
+        return [self.audioLyricFetchedResultsController count];
     }
     
     return 0;
@@ -584,6 +626,23 @@
             return  result;
         }
     }
+    else if(tableView == self.lyricTableView)
+    {
+        // Time column
+        if([tableColumn.identifier isEqualToString:@"time"])
+        {
+            NSTableCellView *result = [tableView makeViewWithIdentifier:@"timeView" owner:self];
+            result.textField.floatValue = [[(AudioLyric *)[self.audioLyricFetchedResultsController objectAtIndex:row] time] floatValue];
+            return result;
+        }
+        // Lyric column
+        else if([tableColumn.identifier isEqualToString:@"lyric"])
+        {
+            NSTableCellView *result = [tableView makeViewWithIdentifier:@"lyricView" owner:self];
+            result.textField.stringValue = [(AudioLyric *)[self.audioLyricFetchedResultsController objectAtIndex:row] text];
+            return result;
+        }
+    }
     
     // Return the result
     return nil;
@@ -596,8 +655,12 @@
     if(tableView == self.sequenceTableView)
     {
         self.createTrackButton.enabled = YES;
+        self.createLyricButton.enabled = YES;
         
-        [self updateTrackFetchedResultsControllerForSequence:(Sequence *)[self.sequenceFetchedResultsController objectAtIndex:row]];
+        Sequence *sequence = (Sequence *)[self.sequenceFetchedResultsController objectAtIndex:row];
+        [self updateTrackFetchedResultsControllerForSequence:sequence];
+        [self updateAudioLyricFetchedResultsControllerForAudio:sequence.audio];
+        
         NSError *error = nil;
         if (![[self trackFetchedResultsController] performFetch:&error])
         {
@@ -609,7 +672,6 @@
         // Show the audio data
         if(self.sequenceFetchedResultsController.count > row)
         {
-            Sequence *sequence = [self.sequenceFetchedResultsController objectAtIndex:row];
             if(sequence.audio.title.length > 0)
             {
                 self.audioDescriptionTextField.stringValue = sequence.audio.title;
@@ -695,6 +757,25 @@
     return _trackChannelFetchedResultsController;
 }
 
+// Returns the fetched results controller. Creates and configures the controller if necessary.
+- (SNRFetchedResultsController *)audioLyricFetchedResultsController
+{
+    if (_audioLyricFetchedResultsController != nil)
+    {
+        return _audioLyricFetchedResultsController;
+    }
+    
+    // Create and configure a fetch request with the Book entity.
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"AudioLyric"];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES]];
+    
+    // Create and initialize the fetch results controller.
+    _audioLyricFetchedResultsController = [[SNRFetchedResultsController alloc] initWithManagedObjectContext:[[CoreDataManager sharedManager] managedObjectContext] fetchRequest:fetchRequest];
+    _audioLyricFetchedResultsController.delegate = self;
+    
+    return _audioLyricFetchedResultsController;
+}
+
 - (void)updateTrackFetchedResultsControllerForSequence:(Sequence *)sequence
 {
     self.trackFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"analysisSequence == %@", sequence];
@@ -703,6 +784,11 @@
 - (void)updateTrackChannelFetchedResultsControllerForTrack:(ControlBox *)track
 {
     self.trackChannelFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"controlBox == %@", track];
+}
+
+- (void)updateAudioLyricFetchedResultsControllerForAudio:(Audio *)audio
+{
+    self.audioLyricFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"audio == %@", audio];
 }
 
 // NSFetchedResultsController delegate methods to respond to additions, removals and so on.
@@ -723,6 +809,11 @@
         // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
         [self.trackChannelTableView beginUpdates];
     }
+    else if(controller == self.audioLyricFetchedResultsController)
+    {
+        // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
+        [self.lyricTableView beginUpdates];
+    }
 }
 
 - (void)controller:(SNRFetchedResultsController *)controller didChangeObject:(id)anObject atIndex:(NSUInteger)index forChangeType:(SNRFetchedResultsChangeType)type newIndex:(NSUInteger)newIndex
@@ -739,6 +830,10 @@
     else if(controller == self.trackChannelFetchedResultsController)
     {
         tableView = self.trackChannelTableView;
+    }
+    else if(controller == self.audioLyricFetchedResultsController)
+    {
+        tableView = self.lyricTableView;
     }
     
     switch (type)
@@ -777,6 +872,11 @@
     {
         // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
         [self.trackChannelTableView endUpdates];
+    }
+    else if(controller == self.audioLyricFetchedResultsController)
+    {
+        // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
+        [self.lyricTableView endUpdates];
     }
 }
 

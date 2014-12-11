@@ -36,6 +36,7 @@
 		1A3474E71A32EB2E00736869 /* ENAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474E11A32EB2E00736869 /* ENAPI.m */; };
 		1A3474E81A32EB2E00736869 /* ENAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474E41A32EB2E00736869 /* ENAPIRequest.m */; };
 		1A4ADDD41A397D0800B22C4E /* SequenceCurrentTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A4ADDD31A397D0800B22C4E /* SequenceCurrentTimeView.m */; };
+		1A4ADDD71A398F7400B22C4E /* AudioLyric.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A4ADDD61A398F7400B22C4E /* AudioLyric.m */; };
 		1A75ADBF1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADBE1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m */; };
 		1A75ADC21A31248A00D532FB /* SequenceAudioAnalysisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADC11A31248A00D532FB /* SequenceAudioAnalysisView.m */; };
 		1A75ADC71A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADC61A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m */; };
@@ -136,6 +137,8 @@
 		1A4ADDD11A39683200B22C4E /* LightMaster 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LightMaster 2.xcdatamodel"; sourceTree = "<group>"; };
 		1A4ADDD21A397D0800B22C4E /* SequenceCurrentTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceCurrentTimeView.h; sourceTree = "<group>"; };
 		1A4ADDD31A397D0800B22C4E /* SequenceCurrentTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceCurrentTimeView.m; sourceTree = "<group>"; };
+		1A4ADDD51A398F7400B22C4E /* AudioLyric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioLyric.h; path = LightMaster/AudioLyric.h; sourceTree = "<group>"; };
+		1A4ADDD61A398F7400B22C4E /* AudioLyric.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioLyric.m; path = LightMaster/AudioLyric.m; sourceTree = "<group>"; };
 		1A75ADBD1A31247B00D532FB /* SequenceAudioAnalysisScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceAudioAnalysisScrollView.h; sourceTree = "<group>"; };
 		1A75ADBE1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceAudioAnalysisScrollView.m; sourceTree = "<group>"; };
 		1A75ADC01A31248900D532FB /* SequenceAudioAnalysisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceAudioAnalysisView.h; sourceTree = "<group>"; };
@@ -538,6 +541,8 @@
 				1AB616981A36C14C0065A050 /* SequenceTatum.m */,
 				1A0D21621A34141D00E5B3E8 /* Audio.h */,
 				1A0D21631A34141D00E5B3E8 /* Audio.m */,
+				1A4ADDD51A398F7400B22C4E /* AudioLyric.h */,
+				1A4ADDD61A398F7400B22C4E /* AudioLyric.m */,
 				1AE771601A243F2000C49006 /* ControlBox */,
 				1AE7715E1A243EED00C49006 /* EchoNest */,
 				1AE7715F1A243EF700C49006 /* Commands */,
@@ -645,6 +650,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A4ADDD71A398F7400B22C4E /* AudioLyric.m in Sources */,
 				1AE771571A243E6600C49006 /* EchoNestBeat.m in Sources */,
 				1AB616931A36C0BD0065A050 /* ChannelPattern.m in Sources */,
 				1A3474E71A32EB2E00736869 /* ENAPI.m in Sources */,

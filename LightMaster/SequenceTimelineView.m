@@ -10,11 +10,11 @@
 #import "SequenceLogic.h"
 #import "Sequence.h"
 #import "CoreDataManager.h"
+#import "NSManagedObjectContext+Queryable.h"
 #import "SequenceTimelineScrollView.h"
 #import "SequenceScrollView.h"
 #import "Audio.h"
-#import "EchoNestAudioAnalysis.h"
-#import "Audio.h"
+#import "AudioLyric.h"
 #import "EchoNestAudioAnalysis.h"
 #import "EchoNestTatum.h"
 #import "EchoNestBeat.h"
@@ -50,7 +50,11 @@
     //[[NSColor darkGrayColor] set];
     //NSRectFill(dirtyRect);
     
+    // Draw audio
     [self drawAudio];
+    
+    // Draw Lyrics
+    [self drawLyrics];
     
     // Draw echo tatums
     [self drawEchoNestTatums];
@@ -85,11 +89,20 @@
         [bezierPath setLineWidth:1.0];
         [[NSColor blackColor] set];
         [bezierPath stroke];
-        
+    }
+}
+
+- (void)drawLyrics
+{
+    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+    NSArray *lyrics = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"AudioLyric"] where:@"audio == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence.audio, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5]] orderBy:@"time"] toArray];
+    
+    for(AudioLyric *lyric in lyrics)
+    {
         // Draw the text
         NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
-        NSRect textFrame = NSMakeRect(10 + [(NSScrollView *)self.superview.superview documentVisibleRect].origin.x, topY, rightX - leftX, CHANNEL_HEIGHT - 2);
-        [audio.title drawInRect:textFrame withAttributes:attributes];
+        NSRect textFrame = NSMakeRect([[SequenceLogic sharedInstance] timeToX:[lyric.time floatValue]], self.frame.size.height / 2, 150, CHANNEL_HEIGHT - 2);
+        [lyric.text drawInRect:textFrame withAttributes:attributes];
     }
 }
 

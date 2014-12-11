@@ -14,6 +14,7 @@
 #import "ControlBox.h"
 #import "Channel.h"
 #import "Audio.h"
+#import "AudioLyric.h"
 #import "EchoNestAudioAnalysis.h"
 #import "EchoNestTatum.h"
 #import "CommandOn.h"
@@ -457,6 +458,20 @@
     command.uuid = [[NSUUID UUID] UUIDString];
     
     return command;
+}
+
+#pragma mark - Audio
+
+- (AudioLyric *)newAudioLyricForSequence:(Sequence *)sequence
+{
+    AudioLyric *lyric = [NSEntityDescription insertNewObjectForEntityForName:@"AudioLyric" inManagedObjectContext:self.managedObjectContext];
+    lyric.text = @"Lyric";
+    lyric.time = @(1.0);
+    lyric.audio = sequence.audio;
+    
+    [self saveContext];
+    
+    return lyric;
 }
 
 @end

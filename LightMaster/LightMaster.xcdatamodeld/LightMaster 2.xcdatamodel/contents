@@ -11,7 +11,7 @@
         <relationship name="lyrics" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AudioLyric" inverseName="audio" inverseEntity="AudioLyric" syncable="YES"/>
         <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sequence" inverseName="audio" inverseEntity="Sequence" syncable="YES"/>
     </entity>
-    <entity name="AudioLyric" syncable="YES">
+    <entity name="AudioLyric" representedClassName="AudioLyric" syncable="YES">
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="audio" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Audio" inverseName="lyrics" inverseEntity="Audio" syncable="YES"/>
