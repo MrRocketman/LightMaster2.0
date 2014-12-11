@@ -15,6 +15,7 @@
 
 enum
 {
+    CommandTypeSelect,
     CommandTypeOn,
     CommandTypeUp,
     CommandTypeDown,

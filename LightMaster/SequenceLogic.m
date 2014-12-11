@@ -37,7 +37,7 @@
     {
         self.magnification = 5.0;
         self.currentTime = 1.0;
-        self.commandType = CommandTypeOn;
+        self.commandType = CommandTypeSelect;
     }
     
     return self;

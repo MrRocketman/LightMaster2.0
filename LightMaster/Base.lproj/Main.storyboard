@@ -745,7 +745,7 @@
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aBB-OC-aOC">
-                                        <rect key="frame" x="471" y="18" width="152" height="50"/>
+                                        <rect key="frame" x="431" y="18" width="152" height="50"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="001.000" placeholderString="" id="UO0-tf-qIh">
                                             <font key="font" metaFont="system" size="41"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -764,16 +764,17 @@
                                         </connections>
                                     </button>
                                     <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Xn-nQr">
-                                        <rect key="frame" x="699" y="34" width="332" height="20"/>
+                                        <rect key="frame" x="613" y="34" width="418" height="20"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="330" id="hSV-8E-gMk"/>
+                                            <constraint firstAttribute="width" constant="416" id="hSV-8E-gMk"/>
                                         </constraints>
                                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="roundRect" trackingMode="selectOne" id="XlB-dn-7Fr">
                                             <font key="font" metaFont="titleBar" size="12"/>
                                             <segments>
-                                                <segment label="On" width="70" selected="YES"/>
-                                                <segment label="Up" width="69" tag="1"/>
-                                                <segment label="Down" width="69"/>
+                                                <segment label="Select" width="70" selected="YES"/>
+                                                <segment label="On" width="69" tag="1"/>
+                                                <segment label="Fade Up" width="69"/>
+                                                <segment label="Fade Down"/>
                                                 <segment label="Twinkle"/>
                                                 <segment label="Pulse"/>
                                             </segments>
@@ -800,7 +801,7 @@
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="leading" secondItem="VS1-F9-Vzu" secondAttribute="trailing" constant="8" symbolic="YES" id="6pM-kz-wzE"/>
                                     <constraint firstAttribute="trailing" secondItem="yGR-Xn-nQr" secondAttribute="trailing" constant="87" id="HNO-ha-9Dq"/>
                                     <constraint firstItem="yGR-Xn-nQr" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="31" id="Hj5-to-pYQ"/>
-                                    <constraint firstAttribute="centerX" secondItem="aBB-OC-aOC" secondAttribute="centerX" constant="11.5" id="JSe-NW-Eka"/>
+                                    <constraint firstAttribute="centerX" secondItem="aBB-OC-aOC" secondAttribute="centerX" constant="51.5" id="JSe-NW-Eka"/>
                                     <constraint firstItem="aBB-OC-aOC" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="top" constant="16" id="Sj5-Yz-e5O"/>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="bottom" secondItem="hW0-Qs-xwE" secondAttribute="bottom" id="UgU-aQ-gMz"/>
                                     <constraint firstItem="hW0-Qs-xwE" firstAttribute="leading" secondItem="mU0-ML-CRS" secondAttribute="trailing" constant="8" symbolic="YES" id="WD8-ae-PqP"/>
@@ -1393,7 +1394,7 @@
                                     <rect key="frame" x="1" y="96.938554883003235" width="192" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="vnF-kv-xbk">
+                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="vnF-kv-xbk">
                                     <rect key="frame" x="224" y="17" width="15" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>

@@ -401,32 +401,20 @@
             if(self.retainMouseGroupSelect)
             {
                 self.mouseGroupSelect = NO;
-                
-                if(self.shiftKey)
-                {
-                    self.mouseGroupSelect = YES;
-                    [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = nil;
-                    [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nil;
-                }
+                self.retainMouseGroupSelect = NO;
             }
             else
             {
                 self.mouseGroupSelect = YES;
+                // retain the selection in select mode
+                if([SequenceLogic sharedInstance].commandType == CommandTypeSelect)
+                {
+                    self.retainMouseGroupSelect = YES;
+                }
                 [SequenceLogic sharedInstance].mouseBoxSelectStartTatum = nil;
                 [SequenceLogic sharedInstance].mouseBoxSelectEndTatum = nil;
             }
         }
-    }
-    
-    // start new shift drag
-    if(self.shiftKey)
-    {
-        self.retainMouseGroupSelect = YES;
-    }
-    // deselect shift drag if we aren't dragging a tatum
-    else if(!self.sequenceTatumIsSelected)
-    {
-        self.retainMouseGroupSelect = NO;
     }
     
     [self setNeedsDisplay:YES];
@@ -511,7 +499,7 @@
 
 - (void)flagsChanged:(NSEvent *)event
 {
-    self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
+    self.commandKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
     self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
     self.optionKey = ([event modifierFlags] & NSAlternateKeyMask ? YES : NO);
     if(!self.optionKey)
@@ -592,6 +580,12 @@
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPause" object:nil];
             }
+        }
+        else if(keyboardEvent.keyCode == 1) // 's'
+        {
+            // command on
+            [SequenceLogic sharedInstance].commandType = CommandTypeSelect;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeCommandType" object:nil];
         }
         else if(keyboardEvent.keyCode == 31) // 'o'
         {
