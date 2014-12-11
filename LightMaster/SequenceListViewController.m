@@ -73,18 +73,27 @@
     [self.trackTableView reloadData];
     [self.trackChannelTableView reloadData];
     
-    Sequence *sequence = [self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow];
-    if(sequence.audio.title.length > 0)
-    {
-        self.audioDescriptionTextField.stringValue = sequence.audio.title;
-    }
-    self.currentAudio = sequence.audio;
+    [self updateAudioTitleLabelForSequenceAtRow:(int)self.sequenceTableView.selectedRow];
     [self updateAudioAnlysisProgressLabel];
 }
 
 - (BOOL)acceptsFirstResponder
 {
     return YES;
+}
+
+- (void)updateAudioTitleLabelForSequenceAtRow:(int)row
+{
+    Sequence *sequence = [self.sequenceFetchedResultsController objectAtIndex:row];
+    self.currentAudio = sequence.audio;
+    if(sequence.audio.title.length > 0)
+    {
+        self.audioDescriptionTextField.stringValue = sequence.audio.title;
+    }
+    else
+    {
+        self.audioDescriptionTextField.stringValue = @"";
+    }
 }
 
 - (void)keyDown:(NSEvent*)event
@@ -144,7 +153,7 @@
 
 - (IBAction)createSequenceButtonPress:(id)sender
 {
-    [[CoreDataManager sharedManager] newControlBox];
+    [[CoreDataManager sharedManager] newSequence];
 }
 
 - (IBAction)loadSequenceButtonPress:(id)sender
@@ -445,6 +454,7 @@
                   //audio.endOffset = audio.echoNestAudioAnalysis.startOfFadeOut;
                   //audio.startOffset = audio.echoNestAudioAnalysis.endOfFadeIn;
                   audio.sequence.endTime = audio.echoNestAudioAnalysis.duration;
+                  audio.sequence.title = audio.echoNestAudioAnalysis.title;
                   [[CoreDataManager sharedManager] updateSequenceTatumsForNewAudioForSequence:audio.sequence];
                   
                   audio.echoNestUploadProgress = @(1.0);
@@ -590,6 +600,7 @@
             }
             self.currentAudio = sequence.audio;
             [self updateAudioAnlysisProgressLabel];
+            [self updateAudioTitleLabelForSequenceAtRow:(int)row];
         }
     }
     else if(tableView == self.trackTableView)

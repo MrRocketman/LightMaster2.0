@@ -276,7 +276,7 @@
     }
     
     // Add any control boxes that already exist
-    [sequence addControlBoxes:[NSSet setWithArray:[[self.managedObjectContext ofType:@"ControlBox"] toArray]]];
+    [sequence addControlBoxes:[NSSet setWithArray:[[[self.managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence == nil"] toArray]]];
     
     // Add a default analysisControlBox
     [self newAnalysisControlBoxForSequence:sequence];
@@ -408,7 +408,6 @@
     controlBox.title = @"New Track";
     controlBox.uuid = [[NSUUID UUID] UUIDString];
     controlBox.idNumber = @([[[[self.managedObjectContext ofType:@"ControlBox"] where:@"analysisSequence != nil"] toArray] count]);
-    NSLog(@"idNumber:%d", [controlBox.idNumber intValue]);
     controlBox.analysisSequence = sequence;
     
     // Make a default channel
