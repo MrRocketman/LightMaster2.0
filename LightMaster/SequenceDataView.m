@@ -43,6 +43,7 @@
 
 @property (strong, nonatomic) NSArray *controlBoxes;
 @property (strong, nonatomic) NSMutableArray *channels;
+@property (strong, nonatomic) NSArray *tatums;
 
 @end
 
@@ -59,6 +60,8 @@
         [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     }
     [self fetchControlBoxAndChannelData];
+    
+    [self fetchTatums];
 }
 
 - (void)sequenceChange:(NSNotification *)notification
@@ -93,6 +96,13 @@
     {
         [self.channels addObject:[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Channel"] where:@"controlBox == %@", controlBox] orderBy:@"idNumber"] toArray]];
     }
+}
+
+- (void)fetchTatums
+{
+    self.tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
+    //NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+    //self.tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5]] orderBy:@"time"] toArray];
 }
 
 #pragma mark - Drawing
@@ -218,13 +228,10 @@
 
 - (void)drawSequenceTatums
 {
-    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
-    NSArray *visibleTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5]] orderBy:@"time"] toArray];
-    
     self.sequenceTatumPaths = [NSBezierPath bezierPath];
-    for(int i = 0; i < visibleTatums.count; i ++)
+    for(int i = 0; i < self.tatums.count; i ++)
     {
-        SequenceTatum *tatum = (SequenceTatum *)visibleTatums[i];
+        SequenceTatum *tatum = (SequenceTatum *)self.tatums[i];
         
         // Update the tatum position if it's selected
         if(self.sequenceTatumIsSelected && self.selectedSequenceTatum == tatum)
@@ -261,9 +268,9 @@
             {
                 SequenceTatum *nextTatum;
                 float tatumX, nextTatumX;
-                if(i < visibleTatums.count - 1)
+                if(i < self.tatums.count - 1)
                 {
-                    nextTatum = (SequenceTatum *)visibleTatums[i + 1];
+                    nextTatum = (SequenceTatum *)self.tatums[i + 1];
                 }
                 else
                 {
@@ -784,7 +791,7 @@
     {
         // Figure out which control box
         int channelCount = 0;
-        int controlBoxIndex;
+        int controlBoxIndex = 0;
         for(int i = 0; i < self.controlBoxes.count; i ++)
         {
             ControlBox *controlBox = self.controlBoxes[i];
@@ -834,7 +841,7 @@
     {
         // Figure out which control box
         int channelCount = 0;
-        int controlBoxIndex;
+        int controlBoxIndex = 0;
         for(int i = 0; i < self.controlBoxes.count; i ++)
         {
             ControlBox *controlBox = self.controlBoxes[i];

@@ -143,6 +143,7 @@
 {
     [SequenceLogic sharedInstance].currentTime = 0;
     self.audioPlayer.currentTime = 0;
+    [self updateTime];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
 }
 
