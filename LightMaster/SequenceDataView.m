@@ -16,6 +16,10 @@
 #import "CommandFade.h"
 #import "ControlBox.h"
 #import "Channel.h"
+#import "Audio.h"
+#import "EchoNestAudioAnalysis.h"
+#import "EchoNestTatum.h"
+#import "EchoNestBeat.h"
 
 @interface SequenceDataView()
 
@@ -129,6 +133,12 @@
     // Draw Sequence Tatums
     [self drawSequenceTatums];
     
+    // Draw echo tatums
+    [self drawEchoNestTatums];
+    
+    // Draw echo beats
+    [self drawEchoNestBeats];
+    
     // Draw the currentTimeMarker
     //[self drawCurrentTimeMarker];
     
@@ -237,7 +247,7 @@
             {
                 tatum.time = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
                 NSBezierPath *selectedTatumPath = [NSBezierPath bezierPath];
-                [self addSequenceTatum:tatum toBezierPath:selectedTatumPath];
+                [self addSequenceTatumWithTime:[tatum.time floatValue] toBezierPath:selectedTatumPath];
                 [[NSColor yellowColor] set];
                 [selectedTatumPath fill];
             }
@@ -248,7 +258,7 @@
         else
         {
             // Draw the normal sequence Tatums
-            NSPoint startPoint = [self addSequenceTatum:tatum toBezierPath:self.sequenceTatumPaths];
+            NSPoint startPoint = [self addSequenceTatumWithTime:[tatum.time floatValue] toBezierPath:self.sequenceTatumPaths];
             
             // Select a sequenceTatum
             if(self.sequenceTatumIsSelected && !self.selectedSequenceTatum && self.currentMousePoint.x >= startPoint.x - 1 && self.currentMousePoint.x <= startPoint.x + 1)
@@ -325,9 +335,37 @@
     [self.sequenceTatumPaths fill];
 }
 
-- (NSPoint)addSequenceTatum:(SequenceTatum *)tatum toBezierPath:(NSBezierPath *)path
+- (void)drawEchoNestTatums
 {
-    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[tatum.time floatValue]], NSMinY(self.bounds));
+    NSSet *echoNestTatums = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis.tatums;
+    
+    NSBezierPath *echoNestTatumPath = [NSBezierPath bezierPath];
+    for(EchoNestTatum *echoTatum in echoNestTatums)
+    {
+        [self addSequenceTatumWithTime:[echoTatum.start floatValue] toBezierPath:echoNestTatumPath];
+    }
+    
+    [[NSColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0] set];
+    [echoNestTatumPath fill];
+}
+
+- (void)drawEchoNestBeats
+{
+    NSSet *echoNestBeats = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis.beats;
+    
+    NSBezierPath *echoNestBeatPath = [NSBezierPath bezierPath];
+    for(EchoNestBeat *echoBeat in echoNestBeats)
+    {
+        [self addSequenceTatumWithTime:[echoBeat.start floatValue] toBezierPath:echoNestBeatPath];
+    }
+    
+    [[NSColor colorWithRed:0.0 green:0.0 blue:0.7 alpha:1.0] set];
+    [echoNestBeatPath fill];
+}
+
+- (NSPoint)addSequenceTatumWithTime:(float)time toBezierPath:(NSBezierPath *)path
+{
+    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], NSMinY(self.bounds));
     NSPoint endPoint = NSMakePoint(startPoint.x, NSMaxY(self.bounds));
     
     [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
