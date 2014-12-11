@@ -152,11 +152,8 @@
     [self playPause:nil];
 }
 
-- (void)playPause:(NSNotification *)notification
+- (void)playPause
 {
-    self.isPlayFromCurrentTime = NO;
-    self.isPlaySelection = NO;
-    
     if(self.isPlayButton)
     {
         [self.audioPlayer play];
@@ -174,6 +171,14 @@
     self.isPlayButton = !self.isPlayButton;
 }
 
+- (void)playPause:(NSNotification *)notification
+{
+    self.isPlayFromCurrentTime = NO;
+    self.isPlaySelection = NO;
+    
+    [self playPause];
+}
+
 - (void)playPauseSelection:(NSNotification *)notification
 {
     self.isPlaySelection = YES;
@@ -185,7 +190,7 @@
         self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
     }
     
-    [self playPause:notification];
+    [self playPause];
 }
 
 - (void)playPauseFromCurrentTime:(NSNotification *)notification
@@ -199,7 +204,7 @@
         self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
     }
     
-    [self playPause:notification];
+    [self playPause];
 }
 
 - (void)audioTimerFire:(NSTimer *)timer
