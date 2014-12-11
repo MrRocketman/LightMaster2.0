@@ -876,6 +876,7 @@
 {
     // Pase data
     const float epsilon = 0.001;
+    const float pasteEpsilon = 0.03;
     float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
     float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
     float pasteStartTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
@@ -885,7 +886,7 @@
     for(SequenceTatum *tatum in tatumsToCopy)
     {
         float newTatumTime = pasteStartTime + [tatum.time floatValue] - copyStartTime;
-        SequenceTatum *sameTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - epsilon, newTatumTime + epsilon] orderBy:@"time"] toArray] firstObject];
+        SequenceTatum *sameTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - pasteEpsilon, newTatumTime + pasteEpsilon] orderBy:@"time"] toArray] firstObject];
         // Add the tatum if one doesn't already exist
         if(!sameTatum)
         {
@@ -937,10 +938,10 @@
                     {
                         // Find the new startTatum
                         float newTatumTime = pasteStartTime + [command.startTatum.time floatValue] - copyStartTime;
-                        SequenceTatum *startTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - epsilon, newTatumTime + epsilon] orderBy:@"time"] toArray] firstObject];
+                        SequenceTatum *startTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - pasteEpsilon, newTatumTime + pasteEpsilon] orderBy:@"time"] toArray] firstObject];
                         // Find the new endTatum
                         newTatumTime = pasteStartTime + [command.endTatum.time floatValue] - copyStartTime;
-                        SequenceTatum *endTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - epsilon, newTatumTime + epsilon] orderBy:@"time"] toArray] firstObject];
+                        SequenceTatum *endTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - pasteEpsilon, newTatumTime + pasteEpsilon] orderBy:@"time"] toArray] firstObject];
                         
                         if([command isMemberOfClass:[CommandOn class]])
                         {
