@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SequenceScrollView, SequenceChannelScrollView, SequenceTimelineScrollView, SequenceAudioAnalysisChannelScrollView, SequenceAudioAnalysisScrollView;
+@class SequenceScrollView, SequenceChannelScrollView, SequenceTimelineScrollView, SequenceAudioAnalysisChannelScrollView, SequenceAudioAnalysisScrollView, SequenceCurrentTimeView;
 
 @interface SequenceViewController : NSViewController <NSSplitViewDelegate>
 

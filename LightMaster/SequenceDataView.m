@@ -43,7 +43,6 @@
 
 @property (strong, nonatomic) NSArray *controlBoxes;
 @property (strong, nonatomic) NSMutableArray *channels;
-@property (strong, nonatomic) NSArray *tatums;
 
 @end
 
@@ -60,8 +59,6 @@
         [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     }
     [self fetchControlBoxAndChannelData];
-    
-    [self fetchTatums];
 }
 
 - (void)sequenceChange:(NSNotification *)notification
@@ -98,13 +95,6 @@
     }
 }
 
-- (void)fetchTatums
-{
-    self.tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
-    //NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
-    //self.tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5]] orderBy:@"time"] toArray];
-}
-
 #pragma mark - Drawing
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -138,9 +128,6 @@
     
     // Draw Sequence Tatums
     [self drawSequenceTatums];
-    
-    // Draw the currentTimeMarker
-    //[self drawCurrentTimeMarker];
     
     // Draw mouse selection box
     [self drawMouseGroupSelectionBox];
@@ -228,10 +215,13 @@
 
 - (void)drawSequenceTatums
 {
+    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
+    NSArray *tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5]] orderBy:@"time"] toArray];
+    
     self.sequenceTatumPaths = [NSBezierPath bezierPath];
-    for(int i = 0; i < self.tatums.count; i ++)
+    for(int i = 0; i < tatums.count; i ++)
     {
-        SequenceTatum *tatum = (SequenceTatum *)self.tatums[i];
+        SequenceTatum *tatum = (SequenceTatum *)tatums[i];
         
         // Update the tatum position if it's selected
         if(self.sequenceTatumIsSelected && self.selectedSequenceTatum == tatum)
@@ -268,9 +258,9 @@
             {
                 SequenceTatum *nextTatum;
                 float tatumX, nextTatumX;
-                if(i < self.tatums.count - 1)
+                if(i < tatums.count - 1)
                 {
-                    nextTatum = (SequenceTatum *)self.tatums[i + 1];
+                    nextTatum = (SequenceTatum *)tatums[i + 1];
                 }
                 else
                 {
@@ -343,13 +333,6 @@
     [path lineToPoint:NSMakePoint(startPoint.x + 1, startPoint.y)];
     
     return startPoint;
-}
-
-- (void)drawCurrentTimeMarker
-{
-    NSRect markerLineFrame = NSMakeRect([[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime], 0, 1, self.frame.size.height);
-    [[NSColor redColor] set];
-    NSRectFill(markerLineFrame);
 }
 
 - (void)drawMouseGroupSelectionBox

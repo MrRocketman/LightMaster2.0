@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class SequenceTimelineView;
-@class SequenceScrollView, SequenceAudioAnalysisScrollView;
+@class SequenceScrollView, SequenceAudioAnalysisScrollView, SequenceCurrentTimeView, SequenceChannelScrollView;
 
 @interface SequenceTimelineScrollView : NSScrollView
 
@@ -17,6 +17,8 @@
 
 @property (strong, nonatomic) IBOutlet SequenceScrollView *sequenceScrollView;
 @property (strong, nonatomic) IBOutlet SequenceAudioAnalysisScrollView *audioAnalysisScrollView;
+@property (strong, nonatomic) IBOutlet SequenceCurrentTimeView *currentTimeView;
+@property (strong, nonatomic) IBOutlet SequenceChannelScrollView *channelScrollView;
 
 - (void)otherScrollViewBoundsChange:(NSNotification *)notification;
 - (void)updateViews;

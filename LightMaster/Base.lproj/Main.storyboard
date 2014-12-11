@@ -1016,10 +1016,18 @@
                                 </scroller>
                                 <connections>
                                     <outlet property="audioAnalysisScrollView" destination="KBw-UR-8Zc" id="e69-mn-Jm5"/>
+                                    <outlet property="channelScrollView" destination="2oc-df-p3U" id="VRx-ON-mJX"/>
+                                    <outlet property="currentTimeView" destination="3BG-fo-4mT" id="V3v-ed-C1j"/>
                                     <outlet property="sequenceScrollView" destination="6cL-qx-bct" id="7iT-ps-CS4"/>
                                     <outlet property="timelineView" destination="pnm-RU-I1n" id="n0K-he-06i"/>
                                 </connections>
                             </scrollView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="3BG-fo-4mT" customClass="SequenceCurrentTimeView">
+                                <rect key="frame" x="300" y="0.0" width="2" height="540"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="2" id="y6x-Ux-9Dz"/>
+                                </constraints>
+                            </customView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Ctz-13-9DI" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" id="2Se-BM-xTG"/>
@@ -1027,11 +1035,15 @@
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="top" secondItem="IZ1-n6-LCC" secondAttribute="bottom" id="8we-EJ-EPl"/>
                             <constraint firstItem="Ctz-13-9DI" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="134" id="DxO-Vs-pei"/>
                             <constraint firstAttribute="bottom" secondItem="Ctz-13-9DI" secondAttribute="bottom" id="JXC-pU-Og5"/>
+                            <constraint firstAttribute="trailing" secondItem="3BG-fo-4mT" secondAttribute="trailing" constant="815" id="NGq-PH-2II"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="198" id="Ttc-1X-8rt"/>
                             <constraint firstAttribute="trailing" secondItem="Ctz-13-9DI" secondAttribute="trailing" id="VId-6l-kdJ"/>
                             <constraint firstAttribute="trailing" secondItem="IZ1-n6-LCC" secondAttribute="trailing" id="Wpz-2G-v22"/>
                             <constraint firstItem="IZ1-n6-LCC" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" id="XBf-so-Pwc"/>
+                            <constraint firstItem="3BG-fo-4mT" firstAttribute="top" secondItem="3Oz-AZ-EDF" secondAttribute="top" id="bI2-Pi-gOr"/>
+                            <constraint firstItem="3BG-fo-4mT" firstAttribute="bottom" secondItem="Ctz-13-9DI" secondAttribute="bottom" id="eH9-8l-ncY"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="trailing" secondItem="IZ1-n6-LCC" secondAttribute="trailing" id="n7c-ue-Zh6"/>
+                            <constraint firstItem="3BG-fo-4mT" firstAttribute="leading" secondItem="egB-YG-W3y" secondAttribute="leading" constant="300" id="oTu-ds-DWs"/>
                             <constraint firstItem="3Oz-AZ-EDF" firstAttribute="top" secondItem="egB-YG-W3y" secondAttribute="top" constant="84" id="uaA-0M-Q1s"/>
                         </constraints>
                     </view>

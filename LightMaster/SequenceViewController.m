@@ -154,6 +154,9 @@
 
 - (void)playPause:(NSNotification *)notification
 {
+    self.isPlayFromCurrentTime = NO;
+    self.isPlaySelection = NO;
+    
     if(self.isPlayButton)
     {
         [self.audioPlayer play];
@@ -174,6 +177,7 @@
 - (void)playPauseSelection:(NSNotification *)notification
 {
     self.isPlaySelection = YES;
+    self.isPlayFromCurrentTime = NO;
     
     if(self.isPlayButton)
     {
@@ -187,6 +191,7 @@
 - (void)playPauseFromCurrentTime:(NSNotification *)notification
 {
     self.isPlayFromCurrentTime = YES;
+    self.isPlaySelection = NO;
     
     if(self.isPlayButton)
     {

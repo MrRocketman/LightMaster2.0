@@ -21,7 +21,6 @@
 
 @interface SequenceTimelineView()
 
-@property (assign, nonatomic) BOOL currentTimeMarkerIsSelected;
 @property (assign, nonatomic) BOOL endTimeMarkerIsSelected;
 @property (strong, nonatomic) NSBezierPath *endTimePath;
 @property (strong, nonatomic) NSTimer *autoScrollTimer;
@@ -34,12 +33,7 @@
 
 - (void)awakeFromNib
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
-}
-
-- (void)currentTimeChange:(NSNotification *)notification
-{
-    [self setNeedsDisplay:YES];
+    
 }
 
 - (BOOL)isFlipped
@@ -176,43 +170,8 @@
     [timeLines setLineWidth:1.0];
     [timeLines stroke];
     
-    // Draw the currentTime marker
-    [self drawCurrentTimeMarker];
-    
     // Draw the endTime marker
     [self drawEndTimeMarker];
-}
-
-- (void)drawCurrentTimeMarker
-{
-    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime], self.frame.size.height / 2);
-    float width = self.frame.size.height / 2;
-    float height = self.frame.size.height / 2;
-    
-    NSBezierPath *triangle = [NSBezierPath bezierPath];
-    
-    [triangle moveToPoint:point];
-    [triangle lineToPoint:NSMakePoint(point.x - width / 2,  point.y - height)];
-    [triangle lineToPoint:NSMakePoint(point.x + width / 2, point.y - height)];
-    [triangle closePath];
-    
-    // Set the color according to whether it is clicked or not
-    if(!self.currentTimeMarkerIsSelected)
-    {
-        [[NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:0.5] setFill];
-    }
-    else
-    {
-        [[NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:0.1] setFill];
-    }
-    [triangle fill];
-    [[NSColor whiteColor] setStroke];
-    [triangle stroke];
-    
-    // Draw the line
-    NSRect markerLineFrame = NSMakeRect(point.x, self.frame.size.height / 2, 1, self.frame.size.height / 2);
-    [[NSColor redColor] set];
-    NSRectFill(markerLineFrame);
 }
 
 - (void)drawEndTimeMarker
@@ -317,7 +276,7 @@
     else
     {
         // Update the currentTime
-        self.currentTimeMarkerIsSelected = YES;
+        [SequenceLogic sharedInstance].currentTimeMarkerIsSelected = YES;
         [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
@@ -338,7 +297,7 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
     }
-    else if(self.currentTimeMarkerIsSelected)
+    else if([SequenceLogic sharedInstance].currentTimeMarkerIsSelected)
     {
         // Update the currentTime
         float newCurrentTime = [[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x];
@@ -373,9 +332,9 @@
         // Update the endTime
         [CoreDataManager sharedManager].currentSequence.endTime = @([[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x]);
     }
-    if(self.currentTimeMarkerIsSelected)
+    if([SequenceLogic sharedInstance].currentTimeMarkerIsSelected)
     {
-        self.currentTimeMarkerIsSelected = NO;
+        [SequenceLogic sharedInstance].currentTimeMarkerIsSelected = NO;
     }
     
     [self.autoScrollTimer invalidate];

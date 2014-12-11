@@ -12,11 +12,14 @@
 #import "SequenceScrollView.h"
 #import "SequenceLogic.h"
 #import "SequenceAudioAnalysisScrollView.h"
+#import "SequenceCurrentTimeView.h"
+#import "SequenceChannelScrollView.h"
 
 @interface SequenceTimelineScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
 @property (assign, nonatomic) NSRect lastRefreshVisibleRect;
+@property (assign, nonatomic) BOOL previousCurrentTimeShouldDraw;
 
 @end
 
@@ -28,6 +31,9 @@
     [self.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
     self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
+    [self updateCurrentTimePosition];
+    self.previousCurrentTimeShouldDraw = YES;
 }
 
 - (BOOL)isFlipped
@@ -35,8 +41,34 @@
     return YES;
 }
 
+- (void)currentTimeChange:(NSNotification *)notification
+{
+    [self updateCurrentTimePosition];
+}
+
+- (void)updateCurrentTimePosition
+{
+    // Set the currentTimeView Position
+    NSPoint point = NSMakePoint([[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] + self.channelScrollView.frame.size.width - self.documentVisibleRect.origin.x, 0);
+    self.currentTimeView.frame = NSMakeRect(point.x, point.y, self.currentTimeView.frame.size.width, self.currentTimeView.frame.size.height);
+    if(point.x < self.channelScrollView.frame.size.width && self.previousCurrentTimeShouldDraw)
+    {
+        self.currentTimeView.shouldDraw = NO;
+        self.previousCurrentTimeShouldDraw = NO;
+        [self.currentTimeView setNeedsDisplay:YES];
+    }
+    else if(point.x >= self.channelScrollView.frame.size.width && !self.previousCurrentTimeShouldDraw)
+    {
+        self.currentTimeView.shouldDraw = YES;
+        self.previousCurrentTimeShouldDraw = YES;
+        [self.currentTimeView setNeedsDisplay:YES];
+    }
+}
+
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
+    [self updateCurrentTimePosition];
+    
     // Only redraw every 50% width change, since the view draws 200% width
     if(self.documentVisibleRect.origin.x > self.lastRefreshVisibleRect.origin.x + self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.x < self.lastRefreshVisibleRect.origin.x - self.lastRefreshVisibleRect.size.width / 2)
     {
@@ -66,6 +98,8 @@
 
 - (void)otherScrollViewBoundsChange:(NSNotification *)notification
 {
+    [self updateCurrentTimePosition];
+    
     // get the changed content view from the notification
     NSClipView *changedContentView=[notification object];
     

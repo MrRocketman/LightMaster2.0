@@ -38,6 +38,8 @@ enum
 @property (assign, nonatomic) int topChannelForCopy;
 @property (assign, nonatomic) int bottomChannelForCopy;
 
+@property (assign, nonatomic) BOOL currentTimeMarkerIsSelected;
+
 - (void)updateMagnification:(float)newMagnification;
 
 - (float)timeToX:(float)time;
