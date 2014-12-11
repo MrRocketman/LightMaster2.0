@@ -584,7 +584,7 @@
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPauseFromCurrentTime" object:nil];
             }
-            else if(self.shiftKey)
+            else if(self.retainMouseGroupSelect)
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPauseSelection" object:nil];
             }
