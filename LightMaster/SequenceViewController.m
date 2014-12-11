@@ -29,8 +29,6 @@
 @property (assign, nonatomic) BOOL isPlaySelection;
 @property (assign, nonatomic) BOOL isPlayFromCurrentTime;
 @property (strong, nonatomic) NSTimer *audioTimer;
-@property (strong, nonatomic) NSDate *playStartDate;
-@property (assign, nonatomic) float playStartTime;
 @property (assign, nonatomic) float splitViewY;
 @property (strong, nonatomic) Audio *currentAudio;
 
@@ -109,17 +107,11 @@
 - (void)currentTimeChange:(NSNotification *)notification
 {
     self.timeLabel.stringValue = [NSString stringWithFormat:@"%03d.%03d", (int)[SequenceLogic sharedInstance].currentTime, (int)(([SequenceLogic sharedInstance].currentTime - (int)[SequenceLogic sharedInstance].currentTime) * 1000)];
-    self.playStartDate = [NSDate date];
-    self.playStartTime = [SequenceLogic sharedInstance].currentTime;
     
     // Only update the audio if the user dragged the time marker
     if(notification.object != self)
     {
         self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
-    }
-    else
-    {
-        [self updateTime];
     }
 }
 
@@ -165,8 +157,6 @@
     {
         [self.audioPlayer play];
         self.playButton.title = @"Pause";
-        self.playStartDate = [NSDate date];
-        self.playStartTime = [SequenceLogic sharedInstance].currentTime;
         self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.002 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
     }
     else
@@ -208,7 +198,7 @@
 
 - (void)audioTimerFire:(NSTimer *)timer
 {
-    [SequenceLogic sharedInstance].currentTime = [[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
+    [SequenceLogic sharedInstance].currentTime = self.audioPlayer.currentTime;//[[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
     [self updateTime];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
 }
@@ -222,8 +212,6 @@
         self.audioPlayer.currentTime = 0;
         [self.audioPlayer play];
         [SequenceLogic sharedInstance].currentTime = 0;
-        self.playStartDate = [NSDate date];
-        self.playStartTime = [SequenceLogic sharedInstance].currentTime;
     }
     // If we are playing a selection
     else if(self.isPlaySelection && [SequenceLogic sharedInstance].currentTime >= [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
