@@ -51,6 +51,7 @@
 - (void)setup
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceChange:) name:@"CurrentSequenceChange" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deselectMouse:) name:@"DeselectMouse" object:nil];
     
     self.newCommandBrightness = 1.0;
     
@@ -64,6 +65,13 @@
 - (void)sequenceChange:(NSNotification *)notification
 {
     [self fetchControlBoxAndChannelData];
+    [self setNeedsDisplay:YES];
+}
+
+- (void)deselectMouse:(NSNotification *)notification
+{
+    self.mouseGroupSelect = NO;
+    self.retainMouseGroupSelect = NO;
     [self setNeedsDisplay:YES];
 }
 

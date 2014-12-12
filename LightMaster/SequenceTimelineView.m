@@ -312,6 +312,7 @@
         [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance] xToTime:self.currentMousePoint.x];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"DeselectMouse" object:nil];
     }
     
     [self setNeedsDisplay:YES];
