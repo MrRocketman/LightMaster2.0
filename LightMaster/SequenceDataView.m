@@ -516,7 +516,7 @@
             self.newCommandBrightness = 0.2;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:2];
             }
         }
         else if(keyboardEvent.keyCode == 20 || keyboardEvent.keyCode == 85) // '3'
@@ -524,7 +524,7 @@
             self.newCommandBrightness = 0.3;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:3];
             }
         }
         else if(keyboardEvent.keyCode == 21 || keyboardEvent.keyCode == 86) // '4'
@@ -532,7 +532,7 @@
             self.newCommandBrightness = 0.4;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:4];
             }
         }
         else if(keyboardEvent.keyCode == 23 || keyboardEvent.keyCode == 87) // '5'
@@ -540,7 +540,7 @@
             self.newCommandBrightness = 0.5;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:5];
             }
         }
         else if(keyboardEvent.keyCode == 22 || keyboardEvent.keyCode == 88) // '6'
@@ -548,7 +548,7 @@
             self.newCommandBrightness = 0.6;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:6];
             }
         }
         else if(keyboardEvent.keyCode == 26 || keyboardEvent.keyCode == 89) // '7'
@@ -556,7 +556,7 @@
             self.newCommandBrightness = 0.7;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:7];
             }
         }
         else if(keyboardEvent.keyCode == 28 || keyboardEvent.keyCode == 91) // '8'
@@ -564,7 +564,7 @@
             self.newCommandBrightness = 0.8;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:8];
             }
         }
         else if(keyboardEvent.keyCode == 25 || keyboardEvent.keyCode == 92) // '9'
@@ -572,7 +572,7 @@
             self.newCommandBrightness = 0.9;
             if(self.optionKey)
             {
-                [self subdivideTatums:1];
+                [self subdivideTatums:9];
             }
         }
         else if(keyboardEvent.keyCode == 51) // 'delete'
