@@ -147,6 +147,7 @@
     self.lastChannelUpdateTime = -1;
     [self updateTime];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DeselectMouse" object:nil];
 }
 
 - (IBAction)playButtonPress:(id)sender
