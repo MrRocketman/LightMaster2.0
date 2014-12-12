@@ -39,6 +39,7 @@ enum
 @property (assign, nonatomic) int bottomChannelForCopy;
 
 @property (assign, nonatomic) BOOL currentTimeMarkerIsSelected;
+@property (assign, nonatomic) BOOL showChannelBrightness;
 
 - (void)updateMagnification:(float)newMagnification;
 

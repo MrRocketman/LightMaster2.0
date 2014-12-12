@@ -70,8 +70,8 @@
     self.frame = NSMakeRect(0, 0, self.frame.size.width, [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
     
     // clear the background
-    //[[NSColor lightGrayColor] set];
-    //NSRectFill(self.bounds);
+    [[NSColor blackColor] set];
+    NSRectFill(self.bounds);
     
     [self drawHeaders];
     [self drawChannels];
@@ -114,7 +114,7 @@
 
 - (void)drawChannel:(Channel *)channel withIndex:(int)index
 {
-    [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:channel.color halfWidth:YES rightHalf:YES channelHeight:1];
+    [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:[channel.color colorWithAlphaComponent:[[CoreDataManager sharedManager] currentBrightnessForChannel:channel]] halfWidth:YES rightHalf:YES channelHeight:1];
 }
 
 - (void)drawRectWithChannelIndex:(int)index text:(NSString *)text textOffset:(int)textOffset color:(NSColor *)color halfWidth:(BOOL)halfWidth rightHalf:(BOOL)rightHalf channelHeight:(int)channelMultiples

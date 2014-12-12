@@ -159,6 +159,7 @@
         [self.audioPlayer play];
         self.playButton.title = @"Pause";
         self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.002 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
+        [SequenceLogic sharedInstance].showChannelBrightness = YES;
     }
     else
     {
@@ -166,6 +167,11 @@
         self.playButton.title = @"Play";
         [self.audioTimer invalidate];
         self.audioTimer = nil;
+        [SequenceLogic sharedInstance].showChannelBrightness = NO;
+        
+        // Update channel brightness levels
+        [self.audioAnalysisChannelScrollView updateViews];
+        [self.channelScrollView updateViews];
     }
     
     self.isPlayButton = !self.isPlayButton;
@@ -281,6 +287,10 @@
     [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
     [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
     [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
+    
+    // Update channel brightness levels
+    [self.audioAnalysisChannelScrollView updateViews];
+    //[self.channelScrollView updateViews];
 }
 
 - (IBAction)commandTypeSegmentedControlChange:(id)sender

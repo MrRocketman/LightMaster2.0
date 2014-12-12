@@ -17,8 +17,10 @@
 #import "AudioLyric.h"
 #import "EchoNestAudioAnalysis.h"
 #import "EchoNestTatum.h"
+#import "Command.h"
 #import "CommandOn.h"
 #import "CommandFade.h"
+#import "SequenceLogic.h"
 
 @interface CoreDataManager()
 
@@ -472,6 +474,37 @@
     [self saveContext];
     
     return lyric;
+}
+
+#pragma mark - Channel
+
+- (float)currentBrightnessForChannel:(Channel *)channel
+{
+    if([SequenceLogic sharedInstance].showChannelBrightness)
+    {
+        Command *command = [[[[self.managedObjectContext ofType:@"Command"] where:@"channel == %@ AND %f >= startTatum.time AND %f <= endTatum.time", channel, [SequenceLogic sharedInstance].currentTime, [SequenceLogic sharedInstance].currentTime] toArray] firstObject];
+        if(command)
+        {
+            if([command isMemberOfClass:[CommandOn class]])
+            {
+                return [((CommandOn *)command).brightness floatValue];
+            }
+            else if([command isMemberOfClass:[CommandFade class]])
+            {
+                CommandFade *commandFade = (CommandFade *)command;
+                float commandDuration = [commandFade.endTatum.time floatValue] - [commandFade.startTatum.time floatValue];
+                float percentThroughCommand = ([commandFade.endTatum.time floatValue] - [SequenceLogic sharedInstance].currentTime) / commandDuration;
+                float brightnessChange = [commandFade.endBrightness floatValue] - [commandFade.startBrightness floatValue];
+                return 1.0 - ([commandFade.startBrightness floatValue] + percentThroughCommand * brightnessChange);
+            }
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
+    
+    return 1.0;
 }
 
 @end
