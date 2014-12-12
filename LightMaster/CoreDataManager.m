@@ -480,7 +480,7 @@
 
 - (float)currentBrightnessForChannel:(Channel *)channel
 {
-    if([SequenceLogic sharedInstance].showChannelBrightness)
+    if([SequenceLogic sharedInstance].showChannelBrightness && channel.commands)
     {
         Command *command = [[[[self.managedObjectContext ofType:@"Command"] where:@"channel == %@ AND %f >= startTatum.time AND %f <= endTatum.time", channel, [SequenceLogic sharedInstance].currentTime, [SequenceLogic sharedInstance].currentTime] toArray] firstObject];
         if(command)

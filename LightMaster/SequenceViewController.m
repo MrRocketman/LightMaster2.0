@@ -31,6 +31,7 @@
 @property (strong, nonatomic) NSTimer *audioTimer;
 @property (assign, nonatomic) float splitViewY;
 @property (strong, nonatomic) Audio *currentAudio;
+@property (assign, nonatomic) float lastChannelUpdateTime;
 
 @end
 
@@ -143,6 +144,7 @@
 {
     [SequenceLogic sharedInstance].currentTime = 0;
     self.audioPlayer.currentTime = 0;
+    self.lastChannelUpdateTime = -1;
     [self updateTime];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
 }
@@ -160,6 +162,7 @@
         self.playButton.title = @"Pause";
         self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.002 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
         [SequenceLogic sharedInstance].showChannelBrightness = YES;
+        self.lastChannelUpdateTime = -1;
     }
     else
     {
@@ -227,6 +230,7 @@
     {
         [self.audioPlayer stop];
         self.audioPlayer.currentTime = 0;
+        self.lastChannelUpdateTime = -1;
         [self.audioPlayer play];
         [SequenceLogic sharedInstance].currentTime = 0;
     }
@@ -240,6 +244,11 @@
         [self.audioPlayer pause];
         [self.audioTimer invalidate];
         self.audioTimer = nil;
+        [SequenceLogic sharedInstance].showChannelBrightness = NO;
+        // Update channel brightness levels
+        [self.audioAnalysisChannelScrollView updateViews];
+        [self.channelScrollView updateViews];
+        self.lastChannelUpdateTime = -1;
     }
     
     // Scroll to center
@@ -288,9 +297,15 @@
     [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
     [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
     
-    // Update channel brightness levels
-    [self.audioAnalysisChannelScrollView updateViews];
-    //[self.channelScrollView updateViews];
+    // Update channel brightness at 30Hz
+    if([SequenceLogic sharedInstance].currentTime > self.lastChannelUpdateTime + 0.03)
+    {
+        self.lastChannelUpdateTime = [SequenceLogic sharedInstance].currentTime;
+        
+        
+        [self.audioAnalysisChannelScrollView updateViews];
+        [self.channelScrollView updateViews];
+    }
 }
 
 - (IBAction)commandTypeSegmentedControlChange:(id)sender
