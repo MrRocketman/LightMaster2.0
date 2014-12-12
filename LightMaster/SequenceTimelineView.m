@@ -18,6 +18,7 @@
 #import "EchoNestAudioAnalysis.h"
 #import "EchoNestTatum.h"
 #import "EchoNestBeat.h"
+#import "EchoNestSegment.h"
 
 @interface SequenceTimelineView()
 
@@ -61,6 +62,9 @@
     
     // Draw echo beats
     [self drawEchoNestBeats];
+    
+    // Draw echo segments
+    [self drawEchoNestSegments];
     
     // Draw echo tatums
     [self drawTimeline];
@@ -241,6 +245,20 @@
     
     [[NSColor colorWithRed:0.0 green:0.0 blue:0.7 alpha:1.0] set];
     [echoNestBeatPath fill];
+}
+
+- (void)drawEchoNestSegments
+{
+    NSSet *echoNestSegments = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis.segments;
+    
+    NSBezierPath *echoNestSegmentPath = [NSBezierPath bezierPath];
+    for(EchoNestSegment *echoSegment in echoNestSegments)
+    {
+        [self addLineWithTime:[echoSegment.start floatValue] toBezierPath:echoNestSegmentPath];
+    }
+    
+    [[NSColor colorWithRed:0.7 green:0.0 blue:0.7 alpha:1.0] set];
+    [echoNestSegmentPath fill];
 }
 
 - (NSPoint)addLineWithTime:(float)time toBezierPath:(NSBezierPath *)path

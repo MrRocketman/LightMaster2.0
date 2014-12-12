@@ -298,7 +298,7 @@
     [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
     
     // Update channel brightness at 30Hz
-    if([SequenceLogic sharedInstance].currentTime > self.lastChannelUpdateTime + 0.03)
+    if([SequenceLogic sharedInstance].currentTime > self.lastChannelUpdateTime + 0.06)
     {
         self.lastChannelUpdateTime = [SequenceLogic sharedInstance].currentTime;
         
