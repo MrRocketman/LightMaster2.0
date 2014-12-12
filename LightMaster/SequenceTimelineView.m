@@ -54,9 +54,6 @@
     // Draw audio
     [self drawAudio];
     
-    // Draw Lyrics
-    [self drawLyrics];
-    
     // Draw echo tatums
     [self drawEchoNestTatums];
     
@@ -65,6 +62,9 @@
     
     // Draw echo segments
     [self drawEchoNestSegments];
+    
+    // Draw Lyrics
+    [self drawLyrics];
     
     // Draw echo tatums
     [self drawTimeline];
