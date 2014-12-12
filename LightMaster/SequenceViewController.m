@@ -195,7 +195,7 @@
     
     if(self.isPlayButton)
     {
-        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
+        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] - 0.05;
         self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
     }
     
