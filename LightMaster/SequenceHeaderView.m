@@ -109,24 +109,30 @@
 
 - (void)drawControlBox:(ControlBox *)controlBox withIndex:(int)index
 {
-    //NSLog(@"color:%@", [NSColor grayColor]);
-    [self drawRectWithChannelIndex:index text:controlBox.title textOffset:10 color:[NSColor grayColor] alpha:1.0 halfWidth:YES rightHalf:NO channelHeight:(int)controlBox.channels.count];
+    [self drawRectWithChannelIndex:index text:controlBox.title textOffset:10 color:[NSColor grayColor] halfWidth:YES rightHalf:NO channelHeight:(int)controlBox.channels.count];
 }
 
 - (void)drawChannel:(Channel *)channel withIndex:(int)index
 {
+<<<<<<< HEAD
     NSColor *color = [channel.color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
     //NSColor *color = channel.color;
     NSLog(@"colorspace:%@", color.colorSpace);
     NSLog(@"color:%@", color);
     NSLog(@"red:%f", color.redComponent);
     [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:color alpha:[[CoreDataManager sharedManager] currentBrightnessForChannel:channel] halfWidth:YES rightHalf:YES channelHeight:1];
+=======
+    [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:channel.color halfWidth:YES rightHalf:YES channelHeight:1];
+>>>>>>> parent of fbed047... Color space crashing
 }
 
-- (void)drawRectWithChannelIndex:(int)index text:(NSString *)text textOffset:(int)textOffset color:(NSColor *)color alpha:(float)alpha halfWidth:(BOOL)halfWidth rightHalf:(BOOL)rightHalf channelHeight:(int)channelMultiples
+- (void)drawRectWithChannelIndex:(int)index text:(NSString *)text textOffset:(int)textOffset color:(NSColor *)color halfWidth:(BOOL)halfWidth rightHalf:(BOOL)rightHalf channelHeight:(int)channelMultiples
 {
+<<<<<<< HEAD
     //NSLog(@"color:%@", color);
     //NSLog(@"red:%f", color.redComponent);
+=======
+>>>>>>> parent of fbed047... Color space crashing
     NSBezierPath *bezierPath = [NSBezierPath bezierPath];
     
     float topY = CHANNEL_HEIGHT * index;
@@ -147,10 +153,14 @@
         [bezierPath lineToPoint:NSMakePoint(rightX, bottomY)];
         [bezierPath lineToPoint:NSMakePoint(rightX, topY)];
         [bezierPath lineToPoint:NSMakePoint(leftX, topY)];
+<<<<<<< HEAD
         //NSLog(@"red:%f", color.redComponent);
         //[[NSColor colorWithRed:color.redComponent green:color.greenComponent blue:color.blueComponent alpha:alpha] set];
         [[color colorWithAlphaComponent:alpha] set];
         //[color set];
+=======
+        [color set];
+>>>>>>> parent of fbed047... Color space crashing
         [bezierPath fill];
         [[NSColor blackColor] set];
         [bezierPath stroke];

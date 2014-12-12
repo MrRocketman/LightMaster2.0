@@ -10,7 +10,6 @@
 #import "ChannelPattern.h"
 #import "Command.h"
 #import "ControlBox.h"
-#import <AppKit/AppKit.h>
 
 
 @implementation Channel
@@ -25,34 +24,5 @@
 @dynamic channelPatterns;
 @dynamic commands;
 @dynamic controlBox;
-
-@end
-
-@implementation ColorToDataTransformer
-
-+ (BOOL)allowsReverseTransformation
-{
-    return YES;
-}
-
-+ (Class)transformedValueClass
-{
-    return [NSData class];
-}
-
-
-- (id)transformedValue:(id)value
-{
-    NSColor *color = (NSColor *)value;
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:color];
-    return data;
-}
-
-- (id)reverseTransformedValue:(id)value
-{
-    NSData *data = (NSData *)value;
-    NSColor *color = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    return color;
-}
 
 @end

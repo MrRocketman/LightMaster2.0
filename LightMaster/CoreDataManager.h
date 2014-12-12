@@ -44,7 +44,4 @@
 // Audio
 - (AudioLyric *)newAudioLyricForSequence:(Sequence *)sequence;
 
-// Channel
-- (float)currentBrightnessForChannel:(Channel *)channel;
-
 @end

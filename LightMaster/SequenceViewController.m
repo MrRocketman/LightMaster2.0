@@ -281,7 +281,6 @@
     [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
     [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
     [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
-    [self.audioAnalysisChannelScrollView updateViews];
 }
 
 - (IBAction)commandTypeSegmentedControlChange:(id)sender

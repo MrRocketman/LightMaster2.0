@@ -17,10 +17,8 @@
 #import "AudioLyric.h"
 #import "EchoNestAudioAnalysis.h"
 #import "EchoNestTatum.h"
-#import "Command.h"
 #import "CommandOn.h"
 #import "CommandFade.h"
-#import "SequenceLogic.h"
 
 @interface CoreDataManager()
 
@@ -474,27 +472,6 @@
     [self saveContext];
     
     return lyric;
-}
-
-#pragma mark - Channel
-
-- (float)currentBrightnessForChannel:(Channel *)channel
-{
-    Command *command = [[[[self.managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time", [SequenceLogic sharedInstance].currentTime, [SequenceLogic sharedInstance].currentTime] toArray] firstObject];
-    if(command)
-    {
-        if([command isMemberOfClass:[CommandOn class]])
-        {
-            return [((CommandOn *)command).brightness floatValue];
-        }
-        else if([command isMemberOfClass:[CommandFade class]])
-        {
-            float commandDuration = [((CommandFade *)command).endTatum.time floatValue] - [((CommandFade *)command).startTatum.time floatValue];
-            return ([((CommandFade *)command).startBrightness floatValue] / commandDuration) * ([((CommandFade *)command).endTatum.time floatValue] - [SequenceLogic sharedInstance].currentTime) + [((CommandFade *)command).startBrightness floatValue];
-        }
-    }
-    
-    return 0;
 }
 
 @end

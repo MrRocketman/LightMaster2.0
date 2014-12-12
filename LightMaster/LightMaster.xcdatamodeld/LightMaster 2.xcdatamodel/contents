@@ -208,7 +208,6 @@
     </entity>
     <elements>
         <element name="Audio" positionX="18" positionY="63" width="128" height="178"/>
-        <element name="AudioLyric" positionX="0" positionY="135" width="128" height="88"/>
         <element name="Channel" positionX="36" positionY="81" width="128" height="193"/>
         <element name="ChannelPattern" positionX="-54" positionY="-9" width="128" height="118"/>
         <element name="Command" positionX="0" positionY="45" width="128" height="118"/>
@@ -229,5 +228,6 @@
         <element name="Playlist" positionX="27" positionY="72" width="128" height="118"/>
         <element name="Sequence" positionX="45" positionY="90" width="128" height="208"/>
         <element name="SequenceTatum" positionX="-9" positionY="36" width="128" height="118"/>
+        <element name="AudioLyric" positionX="0" positionY="135" width="128" height="88"/>
     </elements>
 </model>

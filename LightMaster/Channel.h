@@ -38,6 +38,3 @@
 - (void)removeCommands:(NSSet *)values;
 
 @end
-
-@interface ColorToDataTransformer : NSValueTransformer
-@end
