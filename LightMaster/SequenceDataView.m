@@ -901,7 +901,7 @@
 {
     // Pase data
     const float epsilon = 0.001;
-    const float pasteEpsilon = 0.03;
+    const float pasteEpsilon = 0.05;
     float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
     float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
     float pasteStartTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
