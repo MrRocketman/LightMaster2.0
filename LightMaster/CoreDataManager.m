@@ -17,6 +17,7 @@
 #import "AudioLyric.h"
 #import "EchoNestAudioAnalysis.h"
 #import "EchoNestTatum.h"
+#import "EchoNestSegment.h"
 #import "Command.h"
 #import "CommandOn.h"
 #import "CommandFade.h"
@@ -376,6 +377,11 @@
     {
         [self addSequenceTatumToSequence:sequence atTime:[echoTatum.start floatValue]];
     }
+    /*NSSet *echoSegments = sequence.audio.echoNestAudioAnalysis.segments;
+    for(EchoNestSegment *echoSegment in echoSegments)
+    {
+        [self addSequenceTatumToSequence:sequence atTime:[echoSegment.start floatValue]];
+    }*/
     
     // Save
     [self saveContext];

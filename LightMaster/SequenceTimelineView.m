@@ -257,7 +257,7 @@
         [self addLineWithTime:[echoSegment.start floatValue] toBezierPath:echoNestSegmentPath];
     }
     
-    [[NSColor colorWithRed:0.7 green:0.0 blue:0.7 alpha:1.0] set];
+    [[NSColor colorWithRed:0.7 green:0.7 blue:0.0 alpha:1.0] set];
     [echoNestSegmentPath fill];
 }
 

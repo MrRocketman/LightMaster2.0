@@ -667,7 +667,15 @@
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             [[NSApplication sharedApplication] presentError:error];
         }
+        error = nil;
+        if (![[self audioLyricFetchedResultsController] performFetch:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            [[NSApplication sharedApplication] presentError:error];
+        }
+        
         [self.trackTableView reloadData];
+        [self.lyricTableView reloadData];
         
         // Show the audio data
         if(self.sequenceFetchedResultsController.count > row)
