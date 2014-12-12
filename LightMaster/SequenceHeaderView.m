@@ -115,16 +115,18 @@
 
 - (void)drawChannel:(Channel *)channel withIndex:(int)index
 {
-    NSColor *color = (NSColor *)[channel.color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+    NSColor *color = [channel.color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
     //NSColor *color = channel.color;
-    //NSLog(@"red:%f", color.redComponent);
+    NSLog(@"colorspace:%@", color.colorSpace);
+    NSLog(@"color:%@", color);
+    NSLog(@"red:%f", color.redComponent);
     [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:color alpha:[[CoreDataManager sharedManager] currentBrightnessForChannel:channel] halfWidth:YES rightHalf:YES channelHeight:1];
 }
 
 - (void)drawRectWithChannelIndex:(int)index text:(NSString *)text textOffset:(int)textOffset color:(NSColor *)color alpha:(float)alpha halfWidth:(BOOL)halfWidth rightHalf:(BOOL)rightHalf channelHeight:(int)channelMultiples
 {
-    NSLog(@"color:%@", color);
-    NSLog(@"red:%f", color.redComponent);
+    //NSLog(@"color:%@", color);
+    //NSLog(@"red:%f", color.redComponent);
     NSBezierPath *bezierPath = [NSBezierPath bezierPath];
     
     float topY = CHANNEL_HEIGHT * index;
@@ -147,6 +149,7 @@
         [bezierPath lineToPoint:NSMakePoint(leftX, topY)];
         //NSLog(@"red:%f", color.redComponent);
         //[[NSColor colorWithRed:color.redComponent green:color.greenComponent blue:color.blueComponent alpha:alpha] set];
+        [[color colorWithAlphaComponent:alpha] set];
         //[color set];
         [bezierPath fill];
         [[NSColor blackColor] set];
