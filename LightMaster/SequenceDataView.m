@@ -149,6 +149,28 @@
     float rightTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5];
     int totalChannelIndex = 0;
     
+    // Create a path for each channel
+    NSMutableArray *commandPaths = [NSMutableArray new];
+    for(int controlBoxIndex = 0; controlBoxIndex < self.controlBoxes.count; controlBoxIndex ++)
+    {
+        NSArray *channels = self.channels[controlBoxIndex];
+        for(int channelIndex = 0; channelIndex < channels.count; channelIndex ++)
+        {
+            [commandPaths addObject:[NSBezierPath bezierPath]];
+        }
+    }
+    
+    /*NSArray *commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] toArray];
+    for(Command *theCommand in commands)
+    {
+        
+    }*/
+    
+    
+    
+    
+    
+    
     for(int controlBoxIndex = 0; controlBoxIndex < self.controlBoxes.count; controlBoxIndex ++)
     {
         NSArray *channels = self.channels[controlBoxIndex];
@@ -158,13 +180,7 @@
             //NSArray *commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel == %@", [CoreDataManager sharedManager].currentSequence, channels[channelIndex]] toArray];
             NSSet *commands = ((Channel *)channels[channelIndex]).commands;
             for(Command *theCommand in commands)
-            {
-                // Repair commands
-                if(theCommand.channel.controlBox.analysisSequence == [CoreDataManager sharedManager].currentSequence && !theCommand.sequence)
-                {
-                    theCommand.sequence = [CoreDataManager sharedManager].currentSequence;
-                }
-                
+            {   
                 float startTime = [theCommand.startTatum.time floatValue];
                 float endTime = [theCommand.endTatum.time floatValue];
                 if((startTime >= leftTime && startTime <= rightTime) || (endTime >= leftTime && endTime <= rightTime) || (startTime < leftTime && endTime > rightTime))
