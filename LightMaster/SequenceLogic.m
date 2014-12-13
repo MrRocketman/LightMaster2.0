@@ -150,7 +150,7 @@
         packetIndex ++;
         
         // If the command hasn't been sent, send it
-        if(![command.sendComplete boolValue])
+        if(![command.sendComplete boolValue] && command.channel.controlBox.analysisSequence == nil)
         {
             // Command on
             if([command isMemberOfClass:[CommandOn class]])
