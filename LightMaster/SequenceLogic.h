@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ORSSerialPort.h"
 
 #define CHANNEL_HEIGHT 20.0
 #define AUTO_SCROLL_REFRESH_RATE 0.03
@@ -23,7 +24,7 @@ enum
     CommandTypePulse
 };
 
-@interface SequenceLogic : NSObject
+@interface SequenceLogic : NSObject <ORSSerialPortDelegate>
 
 + (SequenceLogic *)sharedInstance;
 
@@ -42,6 +43,8 @@ enum
 @property (assign, nonatomic) BOOL showChannelBrightness;
 
 @property (strong, nonatomic) NSArray *commandsForCurrentTime;
+
+@property (strong, nonatomic) ORSSerialPort *serialPort;
 
 - (void)updateMagnification:(float)newMagnification;
 

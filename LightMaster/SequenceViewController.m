@@ -21,6 +21,8 @@
 #import "Audio.h"
 #import "Sequence.h"
 #import "SequenceTatum.h"
+#import "ORSSerialPortManager.h"
+#import "ORSSerialPort.h"
 
 @interface SequenceViewController ()
 
@@ -36,6 +38,11 @@
 @end
 
 @implementation SequenceViewController
+
+- (void)awakeFromNib
+{
+    self.serialPortManager = [ORSSerialPortManager sharedSerialPortManager];
+}
 
 - (void)viewDidLoad
 {
@@ -54,6 +61,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseSelection:) name:@"PlayPauseSelection" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseFromCurrentTime:) name:@"PlayPauseFromCurrentTime" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deselectMouse:) name:@"DeselectMouse" object:nil];
+    
+    [self.serialPortButton selectItemAtIndex:0];
+    //[self serialPortSelectionChange:nil];
+    [self performSelector:@selector(serialPortSelectionChange:) withObject:nil afterDelay:2.0];
     
     self.isPlayButton = YES;
     [self reloadAudio];
@@ -148,6 +159,25 @@
     }
 }
 
+#pragma mark - Button Actions
+
+- (IBAction)serialPortSelectionChange:(id)sender
+{
+    // Remove the old port
+    [SequenceLogic sharedInstance].serialPort.delegate = nil;
+    [[SequenceLogic sharedInstance].serialPort close];
+    [SequenceLogic sharedInstance].serialPort = nil;
+    
+    // Open the new port
+    //ORSSerialPort *serialPort = [ORSSerialPort serialPortWithPath:[[self.serialPortButton selectedItem] title]];
+    ORSSerialPort *serialPort = self.serialPortManager.availablePorts[self.serialPortButton.indexOfSelectedItem];
+    [serialPort setDelegate:[SequenceLogic sharedInstance]];
+    [serialPort setBaudRate:@57600];
+    [serialPort open];
+    NSLog(@"open serial port:%@", serialPort);
+    [SequenceLogic sharedInstance].serialPort = serialPort;
+}
+
 - (IBAction)skipBackButtonPress:(id)sender
 {
     [SequenceLogic sharedInstance].currentTime = 0;
@@ -224,6 +254,8 @@
     
     [self playPause];
 }
+
+#pragma mark - Time
 
 - (void)audioTimerFire:(NSTimer *)timer
 {

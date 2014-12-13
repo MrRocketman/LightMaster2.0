@@ -46,6 +46,8 @@
     return self;
 }
 
+#pragma mark - Math
+
 - (void)updateMagnification:(float)newMagnification
 {
     float previousMagnification = self.magnification;
@@ -155,6 +157,92 @@
     }
     
     return 1.0;
+}
+
+#pragma mark - SerialPort
+
+- (void)sendPacketToSerialPort:(uint8_t *)packet packetLength:(int)length
+{
+    if([self.serialPort isOpen])
+    {
+        /*for(int i = 0; i < length; i ++)
+         {
+         NSLog(@"send:0x%02x", packet[i]);
+         }*/
+        [self.serialPort sendData:[NSData dataWithBytes:packet length:length]];
+    }
+    else
+    {
+        //NSLog(@"Can't send:%@", [NSString stringWithCString:packet encoding:NSStringEncodingConversionAllowLossy]);
+        for(int i = 0; i < length; i ++)
+        {
+            NSLog(@"can't send c:%c d:%d h:%02x", packet[i], packet[i], packet[i]);
+        }
+        //NSLog(@"Couldn't send. Not connected");
+    }
+}
+
+- (void)sendStringToSerialPort:(NSString *)text
+{
+    if([self.serialPort isOpen])
+    {
+        //NSLog(@"Writing:%@:", text);
+        [self.serialPort sendData:[text dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    else
+    {
+        NSLog(@"Can't send:%@", text);
+        for(int i = 0; i < [text length]; i ++)
+        {
+            NSLog(@"c:%c d:%d h:%x", [text characterAtIndex:i], [text characterAtIndex:i], [text characterAtIndex:i]);
+        }
+    }
+}
+
+#pragma mark - ORSSerialPortDelegate
+
+- (void)serialPortWasOpened:(ORSSerialPort *)serialPort
+{
+    //self.openCloseButton.title = @"Close";
+}
+
+- (void)serialPortWasClosed:(ORSSerialPort *)serialPort
+{
+    //self.openCloseButton.title = @"Open";
+}
+
+- (void)serialPort:(ORSSerialPort *)serialPort didReceiveData:(NSData *)data
+{
+    // This method is called if data arrives
+    if ([data length] > 0)
+    {
+        NSString *receivedText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"Serial Port Data Received: %@",receivedText);
+        for(int i = 0; i < [receivedText length]; i ++)
+        {
+            char character = [receivedText characterAtIndex:i];
+            int characterValue = (int)character;
+            NSLog(@"c:%c v:%i", character, characterValue);
+        }
+        
+        // ToDo: Do something with received text
+    }
+    // Port closed
+    else
+    {
+        NSLog(@"Port was closed on a readData operation...not good!");
+    }
+}
+
+- (void)serialPortWasRemovedFromSystem:(ORSSerialPort *)serialPort;
+{
+    // After a serial port is removed from the system, it is invalid and we must discard any references to it
+    self.serialPort = nil;
+}
+
+- (void)serialPort:(ORSSerialPort *)theSerialPort didEncounterError:(NSError *)error
+{
+    NSLog(@"Serial port %@ encountered an error: %@", theSerialPort, error);
 }
 
 @end

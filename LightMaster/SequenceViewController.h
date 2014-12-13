@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SequenceScrollView, SequenceChannelScrollView, SequenceTimelineScrollView, SequenceAudioAnalysisChannelScrollView, SequenceAudioAnalysisScrollView, SequenceCurrentTimeView;
+@class SequenceScrollView, SequenceChannelScrollView, SequenceTimelineScrollView, SequenceAudioAnalysisChannelScrollView, SequenceAudioAnalysisScrollView, SequenceCurrentTimeView, ORSSerialPortManager, ORSSerialPort;
 
 @interface SequenceViewController : NSViewController <NSSplitViewDelegate>
 
@@ -29,6 +29,9 @@
 
 @property (strong, nonatomic) IBOutlet NSSplitView *splitView;
 
+@property (strong, nonatomic) ORSSerialPortManager *serialPortManager;
+
+- (IBAction)serialPortSelectionChange:(id)sender;
 - (IBAction)skipBackButtonPress:(id)sender;
 - (IBAction)playButtonPress:(id)sender;
 - (IBAction)commandTypeSegmentedControlChange:(id)sender;
