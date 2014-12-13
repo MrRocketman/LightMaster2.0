@@ -2,14 +2,14 @@
 //  Sequence.h
 //  LightMaster
 //
-//  Created by James Adams on 12/8/14.
+//  Created by James Adams on 12/12/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Audio, ControlBox, Playlist, SequenceTatum;
+@class Audio, Command, ControlBox, Playlist, SequenceTatum;
 
 @interface Sequence : NSManagedObject
 
@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSSet *controlBoxes;
 @property (nonatomic, retain) NSSet *playlists;
 @property (nonatomic, retain) NSSet *tatums;
+@property (nonatomic, retain) NSSet *commands;
 @end
 
 @interface Sequence (CoreDataGeneratedAccessors)
@@ -47,5 +48,10 @@
 - (void)removeTatumsObject:(SequenceTatum *)value;
 - (void)addTatums:(NSSet *)values;
 - (void)removeTatums:(NSSet *)values;
+
+- (void)addCommandsObject:(Command *)value;
+- (void)removeCommandsObject:(Command *)value;
+- (void)addCommands:(NSSet *)values;
+- (void)removeCommands:(NSSet *)values;
 
 @end

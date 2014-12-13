@@ -450,6 +450,7 @@
     command.endTatum = endTatum;
     command.brightness = @(brightness);
     command.channel = channel;
+    command.sequence = self.currentSequence;
     command.uuid = [[NSUUID UUID] UUIDString];
     
     return command;
@@ -463,6 +464,7 @@
     command.startBrightness = @(startBrightness);
     command.endBrightness = @(endBrightness);
     command.channel = channel;
+    command.sequence = self.currentSequence;
     command.uuid = [[NSUUID UUID] UUIDString];
     
     return command;
