@@ -78,6 +78,7 @@
 
 #pragma mark - SplitViewDelegate
 
+// Controls the MAX position of a split
 -(CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
     int numberOfAudioChannels = [[SequenceLogic sharedInstance] numberOfAudioChannels];
@@ -86,12 +87,13 @@
     {
         maxY = self.view.frame.size.height - 200;
     }
-    return maxY; //controls the MAX position of a split (use an if else or switch block to deal with the dividerIndex)
+    return maxY;
 }
 
--(CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex{
-    return 20;//controls the MIN position of a split (use an if else or switch block to deal with the dividerIndex)
-    
+// Controls the MIN position of a split
+-(CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+    return 20;
 }
 
 #pragma mark - Other
@@ -305,10 +307,11 @@
     [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
     
     // Update channel brightness at 30Hz
+    [[SequenceLogic sharedInstance] updateCommandsForCurrentTime];
     if([SequenceLogic sharedInstance].currentTime > self.lastChannelUpdateTime + 0.06)
     {
         self.lastChannelUpdateTime = [SequenceLogic sharedInstance].currentTime;
-        
+        //[[SequenceLogic sharedInstance] updateCommandsForCurrentTime];
         
         [self.audioAnalysisChannelScrollView updateViews];
         [self.channelScrollView updateViews];

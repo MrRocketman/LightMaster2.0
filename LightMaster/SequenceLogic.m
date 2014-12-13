@@ -14,6 +14,9 @@
 #import "ControlBox.h"
 #import "Channel.h"
 #import "Audio.h"
+#import "Command.h"
+#import "CommandOn.h"
+#import "CommandFade.h"
 
 #define SECONDS_TO_PIXELS 25.0
 
@@ -107,6 +110,51 @@
         channelCount += (int)box.channels.count;
     }
     return channelCount;
+}
+
+#pragma mark - Commands
+
+- (void)updateCommandsForCurrentTime
+{
+    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time", [SequenceLogic sharedInstance].currentTime, [SequenceLogic sharedInstance].currentTime] toArray];
+}
+
+- (float)currentBrightnessForChannel:(Channel *)channel
+{
+    if([SequenceLogic sharedInstance].showChannelBrightness && channel.commands)
+    {
+        Command *command;
+        for(Command *eachCommand in self.commandsForCurrentTime)
+        {
+            if(eachCommand.channel == channel)
+            {
+                command = eachCommand;
+                break;
+            }
+        }
+        //Command *command = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND %f >= startTatum.time AND %f <= endTatum.time", channel, [SequenceLogic sharedInstance].currentTime, [SequenceLogic sharedInstance].currentTime] toArray] firstObject];
+        if(command)
+        {
+            if([command isMemberOfClass:[CommandOn class]])
+            {
+                return [((CommandOn *)command).brightness floatValue];
+            }
+            else if([command isMemberOfClass:[CommandFade class]])
+            {
+                CommandFade *commandFade = (CommandFade *)command;
+                float commandDuration = [commandFade.endTatum.time floatValue] - [commandFade.startTatum.time floatValue];
+                float percentThroughCommand = ([commandFade.endTatum.time floatValue] - [SequenceLogic sharedInstance].currentTime) / commandDuration;
+                float brightnessChange = [commandFade.endBrightness floatValue] - [commandFade.startBrightness floatValue];
+                return 1.0 - ([commandFade.startBrightness floatValue] + percentThroughCommand * brightnessChange);
+            }
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
+    
+    return 1.0;
 }
 
 @end

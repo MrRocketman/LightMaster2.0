@@ -119,7 +119,7 @@
 {
     if([self channelIndexIsInVisibleRange:index withChannelHeight:1])
     {
-        [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:[channel.color colorWithAlphaComponent:[[CoreDataManager sharedManager] currentBrightnessForChannel:channel]] halfWidth:YES rightHalf:YES channelHeight:1];
+        [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:[channel.color colorWithAlphaComponent:[[SequenceLogic sharedInstance] currentBrightnessForChannel:channel]] halfWidth:YES rightHalf:YES channelHeight:1];
     }
 }
 

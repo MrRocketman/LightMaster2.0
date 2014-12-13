@@ -11,7 +11,7 @@
 #define CHANNEL_HEIGHT 20.0
 #define AUTO_SCROLL_REFRESH_RATE 0.03
 
-@class SequenceTatum;
+@class SequenceTatum, Channel;
 
 enum
 {
@@ -41,6 +41,8 @@ enum
 @property (assign, nonatomic) BOOL currentTimeMarkerIsSelected;
 @property (assign, nonatomic) BOOL showChannelBrightness;
 
+@property (strong, nonatomic) NSArray *commandsForCurrentTime;
+
 - (void)updateMagnification:(float)newMagnification;
 
 - (float)timeToX:(float)time;
@@ -48,5 +50,9 @@ enum
 - (float)widthForTimeInterval:(float)timeInterval;
 - (int)numberOfChannels;
 - (int)numberOfAudioChannels;
+
+// Commands
+- (void)updateCommandsForCurrentTime;
+- (float)currentBrightnessForChannel:(Channel *)channel;
 
 @end
