@@ -53,6 +53,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPause:) name:@"PlayPause" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseSelection:) name:@"PlayPauseSelection" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseFromCurrentTime:) name:@"PlayPauseFromCurrentTime" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deselectMouse:) name:@"DeselectMouse" object:nil];
     
     self.isPlayButton = YES;
     [self reloadAudio];
@@ -103,6 +104,11 @@
 - (void)changeCommandtype:(NSNotification *)notification
 {
     [self.commandTypeSegmentedControl setSelectedSegment:[SequenceLogic sharedInstance].commandType];
+}
+
+- (void)deselectMouse:(NSNotification *)notification
+{
+    self.lastChannelUpdateTime = -1;
 }
 
 - (void)currentTimeChange:(NSNotification *)notification
