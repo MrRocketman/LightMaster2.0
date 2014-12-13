@@ -19,6 +19,9 @@
 #import "CommandFade.h"
 
 #define SECONDS_TO_PIXELS 25.0
+#define MAX_BRIGHTNESS 127
+#define MAX_SHORT_DURATION 2.56
+#define MAX_LONG_DURATION 25.6
 
 @implementation SequenceLogic
 
@@ -118,13 +121,240 @@
 
 - (void)updateCommandsForCurrentTime
 {
-    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time", [SequenceLogic sharedInstance].currentTime, [SequenceLogic sharedInstance].currentTime] toArray];
+    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time", self.currentTime, self.currentTime] toArray];
+    
+    [self sendCommandsForCurrentTime];
+}
+
+- (void)resetCommandsSendComplete
+{
+    NSArray *commandsToReset = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"startTatum.time >= %F", self.currentTime] toArray];
+    for(Command *command in commandsToReset)
+    {
+        command.sendComplete = @(NO);
+    }
+    
+    [[CoreDataManager sharedManager] saveContext];
+}
+
+- (void)sendCommandsForCurrentTime
+{
+    const float epsilon = 0.005;
+    
+    for(Command *command in self.commandsForCurrentTime)
+    {
+        uint8_t packet[32] = {0};
+        uint8_t packetIndex = 0;
+        // Set the controlBox packet byte
+        packet[packetIndex] = (uint8_t)[command.channel.controlBox.idNumber intValue];
+        packetIndex ++;
+        
+        // If the command hasn't been sent, send it
+        if(![command.sendComplete boolValue])
+        {
+            // Command on
+            if([command isMemberOfClass:[CommandOn class]])
+            {
+                CommandOn *commandOn = (CommandOn *)command;
+                float commandDuration = [commandOn.endTatum.time floatValue] - [commandOn.startTatum.time floatValue];
+                
+                // Does the command have a custom brightness
+                if([commandOn.brightness floatValue] < 1.0 - epsilon)
+                {
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Set the command id byte to brightness for hundredths for 1 channel
+                        packet[packetIndex] = 0x12;
+                        packetIndex ++;
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Set the command id byte to brightness for tenths for 1 channel
+                        packet[packetIndex] = 0x13;
+                        packetIndex ++;
+                    }
+                    
+                    // Set the channel id byte
+                    packet[packetIndex] = (uint8_t)[commandOn.channel.idNumber intValue];
+                    packetIndex ++;
+                    
+                    // Set the brightness byte
+                    packet[packetIndex] = (uint8_t)([commandOn.brightness floatValue] * MAX_BRIGHTNESS);
+                    packetIndex ++;
+                    
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Set the command id byte to brightness for hundredths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 100);
+                        packetIndex ++;
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Set the command id byte to brightness for tenths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 10);
+                        packetIndex ++;
+                    }
+                }
+                // Full brightness command
+                else
+                {
+                    // Command id byte
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Set the command id byte to brightness for hundredths for 1 channel
+                        packet[packetIndex] = 0x05;
+                        packetIndex ++;
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Set the command id byte to brightness for tenths for 1 channel
+                        packet[packetIndex] = 0x06;
+                        packetIndex ++;
+                    }
+                    
+                    // Set the channel id byte
+                    packet[packetIndex] = (uint8_t)[commandOn.channel.idNumber intValue];
+                    packetIndex ++;
+                    
+                    // Duration byte
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Set the command id byte to brightness for hundredths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 100);
+                        packetIndex ++;
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Set the command id byte to brightness for tenths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 10);
+                        packetIndex ++;
+                    }
+                }
+            }
+            // Command on
+            else if([command isMemberOfClass:[CommandFade class]])
+            {
+                CommandFade *commandFade = (CommandFade *)command;
+                float commandDuration = [commandFade.endTatum.time floatValue] - [commandFade.startTatum.time floatValue];
+                
+                // Does the command have a custom brightness
+                if(([commandFade.startBrightness floatValue] < 1.0 - epsilon && [commandFade.startBrightness floatValue] > 0.0 + epsilon) || ([commandFade.endBrightness floatValue] < 1.0 - epsilon && [commandFade.endBrightness floatValue] > 0.0 + epsilon))
+                {
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Set the command id byte to custom fade for hundredths for 1 channel
+                        packet[packetIndex] = 0x24;
+                        packetIndex ++;
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Set the command id byte to custom fade for tenths for 1 channel
+                        packet[packetIndex] = 0x25;
+                        packetIndex ++;
+                    }
+                    
+                    // Set the channel id byte
+                    packet[packetIndex] = (uint8_t)[commandFade.channel.idNumber intValue];
+                    packetIndex ++;
+                    
+                    // Set the startBrightness byte
+                    packet[packetIndex] = (uint8_t)([commandFade.startBrightness floatValue] * MAX_BRIGHTNESS);
+                    packetIndex ++;
+                    
+                    // Set the endBrightness byte
+                    packet[packetIndex] = (uint8_t)([commandFade.endBrightness floatValue] * MAX_BRIGHTNESS);
+                    packetIndex ++;
+                    
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Set the command id byte to brightness for hundredths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 100);
+                        packetIndex ++;
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Set the command id byte to brightness for tenths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 10);
+                        packetIndex ++;
+                    }
+                }
+                // Full brightness fade
+                else
+                {
+                    // Command id byte
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Fade down command
+                        if([commandFade.startBrightness floatValue] > 1.0 - epsilon)
+                        {
+                            // Set the command id byte to fade down for hundredths for 1 channel
+                            packet[packetIndex] = 0x22;
+                            packetIndex ++;
+                        }
+                        // Fade up command
+                        else
+                        {
+                            // Set the command id byte to fade up for hundredths for 1 channel
+                            packet[packetIndex] = 0x20;
+                            packetIndex ++;
+                        }
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Fade down command
+                        if([commandFade.startBrightness floatValue] > 1.0 - epsilon)
+                        {
+                            // Set the command id byte to fade down for tenths for 1 channel
+                            packet[packetIndex] = 0x23;
+                            packetIndex ++;
+                        }
+                        // Fade up command
+                        else
+                        {
+                            // Set the command id byte to fade up for tenths for 1 channel
+                            packet[packetIndex] = 0x21;
+                            packetIndex ++;
+                        }
+                    }
+                    
+                    // Set the channel id byte
+                    packet[packetIndex] = (uint8_t)[commandFade.channel.idNumber intValue];
+                    packetIndex ++;
+                    
+                    // Duration byte
+                    if(commandDuration <= MAX_SHORT_DURATION)
+                    {
+                        // Set the command id byte to brightness for hundredths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 100);
+                        packetIndex ++;
+                    }
+                    else if(commandDuration <= MAX_LONG_DURATION)
+                    {
+                        // Set the command id byte to brightness for tenths for 1 channel
+                        packet[packetIndex] = (uint8_t)(commandDuration * 10);
+                        packetIndex ++;
+                    }
+                }
+            }
+            
+            // Set the end of packet byte
+            packet[packetIndex] = 0xFF;
+            packetIndex ++;
+            
+            // Send the packet
+            [self sendPacketToSerialPort:packet packetLength:packetIndex];
+            
+            // Mark as sent so it doesn't get sent again
+            command.sendComplete = @(YES);
+        }
+    }
 }
 
 - (float)currentBrightnessForChannel:(Channel *)channel
 {
     if([SequenceLogic sharedInstance].showChannelBrightness && channel.commands)
     {
+        // Find the command for this channel
         Command *command;
         for(Command *eachCommand in self.commandsForCurrentTime)
         {
@@ -134,7 +364,8 @@
                 break;
             }
         }
-        //Command *command = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND %f >= startTatum.time AND %f <= endTatum.time", channel, [SequenceLogic sharedInstance].currentTime, [SequenceLogic sharedInstance].currentTime] toArray] firstObject];
+        
+        
         if(command)
         {
             if([command isMemberOfClass:[CommandOn class]])
@@ -165,19 +396,20 @@
 {
     if([self.serialPort isOpen])
     {
-        /*for(int i = 0; i < length; i ++)
-         {
-         NSLog(@"send:0x%02x", packet[i]);
-         }*/
+        //NSLog(@"Send");
+        //for(int i = 0; i < length; i ++)
+        //{
+        //    NSLog(@"0x%02x", packet[i]);
+        //}
         [self.serialPort sendData:[NSData dataWithBytes:packet length:length]];
     }
     else
     {
         //NSLog(@"Can't send:%@", [NSString stringWithCString:packet encoding:NSStringEncodingConversionAllowLossy]);
-        for(int i = 0; i < length; i ++)
-        {
-            NSLog(@"can't send c:%c d:%d h:%02x", packet[i], packet[i], packet[i]);
-        }
+        //for(int i = 0; i < length; i ++)
+        //{
+        //    NSLog(@"can't send c:%c d:%d h:%02x", packet[i], packet[i], packet[i]);
+        //}
         //NSLog(@"Couldn't send. Not connected");
     }
 }

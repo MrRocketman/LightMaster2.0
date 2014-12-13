@@ -52,6 +52,7 @@
     if(![CoreDataManager sharedManager].currentSequence)
     {
         [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
+        [[SequenceLogic sharedInstance] resetCommandsSendComplete];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSequenceFromNotification:) name:@"CurrentSequenceChange" object:nil];
@@ -122,6 +123,7 @@
 - (void)deselectMouse:(NSNotification *)notification
 {
     self.lastChannelUpdateTime = -1;
+    [[SequenceLogic sharedInstance] resetCommandsSendComplete];
 }
 
 - (void)currentTimeChange:(NSNotification *)notification
@@ -174,7 +176,6 @@
     [serialPort setDelegate:[SequenceLogic sharedInstance]];
     [serialPort setBaudRate:@57600];
     [serialPort open];
-    NSLog(@"open serial port:%@", serialPort);
     [SequenceLogic sharedInstance].serialPort = serialPort;
 }
 
@@ -183,6 +184,7 @@
     [SequenceLogic sharedInstance].currentTime = 0;
     self.audioPlayer.currentTime = 0;
     self.lastChannelUpdateTime = -1;
+    [[SequenceLogic sharedInstance] resetCommandsSendComplete];
     [self updateTime];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"DeselectMouse" object:nil];
@@ -272,6 +274,7 @@
         [self.audioPlayer stop];
         self.audioPlayer.currentTime = 0;
         self.lastChannelUpdateTime = -1;
+        [[SequenceLogic sharedInstance] resetCommandsSendComplete];
         [self.audioPlayer play];
         [SequenceLogic sharedInstance].currentTime = 0;
     }

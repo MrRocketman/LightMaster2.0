@@ -56,6 +56,7 @@ enum
 
 // Commands
 - (void)updateCommandsForCurrentTime;
+- (void)resetCommandsSendComplete;
 - (float)currentBrightnessForChannel:(Channel *)channel;
 
 @end
