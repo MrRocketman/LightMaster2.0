@@ -201,7 +201,7 @@
     {
         [self.audioPlayer play];
         self.playButton.title = @"Pause";
-        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.002 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
+        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
         [SequenceLogic sharedInstance].showChannelBrightness = YES;
         self.lastChannelUpdateTime = -1;
     }

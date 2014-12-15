@@ -378,7 +378,8 @@
                 float commandDuration = [commandFade.endTatum.time floatValue] - [commandFade.startTatum.time floatValue];
                 float percentThroughCommand = ([commandFade.endTatum.time floatValue] - [SequenceLogic sharedInstance].currentTime) / commandDuration;
                 float brightnessChange = [commandFade.endBrightness floatValue] - [commandFade.startBrightness floatValue];
-                return 1.0 - ([commandFade.startBrightness floatValue] + percentThroughCommand * brightnessChange);
+                float maxBrightness = ([commandFade.startBrightness floatValue] > [commandFade.endBrightness floatValue] ? [commandFade.startBrightness floatValue] : [commandFade.endBrightness floatValue]);
+                return maxBrightness - ([commandFade.startBrightness floatValue] + percentThroughCommand * brightnessChange);
             }
         }
         else
