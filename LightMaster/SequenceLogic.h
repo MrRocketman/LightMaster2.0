@@ -38,6 +38,7 @@ enum
 @property (strong, nonatomic) SequenceTatum *endTatumForCopy;
 @property (assign, nonatomic) int topChannelForCopy;
 @property (assign, nonatomic) int bottomChannelForCopy;
+@property (strong, nonatomic) NSArray *commandArraysToCopy;
 
 @property (assign, nonatomic) BOOL currentTimeMarkerIsSelected;
 @property (assign, nonatomic) BOOL showChannelBrightness;

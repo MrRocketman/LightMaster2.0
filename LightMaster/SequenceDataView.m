@@ -718,6 +718,29 @@
             [SequenceLogic sharedInstance].endTatumForCopy = [SequenceLogic sharedInstance].mouseBoxSelectEndTatum;
             [SequenceLogic sharedInstance].topChannelForCopy = self.mouseBoxSelectTopChannel;
             [SequenceLogic sharedInstance].bottomChannelForCopy = self.mouseBoxSelectBottomChannel;
+            
+            // Store the commands to copy (so they can be pasted to the audioAnalysis section if wanted)
+            NSMutableArray *commandArraysToCopy = [NSMutableArray new];
+            int i = 0;
+            const float epsilon = 0.001;
+            float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
+            float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
+            for(NSArray *channels in self.channels)
+            {
+                for(Channel *channel in channels)
+                {
+                    // Only use the selected channels
+                    if(i >= [SequenceLogic sharedInstance].topChannelForCopy && i < [SequenceLogic sharedInstance].bottomChannelForCopy)
+                    {
+                        NSArray *commandsToCopy = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                        [commandArraysToCopy addObject:commandsToCopy];
+                    }
+                    
+                    // Increment our channel counter
+                    i ++;
+                }
+            }
+            [SequenceLogic sharedInstance].commandArraysToCopy = (NSArray *)commandArraysToCopy;
         }
         else if(keyboardEvent.keyCode == 9 && self.commandKey && self.retainMouseGroupSelect && [SequenceLogic sharedInstance].startTatumForCopy) // 'v'
         {
@@ -972,7 +995,7 @@
     int copiedChannelsCounter = 0;
     for(NSArray *channels in self.channels)
     {
-        for(Channel *channel in channels)
+        for(int count = 0; count < channels.count; count ++)
         {
             // Only use the selected channels
             if(i >= [SequenceLogic sharedInstance].topChannelForCopy && i < [SequenceLogic sharedInstance].bottomChannelForCopy)
@@ -1006,7 +1029,7 @@
                 // Only paste if we are in a valid range
                 if(index < (self.isAudioAnalysisView ? [SequenceLogic sharedInstance].numberOfAudioChannels : [SequenceLogic sharedInstance].numberOfChannels))
                 {
-                    NSArray *commandsToCopy = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                    NSArray *commandsToCopy = [SequenceLogic sharedInstance].commandArraysToCopy[copiedChannelsCounter];//[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
                     for(Command *command in commandsToCopy)
                     {
                         // Find the new startTatum
@@ -1041,8 +1064,6 @@
 {
     // Pase to existing tatums
     const float epsilon = 0.001;
-    float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
-    float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
     NSArray *copyTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"time >= %f AND time <= %f AND sequence == %@", [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue] - epsilon, [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue] + epsilon, [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
     NSArray *tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"time >= %f AND sequence == %@", [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] - epsilon, [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
     SequenceTatum *endPasteTatum = tatums[copyTatums.count - 1];
@@ -1053,7 +1074,7 @@
     int copiedChannelsCounter = 0;
     for(NSArray *channels in self.channels)
     {
-        for(Channel *channel in channels)
+        for(int count = 0; count < channels.count; count ++)
         {
             // Only use the selected channels
             if(i >= [SequenceLogic sharedInstance].topChannelForCopy && i < [SequenceLogic sharedInstance].bottomChannelForCopy)
@@ -1087,7 +1108,7 @@
                 // Only paste if we are in a valid range
                 if(index < (self.isAudioAnalysisView ? [SequenceLogic sharedInstance].numberOfAudioChannels : [SequenceLogic sharedInstance].numberOfChannels))
                 {
-                    NSArray *commandsToCopy = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                    NSArray *commandsToCopy = [SequenceLogic sharedInstance].commandArraysToCopy[copiedChannelsCounter];//[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
                     for(Command *command in commandsToCopy)
                     {
                         // Find the new start and end tatums based on the number of tatums
