@@ -1029,7 +1029,7 @@
                 // Only paste if we are in a valid range
                 if(index < (self.isAudioAnalysisView ? [SequenceLogic sharedInstance].numberOfAudioChannels : [SequenceLogic sharedInstance].numberOfChannels))
                 {
-                    NSArray *commandsToCopy = [SequenceLogic sharedInstance].commandArraysToCopy[copiedChannelsCounter];//[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                    NSArray *commandsToCopy = [SequenceLogic sharedInstance].commandArraysToCopy[copiedChannelsCounter];
                     for(Command *command in commandsToCopy)
                     {
                         // Find the new startTatum
@@ -1039,13 +1039,17 @@
                         newTatumTime = pasteStartTime + [command.endTatum.time floatValue] - copyStartTime;
                         SequenceTatum *endTatum = [[[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time > %f AND time < %f", [CoreDataManager sharedManager].currentSequence, newTatumTime - pasteEpsilon, newTatumTime + pasteEpsilon] orderBy:@"time"] toArray] firstObject];
                         
-                        if([command isMemberOfClass:[CommandOn class]])
+                        // Only paste if we have a start and end tatum
+                        if(startTatum && endTatum)
                         {
-                            [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandOn *)command).brightness floatValue] endBrightness:[((CommandOn *)command).brightness floatValue]];
-                        }
-                        else if([command isMemberOfClass:[CommandFade class]])
-                        {
-                            [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandFade *)command).startBrightness floatValue] endBrightness:[((CommandFade *)command).endBrightness floatValue]];
+                            if([command isMemberOfClass:[CommandOn class]])
+                            {
+                                [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandOn *)command).brightness floatValue] endBrightness:[((CommandOn *)command).brightness floatValue]];
+                            }
+                            else if([command isMemberOfClass:[CommandFade class]])
+                            {
+                                [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandFade *)command).startBrightness floatValue] endBrightness:[((CommandFade *)command).endBrightness floatValue]];
+                            }
                         }
                     }
                 }
@@ -1108,7 +1112,7 @@
                 // Only paste if we are in a valid range
                 if(index < (self.isAudioAnalysisView ? [SequenceLogic sharedInstance].numberOfAudioChannels : [SequenceLogic sharedInstance].numberOfChannels))
                 {
-                    NSArray *commandsToCopy = [SequenceLogic sharedInstance].commandArraysToCopy[copiedChannelsCounter];//[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                    NSArray *commandsToCopy = [SequenceLogic sharedInstance].commandArraysToCopy[copiedChannelsCounter];
                     for(Command *command in commandsToCopy)
                     {
                         // Find the new start and end tatums based on the number of tatums
@@ -1128,16 +1132,28 @@
                             
                             i2 ++;
                         }
-                        SequenceTatum *startTatum = pasteTatums[copyStartTatumIndex];
-                        SequenceTatum *endTatum = pasteTatums[copyEndTatumIndex];
-                        
-                        if([command isMemberOfClass:[CommandOn class]])
+                        SequenceTatum *startTatum;
+                        if(copyStartTatumIndex < pasteTatums.count)
                         {
-                            [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandOn *)command).brightness floatValue] endBrightness:[((CommandOn *)command).brightness floatValue]];
+                            startTatum = pasteTatums[copyStartTatumIndex];
                         }
-                        else if([command isMemberOfClass:[CommandFade class]])
+                        SequenceTatum *endTatum;
+                        if(copyEndTatumIndex < pasteTatums.count)
                         {
-                            [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandFade *)command).startBrightness floatValue] endBrightness:[((CommandFade *)command).endBrightness floatValue]];
+                            endTatum = pasteTatums[copyEndTatumIndex];
+                        }
+                        
+                        // Only paste if we have a start and end tatum
+                        if(startTatum && endTatum)
+                        {
+                            if([command isMemberOfClass:[CommandOn class]])
+                            {
+                                [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandOn *)command).brightness floatValue] endBrightness:[((CommandOn *)command).brightness floatValue]];
+                            }
+                            else if([command isMemberOfClass:[CommandFade class]])
+                            {
+                                [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandFade *)command).startBrightness floatValue] endBrightness:[((CommandFade *)command).endBrightness floatValue]];
+                            }
                         }
                     }
                 }
