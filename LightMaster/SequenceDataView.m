@@ -541,7 +541,7 @@
 
 - (void)flagsChanged:(NSEvent *)event
 {
-    self.commandKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
+    self.shiftKey = ([event modifierFlags] & NSShiftKeyMask ? YES : NO);
     self.commandKey = ([event modifierFlags] & NSCommandKeyMask ? YES : NO);
     self.optionKey = ([event modifierFlags] & NSAlternateKeyMask ? YES : NO);
     if(!self.optionKey)
@@ -1035,8 +1035,96 @@
 
 - (void)pasteDataToExistingTatums
 {
-    // Pase data
-    NSLog(@"Paste And Copy To Tatums");
+    // Pase to existing tatums
+    const float epsilon = 0.001;
+    float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
+    float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
+    NSArray *copyTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"time >= %f AND time <= %f AND sequence == %@", [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue] - epsilon, [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue] + epsilon, [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
+    NSArray *tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"time >= %f AND sequence == %@", [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] - epsilon, [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
+    SequenceTatum *endPasteTatum = tatums[copyTatums.count - 1];
+    NSArray *pasteTatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"time >= %f AND time <= %f AND sequence == %@", [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] - epsilon, [endPasteTatum.time floatValue] + epsilon, [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
+    
+    // Paste commands from the copy area, one channel at a time
+    int i = 0;
+    int copiedChannelsCounter = 0;
+    for(NSArray *channels in self.channels)
+    {
+        for(Channel *channel in channels)
+        {
+            // Only use the selected channels
+            if(i >= [SequenceLogic sharedInstance].topChannelForCopy && i < [SequenceLogic sharedInstance].bottomChannelForCopy)
+            {
+                // Figure out which channel index we are pasting into
+                int newChannelIndexForCommand = self.mouseBoxSelectTopChannel + copiedChannelsCounter;
+                // Find the new channel
+                BOOL done = NO;
+                Channel *newChannel;
+                int index = 0;
+                for(NSArray *tempChannels in self.channels)
+                {
+                    for(Channel *tempChannel in tempChannels)
+                    {
+                        if(index == newChannelIndexForCommand)
+                        {
+                            done = YES;
+                            newChannel = tempChannel;
+                            break;
+                        }
+                        
+                        index ++;
+                    }
+                    
+                    if(done)
+                    {
+                        break;
+                    }
+                }
+                
+                // Only paste if we are in a valid range
+                if(index < (self.isAudioAnalysisView ? [SequenceLogic sharedInstance].numberOfAudioChannels : [SequenceLogic sharedInstance].numberOfChannels))
+                {
+                    NSArray *commandsToCopy = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                    for(Command *command in commandsToCopy)
+                    {
+                        // Find the new start and end tatums based on the number of tatums
+                        int copyStartTatumIndex = 0;
+                        int copyEndTatumIndex = 0;
+                        int i2 = 0;
+                        for(SequenceTatum *tatum in copyTatums)
+                        {
+                            if(tatum == command.startTatum)
+                            {
+                                copyStartTatumIndex = i2;
+                            }
+                            if(tatum == command.endTatum)
+                            {
+                                copyEndTatumIndex = i2;
+                            }
+                            
+                            i2 ++;
+                        }
+                        SequenceTatum *startTatum = pasteTatums[copyStartTatumIndex];
+                        SequenceTatum *endTatum = pasteTatums[copyEndTatumIndex];
+                        
+                        if([command isMemberOfClass:[CommandOn class]])
+                        {
+                            [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandOn *)command).brightness floatValue] endBrightness:[((CommandOn *)command).brightness floatValue]];
+                        }
+                        else if([command isMemberOfClass:[CommandFade class]])
+                        {
+                            [self addCommandForChannel:newChannel startTatum:startTatum endTatum:endTatum startBrightness:[((CommandFade *)command).startBrightness floatValue] endBrightness:[((CommandFade *)command).endBrightness floatValue]];
+                        }
+                    }
+                }
+                
+                // Increment how many of the copy channels we have finished
+                copiedChannelsCounter ++;
+            }
+            
+            // Increment our channel counter
+            i ++;
+        }
+    }
 }
 
 @end
