@@ -721,14 +721,19 @@
         }
         else if(keyboardEvent.keyCode == 9 && self.commandKey && self.retainMouseGroupSelect && [SequenceLogic sharedInstance].startTatumForCopy) // 'v'
         {
-            if(!self.shiftKey)
+            if(self.optionKey)
             {
-                [self pasteData];
+                [self pasteDataWithPasteEpsilon:0.2];
             }
-            else
+            else if(self.shiftKey)
             {
                 [self pasteDataToExistingTatums];
             }
+            else
+            {
+                [self pasteDataWithPasteEpsilon:0.05];
+            }
+            
             
             self.retainMouseGroupSelect = NO;
             [[CoreDataManager sharedManager] saveContext];
@@ -941,11 +946,10 @@
     [self setNeedsDisplay:YES];
 }
 
-- (void)pasteData
+- (void)pasteDataWithPasteEpsilon:(float)pasteEpsilon
 {
     // Pase data
     const float epsilon = 0.001;
-    const float pasteEpsilon = 0.05;
     float copyStartTime = [[SequenceLogic sharedInstance].startTatumForCopy.time floatValue];
     float copyEndTime = [[SequenceLogic sharedInstance].endTatumForCopy.time floatValue];
     float pasteStartTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
