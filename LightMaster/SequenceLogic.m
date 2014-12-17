@@ -159,7 +159,7 @@
 
 - (void)resetCommandsSendComplete
 {
-    NSArray *commandsToReset = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"startTatum.time >= %f AND sequence == %@", self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
+    NSArray *commandsToReset = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"startTatum.time >= %f AND sequence == %@ AND sendComplete == NO", self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
     for(Command *command in commandsToReset)
     {
         command.sendComplete = @(NO);
@@ -608,7 +608,7 @@
     if(self.currentTime > self.lastChannelUpdateTime + 0.06)
     {
         self.lastChannelUpdateTime = self.currentTime;
-        //[self updateCommandsForCurrentTime];
+        [self updateCommandsForCurrentTime];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDimmingDisplay" object:nil];
     }

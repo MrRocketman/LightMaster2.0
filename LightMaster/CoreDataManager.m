@@ -9,6 +9,7 @@
 #import "CoreDataManager.h"
 #import "NSManagedObjectContext+Queryable.h"
 #import "AppDelegate.h"
+#import "Playlist.h"
 #import "Sequence.h"
 #import "SequenceTatum.h"
 #import "ControlBox.h"
@@ -261,6 +262,20 @@
             [[NSApplication sharedApplication] presentError:error];
         }
     }
+}
+
+#pragma mark - Playlist Methods
+
+- (Playlist *)newPlaylist
+{
+    Playlist *playlist = [NSEntityDescription insertNewObjectForEntityForName:@"Playlist" inManagedObjectContext:self.managedObjectContext];
+    playlist.title = @"New Playlist";
+    playlist.uuid = [[NSUUID UUID] UUIDString];
+    
+    // Save
+    [self saveContext];
+    
+    return playlist;
 }
 
 #pragma mark - Sequence Methods

@@ -37,6 +37,7 @@
 		1A3474E81A32EB2E00736869 /* ENAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3474E41A32EB2E00736869 /* ENAPIRequest.m */; };
 		1A4ADDD41A397D0800B22C4E /* SequenceCurrentTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A4ADDD31A397D0800B22C4E /* SequenceCurrentTimeView.m */; };
 		1A4ADDD71A398F7400B22C4E /* AudioLyric.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A4ADDD61A398F7400B22C4E /* AudioLyric.m */; };
+		1A532F3F1A411950004C2ECE /* PlaylistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A532F3E1A411950004C2ECE /* PlaylistViewController.m */; };
 		1A75ADBF1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADBE1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m */; };
 		1A75ADC21A31248A00D532FB /* SequenceAudioAnalysisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADC11A31248A00D532FB /* SequenceAudioAnalysisView.m */; };
 		1A75ADC71A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A75ADC61A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m */; };
@@ -139,6 +140,8 @@
 		1A4ADDD31A397D0800B22C4E /* SequenceCurrentTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceCurrentTimeView.m; sourceTree = "<group>"; };
 		1A4ADDD51A398F7400B22C4E /* AudioLyric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioLyric.h; path = LightMaster/AudioLyric.h; sourceTree = "<group>"; };
 		1A4ADDD61A398F7400B22C4E /* AudioLyric.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioLyric.m; path = LightMaster/AudioLyric.m; sourceTree = "<group>"; };
+		1A532F3D1A41194F004C2ECE /* PlaylistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistViewController.h; sourceTree = "<group>"; };
+		1A532F3E1A411950004C2ECE /* PlaylistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistViewController.m; sourceTree = "<group>"; };
 		1A75ADBD1A31247B00D532FB /* SequenceAudioAnalysisScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceAudioAnalysisScrollView.h; sourceTree = "<group>"; };
 		1A75ADBE1A31247B00D532FB /* SequenceAudioAnalysisScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceAudioAnalysisScrollView.m; sourceTree = "<group>"; };
 		1A75ADC01A31248900D532FB /* SequenceAudioAnalysisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceAudioAnalysisView.h; sourceTree = "<group>"; };
@@ -356,6 +359,15 @@
 			path = Base64;
 			sourceTree = "<group>";
 		};
+		1A532F401A411956004C2ECE /* Playlist Tab */ = {
+			isa = PBXGroup;
+			children = (
+				1A532F3D1A41194F004C2ECE /* PlaylistViewController.h */,
+				1A532F3E1A411950004C2ECE /* PlaylistViewController.m */,
+			);
+			name = "Playlist Tab";
+			sourceTree = "<group>";
+		};
 		1A75ADC31A31248F00D532FB /* AudioAnalysisView */ = {
 			isa = PBXGroup;
 			children = (
@@ -481,6 +493,7 @@
 				1AE830491A21C725000E297D /* Data Model */,
 				1A3474AB1A32E14C00736869 /* Serial Port */,
 				1A3474DC1A32EB2E00736869 /* ENAPILibrary */,
+				1A532F401A411956004C2ECE /* Playlist Tab */,
 				1A14CA5F1A253E6200C4FEB0 /* SequenceTab */,
 				1A14CA631A25411F00C4FEB0 /* ControlBoxTab */,
 				1AE8302A1A21BA68000E297D /* Images.xcassets */,
@@ -688,6 +701,7 @@
 				1A27BEF91A2C4FB90043F8C9 /* SequenceLogic.m in Sources */,
 				1A27BEE61A2BF6840043F8C9 /* SequenceTimelineView.m in Sources */,
 				1A27BEE31A2BF66D0043F8C9 /* SequenceChannelView.m in Sources */,
+				1A532F3F1A411950004C2ECE /* PlaylistViewController.m in Sources */,
 				1AE7713F1A243E6600C49006 /* EchoNestTatum.m in Sources */,
 				1A14CA621A25411B00C4FEB0 /* ControlBoxViewController.m in Sources */,
 				1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */,

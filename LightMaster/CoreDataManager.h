@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Sequence, SequenceTatum, ControlBox, Channel, ControlBox, CommandOn, CommandFade, AudioLyric;
+@class Playlist, Sequence, SequenceTatum, ControlBox, Channel, ControlBox, CommandOn, CommandFade, AudioLyric;
 
 @interface CoreDataManager : NSObject
 
@@ -24,6 +24,9 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+
+// Playlist
+- (Playlist *)newPlaylist;
 
 // Sequence Methods
 - (Sequence *)newSequence;
