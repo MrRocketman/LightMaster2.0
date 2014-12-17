@@ -16,24 +16,12 @@
 #import "SequenceAudioAnalysisScrollView.h"
 #import "SequenceAudioAnalysisChannelScrollView.h"
 #import "SequenceLogic.h"
-#import "NSManagedObjectContext+Queryable.h"
-#import <AVFoundation/AVFoundation.h>
-#import "Audio.h"
-#import "Sequence.h"
-#import "SequenceTatum.h"
 #import "ORSSerialPortManager.h"
 #import "ORSSerialPort.h"
 
 @interface SequenceViewController ()
 
-@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
-@property (assign, nonatomic) BOOL isPlayButton;
-@property (assign, nonatomic) BOOL isPlaySelection;
-@property (assign, nonatomic) BOOL isPlayFromCurrentTime;
-@property (strong, nonatomic) NSTimer *audioTimer;
 @property (assign, nonatomic) float splitViewY;
-@property (strong, nonatomic) Audio *currentAudio;
-@property (assign, nonatomic) float lastChannelUpdateTime;
 
 @end
 
@@ -42,6 +30,10 @@
 - (void)awakeFromNib
 {
     self.serialPortManager = [ORSSerialPortManager sharedSerialPortManager];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeCommandtype:) name:@"ChangeCommandType" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseButtonUpdate:) name:@"PlayPauseButtonUpdate" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:) name:@"Pause" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
 }
 
 - (void)viewDidLoad
@@ -49,27 +41,9 @@
     [super viewDidLoad];
     // Do view setup here.
     
-    if(![CoreDataManager sharedManager].currentSequence)
-    {
-        [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
-        [[SequenceLogic sharedInstance] resetCommandsSendComplete];
-    }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSequenceFromNotification:) name:@"CurrentSequenceChange" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeCommandtype:) name:@"ChangeCommandType" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPause:) name:@"PlayPause" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseSelection:) name:@"PlayPauseSelection" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseFromCurrentTime:) name:@"PlayPauseFromCurrentTime" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deselectMouse:) name:@"DeselectMouse" object:nil];
-    
     [self.serialPortButton selectItemAtIndex:0];
     //[self serialPortSelectionChange:nil];
     [self performSelector:@selector(serialPortSelectionChange:) withObject:nil afterDelay:2.0];
-    
-    self.isPlayButton = YES;
-    [self reloadAudio];
-    [self currentTimeChange:nil];
 }
 
 - (void)viewWillAppear
@@ -120,33 +94,6 @@
     [self.commandTypeSegmentedControl setSelectedSegment:[SequenceLogic sharedInstance].commandType];
 }
 
-- (void)deselectMouse:(NSNotification *)notification
-{
-    self.lastChannelUpdateTime = -1;
-    [[SequenceLogic sharedInstance] resetCommandsSendComplete];
-}
-
-- (void)currentTimeChange:(NSNotification *)notification
-{
-    self.timeLabel.stringValue = [NSString stringWithFormat:@"%03d.%03d", (int)[SequenceLogic sharedInstance].currentTime, (int)(([SequenceLogic sharedInstance].currentTime - (int)[SequenceLogic sharedInstance].currentTime) * 1000)];
-    
-    // Only update the audio if the user dragged the time marker
-    if(notification.object != self)
-    {
-        self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
-    }
-}
-
-- (void)reloadAudio
-{
-    NSError *error = nil;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[CoreDataManager sharedManager].currentSequence.audio.audioFile fileTypeHint:[[CoreDataManager sharedManager].currentSequence.audio.audioFilePath pathExtension] error:&error];
-    //NSLog(@"Audio error %@, %@", error, [error userInfo]);
-    self.audioPlayer.currentTime = 1.0;
-    [self.audioPlayer prepareToPlay];
-    self.currentAudio = [CoreDataManager sharedManager].currentSequence.audio;
-}
-
 - (void)reloadSequence
 {
     [self.sequenceScrollView updateViews];
@@ -154,11 +101,6 @@
     [self.timelineScrollView updateViews];
     [self.audioAnalysisScrollView updateViews];
     [self.audioAnalysisChannelScrollView updateViews];
-    
-    if(self.currentAudio != [CoreDataManager sharedManager].currentSequence.audio)
-    {
-        [self reloadAudio];
-    }
 }
 
 #pragma mark - Button Actions
@@ -181,119 +123,43 @@
 
 - (IBAction)skipBackButtonPress:(id)sender
 {
-    [SequenceLogic sharedInstance].currentTime = 0;
-    self.audioPlayer.currentTime = 0;
-    self.lastChannelUpdateTime = -1;
-    [[SequenceLogic sharedInstance] resetCommandsSendComplete];
-    [self updateTime];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"DeselectMouse" object:nil];
+    [[SequenceLogic sharedInstance] skipBack];
 }
 
 - (IBAction)playButtonPress:(id)sender
 {
-    [self playPause:nil];
+    [[SequenceLogic sharedInstance] playPause:nil];
 }
 
-- (void)playPause
+- (IBAction)commandTypeSegmentedControlChange:(id)sender
 {
-    if(self.isPlayButton)
+    [SequenceLogic sharedInstance].commandType = (int)self.commandTypeSegmentedControl.selectedSegment;
+}
+
+- (void)playPauseButtonUpdate:(NSNotification *)notification
+{
+    if([notification.object boolValue])
     {
-        [self.audioPlayer play];
         self.playButton.title = @"Pause";
-        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
-        [SequenceLogic sharedInstance].showChannelBrightness = YES;
-        self.lastChannelUpdateTime = -1;
     }
     else
     {
-        [self.audioPlayer pause];
         self.playButton.title = @"Play";
-        [self.audioTimer invalidate];
-        self.audioTimer = nil;
-        [SequenceLogic sharedInstance].showChannelBrightness = NO;
         
         // Update channel brightness levels
         [self.audioAnalysisChannelScrollView updateViews];
         [self.channelScrollView updateViews];
     }
-    
-    self.isPlayButton = !self.isPlayButton;
 }
 
-- (void)playPause:(NSNotification *)notification
+- (void)pause:(NSNotification *)notification
 {
-    self.isPlayFromCurrentTime = NO;
-    self.isPlaySelection = NO;
-    
-    [self playPause];
+    [self.playButton setState:0];
 }
 
-- (void)playPauseSelection:(NSNotification *)notification
+- (void)currentTimeChange:(NSNotification *)notification
 {
-    self.isPlaySelection = YES;
-    self.isPlayFromCurrentTime = NO;
-    
-    if(self.isPlayButton)
-    {
-        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue] - 0.05;
-        self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
-    }
-    
-    [self playPause];
-}
-
-- (void)playPauseFromCurrentTime:(NSNotification *)notification
-{
-    self.isPlayFromCurrentTime = YES;
-    self.isPlaySelection = NO;
-    
-    if(self.isPlayButton)
-    {
-        [SequenceLogic sharedInstance].currentTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
-        self.audioPlayer.currentTime = [SequenceLogic sharedInstance].currentTime;
-    }
-    
-    [self playPause];
-}
-
-#pragma mark - Time
-
-- (void)audioTimerFire:(NSTimer *)timer
-{
-    [SequenceLogic sharedInstance].currentTime = self.audioPlayer.currentTime;//[[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
-    [self updateTime];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
-}
-
-- (void)updateTime
-{
-    // Loop back to beginning
-    if([SequenceLogic sharedInstance].currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
-    {
-        [self.audioPlayer stop];
-        self.audioPlayer.currentTime = 0;
-        self.lastChannelUpdateTime = -1;
-        [[SequenceLogic sharedInstance] resetCommandsSendComplete];
-        [self.audioPlayer play];
-        [SequenceLogic sharedInstance].currentTime = 0;
-    }
-    // If we are playing a selection
-    else if(self.isPlaySelection && [SequenceLogic sharedInstance].currentTime >= [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue])
-    {
-        self.isPlaySelection = NO;
-        self.isPlayButton = !self.isPlayButton;
-        [self.playButton setState:0];
-        self.playButton.title = @"Play";
-        [self.audioPlayer pause];
-        [self.audioTimer invalidate];
-        self.audioTimer = nil;
-        [SequenceLogic sharedInstance].showChannelBrightness = NO;
-        // Update channel brightness levels
-        [self.audioAnalysisChannelScrollView updateViews];
-        [self.channelScrollView updateViews];
-        self.lastChannelUpdateTime = -1;
-    }
+    self.timeLabel.stringValue = [NSString stringWithFormat:@"%03d.%03d", (int)[SequenceLogic sharedInstance].currentTime, (int)(([SequenceLogic sharedInstance].currentTime - (int)[SequenceLogic sharedInstance].currentTime) * 1000)];
     
     // Scroll to center
     NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
@@ -340,22 +206,6 @@
     [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
     [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
     [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
-    
-    // Update channel brightness at 30Hz
-    [[SequenceLogic sharedInstance] updateCommandsForCurrentTime];
-    if([SequenceLogic sharedInstance].currentTime > self.lastChannelUpdateTime + 0.06)
-    {
-        self.lastChannelUpdateTime = [SequenceLogic sharedInstance].currentTime;
-        //[[SequenceLogic sharedInstance] updateCommandsForCurrentTime];
-        
-        [self.audioAnalysisChannelScrollView updateViews];
-        [self.channelScrollView updateViews];
-    }
-}
-
-- (IBAction)commandTypeSegmentedControlChange:(id)sender
-{
-    [SequenceLogic sharedInstance].commandType = (int)self.commandTypeSegmentedControl.selectedSegment;
 }
 
 @end

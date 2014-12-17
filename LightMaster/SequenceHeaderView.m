@@ -25,6 +25,7 @@
 - (void)setup
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceChange:) name:@"CurrentSequenceChange" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(update:) name:@"UpdateDimmingDisplay" object:nil];
     
     [self fetchControlBoxAndChannelData];
 }
@@ -32,6 +33,11 @@
 - (void)sequenceChange:(NSNotification *)notification
 {
     [self fetchControlBoxAndChannelData];
+    [self setNeedsDisplay:YES];
+}
+
+- (void)update:(NSNotification *)notification
+{
     [self setNeedsDisplay:YES];
 }
 

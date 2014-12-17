@@ -60,4 +60,8 @@ enum
 - (void)resetCommandsSendComplete;
 - (float)currentBrightnessForChannel:(Channel *)channel;
 
+// Play/timing
+- (void)skipBack;
+- (void)playPause:(NSNotification *)notification;
+
 @end

@@ -17,11 +17,25 @@
 #import "Command.h"
 #import "CommandOn.h"
 #import "CommandFade.h"
+#import "ORSSerialPort.h"
+#import <AVFoundation/AVFoundation.h>
 
 #define SECONDS_TO_PIXELS 25.0
 #define MAX_BRIGHTNESS 127
 #define MAX_SHORT_DURATION 2.56
 #define MAX_LONG_DURATION 25.6
+
+@interface SequenceLogic()
+
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+@property (assign, nonatomic) BOOL isPlayButton;
+@property (assign, nonatomic) BOOL isPlaySelection;
+@property (assign, nonatomic) BOOL isPlayFromCurrentTime;
+@property (strong, nonatomic) NSTimer *audioTimer;
+@property (strong, nonatomic) Audio *currentAudio;
+@property (assign, nonatomic) float lastChannelUpdateTime;
+
+@end
 
 @implementation SequenceLogic
 
@@ -44,6 +58,23 @@
         self.magnification = 5.0;
         self.currentTime = 1.0;
         self.commandType = CommandTypeSelect;
+        
+        if(![CoreDataManager sharedManager].currentSequence)
+        {
+            [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
+            [self resetCommandsSendComplete];
+        }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSequenceFromNotification:) name:@"CurrentSequenceChange" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPause:) name:@"PlayPause" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseSelection:) name:@"PlayPauseSelection" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playPauseFromCurrentTime:) name:@"PlayPauseFromCurrentTime" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deselectMouse:) name:@"DeselectMouse" object:nil];
+        
+        self.isPlayButton = YES;
+        [self reloadAudio];
+        [self currentTimeChange:nil];
     }
     
     return self;
@@ -352,7 +383,7 @@
 
 - (float)currentBrightnessForChannel:(Channel *)channel
 {
-    if([SequenceLogic sharedInstance].showChannelBrightness && channel.commands)
+    if(self.showChannelBrightness && channel.commands)
     {
         // Find the command for this channel
         Command *command;
@@ -365,7 +396,6 @@
             }
         }
         
-        
         if(command)
         {
             if([command isMemberOfClass:[CommandOn class]])
@@ -376,7 +406,7 @@
             {
                 CommandFade *commandFade = (CommandFade *)command;
                 float commandDuration = [commandFade.endTatum.time floatValue] - [commandFade.startTatum.time floatValue];
-                float percentThroughCommand = ([commandFade.endTatum.time floatValue] - [SequenceLogic sharedInstance].currentTime) / commandDuration;
+                float percentThroughCommand = ([commandFade.endTatum.time floatValue] - self.currentTime) / commandDuration;
                 float brightnessChange = [commandFade.endBrightness floatValue] - [commandFade.startBrightness floatValue];
                 float maxBrightness = ([commandFade.startBrightness floatValue] > [commandFade.endBrightness floatValue] ? [commandFade.startBrightness floatValue] : [commandFade.endBrightness floatValue]);
                 return maxBrightness - ([commandFade.startBrightness floatValue] + percentThroughCommand * brightnessChange);
@@ -476,6 +506,161 @@
 - (void)serialPort:(ORSSerialPort *)theSerialPort didEncounterError:(NSError *)error
 {
     NSLog(@"Serial port %@ encountered an error: %@", theSerialPort, error);
+}
+
+#pragma mark - Play Pause
+
+- (void)playPause
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPauseButtonUpdate" object:@(self.isPlayButton)];
+    
+    if(self.isPlayButton)
+    {
+        [self.audioPlayer play];
+        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
+        self.showChannelBrightness = YES;
+        self.lastChannelUpdateTime = -1;
+    }
+    else
+    {
+        [self.audioPlayer pause];
+        [self.audioTimer invalidate];
+        self.audioTimer = nil;
+        self.showChannelBrightness = NO;
+    }
+    
+    self.isPlayButton = !self.isPlayButton;
+}
+
+- (void)playPause:(NSNotification *)notification
+{
+    self.isPlayFromCurrentTime = NO;
+    self.isPlaySelection = NO;
+    
+    [self playPause];
+}
+
+- (void)playPauseSelection:(NSNotification *)notification
+{
+    self.isPlaySelection = YES;
+    self.isPlayFromCurrentTime = NO;
+    
+    if(self.isPlayButton)
+    {
+        self.currentTime = [self.mouseBoxSelectStartTatum.time floatValue] - 0.05;
+        self.audioPlayer.currentTime = self.currentTime;
+    }
+    
+    [self playPause];
+}
+
+- (void)playPauseFromCurrentTime:(NSNotification *)notification
+{
+    self.isPlayFromCurrentTime = YES;
+    self.isPlaySelection = NO;
+    
+    if(self.isPlayButton)
+    {
+        self.currentTime = [self.mouseBoxSelectStartTatum.time floatValue];
+        self.audioPlayer.currentTime = self.currentTime;
+    }
+    
+    [self playPause];
+}
+
+#pragma mark - Time
+
+- (void)audioTimerFire:(NSTimer *)timer
+{
+    self.currentTime = self.audioPlayer.currentTime;//[[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
+    [self updateTime];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+}
+
+- (void)updateTime
+{
+    // Loop back to beginning
+    if(self.currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
+    {
+        [self.audioPlayer stop];
+        self.audioPlayer.currentTime = 0;
+        self.lastChannelUpdateTime = -1;
+        [self resetCommandsSendComplete];
+        [self.audioPlayer play];
+        self.currentTime = 0;
+    }
+    // If we are playing a selection and get to the end
+    else if(self.isPlaySelection && self.currentTime >= [self.mouseBoxSelectEndTatum.time floatValue])
+    {
+        self.isPlaySelection = NO;
+        self.isPlayButton = !self.isPlayButton;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Pause" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPauseButtonUpdate" object:@(self.isPlayButton)];
+        [self.audioPlayer pause];
+        [self.audioTimer invalidate];
+        self.audioTimer = nil;
+        self.showChannelBrightness = NO;
+        self.lastChannelUpdateTime = -1;
+    }
+    
+    // Update channel brightness at 30Hz
+    [self updateCommandsForCurrentTime];
+    if(self.currentTime > self.lastChannelUpdateTime + 0.06)
+    {
+        self.lastChannelUpdateTime = self.currentTime;
+        //[self updateCommandsForCurrentTime];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDimmingDisplay" object:nil];
+    }
+}
+
+- (void)deselectMouse:(NSNotification *)notification
+{
+    self.lastChannelUpdateTime = -1;
+    [self resetCommandsSendComplete];
+}
+
+- (void)currentTimeChange:(NSNotification *)notification
+{
+    // Only update the audio if the user dragged the time marker
+    if(notification.object != self)
+    {
+        self.audioPlayer.currentTime = self.currentTime;
+    }
+}
+
+- (void)reloadAudio
+{
+    NSError *error = nil;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[CoreDataManager sharedManager].currentSequence.audio.audioFile fileTypeHint:[[CoreDataManager sharedManager].currentSequence.audio.audioFilePath pathExtension] error:&error];
+    //NSLog(@"Audio error %@, %@", error, [error userInfo]);
+    self.audioPlayer.currentTime = 1.0;
+    [self.audioPlayer prepareToPlay];
+    self.currentAudio = [CoreDataManager sharedManager].currentSequence.audio;
+}
+
+- (void)reloadSequenceFromNotification:(NSNotification *)notification
+{
+    [self reloadSequence];
+}
+
+- (void)reloadSequence
+{
+    if(self.currentAudio != [CoreDataManager sharedManager].currentSequence.audio)
+    {
+        [self reloadAudio];
+    }
+}
+
+- (void)skipBack
+{
+    self.currentTime = 0;
+    self.audioPlayer.currentTime = 0;
+    self.lastChannelUpdateTime = -1;
+    [self resetCommandsSendComplete];
+    [self updateTime];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DeselectMouse" object:nil];
 }
 
 @end
