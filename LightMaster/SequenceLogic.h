@@ -42,6 +42,7 @@ enum
 
 @property (assign, nonatomic) BOOL currentTimeMarkerIsSelected;
 @property (assign, nonatomic) BOOL showChannelBrightness;
+@property (assign, nonatomic) BOOL drawCurrentSequence;
 
 @property (strong, nonatomic) NSArray *commandsForCurrentTime;
 

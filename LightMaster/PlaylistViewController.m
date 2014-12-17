@@ -10,12 +10,16 @@
 #import "CoreDataManager.h"
 #import "Sequence.h"
 #import "Playlist.h"
+#import "SequenceLogic.h"
 
 @interface PlaylistViewController ()
 
 @property (strong, nonatomic) SNRFetchedResultsController *playlistFetchedResultsController;
 @property (strong, nonatomic) SNRFetchedResultsController *currentSequenceFetchedResultsController;
 @property (strong, nonatomic) SNRFetchedResultsController *sequenceFetchedResultsController;
+
+@property (assign, nonatomic) int currentSequenceIndex;
+@property (assign, nonatomic) BOOL isPlayButton;
 
 @end
 
@@ -24,6 +28,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.isPlayButton = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceComplete:) name:@"SequenceComplete" object:nil];
     
     // Playlists
     NSError *error;
@@ -103,6 +110,27 @@
     }
 }
 
+- (void)sequenceComplete:(NSNotification *)notification
+{
+    self.currentSequenceIndex ++;
+    // Loop back to the first one
+    if(self.currentSequenceIndex >= self.currentSequenceFetchedResultsController.count)
+    {
+        self.currentSequenceIndex = 0;
+    }
+    
+    [self loadNextSequence];
+}
+
+- (void)loadNextSequence
+{
+    // Load the sequence
+    Sequence *sequence = [self.currentSequenceFetchedResultsController objectAtIndex:self.currentSequenceIndex];
+    [CoreDataManager sharedManager].currentSequence = sequence;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
+    [[SequenceLogic sharedInstance] skipBack];
+}
+
 #pragma mark - Buttons
 
 - (IBAction)createPlaylistButtonPress:(id)sender
@@ -112,9 +140,25 @@
 
 - (IBAction)playPlaylistButtonPress:(id)sender
 {
-    /*Sequence *sequence = [self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow];
-    [CoreDataManager sharedManager].currentSequence = sequence;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];*/
+    if(self.isPlayButton)
+    {
+        self.playPlaylistButton.title = @"Stop";
+        
+        self.currentSequenceIndex = 0;
+        [self loadNextSequence];
+        
+        [SequenceLogic sharedInstance].drawCurrentSequence = NO;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPause" object:nil];
+    }
+    else
+    {
+        self.playPlaylistButton.title = @"Play";
+        
+        [SequenceLogic sharedInstance].drawCurrentSequence = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayPause" object:nil];
+    }
+    
+    self.isPlayButton = !self.isPlayButton;
 }
 
 - (IBAction)addSequenceToPlaylistButtonPress:(id)sender

@@ -58,6 +58,7 @@
         self.magnification = 5.0;
         self.currentTime = 1.0;
         self.commandType = CommandTypeSelect;
+        self.drawCurrentSequence = YES;
         
         if(![CoreDataManager sharedManager].currentSequence)
         {
@@ -574,20 +575,26 @@
 {
     self.currentTime = self.audioPlayer.currentTime;//[[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
     [self updateTime];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+    
+    if(self.drawCurrentSequence)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+    }
 }
 
 - (void)updateTime
 {
     // Loop back to beginning
-    if(self.currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
+    if(self.currentTime > 10.0)//[[CoreDataManager sharedManager].currentSequence.endTime floatValue])
     {
         [self.audioPlayer stop];
+        [self resetCommandsSendComplete];
+        self.currentTime = 0;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SequenceComplete" object:nil];
+        
         self.audioPlayer.currentTime = 0;
         self.lastChannelUpdateTime = -1;
-        [self resetCommandsSendComplete];
         [self.audioPlayer play];
-        self.currentTime = 0;
     }
     // If we are playing a selection and get to the end
     else if(self.isPlaySelection && self.currentTime >= [self.mouseBoxSelectEndTatum.time floatValue])
@@ -610,7 +617,10 @@
         self.lastChannelUpdateTime = self.currentTime;
         [self updateCommandsForCurrentTime];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDimmingDisplay" object:nil];
+        if(self.drawCurrentSequence)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDimmingDisplay" object:nil];
+        }
     }
 }
 
