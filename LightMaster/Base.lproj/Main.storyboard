@@ -738,7 +738,7 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <outlet property="delegate" destination="ix5-GP-Gjg" id="gN3-on-6sn"/>
+                                                                        <outlet property="delegate" destination="eyL-El-yrb" id="Jr3-lA-DgR"/>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>
@@ -811,9 +811,6 @@
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
-                                                                    <connections>
-                                                                        <outlet property="delegate" destination="ix5-GP-Gjg" id="tkk-RH-Nyg"/>
-                                                                    </connections>
                                                                 </textField>
                                                             </subviews>
                                                             <constraints>
@@ -885,9 +882,6 @@
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
-                                                                    <connections>
-                                                                        <outlet property="delegate" destination="ix5-GP-Gjg" id="kzL-Fk-17h"/>
-                                                                    </connections>
                                                                 </textField>
                                                             </subviews>
                                                             <constraints>
