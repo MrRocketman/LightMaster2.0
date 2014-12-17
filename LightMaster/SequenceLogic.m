@@ -160,7 +160,7 @@
 
 - (void)resetCommandsSendComplete
 {
-    NSArray *commandsToReset = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"startTatum.time >= %f AND sequence == %@ AND sendComplete == NO", self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
+    NSArray *commandsToReset = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"startTatum.time >= %f AND sequence == %@", self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
     for(Command *command in commandsToReset)
     {
         command.sendComplete = @(NO);
@@ -585,7 +585,7 @@
 - (void)updateTime
 {
     // Loop back to beginning
-    if(self.currentTime > 10.0)//[[CoreDataManager sharedManager].currentSequence.endTime floatValue])
+    if(self.currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
     {
         [self.audioPlayer stop];
         [self resetCommandsSendComplete];
