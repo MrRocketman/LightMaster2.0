@@ -153,7 +153,8 @@
 
 - (void)updateCommandsForCurrentTime
 {
-    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time AND sequence == %@", self.currentTime, self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
+    const float epsilon = 0.030;
+    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time AND sequence == %@", self.currentTime + epsilon, self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
     
     [self sendCommandsForCurrentTime];
 }
