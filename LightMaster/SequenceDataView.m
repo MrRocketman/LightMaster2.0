@@ -162,11 +162,11 @@
     NSArray *commands;
     if(self.isAudioAnalysisView)
     {
-        commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel.controlBox.analysisSequence != nil", [CoreDataManager sharedManager].currentSequence] toArray];
+        commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel.controlBox.analysisSequence != nil AND ((startTatum.time >= %f AND startTatum.time <= %f) OR (endTatum.time >= %f AND endTatum.time <= %f) OR (startTatum.time < %f AND endTatum.time > %f))", [CoreDataManager sharedManager].currentSequence, leftTime, rightTime, leftTime, rightTime, leftTime, rightTime] toArray];
     }
     else
     {
-        commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel.controlBox.analysisSequence == nil", [CoreDataManager sharedManager].currentSequence] toArray];
+        commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel.controlBox.analysisSequence == nil AND ((startTatum.time >= %f AND startTatum.time <= %f) OR (endTatum.time >= %f AND endTatum.time <= %f) OR (startTatum.time < %f AND endTatum.time > %f))", [CoreDataManager sharedManager].currentSequence, leftTime, rightTime, leftTime, rightTime, leftTime, rightTime] toArray];
     }
     
     // Add the commands to each path
@@ -196,39 +196,34 @@
         
         // Add the command
         NSBezierPath *commandPath = commandPaths[channelIndex];
-        float startTime = [theCommand.startTatum.time floatValue];
-        float endTime = [theCommand.endTatum.time floatValue];
-        if((startTime >= leftTime && startTime <= rightTime) || (endTime >= leftTime && endTime <= rightTime) || (startTime < leftTime && endTime > rightTime))
+        if([theCommand isMemberOfClass:[CommandOn class]])
         {
-            if([theCommand isMemberOfClass:[CommandOn class]])
-            {
-                CommandOn *command = (CommandOn *)theCommand;
-                float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
-                float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.brightness floatValue]));
-                float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
-                [commandPath moveToPoint:NSMakePoint(leftX, topY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, topY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, topY)];
-            }
-            else if([theCommand isMemberOfClass:[CommandFade class]])
-            {
-                CommandFade *command = (CommandFade *)theCommand;
-                float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
-                float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                float modifiedStartBrightness = ([command.startBrightness floatValue] > 0.1 ? (1.0 - [command.startBrightness floatValue]) : (0.9 - [command.startBrightness floatValue]));
-                float modifiedEndBrightness = ([command.endBrightness floatValue] > 0.1 ? (1.0 - [command.endBrightness floatValue]) : (0.9 - [command.endBrightness floatValue]));
-                float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedStartBrightness);
-                float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedEndBrightness);
-                float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
-                [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, rightY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, leftY)];
-            }
+            CommandOn *command = (CommandOn *)theCommand;
+            float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+            float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+            float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.brightness floatValue]));
+            float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
+            [commandPath moveToPoint:NSMakePoint(leftX, topY)];
+            [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
+            [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
+            [commandPath lineToPoint:NSMakePoint(rightX, topY)];
+            [commandPath lineToPoint:NSMakePoint(leftX, topY)];
+        }
+        else if([theCommand isMemberOfClass:[CommandFade class]])
+        {
+            CommandFade *command = (CommandFade *)theCommand;
+            float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+            float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+            float modifiedStartBrightness = ([command.startBrightness floatValue] > 0.1 ? (1.0 - [command.startBrightness floatValue]) : (0.9 - [command.startBrightness floatValue]));
+            float modifiedEndBrightness = ([command.endBrightness floatValue] > 0.1 ? (1.0 - [command.endBrightness floatValue]) : (0.9 - [command.endBrightness floatValue]));
+            float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedStartBrightness);
+            float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedEndBrightness);
+            float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
+            [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
+            [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
+            [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
+            [commandPath lineToPoint:NSMakePoint(rightX, rightY)];
+            [commandPath lineToPoint:NSMakePoint(leftX, leftY)];
         }
     }
     
