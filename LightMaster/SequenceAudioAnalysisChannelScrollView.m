@@ -73,7 +73,7 @@
         [[self contentView] scrollToPoint:newOffset];
         // we have to tell the NSScrollView to update its
         // scrollers
-        [self reflectScrolledClipView:[self contentView]];
+        //[self reflectScrolledClipView:[self contentView]];
         self.ignoreBoundsChanges = NO;
     }
 }
