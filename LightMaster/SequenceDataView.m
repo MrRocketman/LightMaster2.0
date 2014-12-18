@@ -149,104 +149,66 @@
     float rightTime = [[SequenceLogic sharedInstance] xToTime:dirtyRect.origin.x + dirtyRect.size.width * 1.5];
     int topChannel = dirtyRect.origin.y / CHANNEL_HEIGHT;
     int bottomChannel = (dirtyRect.origin.y + dirtyRect.size.height) / CHANNEL_HEIGHT;
-    
-    // Create a path for each channel
-    NSMutableArray *commandPaths = [NSMutableArray new];
-    for(NSArray *channels in self.channels)
-    {
-        for(int i = 0; i < channels.count; i ++)
-        {
-            [commandPaths addObject:[NSBezierPath bezierPath]];
-        }
-    }
-    
-    // Get the commands for this view
-    NSArray *commands;
-    if(self.isAudioAnalysisView)
-    {
-        commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel.controlBox.analysisSequence != nil AND ((startTatum.time >= %f AND startTatum.time <= %f) OR (endTatum.time >= %f AND endTatum.time <= %f) OR (startTatum.time < %f AND endTatum.time > %f))", [CoreDataManager sharedManager].currentSequence, leftTime, rightTime, leftTime, rightTime, leftTime, rightTime] toArray];
-    }
-    else
-    {
-        commands = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel.controlBox.analysisSequence == nil AND ((startTatum.time >= %f AND startTatum.time <= %f) OR (endTatum.time >= %f AND endTatum.time <= %f) OR (startTatum.time < %f AND endTatum.time > %f))", [CoreDataManager sharedManager].currentSequence, leftTime, rightTime, leftTime, rightTime, leftTime, rightTime] toArray];
-    }
-    
-    // Add the commands to each path
-    for(Command *theCommand in commands)
-    {
-        // Find the channel index
-        int channelIndex = [self channelIndexForCommand:theCommand];
-        
-        if(channelIndex >= topChannel && channelIndex <= bottomChannel)
-        {
-            // Add the command
-            NSBezierPath *commandPath = commandPaths[channelIndex];
-            if([theCommand isMemberOfClass:[CommandOn class]])
-            {
-                CommandOn *command = (CommandOn *)theCommand;
-                float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
-                float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.brightness floatValue]));
-                float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
-                [commandPath moveToPoint:NSMakePoint(leftX, topY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, topY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, topY)];
-            }
-            else if([theCommand isMemberOfClass:[CommandFade class]])
-            {
-                CommandFade *command = (CommandFade *)theCommand;
-                float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
-                float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
-                float modifiedStartBrightness = ([command.startBrightness floatValue] > 0.1 ? (1.0 - [command.startBrightness floatValue]) : (0.9 - [command.startBrightness floatValue]));
-                float modifiedEndBrightness = ([command.endBrightness floatValue] > 0.1 ? (1.0 - [command.endBrightness floatValue]) : (0.9 - [command.endBrightness floatValue]));
-                float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedStartBrightness);
-                float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedEndBrightness);
-                float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
-                [commandPath moveToPoint:NSMakePoint(leftX, leftY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, bottomY)];
-                [commandPath lineToPoint:NSMakePoint(rightX, rightY)];
-                [commandPath lineToPoint:NSMakePoint(leftX, leftY)];
-            }
-        }
-    }
-    
-    // Draw each channel path
+
+    // Draw each channel
     int channelIndex = 0;
     for(NSArray *channels in self.channels)
     {
         for(Channel *channel in channels)
         {
+            // Only draw the channel if it needs to be
             if(channelIndex >= topChannel && channelIndex <= bottomChannel)
             {
+                NSBezierPath *channelPath = [NSBezierPath bezierPath];
+                
+                // Add the commands
+                for(Command *theCommand in channel.commands)
+                {
+                    // Only add this commands if it's for this sequence and needs to be drawn
+                    float startTime = [theCommand.startTatum.time floatValue];
+                    float endTime = [theCommand.endTatum.time floatValue];
+                    if(theCommand.sequence == [CoreDataManager sharedManager].currentSequence && ((startTime >= leftTime && startTime <= rightTime) || (endTime >= leftTime && endTime <= rightTime) || (startTime < leftTime && endTime > rightTime)))
+                    {
+                        // Add the command
+                        if([theCommand isMemberOfClass:[CommandOn class]])
+                        {
+                            CommandOn *command = (CommandOn *)theCommand;
+                            float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+                            float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+                            float topY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * (1.0 - [command.brightness floatValue]));
+                            float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
+                            [channelPath moveToPoint:NSMakePoint(leftX, topY)];
+                            [channelPath lineToPoint:NSMakePoint(leftX, bottomY)];
+                            [channelPath lineToPoint:NSMakePoint(rightX, bottomY)];
+                            [channelPath lineToPoint:NSMakePoint(rightX, topY)];
+                            [channelPath lineToPoint:NSMakePoint(leftX, topY)];
+                        }
+                        else if([theCommand isMemberOfClass:[CommandFade class]])
+                        {
+                            CommandFade *command = (CommandFade *)theCommand;
+                            float leftX = [[SequenceLogic sharedInstance] timeToX:[command.startTatum.time floatValue]];
+                            float rightX = [[SequenceLogic sharedInstance] timeToX:[command.endTatum.time floatValue]];
+                            float modifiedStartBrightness = ([command.startBrightness floatValue] > 0.1 ? (1.0 - [command.startBrightness floatValue]) : (0.9 - [command.startBrightness floatValue]));
+                            float modifiedEndBrightness = ([command.endBrightness floatValue] > 0.1 ? (1.0 - [command.endBrightness floatValue]) : (0.9 - [command.endBrightness floatValue]));
+                            float leftY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedStartBrightness);
+                            float rightY = channelIndex * CHANNEL_HEIGHT + (CHANNEL_HEIGHT * modifiedEndBrightness);
+                            float bottomY = (channelIndex + 1) * CHANNEL_HEIGHT - 1;
+                            [channelPath moveToPoint:NSMakePoint(leftX, leftY)];
+                            [channelPath lineToPoint:NSMakePoint(leftX, bottomY)];
+                            [channelPath lineToPoint:NSMakePoint(rightX, bottomY)];
+                            [channelPath lineToPoint:NSMakePoint(rightX, rightY)];
+                            [channelPath lineToPoint:NSMakePoint(leftX, leftY)];
+                        }
+                    }
+                }
+                
                 [(NSColor *)channel.color set];
-                [commandPaths[channelIndex] fill];
+                [channelPath fill];
             }
             
             channelIndex ++;
         }
     }
-}
-
-- (int)channelIndexForCommand:(Command *)command
-{
-    int channelIndex = 0;
-    for(NSArray *channels in self.channels)
-    {
-        for(Channel *channel in channels)
-        {
-            if(command.channel == channel)
-            {
-                return channelIndex;
-            }
-            
-            channelIndex ++;
-        }
-    }
-    
-    return -1;
 }
 
 - (void)drawChannelLines
