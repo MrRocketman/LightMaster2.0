@@ -516,15 +516,7 @@
 
 - (void)autoScroll:(NSTimer *)theTimer;
 {
-    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
-    if(self.currentMousePoint.x > visibleRect.origin.x + visibleRect.size.width - 10 || self.currentMousePoint.x < visibleRect.origin.x + 10)
-    {
-        BOOL didAutoscroll = [self autoscroll:self.mouseEvent];
-        if(didAutoscroll)
-        {
-            [self setNeedsDisplay:YES];
-        }
-    }
+    [self autoscroll:self.mouseEvent];
 }
 
 #pragma mark - Keyboard Methods
