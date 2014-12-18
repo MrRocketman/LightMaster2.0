@@ -732,7 +732,7 @@
                     // Only use the selected channels
                     if(i >= [SequenceLogic sharedInstance].topChannelForCopy && i < [SequenceLogic sharedInstance].bottomChannelForCopy)
                     {
-                        NSArray *commandsToCopy = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
+                        NSArray *commandsToCopy = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel == %@ AND startTatum.time > %f AND endTatum.time < %f", [CoreDataManager sharedManager].currentSequence, channel, copyStartTime - epsilon, copyEndTime + epsilon] toArray];
                         [commandArraysToCopy addObject:commandsToCopy];
                     }
                     
@@ -807,25 +807,25 @@
     float startTatumTime = [startTatum.time floatValue];
     float endTatumTime = [endTatum.time floatValue];
     // We overlap the start, so adjust the start
-    NSArray *commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND startTatum.time < %f", channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+    NSArray *commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel == %@ AND startTatum.time > %f AND startTatum.time < %f", [CoreDataManager sharedManager].currentSequence, channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
     for(Command *command in commandsToModify)
     {
         command.startTatum = endTatum;
     }
     // We overlap the end so adjust the end
-    commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND endTatum.time > %f AND endTatum.time < %f", channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+    commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel == %@ AND endTatum.time > %f AND endTatum.time < %f", [CoreDataManager sharedManager].currentSequence, channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
     for(Command *command in commandsToModify)
     {
         command.endTatum = startTatum;
     }
     // We overlap the whole thing so delete it
-    commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time > %f AND endTatum.time < %f", channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+    commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel == %@ AND startTatum.time > %f AND endTatum.time < %f", [CoreDataManager sharedManager].currentSequence, channel, startTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
     for(Command *command in commandsToModify)
     {
         [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];
     }
     // We are in the middle of a command, so split it
-    commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND startTatum.time < %f AND endTatum.time > %f", channel, startTatumTime + epsilon, endTatumTime - epsilon] orderBy:@"startTatum.time"] toArray];
+    commandsToModify = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel == %@ AND startTatum.time < %f AND endTatum.time > %f", [CoreDataManager sharedManager].currentSequence, channel, startTatumTime + epsilon, endTatumTime - epsilon] orderBy:@"startTatum.time"] toArray];
     for(Command *command in commandsToModify)
     {
         SequenceTatum *oldEndTatum = command.endTatum;
@@ -849,8 +849,8 @@
     if(startBrightness > endBrightness - epsilon && startBrightness < endBrightness + epsilon)
     {
         // See if we are merging commands
-        CommandOn *nextCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND startTatum.time > %f AND startTatum.time < %f AND brightness > %f AND brightness < %f", channel, endTatumTime - epsilon, endTatumTime + epsilon, startBrightness - epsilon, startBrightness + epsilon] toArray] firstObject];
-        CommandOn *previousCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"channel == %@ AND endTatum.time > %f AND endTatum.time < %f AND brightness > %f AND brightness < %f", channel, startTatumTime - epsilon, startTatumTime + epsilon, startBrightness - epsilon, startBrightness + epsilon] toArray] firstObject];
+        CommandOn *nextCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"sequence == %@ AND channel == %@ AND startTatum.time > %f AND startTatum.time < %f AND brightness > %f AND brightness < %f", [CoreDataManager sharedManager].currentSequence, channel, endTatumTime - epsilon, endTatumTime + epsilon, startBrightness - epsilon, startBrightness + epsilon] toArray] firstObject];
+        CommandOn *previousCommand = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"CommandOn"] where:@"sequence == %@ AND channel == %@ AND endTatum.time > %f AND endTatum.time < %f AND brightness > %f AND brightness < %f", [CoreDataManager sharedManager].currentSequence, channel, startTatumTime - epsilon, startTatumTime + epsilon, startBrightness - epsilon, startBrightness + epsilon] toArray] firstObject];
         SequenceTatum *newStartTatum = startTatum;
         SequenceTatum *newEndTatum = endTatum;
         if(nextCommand)
@@ -955,7 +955,7 @@
         const float epsilon = 0.0001;
         float startTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectStartTatum.time floatValue];
         float endTatumTime = [[SequenceLogic sharedInstance].mouseBoxSelectEndTatum.time floatValue];
-        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f))", channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime - epsilon, startTatumTime + epsilon, endTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
+        NSArray *commandsToRemove = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"sequence == %@ AND channel == %@ AND ((startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f) OR (startTatum.time < %f AND endTatum.time > %f) OR (startTatum.time > %f AND startTatum.time < %f) OR (endTatum.time > %f AND endTatum.time < %f))", [CoreDataManager sharedManager].currentSequence, channel, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime, endTatumTime, startTatumTime - epsilon, startTatumTime + epsilon, endTatumTime - epsilon, endTatumTime + epsilon] orderBy:@"startTatum.time"] toArray];
         for(Command *command in commandsToRemove)
         {
             [[CoreDataManager sharedManager].managedObjectContext deleteObject:command];

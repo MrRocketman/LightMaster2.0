@@ -19,6 +19,13 @@
 #import "CommandFade.h"
 #import "ORSSerialPort.h"
 #import <AVFoundation/AVFoundation.h>
+#import "EchoNestAudioAnalysis.h"
+#import "EchoNestSection.h"
+#import "EchoNestBar.h"
+#import "EchoNestBeat.h"
+#import "EchoNestTatum.h"
+#import "EchoNestSegment.h"
+#import "EchoNestPitch.h"
 
 #define SECONDS_TO_PIXELS 25.0
 #define MAX_BRIGHTNESS 127
@@ -673,5 +680,352 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"DeselectMouse" object:nil];
 }
+
+#pragma mark - Autogen
+
+/*- (void)echoNestAutoGenForCurrentSeguence
+{
+    float intensity = 1.0;
+    const int pitchesToUse = 12;
+    const float epsilon = 0.01;
+    
+    // Delete all previous data for the sequence
+    [[CoreDataManager sharedManager].currentSequence removeCommands:[CoreDataManager sharedManager].currentSequence.commands];
+    
+    // Get the first audioAnalysis for this sequence (autogen does not yet support multiple audioAnalysi)
+    EchoNestAudioAnalysis *audioAnalysis = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis;
+    
+    // If the sequence has an analysis, autogen commands
+    if(audioAnalysis != nil)
+    {
+        // Variables
+        NSSet *beats = audioAnalysis.beats;
+        NSSet *tatums = audioAnalysis.tatums;
+        NSSet *segments = audioAnalysis.segments;
+        NSSet *sections = audioAnalysis.sections;
+        
+        // Get the ControlBoxes
+        NSArray *controlBoxes = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"ControlBox"] where:@"sequence CONTAINS %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"idNumber"] toArray];
+        
+        // Find the min and max loudness of the audioAnalysis
+        float minLoudness = 10000.0;
+        float maxLoudness = -10000.0;
+        for(EchoNestSegment *segment in segments)
+        {
+            float segmentLoudness = [segment.loudnessMax floatValue];
+            
+            if(segmentLoudness > maxLoudness)
+            {
+                maxLoudness = segmentLoudness;
+            }
+            if(segmentLoudness < minLoudness && segmentLoudness >= -51.000)
+            {
+                minLoudness = segmentLoudness;
+            }
+        }
+        float loudnessRange = maxLoudness - minLoudness;
+        NSLog(@"loudness Min:%f max:%f range:%f", minLoudness, maxLoudness, loudnessRange);
+        
+        // Main loop (looping through the sections, then segments, then beats and tatums)
+        for(EchoNestSection *section in sections)
+        {
+            NSMutableArray *beatControlBoxes = [NSMutableArray new];
+            NSMutableArray *tatumControlBoxes = [NSMutableArray new];
+            NSMutableArray *segmentControlBoxes = [NSMutableArray new];
+            NSMutableArray *controlBoxesAvailable = [controlBoxes copy];
+            int numberOfBoxesToUseForBeat = (controlBoxesAvailable.count > 3 ? 1 : 0); // just 1 for now
+            int numberOfBoxesToUseForTatum = (controlBoxesAvailable.count > 3 ? 1 : 0); // just 1 for now
+            int numberOfBoxesToUseForSegment;
+            int numberOfAvailableChannelsForBeats = 0;
+            int numberOfAvailableChannelsForTatums = 0;
+            int numberOfAvailableChannelsForSegments = 0;
+            
+            // Pick controlBoxes for the beat
+            for(int i = 0; i < numberOfBoxesToUseForBeat; i ++)
+            {
+                // Pick a random control box index
+                int controlBoxIndexToUse = arc4random() % controlBoxesAvailable.count;
+                [beatControlBoxes addObject:controlBoxesAvailable[controlBoxIndexToUse]];
+                [controlBoxesAvailable removeObject:controlBoxesAvailable[controlBoxIndexToUse]];
+            }
+            // Get the numberOfAvailableChannels for beatControlBoxes
+            for(int i = 0; i < beatControlBoxes.count; i ++)
+            {
+                numberOfAvailableChannelsForBeats += (int)((ControlBox *)beatControlBoxes[i]).channels.count;
+            }
+            
+            // Pick controlBoxes for the tatum
+            for(int i = 0; i < numberOfBoxesToUseForBeat; i ++)
+            {
+                // Pick a random control box index
+                int controlBoxIndexToUse = arc4random() % controlBoxesAvailable.count;
+                [tatumControlBoxes addObject:controlBoxesAvailable[controlBoxIndexToUse]];
+                [controlBoxesAvailable removeObject:controlBoxesAvailable[controlBoxIndexToUse]];
+            }
+            // Get the numberOfAvailableChannels for beatControlBoxes
+            for(int i = 0; i < tatumControlBoxes.count; i ++)
+            {
+                numberOfAvailableChannelsForTatums += (int)((ControlBox *)tatumControlBoxes[i]).channels.count;
+            }
+            
+            // Section info
+            float averageLoudnessForSection = [section.loudness floatValue];
+            float numberOfSegmentsUsedForAverageLoudness = 0;
+            float sectionStartTime = [section.start floatValue];
+            float sectionEndTime = sectionStartTime + [section.duration floatValue];
+            
+            // Determine how many controlBoxes to use
+            numberOfBoxesToUseForSegment = (int)((averageLoudnessForSection - minLoudness) / loudnessRange * intensity * controlBoxesAvailable.count + 0.5);
+            if(numberOfBoxesToUseForSegment == 0)
+            {
+                numberOfBoxesToUseForSegment = 1;
+            }
+            // If we are using 2 or fewer boxes, assign all boxes to segment data
+            if(numberOfBoxesToUseForBeat == 0 && numberOfBoxesToUseForTatum == 0)
+            {
+                numberOfBoxesToUseForSegment = controlBoxesAvailable.count;
+            }
+            
+            // Pick controlBoxes for the segments
+            for(int i = 0; i < numberOfBoxesToUseForSegment; i ++)
+            {
+                // Pick a random control box index
+                int controlBoxIndexToUse = arc4random() % controlBoxesAvailable.count;
+                [segmentControlBoxes addObject:controlBoxesAvailable[controlBoxIndexToUse]];
+                [controlBoxesAvailable removeObject:controlBoxesAvailable[controlBoxIndexToUse]];
+            }
+            // Get the numberOfAvailableChannels for segmentControlBoxes
+            for(int i = 0; i < segmentControlBoxes.count; i ++)
+            {
+                numberOfAvailableChannelsForSegments += (int)((ControlBox *)segmentControlBoxes[i]).channels.count;
+            }
+            
+            // Make an array so we can store which channel belongs to which pitch
+            NSMutableArray *pitchChannelArrays = [NSMutableArray new];
+            for(int i = 0; i < pitchesToUse; i ++)
+            {
+                // Add an array for each pitch to store the channels in
+                [pitchChannelArrays addObject:[NSMutableArray new]];
+            }
+            
+            // Loop through each controlBox and assign it's channel to each pitch
+            for(ControlBox *controlBox in segmentControlBoxes)
+            {
+                float pitchesPerChannel = (pitchesToUse * intensity) / (float)(controlBox.channels.count);
+                float currentPitchIndex = 0;
+                for(Channel *channel in controlBox.channels)
+                {
+                    [((NSMutableArray *)pitchChannelArrays[(int)currentPitchIndex]) addObject:channel];
+                    
+                    currentPitchIndex += pitchesPerChannel;
+                }
+            }
+            
+            // Now loop through each segment
+            EchoNestSegment *previousSegment;
+            for(EchoNestSegment *segment in segments)
+            {
+                NSSet *previousSegmentPitches = previousSegment.pitches;
+                float segmentLoudness = [segment.loudnessStart floatValue];
+                float segmentStartTime = [segment.start floatValue];
+                float segmentEndTime = segmentStartTime + [segment.duration floatValue];
+                
+                // Only use segments that are withing the current section
+                if(segmentStartTime >= sectionStartTime - epsilon && segmentEndTime <= sectionEndTime + epsilon)
+                {
+                    // Create the commands for the segments
+                    for(EchoNestPitch *pitch in segment.pitches)
+                    {
+                        int currentPitchIndex = pitchesToUse[pitchCounter];
+                        float previousPitchValue = [[previousSegmentPitches objectAtIndex:currentPitchIndex] floatValue];
+                        float currentPitchValue = [[currentSegmentPitches objectAtIndex:currentPitchIndex] floatValue];
+                        float nextPitchValue = [[nextSegmentPitches objectAtIndex:currentPitchIndex] floatValue];
+                        float nextNextPitchValue = [[nextNextSegmentPitches objectAtIndex:currentPitchIndex] floatValue];
+                        //NSLog(@"pitchIndex:%d currentPitch:%f previousPitch:%f", currentPitchIndex, currentPitchValue, previousPitchValue);
+                        
+                        // Create a new command (volume increased, therefore it has to be a new 'ding')
+                        if(currentPitchValue >= previousPitchValue + 0.1 && currentPitchValue >= 0.3) // && currentPitch > 0.5???
+                        {
+                            NSLog(@"yes for pitch:%d", currentPitchIndex);
+                            NSMutableArray *availbleSegmentChannelIndexPaths = [segmentChannelIndexPathArrays objectAtIndex:currentPitchIndex];
+                            NSLog(@"availableChannels:%d", (int)[availbleSegmentChannelIndexPaths count]);
+                            
+                            for(int i = 0; i < [availbleSegmentChannelIndexPaths count]; i ++)
+                            {
+                                // Create the newCommand and set it's start/end time
+                                NSMutableDictionary *commandClusterForNewCommand = [self commandClusterForCurrentSequenceAtIndex:(int)[[availbleSegmentChannelIndexPaths objectAtIndex:i] indexAtPosition:0]];
+                                int newCommandIndex = [self createCommandAndReturnNewCommandIndexForCommandCluster:commandClusterForNewCommand];
+                                [self setChannelIndex:(int)[[availbleSegmentChannelIndexPaths objectAtIndex:i] indexAtPosition:1] forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                [self setStartTime:currentSegmentStartTime forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                float newCommandEndTime;
+                                // Note lasts more than this segment
+                                if(nextPitchValue <= currentPitchValue)
+                                {
+                                    // Note lasts at least 2 segments
+                                    if((nextPitchValue <= currentPitchValue && nextPitchValue >= 0.3 && [[nextSegment objectForKey:@"confidence"] floatValue] >= 0.3) || (currentPitchValue - nextPitchValue <= 0.1 && currentPitchValue - nextPitchValue >= 0.0 && [[nextSegment objectForKey:@"confidence"] floatValue] < 0.3))
+                                    {
+                                        // Note lasts three segments
+                                        if((nextNextPitchValue <= nextPitchValue && nextNextPitchValue >= 0.3 && [[nextNextSegment objectForKey:@"confidence"] floatValue] >= 0.3) || (nextPitchValue - nextNextPitchValue <= 0.1 && nextPitchValue - nextNextPitchValue >= 0.0 && [[nextNextSegment objectForKey:@"confidence"] floatValue] < 0.3))
+                                        {
+                                            NSLog(@"three segments");
+                                            newCommandEndTime = currentSegmentStartTime + ([[nextNextSegment objectForKey:@"start"] floatValue] - currentSegmentStartTime) + [[nextNextSegment objectForKey:@"duration"] floatValue] - 0.1;
+                                        }
+                                        // Note lasts two segments but the third segment is a new note
+                                        else if(nextNextPitchValue >= nextPitchValue + 0.1 && nextPitchValue >= 0.2)
+                                        {
+                                            NSLog(@"two segments, third is new note");
+                                            newCommandEndTime = currentSegmentStartTime + ([[nextSegment objectForKey:@"start"] floatValue] - currentSegmentStartTime) + [[nextSegment objectForKey:@"duration"] floatValue] - 0.1;
+                                        }
+                                        // Note lasts two segments and the third segment is not a note
+                                        else
+                                        {
+                                            NSLog(@"two segments");
+                                            newCommandEndTime = currentSegmentStartTime + ([[nextSegment objectForKey:@"start"] floatValue] - currentSegmentStartTime) + [[nextSegment objectForKey:@"duration"] floatValue];
+                                        }
+                                    }
+                                    // Note just lasts one segment
+                                    else
+                                    {
+                                        NSLog(@"one segment fade out");
+                                        newCommandEndTime = [[currentSegment objectForKey:@"start"] floatValue] + [[currentSegment objectForKey:@"duration"] floatValue];
+                                    }
+                                }
+                                else
+                                {
+                                    NSLog(@"One segment");
+                                    newCommandEndTime = [[currentSegment objectForKey:@"start"] floatValue] + [[currentSegment objectForKey:@"duration"] floatValue] - 0.1;
+                                }
+                                [self setEndTime:newCommandEndTime forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                NSLog(@"c start:%f end:%f", currentSegmentStartTime, newCommandEndTime);
+                            }
+                        }
+                    }
+                    
+                    // Now create the commands for the tatums within the doman of the current segment
+                    for( ; (currentTatumIndex < [tatums count] && tatumControlBoxesCount > 0); currentTatumIndex ++)
+                    {
+                        NSDictionary *tatum = [tatums objectAtIndex:currentTatumIndex];
+                        float tatumStartTime = [[tatum objectForKey:@"start"] floatValue];
+                        
+                        // This tatum should have commands added
+                        if(tatumStartTime >= currentSegmentStartTime && tatumStartTime < currentSegmentEndTime && [[tatum objectForKey:@"confidence"] floatValue] >= 0.10)
+                        {
+                            //int numberOfChannelsVariation = arc4random() % (int)(numberOfAvailableChannelsForTatums * 0.20) - (int)(numberOfAvailableChannelsForTatums * 0.10); // Add/subtract a 10% variation to the numberOfChannels
+                            int numberOfChannelsToUse = ((currentSegmentLoudness - minLoudness) / loudnessRange) * autogenv2Intensity * numberOfAvailableChannelsForTatums / 2;// + numberOfChannelsVariation;
+                            
+                            // Limit the numberOfChannelsToUse
+                            if(numberOfChannelsToUse > numberOfAvailableChannelsForTatums)
+                            {
+                                numberOfChannelsToUse = numberOfAvailableChannelsForTatums;
+                            }
+                            else if(numberOfChannelsToUse < 0)
+                            {
+                                numberOfChannelsToUse = 0;
+                            }
+                            else if(numberOfChannelsToUse == 0)
+                            {
+                                numberOfChannelsToUse ++;
+                            }
+                            // Make an array of the availble channels for tatum commands for easy command insertion (controlBoxIndex at index 0, channelIndex at index 1)
+                            NSMutableArray *availbleTatumChannelIndexPaths = [[NSMutableArray alloc] init];
+                            for(int i = 0; i < tatumControlBoxesCount; i ++)
+                            {
+                                for(int i2 = 0; i2 < [self channelsCountForControlBox:[self controlBoxForCurrentSequenceAtIndex:tatumControlBoxIndexes[i]]]; i2 ++)
+                                {
+                                    [availbleTatumChannelIndexPaths addObject:[[NSIndexPath indexPathWithIndex:tatumControlBoxIndexes[i]] indexPathByAddingIndex:i2]];
+                                }
+                            }
+                            
+                            // Create the commands for this tatum
+                            for(int i = 0; i < numberOfChannelsToUse; i ++)
+                            {
+                                // Randomly pick a channel/controlBox to use
+                                int tatumChannelIndexPathToUse = arc4random() % [availbleTatumChannelIndexPaths count];
+                                NSMutableDictionary *commandClusterForNewCommand = [self commandClusterForCurrentSequenceAtIndex:(int)[[availbleTatumChannelIndexPaths objectAtIndex:tatumChannelIndexPathToUse] indexAtPosition:0]];
+                                // Create the newCommand and set it's start/end time
+                                int newCommandIndex = [self createCommandAndReturnNewCommandIndexForCommandCluster:commandClusterForNewCommand];
+                                [self setChannelIndex:(int)[[availbleTatumChannelIndexPaths objectAtIndex:tatumChannelIndexPathToUse] indexAtPosition:1] forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                [self setStartTime:[[tatum objectForKey:@"start"] floatValue] forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                float newCommandEndTime = [[tatum objectForKey:@"start"] floatValue] + [[tatum objectForKey:@"duration"] floatValue] - 0.1;
+                                [self setEndTime:newCommandEndTime forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                
+                                // Remove this channel/controlBox from the availble channels to use
+                                [availbleTatumChannelIndexPaths removeObjectAtIndex:tatumChannelIndexPathToUse];
+                            }
+                        }
+                        // We are done looking if we get past the endTime of the current segment since the data is sorted
+                        else if(tatumStartTime >= currentSegmentEndTime)
+                        {
+                            break;
+                        }
+                    }
+                    
+                    // Now create the commands for the beats within the doman of the current segment
+                    for( ; (currentBeatIndex < [beats count] && beatControlBoxesCount > 0); currentBeatIndex ++)
+                    {
+                        NSDictionary *beat = [beats objectAtIndex:currentBeatIndex];
+                        float beatStartTime = [[beat objectForKey:@"start"] floatValue];
+                        
+                        // This beat should have commands added
+                        if(beatStartTime >= currentSegmentStartTime && beatStartTime < currentSegmentEndTime && [[beat objectForKey:@"confidence"] floatValue] >= 0.10)
+                        {
+                            //int numberOfChannelsVariation = arc4random() % (int)(numberOfAvailableChannelsForBeats * 0.20) - (int)(numberOfAvailableChannelsForBeats * 0.10); // Add/subtract a 10% variation to the numberOfChannels
+                            int numberOfChannelsToUse = ((currentSegmentLoudness - minLoudness) / loudnessRange) * autogenv2Intensity * numberOfAvailableChannelsForBeats / 2;// + numberOfChannelsVariation;
+                            
+                            // Limit the numberOfChannelsToUse
+                            if(numberOfChannelsToUse > numberOfAvailableChannelsForBeats)
+                            {
+                                numberOfChannelsToUse = numberOfAvailableChannelsForBeats;
+                            }
+                            else if(numberOfChannelsToUse < 0)
+                            {
+                                numberOfChannelsToUse = 0;
+                            }
+                            else if(numberOfChannelsToUse == 0)
+                            {
+                                numberOfChannelsToUse ++;
+                            }
+                            // Make an array of the availble channels for beat commands for easy command insertion (controlBoxIndex at index 0, channelIndex at index 1)
+                            NSMutableArray *availbleBeatChannelIndexPaths = [[NSMutableArray alloc] init];
+                            for(int i = 0; i < beatControlBoxesCount; i ++)
+                            {
+                                for(int i2 = 0; i2 < [self channelsCountForControlBox:[self controlBoxForCurrentSequenceAtIndex:beatControlBoxIndexes[i]]]; i2 ++)
+                                {
+                                    [availbleBeatChannelIndexPaths addObject:[[NSIndexPath indexPathWithIndex:beatControlBoxIndexes[i]] indexPathByAddingIndex:i2]];
+                                }
+                            }
+                            
+                            // Create the commands for this beat
+                            for(int i = 0; i < numberOfChannelsToUse; i ++)
+                            {
+                                // Randomly pick a channel/controlBox to use
+                                int beatChannelIndexPathToUse = arc4random() % [availbleBeatChannelIndexPaths count];
+                                NSMutableDictionary *commandClusterForNewCommand = [self commandClusterForCurrentSequenceAtIndex:(int)[[availbleBeatChannelIndexPaths objectAtIndex:beatChannelIndexPathToUse] indexAtPosition:0]];
+                                // Create the newCommand and set it's start/end time
+                                int newCommandIndex = [self createCommandAndReturnNewCommandIndexForCommandCluster:commandClusterForNewCommand];
+                                [self setChannelIndex:(int)[[availbleBeatChannelIndexPaths objectAtIndex:beatChannelIndexPathToUse] indexAtPosition:1] forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                [self setStartTime:[[beat objectForKey:@"start"] floatValue] forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                float newCommandEndTime = [[beat objectForKey:@"start"] floatValue] + [[beat objectForKey:@"duration"] floatValue] - 0.1;
+                                [self setEndTime:newCommandEndTime forCommandAtIndex:newCommandIndex whichIsPartOfCommandCluster:commandClusterForNewCommand];
+                                
+                                // Remove this channel/controlBox from the availble channels to use
+                                [availbleBeatChannelIndexPaths removeObjectAtIndex:beatChannelIndexPathToUse];
+                            }
+                        }
+                        // We are done looking if we get past the endTime of the current segment since the data is sorted
+                        else if(beatStartTime >= currentSegmentEndTime)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        [[CoreDataManager sharedManager] saveContext];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGraphics" object:nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateLibraryContent" object:nil];
+    }
+}*/
 
 @end
