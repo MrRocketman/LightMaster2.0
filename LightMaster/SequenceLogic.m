@@ -698,7 +698,7 @@
     
     // Update channel brightness at 30Hz
     [self updateCommandsForCurrentTime];
-    if(self.currentTime > self.lastChannelUpdateTime + 0.06)
+    if(self.currentTime > self.lastChannelUpdateTime + 0.03)
     {
         self.lastChannelUpdateTime = self.currentTime;
         [self updateCommandsForCurrentTime];
@@ -780,7 +780,6 @@
 {
     float intensity = 1.0;
     const int pitchesToUse = 12;
-    const float epsilon = 0.01;
     
     // Get the audioAnalysis for this sequence
     EchoNestAudioAnalysis *audioAnalysis = [CoreDataManager sharedManager].currentSequence.audio.echoNestAudioAnalysis;
@@ -860,7 +859,6 @@
             
             // Section info
             float averageLoudnessForSection = [section.loudness floatValue];
-            float sectionStartTime = [section.start floatValue];
             
             // Determine how many controlBoxes to use
             numberOfBoxesToUseForSegment = (int)((averageLoudnessForSection - minLoudness) / loudnessRange * intensity * controlBoxesAvailable.count + 0.5);
@@ -922,18 +920,18 @@
             EchoNestSegment *previousSegment;
             EchoNestSegment *nextSegment;
             EchoNestSegment *nextNextSegment;
-            if(segments.count > 2)
+            if(segments.count > 1)
             {
                 nextSegmentPitches = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"EchoNestPitch"] where:@"segment == %@", segments[0]] orderBy:@"index"] toArray];
-                nextSegment = segments[1];
+                nextSegment = segments[0];
             }
-            if(segments.count > 3)
+            if(segments.count > 2)
             {
                 nextSegmentPitches = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"EchoNestPitch"] where:@"segment == %@", segments[1]] orderBy:@"index"] toArray];
-                nextNextSegment = segments[2];
+                nextNextSegment = segments[1];
             }
             // Now loop through each segment
-            for(int segmentIndex = 1; segmentIndex < segments.count; segmentIndex ++)
+            for(int segmentIndex = 0; segmentIndex < segments.count; segmentIndex ++)
             {
                 // Get the current segment details
                 EchoNestSegment *segment = segments[segmentIndex];
@@ -952,170 +950,173 @@
                 }
                 
                 // Create the commands for the segments
-                int pitchIndex = 0;
-                for(EchoNestPitch *pitch in currentSegmentPitches)
+                if(previousSegmentPitches)
                 {
-                    float previousPitchValue = [((EchoNestPitch *)previousSegmentPitches[pitchIndex]).pitch floatValue];
-                    float currentPitchValue = [pitch.pitch floatValue];
-                    float nextPitchValue = [((EchoNestPitch *)nextSegmentPitches[pitchIndex]).pitch floatValue];
-                    float nextNextPitchValue = [((EchoNestPitch *)nextNextSegmentPitches[pitchIndex]).pitch floatValue];
-                    
-                    // Create a new command (volume increased, therefore it has to be a new 'ding')
-                    if(currentPitchValue >= previousPitchValue + 0.1 && currentPitchValue >= 0.3) // && currentPitch > 0.5???
+                    int pitchIndex = 0;
+                    for(EchoNestPitch *pitch in currentSegmentPitches)
                     {
-                        // Get the channels for this pitch
-                        NSArray *channelsForCurrentPitch = (NSArray *)pitchChannelArrays[pitchIndex];
+                        float previousPitchValue = [((EchoNestPitch *)previousSegmentPitches[pitchIndex]).pitch floatValue];
+                        float currentPitchValue = [pitch.pitch floatValue];
+                        float nextPitchValue = [((EchoNestPitch *)nextSegmentPitches[pitchIndex]).pitch floatValue];
+                        float nextNextPitchValue = [((EchoNestPitch *)nextNextSegmentPitches[pitchIndex]).pitch floatValue];
                         
-                        for(Channel *channel in channelsForCurrentPitch)
+                        // Create a new command (volume increased, therefore it has to be a new 'ding')
+                        if(currentPitchValue >= previousPitchValue + 0.1 && currentPitchValue >= 0.3) // && currentPitch > 0.5???
                         {
-                            // Find the start and end tatum for the new command being created
-                            SequenceTatum *startTatum = [self sequenceTatumForCurrentSequenceAtTime:[segment.start floatValue]];
-                            SequenceTatum *endTatum;
+                            // Get the channels for this pitch
+                            NSArray *channelsForCurrentPitch = (NSArray *)pitchChannelArrays[pitchIndex];
                             
-                            // Note lasts more than this segment
-                            if(nextPitchValue <= currentPitchValue)
+                            for(Channel *channel in channelsForCurrentPitch)
                             {
-                                // Note lasts at least 2 segments
-                                if((nextPitchValue <= currentPitchValue && nextPitchValue >= 0.3 && [nextSegment.confidence floatValue] >= 0.3) || (currentPitchValue - nextPitchValue <= 0.1 && currentPitchValue - nextPitchValue >= 0.0 && [nextSegment.confidence floatValue] < 0.3))
+                                // Find the start and end tatum for the new command being created
+                                SequenceTatum *startTatum = [self sequenceTatumForCurrentSequenceAtTime:[segment.start floatValue]];
+                                SequenceTatum *endTatum;
+                                
+                                // Note lasts more than this segment
+                                if(nextPitchValue <= currentPitchValue)
                                 {
-                                    // Note lasts three segments
-                                    if((nextNextPitchValue <= nextPitchValue && nextNextPitchValue >= 0.3 && [nextNextSegment.confidence floatValue] >= 0.3) || (nextPitchValue - nextNextPitchValue <= 0.1 && nextPitchValue - nextNextPitchValue >= 0.0 && [nextNextSegment.confidence floatValue] < 0.3))
+                                    // Note lasts at least 2 segments
+                                    if((nextPitchValue <= currentPitchValue && nextPitchValue >= 0.3 && [nextSegment.confidence floatValue] >= 0.3) || (currentPitchValue - nextPitchValue <= 0.1 && currentPitchValue - nextPitchValue >= 0.0 && [nextSegment.confidence floatValue] < 0.3))
                                     {
-                                        endTatum = [self sequenceTatumForCurrentSequenceAtTime:[nextNextSegment.start floatValue] + [nextNextSegment.duration floatValue]];
+                                        // Note lasts three segments
+                                        if((nextNextPitchValue <= nextPitchValue && nextNextPitchValue >= 0.3 && [nextNextSegment.confidence floatValue] >= 0.3) || (nextPitchValue - nextNextPitchValue <= 0.1 && nextPitchValue - nextNextPitchValue >= 0.0 && [nextNextSegment.confidence floatValue] < 0.3))
+                                        {
+                                            endTatum = [self sequenceTatumForCurrentSequenceAtTime:[nextNextSegment.start floatValue] + [nextNextSegment.duration floatValue]];
+                                        }
+                                        // Note lasts two segments but the third segment is a new note
+                                        else if(nextNextPitchValue >= nextPitchValue + 0.1 && nextPitchValue >= 0.2)
+                                        {
+                                            endTatum = [self sequenceTatumForCurrentSequenceAtTime:[nextSegment.start floatValue] + [nextSegment.duration floatValue]];
+                                        }
+                                        // Note lasts two segments and the third segment is not a note
+                                        else
+                                        {
+                                            endTatum = [self sequenceTatumForCurrentSequenceAtTime:[nextSegment.start floatValue] + [nextSegment.duration floatValue]];
+                                        }
                                     }
-                                    // Note lasts two segments but the third segment is a new note
-                                    else if(nextNextPitchValue >= nextPitchValue + 0.1 && nextPitchValue >= 0.2)
-                                    {
-                                        endTatum = [self sequenceTatumForCurrentSequenceAtTime:[nextSegment.start floatValue] + [nextSegment.duration floatValue]];
-                                    }
-                                    // Note lasts two segments and the third segment is not a note
+                                    // Note just lasts one segment
                                     else
                                     {
-                                        endTatum = [self sequenceTatumForCurrentSequenceAtTime:[nextSegment.start floatValue] + [nextSegment.duration floatValue]];
+                                        endTatum = [self sequenceTatumForCurrentSequenceAtTime:[segment.start floatValue] + [segment.duration floatValue]];
                                     }
                                 }
-                                // Note just lasts one segment
                                 else
                                 {
                                     endTatum = [self sequenceTatumForCurrentSequenceAtTime:[segment.start floatValue] + [segment.duration floatValue]];
                                 }
+                                
+                                // Create the new command
+                                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:startTatum endTatum:endTatum startBrightness:1.0 endBrightness:0.0 channel:channel];
                             }
-                            else
+                        }
+                        
+                        pitchIndex ++;
+                    }
+                    
+                    ///////////////// Tatum commands //////////////////////
+                    // Now create the commands for the tatums within the doman of the current segment
+                    for(EchoNestTatum *echoTatum in tatums)
+                    {
+                        float tatumStartTime = [echoTatum.start floatValue];
+                        
+                        // This tatum should have commands added
+                        if(tatumStartTime >= segmentStartTime && tatumStartTime < segmentEndTime && [echoTatum.confidence floatValue] >= 0.10)
+                        {
+                            int numberOfChannelsToUse = ((segmentLoudness - minLoudness) / loudnessRange) * intensity * numberOfAvailableChannelsForTatums / 2;
+                            
+                            // Limit the numberOfChannelsToUse
+                            if(numberOfChannelsToUse > numberOfAvailableChannelsForTatums)
                             {
-                                endTatum = [self sequenceTatumForCurrentSequenceAtTime:[segment.start floatValue] + [segment.duration floatValue]];
+                                numberOfChannelsToUse = numberOfAvailableChannelsForTatums;
+                            }
+                            else if(numberOfChannelsToUse < 0)
+                            {
+                                numberOfChannelsToUse = 0;
+                            }
+                            else if(numberOfChannelsToUse == 0)
+                            {
+                                numberOfChannelsToUse ++;
                             }
                             
-                            // Create the new command
-                            [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:startTatum endTatum:endTatum startBrightness:1.0 endBrightness:0.0 channel:channel];
+                            NSMutableArray *echoTatumChannels = [NSMutableArray new];
+                            for(ControlBox *tatumControlBox in tatumControlBoxes)
+                            {
+                                [echoTatumChannels addObjectsFromArray:[tatumControlBox.channels allObjects]];
+                            }
+                            
+                            // Create the commands for this tatum
+                            for(int i = 0; i < numberOfChannelsToUse; i ++)
+                            {
+                                // Randomly pick a channel
+                                int tatumChannelIndexToUse = arc4random() % echoTatumChannels.count;
+                                
+                                // Create the new command
+                                SequenceTatum *startTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoTatum.start floatValue]];
+                                SequenceTatum *endTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoTatum.start floatValue] + [echoTatum.duration floatValue]];
+                                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:startTatum endTatum:endTatum startBrightness:1.0 endBrightness:0.0 channel:echoTatumChannels[tatumChannelIndexToUse]];
+                                
+                                // Remove this channel/controlBox from the availble channels to use
+                                [echoTatumChannels removeObjectAtIndex:tatumChannelIndexToUse];
+                            }
+                        }
+                        // We are done looking if we get past the endTime of the current segment since the data is sorted
+                        else if(tatumStartTime >= segmentEndTime)
+                        {
+                            break;
                         }
                     }
                     
-                    pitchIndex ++;
-                }
-                
-                ///////////////// Tatum commands //////////////////////
-                // Now create the commands for the tatums within the doman of the current segment
-                for(EchoNestTatum *echoTatum in tatums)
-                {
-                    float tatumStartTime = [echoTatum.start floatValue];
-                    
-                    // This tatum should have commands added
-                    if(tatumStartTime >= segmentStartTime && tatumStartTime < segmentEndTime && [echoTatum.confidence floatValue] >= 0.10)
+                    //////////////// Beat commands //////////////////////
+                    // Now create the commands for the beats within the doman of the current segment
+                    for(EchoNestBeat *echoBeat in beats)
                     {
-                        int numberOfChannelsToUse = ((segmentLoudness - minLoudness) / loudnessRange) * intensity * numberOfAvailableChannelsForTatums / 2;
+                        float beatStartTime = [echoBeat.start floatValue];
                         
-                        // Limit the numberOfChannelsToUse
-                        if(numberOfChannelsToUse > numberOfAvailableChannelsForTatums)
+                        // This tatum should have commands added
+                        if(beatStartTime >= segmentStartTime && beatStartTime < segmentEndTime && [echoBeat.confidence floatValue] >= 0.10)
                         {
-                            numberOfChannelsToUse = numberOfAvailableChannelsForTatums;
-                        }
-                        else if(numberOfChannelsToUse < 0)
-                        {
-                            numberOfChannelsToUse = 0;
-                        }
-                        else if(numberOfChannelsToUse == 0)
-                        {
-                            numberOfChannelsToUse ++;
-                        }
-                        
-                        NSMutableArray *echoTatumChannels = [NSMutableArray new];
-                        for(ControlBox *tatumControlBox in tatumControlBoxes)
-                        {
-                            [echoTatumChannels addObjectsFromArray:[tatumControlBox.channels allObjects]];
-                        }
-                        
-                        // Create the commands for this tatum
-                        for(int i = 0; i < numberOfChannelsToUse; i ++)
-                        {
-                            // Randomly pick a channel
-                            int tatumChannelIndexToUse = arc4random() % echoTatumChannels.count;
+                            int numberOfChannelsToUse = ((segmentLoudness - minLoudness) / loudnessRange) * intensity * numberOfAvailableChannelsForTatums / 2;
                             
-                            // Create the new command
-                            SequenceTatum *startTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoTatum.start floatValue]];
-                            SequenceTatum *endTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoTatum.start floatValue] + [echoTatum.duration floatValue]];
-                            [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:startTatum endTatum:endTatum startBrightness:1.0 endBrightness:0.0 channel:echoTatumChannels[tatumChannelIndexToUse]];
+                            // Limit the numberOfChannelsToUse
+                            if(numberOfChannelsToUse > numberOfAvailableChannelsForTatums)
+                            {
+                                numberOfChannelsToUse = numberOfAvailableChannelsForTatums;
+                            }
+                            else if(numberOfChannelsToUse < 0)
+                            {
+                                numberOfChannelsToUse = 0;
+                            }
+                            else if(numberOfChannelsToUse == 0)
+                            {
+                                numberOfChannelsToUse ++;
+                            }
                             
-                            // Remove this channel/controlBox from the availble channels to use
-                            [echoTatumChannels removeObjectAtIndex:tatumChannelIndexToUse];
-                        }
-                    }
-                    // We are done looking if we get past the endTime of the current segment since the data is sorted
-                    else if(tatumStartTime >= segmentEndTime)
-                    {
-                        break;
-                    }
-                }
-                
-                //////////////// Beat commands //////////////////////
-                // Now create the commands for the beats within the doman of the current segment
-                for(EchoNestBeat *echoBeat in beats)
-                {
-                    float beatStartTime = [echoBeat.start floatValue];
-                    
-                    // This tatum should have commands added
-                    if(beatStartTime >= segmentStartTime && beatStartTime < segmentEndTime && [echoBeat.confidence floatValue] >= 0.10)
-                    {
-                        int numberOfChannelsToUse = ((segmentLoudness - minLoudness) / loudnessRange) * intensity * numberOfAvailableChannelsForTatums / 2;
-                        
-                        // Limit the numberOfChannelsToUse
-                        if(numberOfChannelsToUse > numberOfAvailableChannelsForTatums)
-                        {
-                            numberOfChannelsToUse = numberOfAvailableChannelsForTatums;
-                        }
-                        else if(numberOfChannelsToUse < 0)
-                        {
-                            numberOfChannelsToUse = 0;
-                        }
-                        else if(numberOfChannelsToUse == 0)
-                        {
-                            numberOfChannelsToUse ++;
-                        }
-                        
-                        NSMutableArray *echoBeatChannels = [NSMutableArray new];
-                        for(ControlBox *beatControlBox in beatControlBoxes)
-                        {
-                            [echoBeatChannels addObjectsFromArray:[beatControlBox.channels allObjects]];
-                        }
-                        
-                        // Create the commands for this tatum
-                        for(int i = 0; i < numberOfChannelsToUse; i ++)
-                        {
-                            // Randomly pick a channel
-                            int beatChannelIndexToUse = arc4random() % echoBeatChannels.count;
+                            NSMutableArray *echoBeatChannels = [NSMutableArray new];
+                            for(ControlBox *beatControlBox in beatControlBoxes)
+                            {
+                                [echoBeatChannels addObjectsFromArray:[beatControlBox.channels allObjects]];
+                            }
                             
-                            // Create the new command
-                            SequenceTatum *startTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoBeat.start floatValue]];
-                            SequenceTatum *endTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoBeat.start floatValue] + [echoBeat.duration floatValue]];
-                            [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:startTatum endTatum:endTatum startBrightness:1.0 endBrightness:0.0 channel:echoBeatChannels[beatChannelIndexToUse]];
-                            
-                            // Remove this channel/controlBox from the availble channels to use
-                            [echoBeatChannels removeObjectAtIndex:beatChannelIndexToUse];
+                            // Create the commands for this tatum
+                            for(int i = 0; i < numberOfChannelsToUse; i ++)
+                            {
+                                // Randomly pick a channel
+                                int beatChannelIndexToUse = arc4random() % echoBeatChannels.count;
+                                
+                                // Create the new command
+                                SequenceTatum *startTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoBeat.start floatValue]];
+                                SequenceTatum *endTatum = [self sequenceTatumForCurrentSequenceAtTime:[echoBeat.start floatValue] + [echoBeat.duration floatValue]];
+                                [[CoreDataManager sharedManager] addCommandFadeWithStartTatum:startTatum endTatum:endTatum startBrightness:1.0 endBrightness:0.0 channel:echoBeatChannels[beatChannelIndexToUse]];
+                                
+                                // Remove this channel/controlBox from the availble channels to use
+                                [echoBeatChannels removeObjectAtIndex:beatChannelIndexToUse];
+                            }
                         }
-                    }
-                    // We are done looking if we get past the endTime of the current segment since the data is sorted
-                    else if(beatStartTime >= segmentEndTime)
-                    {
-                        break;
+                        // We are done looking if we get past the endTime of the current segment since the data is sorted
+                        else if(beatStartTime >= segmentEndTime)
+                        {
+                            break;
+                        }
                     }
                 }
                 
