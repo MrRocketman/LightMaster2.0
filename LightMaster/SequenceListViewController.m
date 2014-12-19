@@ -230,6 +230,11 @@
      }];
 }
 
+- (IBAction)autoGenButtonPress:(id)sender
+{
+    [[SequenceLogic sharedInstance] echoNestAutoGenForCurrentSequence];
+}
+
 - (void)updateAudioAnlysisProgressLabel:(NSNotification *)notification
 {
     self.audioAnlysisProgress.stringValue = [NSString stringWithFormat:@"%.1f%%", 100 * [self.currentAudio.echoNestUploadProgress floatValue]];

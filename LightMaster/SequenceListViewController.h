@@ -36,4 +36,6 @@
 - (IBAction)chooseAudioFileButtonPress:(id)sender;
 - (IBAction)colorChange:(id)sender;
 
+- (IBAction)autoGenButtonPress:(id)sender;
+
 @end

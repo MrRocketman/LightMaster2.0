@@ -56,15 +56,20 @@ enum
 - (int)numberOfChannels;
 - (int)numberOfAudioChannels;
 
-// Commands
-- (void)updateCommandsForCurrentTime;
-- (void)resetCommandsSendComplete;
-- (float)currentBrightnessForChannel:(Channel *)channel;
-
 // Play/timing
 - (void)skipBack;
 - (void)playPause:(NSNotification *)notification;
 
+// Commands
+- (void)updateCommandsForCurrentTime;
+- (void)resetCommandsSendComplete;
+- (float)currentBrightnessForChannel:(Channel *)channel;
+- (void)addCommandForChannel:(Channel *)channel startTatum:(SequenceTatum *)startTatum endTatum:(SequenceTatum *)endTatum startBrightness:(float)startBrightness endBrightness:(float)endBrightness;
+
+// Autogen
+- (void)echoNestAutoGenForCurrentSequence;
+
+// EchoNest
 - (void)fetchEchoNestAnalysisForCurrentSequenceAudio;
 
 @end

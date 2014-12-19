@@ -1476,6 +1476,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OfJ-3D-kkO">
+                                <rect key="frame" x="98" y="576" width="132" height="32"/>
+                                <buttonCell key="cell" type="push" title="New" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7FG-ZK-8a6">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="createSequenceButtonPress:" target="ix5-GP-Gjg" id="QW5-Ut-zvz"/>
+                                </connections>
+                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gjP-wc-d2L">
                                 <rect key="frame" x="401" y="576" width="132" height="32"/>
                                 <buttonCell key="cell" type="push" title="New Track" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UYC-8w-pay">
@@ -1889,14 +1899,14 @@
                                     <action selector="createLyricButtonPress:" target="ix5-GP-Gjg" id="32q-fl-xAD"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OfJ-3D-kkO">
-                                <rect key="frame" x="98" y="576" width="132" height="32"/>
-                                <buttonCell key="cell" type="push" title="New" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7FG-ZK-8a6">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="new-6V-hq9">
+                                <rect key="frame" x="897" y="433" width="158" height="32"/>
+                                <buttonCell key="cell" type="push" title="EchoNest AutoGen" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r6A-rb-Jq8">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="createSequenceButtonPress:" target="ix5-GP-Gjg" id="QW5-Ut-zvz"/>
+                                    <action selector="autoGenButtonPress:" target="ix5-GP-Gjg" id="0et-K8-EE5"/>
                                 </connections>
                             </button>
                         </subviews>
