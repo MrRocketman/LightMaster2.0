@@ -65,4 +65,6 @@ enum
 - (void)skipBack;
 - (void)playPause:(NSNotification *)notification;
 
+- (void)fetchEchoNestAnalysisForCurrentSequenceAudio;
+
 @end

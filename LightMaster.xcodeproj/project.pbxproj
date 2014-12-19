@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A0944B71A43F2AE009CEAE5 /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0944B61A43F2AE009CEAE5 /* EchoNestTimbre.m */; };
+		1A0944BA1A43F2AF009CEAE5 /* EchoNestPitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0944B91A43F2AF009CEAE5 /* EchoNestPitch.m */; };
 		1A0D21641A34141D00E5B3E8 /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D21631A34141D00E5B3E8 /* Audio.m */; };
 		1A0D21731A344E9800E5B3E8 /* EchoNestAudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D21721A344E9800E5B3E8 /* EchoNestAudioAnalysis.m */; };
 		1A14CA521A246A3800C4FEB0 /* SequenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */; };
@@ -52,13 +54,11 @@
 		1AB616A21A36E5C60065A050 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616A11A36E5C60065A050 /* Channel.m */; };
 		1AB616A51A36E5ED0065A050 /* LightMaster.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616A31A36E5ED0065A050 /* LightMaster.xcdatamodeld */; };
 		1AB616AB1A3705D00065A050 /* SequenceHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB616AA1A3705D00065A050 /* SequenceHeaderView.m */; };
-		1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */; };
 		1AE771211A243E6500C49006 /* EchoNestSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771201A243E6500C49006 /* EchoNestSegment.m */; };
 		1AE771241A243E6500C49006 /* EchoNestBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771231A243E6500C49006 /* EchoNestBar.m */; };
 		1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771291A243E6500C49006 /* CommandOn.m */; };
 		1AE771361A243E6500C49006 /* EchoNestSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771351A243E6500C49006 /* EchoNestSection.m */; };
 		1AE7713F1A243E6600C49006 /* EchoNestTatum.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE7713E1A243E6600C49006 /* EchoNestTatum.m */; };
-		1AE771451A243E6600C49006 /* EchoNestPitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771441A243E6600C49006 /* EchoNestPitch.m */; };
 		1AE771571A243E6600C49006 /* EchoNestBeat.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771561A243E6600C49006 /* EchoNestBeat.m */; };
 		1AE771761A24422C00C49006 /* ComplexCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771751A24422C00C49006 /* ComplexCommand.m */; };
 		1AE771791A24422C00C49006 /* CommandPulse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AE771781A24422C00C49006 /* CommandPulse.m */; };
@@ -84,6 +84,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A0944B41A43F214009CEAE5 /* LightMaster 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LightMaster 4.xcdatamodel"; sourceTree = "<group>"; };
+		1A0944B51A43F2AE009CEAE5 /* EchoNestTimbre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTimbre.h; path = LightMaster/EchoNestTimbre.h; sourceTree = "<group>"; };
+		1A0944B61A43F2AE009CEAE5 /* EchoNestTimbre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTimbre.m; path = LightMaster/EchoNestTimbre.m; sourceTree = "<group>"; };
+		1A0944B81A43F2AF009CEAE5 /* EchoNestPitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestPitch.h; path = LightMaster/EchoNestPitch.h; sourceTree = "<group>"; };
+		1A0944B91A43F2AF009CEAE5 /* EchoNestPitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestPitch.m; path = LightMaster/EchoNestPitch.m; sourceTree = "<group>"; };
 		1A0D21621A34141D00E5B3E8 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = LightMaster/Audio.h; sourceTree = "<group>"; };
 		1A0D21631A34141D00E5B3E8 /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Audio.m; path = LightMaster/Audio.m; sourceTree = "<group>"; };
 		1A0D21711A344E9800E5B3E8 /* EchoNestAudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestAudioAnalysis.h; path = LightMaster/EchoNestAudioAnalysis.h; sourceTree = "<group>"; };
@@ -170,8 +175,6 @@
 		1AB616A41A36E5ED0065A050 /* LightMaster.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LightMaster.xcdatamodel; sourceTree = "<group>"; };
 		1AB616A91A3705D00065A050 /* SequenceHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceHeaderView.h; sourceTree = "<group>"; };
 		1AB616AA1A3705D00065A050 /* SequenceHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequenceHeaderView.m; sourceTree = "<group>"; };
-		1AE7711C1A243E6500C49006 /* EchoNestTimbre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTimbre.h; path = LightMaster/EchoNestTimbre.h; sourceTree = "<group>"; };
-		1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTimbre.m; path = LightMaster/EchoNestTimbre.m; sourceTree = "<group>"; };
 		1AE7711F1A243E6500C49006 /* EchoNestSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestSegment.h; path = LightMaster/EchoNestSegment.h; sourceTree = "<group>"; };
 		1AE771201A243E6500C49006 /* EchoNestSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestSegment.m; path = LightMaster/EchoNestSegment.m; sourceTree = "<group>"; };
 		1AE771221A243E6500C49006 /* EchoNestBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestBar.h; path = LightMaster/EchoNestBar.h; sourceTree = "<group>"; };
@@ -182,8 +185,6 @@
 		1AE771351A243E6500C49006 /* EchoNestSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestSection.m; path = LightMaster/EchoNestSection.m; sourceTree = "<group>"; };
 		1AE7713D1A243E6600C49006 /* EchoNestTatum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestTatum.h; path = LightMaster/EchoNestTatum.h; sourceTree = "<group>"; };
 		1AE7713E1A243E6600C49006 /* EchoNestTatum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestTatum.m; path = LightMaster/EchoNestTatum.m; sourceTree = "<group>"; };
-		1AE771431A243E6600C49006 /* EchoNestPitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestPitch.h; path = LightMaster/EchoNestPitch.h; sourceTree = "<group>"; };
-		1AE771441A243E6600C49006 /* EchoNestPitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestPitch.m; path = LightMaster/EchoNestPitch.m; sourceTree = "<group>"; };
 		1AE771551A243E6600C49006 /* EchoNestBeat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EchoNestBeat.h; path = LightMaster/EchoNestBeat.h; sourceTree = "<group>"; };
 		1AE771561A243E6600C49006 /* EchoNestBeat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EchoNestBeat.m; path = LightMaster/EchoNestBeat.m; sourceTree = "<group>"; };
 		1AE771741A24422C00C49006 /* ComplexCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComplexCommand.h; path = LightMaster/ComplexCommand.h; sourceTree = "<group>"; };
@@ -418,10 +419,10 @@
 				1AE7713E1A243E6600C49006 /* EchoNestTatum.m */,
 				1AE7711F1A243E6500C49006 /* EchoNestSegment.h */,
 				1AE771201A243E6500C49006 /* EchoNestSegment.m */,
-				1AE7711C1A243E6500C49006 /* EchoNestTimbre.h */,
-				1AE7711D1A243E6500C49006 /* EchoNestTimbre.m */,
-				1AE771431A243E6600C49006 /* EchoNestPitch.h */,
-				1AE771441A243E6600C49006 /* EchoNestPitch.m */,
+				1A0944B81A43F2AF009CEAE5 /* EchoNestPitch.h */,
+				1A0944B91A43F2AF009CEAE5 /* EchoNestPitch.m */,
+				1A0944B51A43F2AE009CEAE5 /* EchoNestTimbre.h */,
+				1A0944B61A43F2AE009CEAE5 /* EchoNestTimbre.m */,
 			);
 			name = EchoNest;
 			sourceTree = "<group>";
@@ -667,6 +668,7 @@
 				1A4ADDD71A398F7400B22C4E /* AudioLyric.m in Sources */,
 				1AE771571A243E6600C49006 /* EchoNestBeat.m in Sources */,
 				1AB616931A36C0BD0065A050 /* ChannelPattern.m in Sources */,
+				1A0944B71A43F2AE009CEAE5 /* EchoNestTimbre.m in Sources */,
 				1A3474E71A32EB2E00736869 /* ENAPI.m in Sources */,
 				1A75ADC71A3124B700D532FB /* SequenceAudioAnalysisChannelScrollView.m in Sources */,
 				1A0D21731A344E9800E5B3E8 /* EchoNestAudioAnalysis.m in Sources */,
@@ -706,15 +708,14 @@
 				1A14CA621A25411B00C4FEB0 /* ControlBoxViewController.m in Sources */,
 				1AE7712A1A243E6500C49006 /* CommandOn.m in Sources */,
 				1AE830231A21BA68000E297D /* main.m in Sources */,
-				1AE7711E1A243E6500C49006 /* EchoNestTimbre.m in Sources */,
 				1A3474D31A32E8AF00736869 /* ORSSerialPort.m in Sources */,
 				1A4ADDD41A397D0800B22C4E /* SequenceCurrentTimeView.m in Sources */,
+				1A0944BA1A43F2AF009CEAE5 /* EchoNestPitch.m in Sources */,
 				1AB616991A36C14C0065A050 /* SequenceTatum.m in Sources */,
 				1AB616A51A36E5ED0065A050 /* LightMaster.xcdatamodeld in Sources */,
 				1A75ADCA1A3124C800D532FB /* SequenceAudioAnalysisChannelView.m in Sources */,
 				1AAC0F5E1A3BF1AF0047F54B /* Command.m in Sources */,
 				1AE830211A21BA68000E297D /* AppDelegate.m in Sources */,
-				1AE771451A243E6600C49006 /* EchoNestPitch.m in Sources */,
 				1A14CA581A25232C00C4FEB0 /* SNRFetchedResultsController.m in Sources */,
 				1AB6168A1A36BEC90065A050 /* NSManagedObjectContext+Queryable.m in Sources */,
 			);
@@ -920,11 +921,12 @@
 		1AB616A31A36E5ED0065A050 /* LightMaster.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				1A0944B41A43F214009CEAE5 /* LightMaster 4.xcdatamodel */,
 				1AAC0F581A3BF1350047F54B /* LightMaster 3.xcdatamodel */,
 				1A4ADDD11A39683200B22C4E /* LightMaster 2.xcdatamodel */,
 				1AB616A41A36E5ED0065A050 /* LightMaster.xcdatamodel */,
 			);
-			currentVersion = 1AAC0F581A3BF1350047F54B /* LightMaster 3.xcdatamodel */;
+			currentVersion = 1A0944B41A43F214009CEAE5 /* LightMaster 4.xcdatamodel */;
 			path = LightMaster.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

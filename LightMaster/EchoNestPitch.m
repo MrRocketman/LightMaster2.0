@@ -2,7 +2,7 @@
 //  EchoNestPitch.m
 //  LightMaster
 //
-//  Created by James Adams on 11/24/14.
+//  Created by James Adams on 12/18/14.
 //  Copyright (c) 2014 JamesAdams. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 @implementation EchoNestPitch
 
 @dynamic pitch;
+@dynamic index;
 @dynamic segment;
 
 @end

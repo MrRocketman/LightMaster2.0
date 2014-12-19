@@ -29,7 +29,6 @@
 @property (strong, nonatomic) IBOutlet NSTableView *lyricTableView;
 
 - (IBAction)createSequenceButtonPress:(id)sender;
-- (IBAction)loadSequenceButtonPress:(id)sender;
 - (IBAction)createTrackButtonPress:(id)sender;
 - (IBAction)createTrackChannelButtonPress:(id)sender;
 - (IBAction)createLyricButtonPress:(id)sender;

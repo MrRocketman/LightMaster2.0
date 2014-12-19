@@ -703,7 +703,7 @@
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" translatesAutoresizingMaskIntoConstraints="NO" id="ORG-Y5-KKY">
                                 <rect key="frame" x="20" y="21" width="329" height="512"/>
-                                <clipView key="contentView" copiesOnScroll="NO" id="pdA-LS-kFp">
+                                <clipView key="contentView" misplaced="YES" copiesOnScroll="NO" id="pdA-LS-kFp">
                                     <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -713,7 +713,7 @@
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="playlistTitle" width="325" minWidth="40" maxWidth="1000" id="MTH-tj-H3s">
+                                                <tableColumn identifier="playlistTitle" width="324" minWidth="40" maxWidth="1000" id="MTH-tj-H3s">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Playlists">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -730,7 +730,7 @@
                                                             <rect key="frame" x="1" y="1" width="325" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField identifier="playlistTitleTextField" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fRq-kF-8lw">
+                                                                <textField identifier="playlistTitleTextField" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fRq-kF-8lw">
                                                                     <rect key="frame" x="0.0" y="2" width="323" height="17"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="QgN-9v-kWn">
                                                                         <font key="font" metaFont="system"/>
@@ -762,7 +762,7 @@
                                     </subviews>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="Od2-R6-eF6">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Od2-R6-eF6">
                                     <rect key="frame" x="1" y="105.57637637853622" width="211" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -777,7 +777,7 @@
                             </scrollView>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" translatesAutoresizingMaskIntoConstraints="NO" id="QkV-wE-CVs">
                                 <rect key="frame" x="357" y="21" width="329" height="512"/>
-                                <clipView key="contentView" copiesOnScroll="NO" id="5Ps-MI-OCw">
+                                <clipView key="contentView" misplaced="YES" copiesOnScroll="NO" id="5Ps-MI-OCw">
                                     <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -787,7 +787,7 @@
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="currentSequenceTitle" width="325" minWidth="40" maxWidth="1000" id="wIh-uh-xYd">
+                                                <tableColumn identifier="currentSequenceTitle" width="324" minWidth="40" maxWidth="1000" id="wIh-uh-xYd">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Sequences In Playlist">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -804,7 +804,7 @@
                                                             <rect key="frame" x="1" y="1" width="325" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField identifier="currentSequenceTitleTextField" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="D8E-88-zyz">
+                                                                <textField identifier="currentSequenceTitleTextField" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D8E-88-zyz">
                                                                     <rect key="frame" x="0.0" y="2" width="323" height="17"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="YDo-21-nvd">
                                                                         <font key="font" metaFont="system"/>
@@ -833,7 +833,7 @@
                                     </subviews>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="XVN-wA-L7K">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="XVN-wA-L7K">
                                     <rect key="frame" x="1" y="105.57637637853622" width="211" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -848,7 +848,7 @@
                             </scrollView>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="23" horizontalPageScroll="10" verticalLineScroll="23" verticalPageScroll="10" translatesAutoresizingMaskIntoConstraints="NO" id="aMY-0g-FIw">
                                 <rect key="frame" x="757" y="21" width="329" height="512"/>
-                                <clipView key="contentView" copiesOnScroll="NO" id="788-XX-bnV">
+                                <clipView key="contentView" misplaced="YES" copiesOnScroll="NO" id="788-XX-bnV">
                                     <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -1476,26 +1476,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OfJ-3D-kkO">
-                                <rect key="frame" x="14" y="576" width="132" height="32"/>
-                                <buttonCell key="cell" type="push" title="New" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7FG-ZK-8a6">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="createSequenceButtonPress:" target="ix5-GP-Gjg" id="QW5-Ut-zvz"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LIy-eZ-TOI">
-                                <rect key="frame" x="146" y="576" width="132" height="32"/>
-                                <buttonCell key="cell" type="push" title="Load" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vyo-t9-WaT">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="loadSequenceButtonPress:" target="ix5-GP-Gjg" id="izP-T5-anA"/>
-                                </connections>
-                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gjP-wc-d2L">
                                 <rect key="frame" x="401" y="576" width="132" height="32"/>
                                 <buttonCell key="cell" type="push" title="New Track" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UYC-8w-pay">
@@ -1909,6 +1889,16 @@
                                     <action selector="createLyricButtonPress:" target="ix5-GP-Gjg" id="32q-fl-xAD"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OfJ-3D-kkO">
+                                <rect key="frame" x="98" y="576" width="132" height="32"/>
+                                <buttonCell key="cell" type="push" title="New" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7FG-ZK-8a6">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="createSequenceButtonPress:" target="ix5-GP-Gjg" id="QW5-Ut-zvz"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -1919,7 +1909,6 @@
                         <outlet property="createSequenceButton" destination="OfJ-3D-kkO" id="sbT-28-vlR"/>
                         <outlet property="createTrackButton" destination="gjP-wc-d2L" id="7gA-Pr-UGT"/>
                         <outlet property="createTrackChannelButton" destination="go9-Em-VMn" id="W4t-LY-aDd"/>
-                        <outlet property="loadSequenceButton" destination="LIy-eZ-TOI" id="rfh-pK-8n4"/>
                         <outlet property="lyricTableView" destination="wMb-zA-RAX" id="I3e-fM-u8R"/>
                         <outlet property="sequenceTableView" destination="QL2-VF-IO8" id="T7b-MY-wgE"/>
                         <outlet property="trackChannelTableView" destination="5Fz-8z-jdY" id="PNh-5w-z5N"/>

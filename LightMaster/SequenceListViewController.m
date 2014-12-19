@@ -8,19 +8,10 @@
 
 #import "SequenceListViewController.h"
 #import "CoreDataManager.h"
+#import "SequenceLogic.h"
 #import "Sequence.h"
 #import "Audio.h"
 #import "AudioLyric.h"
-#import "ENAPIRequest.h"
-#import "ENAPI.h"
-#import "EchoNestAudioAnalysis.h"
-#import "EchoNestSection.h"
-#import "EchoNestBar.h"
-#import "EchoNestBeat.h"
-#import "EchoNestTatum.h"
-#import "EchoNestSegment.h"
-#import "EchoNestTimbre.h"
-#import "EchoNestPitch.h"
 #import "ControlBox.h"
 #import "Channel.h"
 #import "ChannelColorTableCellView.h"
@@ -43,7 +34,8 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(echoNestUploadUpdate:) name:@"ENAPIRequest.didSendBodyData" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAudioAnlysisProgressLabel:) name:@"AudioAnalysisProgress" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioNameChange:) name:@"AudioNameChange" object:nil];
     
     // Sequences
     NSError *error;
@@ -86,7 +78,7 @@
     [self.lyricTableView reloadData];
     
     [self updateAudioTitleLabelForSequenceAtRow:(int)self.sequenceTableView.selectedRow];
-    [self updateAudioAnlysisProgressLabel];
+    [self updateAudioAnlysisProgressLabel:nil];
 }
 
 - (BOOL)acceptsFirstResponder
@@ -175,13 +167,6 @@
     [[CoreDataManager sharedManager] newSequence];
 }
 
-- (IBAction)loadSequenceButtonPress:(id)sender
-{
-    Sequence *sequence = [self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow];
-    [CoreDataManager sharedManager].currentSequence = sequence;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
-}
-
 - (IBAction)createTrackButtonPress:(id)sender
 {
     [[CoreDataManager sharedManager] newAnalysisControlBoxForSequence:[self.sequenceFetchedResultsController objectAtIndex:self.sequenceTableView.selectedRow]];
@@ -240,261 +225,19 @@
              [[CoreDataManager sharedManager] saveContext];
              
              // Search EchoNest for analysis
-             if([filePath length] > 1)
-             {
-                 // See if the analysis has already been done
-                 NSDictionary *parameters = @{@"md5" : [ENAPI calculateMD5DigestFromData:audio.audioFile], @"bucket" : @"audio_summary"};
-                 [ENAPIRequest GETWithEndpoint:@"track/profile" andParameters:parameters andCompletionBlock:
-                  ^(ENAPIRequest *request)
-                  {
-                      // Doesn't exist yet, needs uploading
-                      if(![request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
-                      {
-                          // Upload the track
-                          NSDictionary *parameters = @{@"track" : audio.audioFile, @"filetype" : [filePath pathExtension]};
-                          [ENAPIRequest POSTWithEndpoint:@"track/upload" andParameters:parameters andCompletionBlock:
-                           ^(ENAPIRequest *request)
-                           {
-                               //NSLog(@"upload request response:%@", request.response);
-                               [self prepareForAudioAnalysisDownloadWithENAPIRequest:request andAudio:audio];
-                           }];
-                      }
-                      // Already exists, skip to downloading analysis
-                      else
-                      {
-                          [self prepareForAudioAnalysisDownloadWithENAPIRequest:request andAudio:audio];
-                      }
-                  }];
-             }
+             [[SequenceLogic sharedInstance] fetchEchoNestAnalysisForCurrentSequenceAudio];
          }
      }];
 }
 
-- (void)echoNestUploadUpdate:(NSNotification *)notification
-{
-    int bytesWritten = [notification.userInfo[@"totalBytesWritten"] intValue];
-    int totalBytesToWrite = [notification.userInfo[@"totalBytesExpectedToWrite"] intValue];
-    self.currentAudio.echoNestUploadProgress = @(0.8 * (float)bytesWritten / totalBytesToWrite);
-    
-    [self updateAudioAnlysisProgressLabel];
-}
-
-- (void)updateAudioAnlysisProgressLabel
+- (void)updateAudioAnlysisProgressLabel:(NSNotification *)notification
 {
     self.audioAnlysisProgress.stringValue = [NSString stringWithFormat:@"%.1f%%", 100 * [self.currentAudio.echoNestUploadProgress floatValue]];
 }
 
-- (void)prepareForAudioAnalysisDownloadWithENAPIRequest:(ENAPIRequest *)request andAudio:(Audio *)audio
+- (void)audioNameChange:(NSNotification *)notification
 {
-    // Delete any old data
-    if(audio.echoNestAudioAnalysis)
-    {
-        [[CoreDataManager sharedManager].managedObjectContext deleteObject:audio.echoNestAudioAnalysis];
-    }
-    
-    EchoNestAudioAnalysis *echonestAudioAnalysis = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestAudioAnalysis" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-    echonestAudioAnalysis.audio = audio;
-    echonestAudioAnalysis.idString = request.response[@"response"][@"track"][@"id"];
-    audio.title = request.response[@"response"][@"track"][@"title"];
-    self.audioDescriptionTextField.stringValue = audio.title;
-    audio.echoNestUploadProgress = @(0.85);
-    [self updateAudioAnlysisProgressLabel];
-    
-    [[CoreDataManager sharedManager] saveContext];
-    
-    // Download the audioanalysis
-    [self checkForAudioAnalysisCompletionWithAudio:audio];
-}
-
-- (void)checkForAudioAnalysisCompletionWithAudio:(Audio *)audio
-{
-    if([audio.echoNestUploadProgress floatValue] < 0.95)
-    {
-        audio.echoNestUploadProgress = @([audio.echoNestUploadProgress floatValue] + 0.01);
-        [self updateAudioAnlysisProgressLabel];
-    }
-    
-    NSDictionary *parameters = @{@"id" : audio.echoNestAudioAnalysis.idString, @"bucket" : @"audio_summary"};
-    [ENAPIRequest GETWithEndpoint:@"track/profile" andParameters:parameters andCompletionBlock:
-     ^(ENAPIRequest *request)
-     {
-         //NSLog(@"summary request response:%@", request.response);
-         
-         // Analysis is ready for download
-         if([request.response[@"response"][@"track"][@"status"] isEqualToString:@"complete"])
-         {
-             audio.echoNestUploadProgress = @(0.95);
-             [self updateAudioAnlysisProgressLabel];
-             
-             // Store the analysisSummary data
-             audio.echoNestAudioAnalysis.artistID = request.response[@"response"][@"track"][@"artist_id"];
-             audio.echoNestAudioAnalysis.idString = request.response[@"response"][@"track"][@"id"];
-             audio.echoNestAudioAnalysis.md5 = request.response[@"response"][@"track"][@"md5"];
-             audio.echoNestAudioAnalysis.songID = request.response[@"response"][@"track"][@"song_id"];
-             audio.echoNestAudioAnalysis.status = request.response[@"response"][@"track"][@"status"];
-             audio.echoNestAudioAnalysis.acousticness = request.response[@"response"][@"track"][@"audio_summary"][@"acousticness"];
-             audio.echoNestAudioAnalysis.analysisURL = request.response[@"response"][@"track"][@"audio_summary"][@"analysis_url"];
-             audio.echoNestAudioAnalysis.danceability = request.response[@"response"][@"track"][@"audio_summary"][@"danceability"];
-             audio.echoNestAudioAnalysis.energy = request.response[@"response"][@"track"][@"audio_summary"][@"energy"];
-             audio.echoNestAudioAnalysis.instrumentalness = request.response[@"response"][@"track"][@"audio_summary"][@"instrumentalness"];
-             audio.echoNestAudioAnalysis.liveness = request.response[@"response"][@"track"][@"audio_summary"][@"liveness"];
-             audio.echoNestAudioAnalysis.loudness = request.response[@"response"][@"track"][@"audio_summary"][@"loudness"];
-             audio.echoNestAudioAnalysis.speechiness = request.response[@"response"][@"track"][@"audio_summary"][@"speechiness"];
-             audio.echoNestAudioAnalysis.tempo = request.response[@"response"][@"track"][@"audio_summary"][@"tempo"];
-             audio.echoNestAudioAnalysis.valence = request.response[@"response"][@"track"][@"audio_summary"][@"valence"];
-             
-             // Download the full analysis
-             [ENAPIRequest downloadAnalysisURL:audio.echoNestAudioAnalysis.analysisURL withCompletionBlock:
-              ^(ENAPIRequest *request)
-              {
-                  //NSLog(@"analysis:%@", request.response);
-                  audio.echoNestAudioAnalysis.album = request.response[@"meta"][@"album"];
-                  audio.echoNestAudioAnalysis.analysisTime = request.response[@"meta"][@"analysis_time"];
-                  audio.echoNestAudioAnalysis.analyzerVersion = request.response[@"meta"][@"analyzer_version"];
-                  audio.echoNestAudioAnalysis.artist = request.response[@"meta"][@"artist"];
-                  audio.echoNestAudioAnalysis.bitrate = request.response[@"meta"][@"bitrate"];
-                  audio.echoNestAudioAnalysis.detailedStatus = request.response[@"meta"][@"detailed_status"];
-                  audio.echoNestAudioAnalysis.fileName = request.response[@"meta"][@"filename"];
-                  audio.echoNestAudioAnalysis.genre = request.response[@"meta"][@"genre"];
-                  audio.echoNestAudioAnalysis.platform = request.response[@"meta"][@"platform"];
-                  audio.echoNestAudioAnalysis.sampleRate = request.response[@"meta"][@"sample_rate"];
-                  audio.echoNestAudioAnalysis.seconds = request.response[@"meta"][@"seconds"];
-                  audio.echoNestAudioAnalysis.statusCode = request.response[@"meta"][@"status_code"];
-                  audio.echoNestAudioAnalysis.timestamp = request.response[@"meta"][@"timestamp"];
-                  audio.echoNestAudioAnalysis.title = request.response[@"meta"][@"title"];
-                  self.audioDescriptionTextField.stringValue = audio.echoNestAudioAnalysis.title;
-                  
-                  audio.echoNestAudioAnalysis.analysisChannels = request.response[@"track"][@"analysis_channels"];
-                  audio.echoNestAudioAnalysis.analysisSampleRate = request.response[@"track"][@"analysis_sample_rate"];
-                  audio.echoNestAudioAnalysis.codeVersion = request.response[@"track"][@"code_version"];
-                  audio.echoNestAudioAnalysis.codeString = request.response[@"track"][@"codestring"];
-                  audio.echoNestAudioAnalysis.decoder = request.response[@"track"][@"decoder"];
-                  audio.echoNestAudioAnalysis.decoderVersion = request.response[@"track"][@"decoder_version"];
-                  audio.echoNestAudioAnalysis.duration = request.response[@"track"][@"duration"];
-                  audio.echoNestAudioAnalysis.echoPrintVersion = request.response[@"track"][@"echoprint_version"];
-                  audio.echoNestAudioAnalysis.echoPrintString = request.response[@"track"][@"echoprintstring"];
-                  audio.echoNestAudioAnalysis.endOfFadeIn = request.response[@"track"][@"end_of_fade_in"];
-                  audio.echoNestAudioAnalysis.key = request.response[@"track"][@"key"];
-                  audio.echoNestAudioAnalysis.keyConfidence = request.response[@"track"][@"key_confidence"];
-                  audio.echoNestAudioAnalysis.loudness = request.response[@"track"][@"loudness"];
-                  audio.echoNestAudioAnalysis.mode = request.response[@"track"][@"mode"];
-                  audio.echoNestAudioAnalysis.modeConfidence = request.response[@"track"][@"mode_confidence"];
-                  audio.echoNestAudioAnalysis.numberOfSamples = request.response[@"track"][@"num_samples"];
-                  audio.echoNestAudioAnalysis.offsetSeconds = request.response[@"track"][@"offset_seconds"];
-                  audio.echoNestAudioAnalysis.rhythmVersion = request.response[@"track"][@"rhythm_version"];
-                  audio.echoNestAudioAnalysis.rhythmString = request.response[@"track"][@"rhythmstring"];
-                  audio.echoNestAudioAnalysis.sampleMD5 = request.response[@"track"][@"sample_md5"];
-                  audio.echoNestAudioAnalysis.startOfFadeOut = request.response[@"track"][@"start_of_fade_out"];
-                  audio.echoNestAudioAnalysis.synchVersion = request.response[@"track"][@"synch_version"];
-                  audio.echoNestAudioAnalysis.synchString = request.response[@"track"][@"synchstring"];
-                  audio.echoNestAudioAnalysis.tempo = request.response[@"track"][@"tempo"];
-                  audio.echoNestAudioAnalysis.tempoConfidence = request.response[@"track"][@"tempo_confidence"];
-                  audio.echoNestAudioAnalysis.timeSignature = request.response[@"track"][@"time_signature"];
-                  audio.echoNestAudioAnalysis.timeSignatureConfidence = request.response[@"track"][@"time_signature_confidence"];
-                  audio.echoNestAudioAnalysis.windowSeconds = request.response[@"track"][@"window_seconds"];
-                  
-                  // Store all the sections
-                  NSArray *sections = request.response[@"sections"];
-                  for(int i = 0; i < sections.count; i ++)
-                  {
-                      EchoNestSection *section = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestSection" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                      NSDictionary *dictionarySection = sections[i];
-                      section.confidence = dictionarySection[@"confidence"];
-                      section.duration = dictionarySection[@"duration"];
-                      section.key = dictionarySection[@"key"];
-                      section.keyConfidence = dictionarySection[@"key_confidence"];
-                      section.loudness = dictionarySection[@"loudness"];
-                      section.mode = dictionarySection[@"mode"];
-                      section.modeConfidence = dictionarySection[@"mode_confidence"];
-                      section.start = dictionarySection[@"start"];
-                      section.tempo = dictionarySection[@"tempo"];
-                      section.tempoConfidence = dictionarySection[@"tempo_confidence"];
-                      section.timeSignature = dictionarySection[@"time_signature"];
-                      section.timeSignatureConfidence = dictionarySection[@"time_signature_confidence"];
-                      [audio.echoNestAudioAnalysis addSectionsObject:section];
-                  }
-                  // Store all the bars
-                  NSArray *bars = request.response[@"bars"];
-                  for(int i = 0; i < bars.count; i ++)
-                  {
-                      EchoNestBar *bar = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestBar" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                      NSDictionary *dictionaryBar = bars[i];
-                      bar.confidence = dictionaryBar[@"confidence"];
-                      bar.duration = dictionaryBar[@"duration"];
-                      bar.start = dictionaryBar[@"start"];
-                      [audio.echoNestAudioAnalysis addBarsObject:bar];
-                  }
-                  // Store all the beats
-                  NSArray *beats = request.response[@"beats"];
-                  for(int i = 0; i < beats.count; i ++)
-                  {
-                      EchoNestBeat *beat = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestBeat" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                      NSDictionary *dictionaryBeat = beats[i];
-                      beat.confidence = dictionaryBeat[@"confidence"];
-                      beat.duration = dictionaryBeat[@"duration"];
-                      beat.start = dictionaryBeat[@"start"];
-                      [audio.echoNestAudioAnalysis addBeatsObject:beat];
-                  }
-                  // Store all the tatums
-                  NSArray *tatums = request.response[@"tatums"];
-                  for(int i = 0; i < tatums.count; i ++)
-                  {
-                      EchoNestTatum *tatum = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestTatum" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                      NSDictionary *dictionaryTatum = tatums[i];
-                      tatum.confidence = dictionaryTatum[@"confidence"];
-                      tatum.duration = dictionaryTatum[@"duration"];
-                      tatum.start = dictionaryTatum[@"start"];
-                      [audio.echoNestAudioAnalysis addTatumsObject:tatum];
-                  }
-                  // Store all the segments
-                  NSArray *segments = request.response[@"segments"];
-                  for(int i = 0; i < segments.count; i ++)
-                  {
-                      EchoNestSegment *segment = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestSegment" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                      NSDictionary *dictionarySegment = segments[i];
-                      segment.confidence = dictionarySegment[@"confidence"];
-                      segment.duration = dictionarySegment[@"duration"];
-                      segment.loudnessMax = dictionarySegment[@"loudness_max"];
-                      segment.loudnessMaxTime = dictionarySegment[@"loudness_max_time"];
-                      segment.loudnessStart = dictionarySegment[@"loudness_start"];
-                      NSArray *pitches = dictionarySegment[@"pitches"];
-                      for(int i2 = 0; i2 < pitches.count; i2 ++)
-                      {
-                          EchoNestPitch *pitch = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestPitch" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                          pitch.pitch = pitches[i2];
-                          [segment addPitchesObject:pitch];
-                      }
-                      segment.start = dictionarySegment[@"start"];
-                      NSArray *timbres = dictionarySegment[@"timbre"];
-                      for(int i2 = 0; i2 < timbres.count; i2 ++)
-                      {
-                          EchoNestTimbre *timbre = [NSEntityDescription insertNewObjectForEntityForName:@"EchoNestTimbre" inManagedObjectContext:[CoreDataManager sharedManager].managedObjectContext];
-                          timbre.timbre = timbres[i2];
-                          [segment addTimbresObject:timbre];
-                      }
-                      
-                      [audio.echoNestAudioAnalysis addSegmentsObject:segment];
-                  }
-                  
-                  //audio.endOffset = audio.echoNestAudioAnalysis.startOfFadeOut;
-                  //audio.startOffset = audio.echoNestAudioAnalysis.endOfFadeIn;
-                  audio.sequence.endTime = audio.echoNestAudioAnalysis.duration;
-                  audio.sequence.title = audio.echoNestAudioAnalysis.title;
-                  [[CoreDataManager sharedManager] updateSequenceTatumsForNewAudioForSequence:audio.sequence];
-                  
-                  audio.echoNestUploadProgress = @(1.0);
-                  [self updateAudioAnlysisProgressLabel];
-                  [[CoreDataManager sharedManager] saveContext];
-                  
-                  [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
-              }];
-         }
-         // Analysis isn't ready, keep polling
-         else
-         {
-             [self performSelector:@selector(checkForAudioAnalysisCompletionWithAudio:) withObject:audio afterDelay:1.0];
-         }
-     }];
+    self.audioDescriptionTextField.stringValue = [CoreDataManager sharedManager].currentSequence.audio.title;
 }
 
 #pragma mark - NSTextFieldDelegate Methods
@@ -658,6 +401,8 @@
         self.createLyricButton.enabled = YES;
         
         Sequence *sequence = (Sequence *)[self.sequenceFetchedResultsController objectAtIndex:row];
+        [CoreDataManager sharedManager].currentSequence = sequence;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentSequenceChange" object:nil];
         [self updateTrackFetchedResultsControllerForSequence:sequence];
         [self updateAudioLyricFetchedResultsControllerForAudio:sequence.audio];
         
@@ -685,7 +430,7 @@
                 self.audioDescriptionTextField.stringValue = sequence.audio.title;
             }
             self.currentAudio = sequence.audio;
-            [self updateAudioAnlysisProgressLabel];
+            [self updateAudioAnlysisProgressLabel:nil];
             [self updateAudioTitleLabelForSequenceAtRow:(int)row];
         }
     }
