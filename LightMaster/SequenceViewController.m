@@ -196,11 +196,11 @@
     NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];
     NSRect audioAnalysisVisibleRect = [self.audioAnalysisScrollView documentVisibleRect];
     [self.sequenceScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, sequenceVisibleRect.origin.y)];
-    [self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
+    //[self.sequenceScrollView reflectScrolledClipView:self.sequenceScrollView.contentView];
     [self.timelineScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, visibleRect.origin.y)];
-    [self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
+    //[self.timelineScrollView reflectScrolledClipView:self.timelineScrollView.contentView];
     [self.audioAnalysisScrollView.contentView scrollToPoint:NSMakePoint(newLeftX, audioAnalysisVisibleRect.origin.y)];
-    [self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
+    //[self.audioAnalysisScrollView reflectScrolledClipView:self.audioAnalysisScrollView.contentView];
 }
 
 @end

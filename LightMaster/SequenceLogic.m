@@ -664,10 +664,10 @@
     self.currentTime = self.audioPlayer.currentTime;// + 0.10;//[[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
     [self updateTime];
     
-    if(self.drawCurrentSequence)
+    /*if(self.drawCurrentSequence)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
-    }
+    }*/
 }
 
 - (void)updateTime
@@ -698,16 +698,26 @@
         self.lastChannelUpdateTime = -1;
     }
     
-    // Update channel brightness at 30Hz
+    // Get the commands for the current time
     [self updateCommandsForCurrentTime];
-    if(self.currentTime > self.lastChannelUpdateTime + 0.066)
+    
+    // Update view at 60Hz
+    if(self.currentTime > self.lastChannelUpdateTime + 0.0166)
     {
-        self.lastChannelUpdateTime = self.currentTime;
-        [self updateCommandsForCurrentTime];
-        
-        if(self.drawCurrentSequence && self.drawChannelBrightness)
+        if(self.drawCurrentSequence)
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDimmingDisplay" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"CurrentTimeChange" object:self];
+        }
+        
+        // Update channel brightness at 30Hz
+        if(self.currentTime > self.lastChannelUpdateTime + 0.033)
+        {
+            self.lastChannelUpdateTime = self.currentTime;
+            
+            if(self.drawCurrentSequence && self.drawChannelBrightness)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDimmingDisplay" object:nil];
+            }
         }
     }
 }
