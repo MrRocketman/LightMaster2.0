@@ -35,6 +35,8 @@
 #define MAX_SHORT_DURATION 2.56
 #define MAX_LONG_DURATION 25.6
 
+#define AUDIO_LATENCY 0.08
+
 @interface SequenceLogic()
 
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
@@ -164,8 +166,7 @@
 
 - (void)updateCommandsForCurrentTime
 {
-    const float epsilon = 0.030;
-    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time AND sequence == %@", self.currentTime + epsilon, self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
+    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time AND sequence == %@", self.currentTime + AUDIO_LATENCY, self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
     
     [self sendCommandsForCurrentTime];
 }
@@ -659,7 +660,7 @@
 
 - (void)audioTimerFire:(NSTimer *)timer
 {
-    self.currentTime = self.audioPlayer.currentTime;//[[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
+    self.currentTime = self.audioPlayer.currentTime;// + 0.10;//[[NSDate date] timeIntervalSinceDate:self.playStartDate] + self.playStartTime;
     [self updateTime];
     
     if(self.drawCurrentSequence)
@@ -698,7 +699,7 @@
     
     // Update channel brightness at 30Hz
     [self updateCommandsForCurrentTime];
-    if(self.currentTime > self.lastChannelUpdateTime + 0.03)
+    if(self.currentTime > self.lastChannelUpdateTime + 0.066)
     {
         self.lastChannelUpdateTime = self.currentTime;
         [self updateCommandsForCurrentTime];
