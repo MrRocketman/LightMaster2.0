@@ -41,6 +41,7 @@
 
 - (void)update:(NSNotification *)notification
 {
+    //[self setNeedsDisplayInRect:[(NSScrollView *)self.superview.superview documentVisibleRect]];
     [self setNeedsDisplay:YES];
 }
 

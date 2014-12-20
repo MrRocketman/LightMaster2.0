@@ -35,7 +35,7 @@
 #define MAX_SHORT_DURATION 2.56
 #define MAX_LONG_DURATION 25.6
 
-#define AUDIO_LATENCY 0.08
+#define AUDIO_LATENCY 0.100
 
 @interface SequenceLogic()
 
@@ -71,6 +71,7 @@
         self.currentTime = 1.0;
         self.commandType = CommandTypeSelect;
         self.drawCurrentSequence = YES;
+        self.drawChannelBrightness = YES;
         
         if(![CoreDataManager sharedManager].currentSequence)
         {
@@ -704,7 +705,7 @@
         self.lastChannelUpdateTime = self.currentTime;
         [self updateCommandsForCurrentTime];
         
-        if(self.drawCurrentSequence)
+        if(self.drawCurrentSequence && self.drawChannelBrightness)
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDimmingDisplay" object:nil];
         }

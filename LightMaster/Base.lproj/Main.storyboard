@@ -1124,6 +1124,16 @@
                                             <segue destination="ix5-GP-Gjg" kind="show" id="4jY-gd-hlC"/>
                                         </connections>
                                     </button>
+                                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWX-2v-gAO">
+                                        <rect key="frame" x="18" y="10" width="117" height="18"/>
+                                        <buttonCell key="cell" type="check" title="Visual Dimming" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="wX8-bn-xDd">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="visualDimmingButtonPress:" target="JHR-DC-ihs" id="Wt8-1E-baq"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="mU0-ML-CRS" firstAttribute="leading" secondItem="VS1-F9-Vzu" secondAttribute="trailing" constant="8" symbolic="YES" id="6pM-kz-wzE"/>

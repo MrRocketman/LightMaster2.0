@@ -33,6 +33,7 @@
 
 - (IBAction)serialPortSelectionChange:(id)sender;
 - (IBAction)skipBackButtonPress:(id)sender;
+- (IBAction)visualDimmingButtonPress:(id)sender;
 - (IBAction)playButtonPress:(id)sender;
 - (IBAction)commandTypeSegmentedControlChange:(id)sender;
 

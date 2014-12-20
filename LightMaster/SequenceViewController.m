@@ -131,6 +131,11 @@
     [[SequenceLogic sharedInstance] playPause:nil];
 }
 
+- (IBAction)visualDimmingButtonPress:(id)sender
+{
+    [SequenceLogic sharedInstance].drawChannelBrightness = ((NSButton *)sender).state;
+}
+
 - (IBAction)commandTypeSegmentedControlChange:(id)sender
 {
     [SequenceLogic sharedInstance].commandType = (int)self.commandTypeSegmentedControl.selectedSegment;
