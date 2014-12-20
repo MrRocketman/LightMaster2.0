@@ -672,7 +672,7 @@
 - (void)updateTime
 {
     // Loop back to beginning
-    if(self.currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue])
+    if(self.currentTime > [[CoreDataManager sharedManager].currentSequence.endTime floatValue] - 0.1)
     {
         [self.audioPlayer stop];
         [self resetCommandsSendComplete];
