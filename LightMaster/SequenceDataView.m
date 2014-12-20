@@ -20,9 +20,6 @@
 @interface SequenceDataView()
 
 @property (strong, nonatomic) NSBezierPath *sequenceTatumPaths;
-@property (strong, nonatomic) NSBezierPath *allSequenceTatumPaths;
-@property (strong, nonatomic) NSMutableArray *allSequenceTatumPathsTatums;
-@property (assign, nonatomic) BOOL allSequenceTatumPathsNeedsUpdate;
 @property (assign, nonatomic) NSPoint currentMousePoint;
 @property (strong, nonatomic) NSEvent *mouseEvent;
 @property (strong, nonatomic) NSTimer *autoScrollTimer;
@@ -69,14 +66,12 @@
         [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     }
     [self fetchControlBoxAndChannelData];
-    [self reloadAllSequenceTatumPaths];
 }
 
 - (void)sequenceChange:(NSNotification *)notification
 {
     [self fetchControlBoxAndChannelData];
     [self setNeedsDisplay:YES];
-    [self reloadAllSequenceTatumPaths];
 }
 
 - (void)deselectMouse:(NSNotification *)notification
@@ -84,12 +79,6 @@
     self.mouseGroupSelect = NO;
     self.retainMouseGroupSelect = NO;
     [self setNeedsDisplay:YES];
-}
-
-- (void)reloadAllSequenceTatumPaths
-{
-    self.allSequenceTatumPaths = [NSBezierPath bezierPath];
-    self.allSequenceTatumPathsTatums = [NSMutableArray new];
 }
 
 - (BOOL)isFlipped
@@ -153,9 +142,6 @@
     [[NSColor blackColor] set];
     NSRectFill(dirtyRect);
     
-    // Update our list of tatum paths - this is used only for mouse checking
-    [self updateAllSequenceTatumPaths];
-    
     // Draw commands
     [self drawCommands];
     
@@ -167,30 +153,6 @@
     
     // Draw mouse selection box
     [self drawMouseGroupSelectionBox];
-}
-
-- (void)updateAllSequenceTatumPaths
-{
-    NSArray *tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, self.dirtyRectLeftTime, self.dirtyRectRightTime] orderBy:@"time"] toArray];
-    BOOL madeChanges = NO;
-    for(SequenceTatum *tatum in tatums)
-    {
-        if(![self.allSequenceTatumPathsTatums containsObject:tatum])
-        {
-            madeChanges = YES;
-            [self.allSequenceTatumPathsTatums addObject:tatum];
-            
-            // Draw the normal sequence Tatums
-            [self addSequenceTatumWithTime:[tatum.time floatValue] toBezierPath:self.allSequenceTatumPaths];
-        }
-        
-    }
-    
-    if(madeChanges)
-    {
-        [[NSColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0] set];
-        [self.allSequenceTatumPaths fill];
-    }
 }
 
 - (void)drawCommands
@@ -525,7 +487,6 @@
     self.autoScrollTimer = nil;
     
     [self setNeedsDisplay:YES];
-    //[self reloadAllSequenceTatumPaths];
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent
@@ -533,7 +494,7 @@
     NSPoint eventLocation = [theEvent locationInWindow];
     NSPoint currentMousePoint = [self convertPoint:eventLocation fromView:nil];
     
-    if([self.allSequenceTatumPaths containsPoint:currentMousePoint])
+    if([self.sequenceTatumPaths containsPoint:currentMousePoint])
     {
         [[NSCursor resizeLeftRightCursor] set];
     }
