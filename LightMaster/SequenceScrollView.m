@@ -44,9 +44,9 @@
         // Only redraw every 50% width change, since the view draws 200% width
         if(fabs(self.magnification - 1.0) > 0.0001)
         {
-            [self updateViews];
-            [self.timelineScrollView updateViews];
-            [self.audioAnalysisScrollView updateViews];
+            //[self updateViews];
+            //[self.timelineScrollView updateViews];
+            //[self.audioAnalysisScrollView updateViews];
         }
         self.magnification = 1.0;
         self.ignoreBoundsChanges = NO;
