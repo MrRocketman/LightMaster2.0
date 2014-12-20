@@ -439,7 +439,7 @@
         }
     }
     
-    [self setNeedsDisplay:YES];
+    [self setNeedsDisplayInRect:[(NSScrollView *)self.superview.superview documentVisibleRect]];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -455,7 +455,7 @@
         self.autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_REFRESH_RATE target:self selector:@selector(autoScroll:) userInfo:nil repeats:YES];
     }
     
-    [self setNeedsDisplay:YES];
+    [self setNeedsDisplayInRect:[(NSScrollView *)self.superview.superview documentVisibleRect]];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
@@ -481,7 +481,7 @@
     [self.autoScrollTimer invalidate];
     self.autoScrollTimer = nil;
     
-    [self setNeedsDisplay:YES];
+    [self setNeedsDisplayInRect:[(NSScrollView *)self.superview.superview documentVisibleRect]];
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent
