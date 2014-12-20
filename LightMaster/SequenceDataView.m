@@ -20,8 +20,6 @@
 @interface SequenceDataView()
 
 @property (strong, nonatomic) NSBezierPath *sequenceTatumPaths;
-@property (strong, nonatomic) NSMutableArray *sequenceTatums;
-@property (assign, nonatomic) BOOL sequenceTatumPathsNeedsUpdate;
 @property (assign, nonatomic) NSPoint currentMousePoint;
 @property (strong, nonatomic) NSEvent *mouseEvent;
 @property (strong, nonatomic) NSTimer *autoScrollTimer;
@@ -68,14 +66,12 @@
         [[CoreDataManager sharedManager] getLatestOrCreateNewSequence];
     }
     [self fetchControlBoxAndChannelData];
-    [self reloadSequenceTatumPaths];
 }
 
 - (void)sequenceChange:(NSNotification *)notification
 {
     [self fetchControlBoxAndChannelData];
     [self setNeedsDisplay:YES];
-    [self reloadSequenceTatumPaths];
 }
 
 - (void)deselectMouse:(NSNotification *)notification
@@ -83,12 +79,6 @@
     self.mouseGroupSelect = NO;
     self.retainMouseGroupSelect = NO;
     [self setNeedsDisplay:YES];
-}
-
-- (void)reloadSequenceTatumPaths
-{
-    self.sequenceTatumPaths = [NSBezierPath bezierPath];
-    self.sequenceTatums = [NSMutableArray new];
 }
 
 - (BOOL)isFlipped
@@ -260,10 +250,12 @@
 - (void)drawSequenceTatums
 {
     NSArray *tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@", [CoreDataManager sharedManager].currentSequence] orderBy:@"time"] toArray];
-    BOOL madeChanges = NO;
-    int i = 0;
-    for(SequenceTatum *tatum in tatums)
+    
+    self.sequenceTatumPaths = [NSBezierPath bezierPath];
+    for(int i = 0; i < tatums.count; i ++)
     {
+        SequenceTatum *tatum = (SequenceTatum *)tatums[i];
+        
         // Update the tatum position if it's selected
         if(self.sequenceTatumIsSelected && self.selectedSequenceTatum == tatum)
         {
@@ -283,11 +275,8 @@
             // Tell any other views to update
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SequenceTatumChange" object:nil];
         }
-        else if(![self.sequenceTatums containsObject:tatum])
+        else
         {
-            madeChanges = YES;
-            [self.sequenceTatums addObject:tatum];
-            
             // Draw the normal sequence Tatums
             NSPoint startPoint = [self addSequenceTatumWithTime:[tatum.time floatValue] toBezierPath:self.sequenceTatumPaths];
             
@@ -359,45 +348,23 @@
                 }
             }
         }
-        
-        i ++;
-    }
-    
-    if(madeChanges)
-    {
-        [[NSColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0] set];
-        [self.sequenceTatumPaths fill];
-    }
-    
-    
-    tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, self.dirtyRectLeftTime, self.dirtyRectRightTime] orderBy:@"time"] toArray];
-    NSBezierPath *dirtyRectSequenceTatumPaths = [NSBezierPath bezierPath];
-    for(SequenceTatum *tatum in tatums)
-    {
-        // Draw the normal sequence Tatums
-        [self addSequenceTatumWithTime:[tatum.time floatValue] toBezierPath:dirtyRectSequenceTatumPaths];
     }
     
     [[NSColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1.0] set];
-    [dirtyRectSequenceTatumPaths fill];
+    [self.sequenceTatumPaths fill];
 }
 
 - (NSPoint)addSequenceTatumWithTime:(float)time toBezierPath:(NSBezierPath *)path
 {
-    //if(time >= self.dirtyRectLeftTime && time <= self.dirtyRectRightTime)
-    //{
-        NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], self.bounds.origin.y);
-        NSPoint endPoint = NSMakePoint(startPoint.x, self.bounds.origin.y + self.bounds.size.height);
+    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], self.bounds.origin.y);
+    NSPoint endPoint = NSMakePoint(startPoint.x, self.bounds.origin.y + self.bounds.size.height);
     
-        [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
-        [path lineToPoint:NSMakePoint(endPoint.x - 1, endPoint.y)];
-        [path lineToPoint:NSMakePoint(endPoint.x + 1, endPoint.y)];
-        [path lineToPoint:NSMakePoint(startPoint.x + 1, startPoint.y)];
+    [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x - 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x + 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(startPoint.x + 1, startPoint.y)];
     
-        return startPoint;
-    //}
-    
-    return NSZeroPoint;
+    return startPoint;
 }
 
 - (void)drawMouseGroupSelectionBox
