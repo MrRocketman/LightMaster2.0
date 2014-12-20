@@ -356,20 +356,15 @@
 
 - (NSPoint)addSequenceTatumWithTime:(float)time toBezierPath:(NSBezierPath *)path
 {
-    if(time >= self.dirtyRectLeftTime && time <= self.dirtyRectRightTime)
-    {
-        NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], self.dirtyRect.origin.y);
-        NSPoint endPoint = NSMakePoint(startPoint.x, self.dirtyRect.origin.y + self.dirtyRect.size.height);
-        
-        [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
-        [path lineToPoint:NSMakePoint(endPoint.x - 1, endPoint.y)];
-        [path lineToPoint:NSMakePoint(endPoint.x + 1, endPoint.y)];
-        [path lineToPoint:NSMakePoint(startPoint.x + 1, startPoint.y)];
-        
-        return startPoint;
-    }
+    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], self.bounds.origin.y);
+    NSPoint endPoint = NSMakePoint(startPoint.x, self.bounds.origin.y + self.bounds.size.height);
     
-    return NSZeroPoint;
+    [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x - 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(endPoint.x + 1, endPoint.y)];
+    [path lineToPoint:NSMakePoint(startPoint.x + 1, startPoint.y)];
+    
+    return startPoint;
 }
 
 - (void)drawMouseGroupSelectionBox
