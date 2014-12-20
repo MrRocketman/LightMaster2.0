@@ -35,7 +35,7 @@
 #define MAX_SHORT_DURATION 2.56
 #define MAX_LONG_DURATION 25.6
 
-#define AUDIO_LATENCY 0.100
+#define AUDIO_LATENCY 0.100 // 0.100
 
 @interface SequenceLogic()
 
@@ -167,7 +167,7 @@
 
 - (void)updateCommandsForCurrentTime
 {
-    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time AND sequence == %@", self.currentTime + AUDIO_LATENCY, self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
+    self.commandsForCurrentTime = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"%f >= startTatum.time AND %f <= endTatum.time AND sequence == %@", self.currentTime + AUDIO_LATENCY, self.currentTime + AUDIO_LATENCY, [CoreDataManager sharedManager].currentSequence] toArray];
     
     [self sendCommandsForCurrentTime];
 }
@@ -421,7 +421,7 @@
             {
                 CommandFade *commandFade = (CommandFade *)command;
                 float commandDuration = [commandFade.endTatum.time floatValue] - [commandFade.startTatum.time floatValue];
-                float percentThroughCommand = ([commandFade.endTatum.time floatValue] - self.currentTime) / commandDuration;
+                float percentThroughCommand = ([commandFade.endTatum.time floatValue] - self.currentTime - AUDIO_LATENCY) / commandDuration;
                 float brightnessChange = [commandFade.endBrightness floatValue] - [commandFade.startBrightness floatValue];
                 float maxBrightness = ([commandFade.startBrightness floatValue] > [commandFade.endBrightness floatValue] ? [commandFade.startBrightness floatValue] : [commandFade.endBrightness floatValue]);
                 return maxBrightness - ([commandFade.startBrightness floatValue] + percentThroughCommand * brightnessChange);
