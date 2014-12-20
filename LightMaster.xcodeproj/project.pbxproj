@@ -318,8 +318,6 @@
 			children = (
 				1A27BEF11A2C3BAE0043F8C9 /* SequenceTimelineScrollView.h */,
 				1A27BEF21A2C3BAE0043F8C9 /* SequenceTimelineScrollView.m */,
-				1A27BEE41A2BF6840043F8C9 /* SequenceTimelineView.h */,
-				1A27BEE51A2BF6840043F8C9 /* SequenceTimelineView.m */,
 			);
 			name = TimelineView;
 			sourceTree = "<group>";
@@ -400,6 +398,8 @@
 				1A34743F1A32D8A700736869 /* SequenceDataView.m */,
 				1A4ADDD21A397D0800B22C4E /* SequenceCurrentTimeView.h */,
 				1A4ADDD31A397D0800B22C4E /* SequenceCurrentTimeView.m */,
+				1A27BEE41A2BF6840043F8C9 /* SequenceTimelineView.h */,
+				1A27BEE51A2BF6840043F8C9 /* SequenceTimelineView.m */,
 			);
 			name = Drawing;
 			sourceTree = "<group>";

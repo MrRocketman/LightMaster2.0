@@ -44,6 +44,12 @@
 @property (strong, nonatomic) NSArray *controlBoxes;
 @property (strong, nonatomic) NSMutableArray *channels;
 
+@property (assign, nonatomic) float dirtyRectLeftTime;
+@property (assign, nonatomic) float dirtyRectRightTime;
+@property (assign, nonatomic) int dirtyRectTopChannel;
+@property (assign, nonatomic) int dirtyRectBottomChannel;
+@property (assign, nonatomic) NSRect dirtyRect;
+
 @end
 
 @implementation SequenceDataView
@@ -108,6 +114,14 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
+    
+    // Get the bounds of where we should be drawing
+    self.dirtyRect = dirtyRect;
+    self.dirtyRectLeftTime = [[SequenceLogic sharedInstance] xToTime:dirtyRect.origin.x];
+    self.dirtyRectRightTime = [[SequenceLogic sharedInstance] xToTime:dirtyRect.origin.x + dirtyRect.size.width];
+    self.dirtyRectTopChannel = dirtyRect.origin.y / CHANNEL_HEIGHT;
+    self.dirtyRectBottomChannel = (dirtyRect.origin.y + dirtyRect.size.height) / CHANNEL_HEIGHT;
+    
     if(self.isAudioAnalysisView)
     {
         self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], [[SequenceLogic sharedInstance] numberOfAudioChannels] * CHANNEL_HEIGHT);
@@ -126,10 +140,10 @@
     
     // clear the background
     [[NSColor blackColor] set];
-    NSRectFill(self.bounds);
+    NSRectFill(dirtyRect);
     
     // Draw commands
-    [self drawCommands:dirtyRect];
+    [self drawCommands];
     
     // Draw channel seperators
     [self drawChannelLines];
@@ -141,15 +155,8 @@
     [self drawMouseGroupSelectionBox];
 }
 
-- (void)drawCommands:(NSRect)dirtyRect
+- (void)drawCommands
 {
-    // Get visible bounds
-    //NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
-    float leftTime = [[SequenceLogic sharedInstance] xToTime:dirtyRect.origin.x - dirtyRect.size.width / 2];
-    float rightTime = [[SequenceLogic sharedInstance] xToTime:dirtyRect.origin.x + dirtyRect.size.width * 1.5];
-    int topChannel = dirtyRect.origin.y / CHANNEL_HEIGHT;
-    int bottomChannel = (dirtyRect.origin.y + dirtyRect.size.height) / CHANNEL_HEIGHT;
-
     // Draw each channel
     int channelIndex = 0;
     for(NSArray *channels in self.channels)
@@ -157,7 +164,7 @@
         for(Channel *channel in channels)
         {
             // Only draw the channel if it needs to be
-            if(channelIndex >= topChannel && channelIndex <= bottomChannel)
+            if(channelIndex >= self.dirtyRectTopChannel && channelIndex <= self.dirtyRectBottomChannel)
             {
                 NSBezierPath *channelPath = [NSBezierPath bezierPath];
                 
@@ -167,7 +174,7 @@
                     // Only add this commands if it's for this sequence and needs to be drawn
                     float startTime = [theCommand.startTatum.time floatValue];
                     float endTime = [theCommand.endTatum.time floatValue];
-                    if(theCommand.sequence == [CoreDataManager sharedManager].currentSequence && ((startTime >= leftTime && startTime <= rightTime) || (endTime >= leftTime && endTime <= rightTime) || (startTime < leftTime && endTime > rightTime)))
+                    if(theCommand.sequence == [CoreDataManager sharedManager].currentSequence && ((startTime >= self.dirtyRectLeftTime && startTime <= self.dirtyRectRightTime) || (endTime >= self.dirtyRectLeftTime && endTime <= self.dirtyRectRightTime) || (startTime < self.dirtyRectLeftTime && endTime > self.dirtyRectRightTime)))
                     {
                         // Add the command
                         if([theCommand isMemberOfClass:[CommandOn class]])
@@ -215,14 +222,24 @@
 {
     NSBezierPath *linesPath = [NSBezierPath bezierPath];
     
-    int largestY = NSMaxY(self.bounds);
-    for (int i = 0; i < largestY; i += CHANNEL_HEIGHT)
+    // Draw each channel line
+    int channelIndex = 0;
+    for(NSArray *channels in self.channels)
     {
-        NSPoint startPoint = NSMakePoint(NSMinX(self.bounds), i);
-        NSPoint endPoint = NSMakePoint(NSMaxX(self.bounds), i);
-        
-        [linesPath moveToPoint:startPoint];
-        [linesPath lineToPoint:endPoint];
+        for(int i = 0; i < channels.count; i ++)
+        {
+            // Only draw the line if it needs to be
+            if(channelIndex >= self.dirtyRectTopChannel && channelIndex <= self.dirtyRectBottomChannel)
+            {
+                NSPoint startPoint = NSMakePoint(self.dirtyRect.origin.x, channelIndex * CHANNEL_HEIGHT);
+                NSPoint endPoint = NSMakePoint(self.dirtyRect.origin.x + self.dirtyRect.size.width, channelIndex * CHANNEL_HEIGHT);
+                
+                [linesPath moveToPoint:startPoint];
+                [linesPath lineToPoint:endPoint];
+            }
+            
+            channelIndex ++;
+        }
     }
     
     [[NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.0] set];
@@ -232,8 +249,7 @@
 
 - (void)drawSequenceTatums
 {
-    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
-    NSArray *tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x - visibleRect.size.width / 2], [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width * 1.5]] orderBy:@"time"] toArray];
+    NSArray *tatums = [[[[[CoreDataManager sharedManager].managedObjectContext ofType:@"SequenceTatum"] where:@"sequence == %@ AND time >= %f AND time <= %f", [CoreDataManager sharedManager].currentSequence, self.dirtyRectLeftTime, self.dirtyRectRightTime] orderBy:@"time"] toArray];
     
     self.sequenceTatumPaths = [NSBezierPath bezierPath];
     for(int i = 0; i < tatums.count; i ++)
@@ -335,14 +351,13 @@
     }
     
     [[NSColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1.0] set];
-    //[self.sequenceTatumPaths setLineWidth:1.0];
     [self.sequenceTatumPaths fill];
 }
 
 - (NSPoint)addSequenceTatumWithTime:(float)time toBezierPath:(NSBezierPath *)path
 {
-    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], NSMinY(self.bounds));
-    NSPoint endPoint = NSMakePoint(startPoint.x, NSMaxY(self.bounds));
+    NSPoint startPoint = NSMakePoint([[SequenceLogic sharedInstance] timeToX:time], self.dirtyRect.origin.y);
+    NSPoint endPoint = NSMakePoint(startPoint.x, self.dirtyRect.origin.y + self.dirtyRect.size.height);
     
     [path moveToPoint:NSMakePoint(startPoint.x - 1, startPoint.y)];
     [path lineToPoint:NSMakePoint(endPoint.x - 1, endPoint.y)];

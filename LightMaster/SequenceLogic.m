@@ -604,7 +604,7 @@
     if(self.isPlayButton)
     {
         [self.audioPlayer play];
-        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
+        self.audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(audioTimerFire:) userInfo:nil repeats:YES];
         self.showChannelBrightness = YES;
         self.lastChannelUpdateTime = -1;
     }

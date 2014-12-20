@@ -28,6 +28,12 @@
 @property (strong, nonatomic) NSEvent *mouseEvent;
 @property (assign, nonatomic) NSPoint currentMousePoint;
 
+@property (assign, nonatomic) float dirtyRectLeftTime;
+@property (assign, nonatomic) float dirtyRectRightTime;
+@property (assign, nonatomic) int dirtyRectTopChannel;
+@property (assign, nonatomic) int dirtyRectBottomChannel;
+@property (assign, nonatomic) NSRect dirtyRect;
+
 @end
 
 @implementation SequenceTimelineView
@@ -45,6 +51,14 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
+    
+    // Get the bounds of where we should be drawing
+    self.dirtyRect = dirtyRect;
+    self.dirtyRectLeftTime = [[SequenceLogic sharedInstance] xToTime:dirtyRect.origin.x];
+    self.dirtyRectRightTime = [[SequenceLogic sharedInstance] xToTime:dirtyRect.origin.x + dirtyRect.size.width];
+    self.dirtyRectTopChannel = dirtyRect.origin.y / CHANNEL_HEIGHT;
+    self.dirtyRectBottomChannel = (dirtyRect.origin.y + dirtyRect.size.height) / CHANNEL_HEIGHT;
+    
     self.frame = NSMakeRect(0, 0, [[SequenceLogic sharedInstance] timeToX:[[CoreDataManager sharedManager].currentSequence.endTime floatValue] + 1.0], self.frame.size.height);
     
     // clear the background
@@ -103,10 +117,14 @@
     
     for(AudioLyric *lyric in lyrics)
     {
-        // Draw the text
-        NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
-        NSRect textFrame = NSMakeRect([[SequenceLogic sharedInstance] timeToX:[lyric.time floatValue]], self.frame.size.height / 2, 150, CHANNEL_HEIGHT - 2);
-        [lyric.text drawInRect:textFrame withAttributes:attributes];
+        // Only draw when needed
+        if([lyric.time floatValue] >= self.dirtyRectLeftTime && [lyric.time floatValue] <= self.dirtyRectRightTime)
+        {
+            // Draw the text
+            NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:CHANNEL_HEIGHT - 5], NSFontAttributeName, nil];
+            NSRect textFrame = NSMakeRect([[SequenceLogic sharedInstance] timeToX:[lyric.time floatValue]], self.frame.size.height / 2, 150, CHANNEL_HEIGHT - 2);
+            [lyric.text drawInRect:textFrame withAttributes:attributes];
+        }
     }
 }
 
@@ -171,16 +189,21 @@
     for(int i = 0; i < timeSpan / timeMarkerDifference + 6; i ++)
     {
         float timeMarker = (leftEdgeNearestTimeMaker + i * timeMarkerDifference);
-        float x = [[SequenceLogic sharedInstance] timeToX:timeMarker];
         
-        // Draw the time text
-        NSString *time = [NSString stringWithFormat:@"%.02f", timeMarker];
-        NSRect textFrame = NSMakeRect(x - 10, 0, 40, self.frame.size.height / 4);
-        [time drawInRect:textFrame withAttributes:attributes];
-        
-        // Add timelines
-        [timeLines moveToPoint:NSMakePoint(x, self.frame.size.height / 4)];
-        [timeLines lineToPoint:NSMakePoint(x, self.frame.size.height / 2)];
+        // Only draw when needed
+        if(timeMarker >= self.dirtyRectLeftTime && timeMarker <= self.dirtyRectRightTime)
+        {
+            float x = [[SequenceLogic sharedInstance] timeToX:timeMarker];
+            
+            // Draw the time text
+            NSString *time = [NSString stringWithFormat:@"%.02f", timeMarker];
+            NSRect textFrame = NSMakeRect(x - 10, 0, 40, self.frame.size.height / 4);
+            [time drawInRect:textFrame withAttributes:attributes];
+            
+            // Add timelines
+            [timeLines moveToPoint:NSMakePoint(x, self.frame.size.height / 4)];
+            [timeLines lineToPoint:NSMakePoint(x, self.frame.size.height / 2)];
+        }
     }
     
     // Draw the time lines
@@ -198,25 +221,29 @@
     float width = self.frame.size.height / 2;
     float height = self.frame.size.height / 2;
     
-    self.endTimePath = [NSBezierPath bezierPath];
-    
-    [self.endTimePath moveToPoint:point];
-    [self.endTimePath lineToPoint:NSMakePoint(point.x - width / 2,  point.y - height)];
-    [self.endTimePath lineToPoint:NSMakePoint(point.x + width / 2, point.y - height)];
-    [self.endTimePath closePath];
-    
-    // Set the color according to whether it is clicked or not
-    if(!self.endTimeMarkerIsSelected)
+    // Only draw when needed
+    if(point.x >= self.dirtyRect.origin.x && point.x + width <= self.dirtyRect.origin.x + self.dirtyRect.size.width)
     {
-        [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:1.0 alpha:0.5] setFill];
+        self.endTimePath = [NSBezierPath bezierPath];
+        
+        [self.endTimePath moveToPoint:point];
+        [self.endTimePath lineToPoint:NSMakePoint(point.x - width / 2,  point.y - height)];
+        [self.endTimePath lineToPoint:NSMakePoint(point.x + width / 2, point.y - height)];
+        [self.endTimePath closePath];
+        
+        // Set the color according to whether it is clicked or not
+        if(!self.endTimeMarkerIsSelected)
+        {
+            [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:1.0 alpha:0.5] setFill];
+        }
+        else
+        {
+            [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:1.0 alpha:0.1] setFill];
+        }
+        [self.endTimePath fill];
+        [[NSColor whiteColor] setStroke];
+        [self.endTimePath stroke];
     }
-    else
-    {
-        [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:1.0 alpha:0.1] setFill];
-    }
-    [self.endTimePath fill];
-    [[NSColor whiteColor] setStroke];
-    [self.endTimePath stroke];
 }
 
 - (void)drawEchoNestTatums
@@ -226,7 +253,11 @@
     NSBezierPath *echoNestTatumPath = [NSBezierPath bezierPath];
     for(EchoNestTatum *echoTatum in echoNestTatums)
     {
-        [self addLineWithTime:[echoTatum.start floatValue] toBezierPath:echoNestTatumPath];
+        // Only draw when needed
+        if([echoTatum.start floatValue] >= self.dirtyRectLeftTime && [echoTatum.start floatValue] <= self.dirtyRectRightTime)
+        {
+            [self addLineWithTime:[echoTatum.start floatValue] toBezierPath:echoNestTatumPath];
+        }
     }
     
     [[NSColor colorWithRed:0.0 green:0.7 blue:0.7 alpha:1.0] set];
@@ -240,7 +271,11 @@
     NSBezierPath *echoNestBeatPath = [NSBezierPath bezierPath];
     for(EchoNestBeat *echoBeat in echoNestBeats)
     {
-        [self addLineWithTime:[echoBeat.start floatValue] toBezierPath:echoNestBeatPath];
+        // Only draw when needed
+        if([echoBeat.start floatValue] >= self.dirtyRectLeftTime && [echoBeat.start floatValue] <= self.dirtyRectRightTime)
+        {
+            [self addLineWithTime:[echoBeat.start floatValue] toBezierPath:echoNestBeatPath];
+        }
     }
     
     [[NSColor colorWithRed:0.0 green:0.0 blue:0.7 alpha:1.0] set];
@@ -254,7 +289,11 @@
     NSBezierPath *echoNestSegmentPath = [NSBezierPath bezierPath];
     for(EchoNestSegment *echoSegment in echoNestSegments)
     {
-        [self addLineWithTime:[echoSegment.start floatValue] toBezierPath:echoNestSegmentPath];
+        // Only draw when needed
+        if([echoSegment.start floatValue] >= self.dirtyRectLeftTime && [echoSegment.start floatValue] <= self.dirtyRectRightTime)
+        {
+            [self addLineWithTime:[echoSegment.start floatValue] toBezierPath:echoNestSegmentPath];
+        }
     }
     
     [[NSColor colorWithRed:0.7 green:0.7 blue:0.0 alpha:1.0] set];

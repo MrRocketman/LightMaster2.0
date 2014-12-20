@@ -18,7 +18,6 @@
 @interface SequenceTimelineScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
-@property (assign, nonatomic) NSRect lastRefreshVisibleRect;
 @property (assign, nonatomic) BOOL previousCurrentTimeShouldDraw;
 
 @end
@@ -30,7 +29,6 @@
 {
     [self.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
-    self.lastRefreshVisibleRect = NSMakeRect(0, 0, 0, 0);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentTimeChange:) name:@"CurrentTimeChange" object:nil];
     [self updateCurrentTimePosition];
     self.previousCurrentTimeShouldDraw = YES;
@@ -68,14 +66,6 @@
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
     [self updateCurrentTimePosition];
-    
-    // Only redraw every 50% width change, since the view draws 200% width
-    if(self.documentVisibleRect.origin.x > self.lastRefreshVisibleRect.origin.x + self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.x < self.lastRefreshVisibleRect.origin.x - self.lastRefreshVisibleRect.size.width / 2)
-    {
-        self.lastRefreshVisibleRect = self.documentVisibleRect;
-        
-        [self updateViews];
-    }
     
     if(!self.ignoreBoundsChanges)
     {
@@ -119,9 +109,6 @@
         // note that a scroll view watching this one will get notified here
         self.ignoreBoundsChanges = YES;
         [[self contentView] scrollToPoint:newOffset];
-        // we have to tell the NSScrollView to update its
-        // scrollers
-        [self reflectScrolledClipView:[self contentView]];
         self.ignoreBoundsChanges = NO;
     }
 }

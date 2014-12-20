@@ -17,6 +17,9 @@
 
 @property (strong, nonatomic) NSArray *controlBoxes;
 @property (strong, nonatomic) NSMutableArray *channels;
+@property (assign, nonatomic) NSRect dirtyRect;
+@property (assign, nonatomic) int dirtyRectTopChannel;
+@property (assign, nonatomic) int dirtyRectBottomChannel;
 
 @end
 
@@ -73,6 +76,10 @@
 {
     [super drawRect:dirtyRect];
     
+    self.dirtyRect = dirtyRect;
+    self.dirtyRectTopChannel = dirtyRect.origin.y / CHANNEL_HEIGHT;
+    self.dirtyRectBottomChannel = (dirtyRect.origin.y + dirtyRect.size.height) / CHANNEL_HEIGHT;
+    
     self.frame = NSMakeRect(0, 0, self.frame.size.width, [[SequenceLogic sharedInstance] numberOfChannels] * CHANNEL_HEIGHT);
     
     // clear the background
@@ -83,6 +90,8 @@
     [self drawChannels];
 }
 
+#pragma mark - Drawing Methods
+
 - (void)drawHeaders
 {
     int channelIndex = 0;
@@ -90,7 +99,13 @@
     // ControlBoxes
     for(ControlBox *box in self.controlBoxes)
     {
-        [self drawControlBox:box withIndex:channelIndex];
+        int bottomChannelIndex = channelIndex + (int)box.channels.count;
+        // Only draw the boxes that need redrawing
+        if((channelIndex >= self.dirtyRectTopChannel && channelIndex <= self.dirtyRectBottomChannel) || (bottomChannelIndex >= self.dirtyRectTopChannel && bottomChannelIndex <= self.dirtyRectBottomChannel))
+        {
+            [self drawRectWithChannelIndex:channelIndex text:box.title textOffset:10 color:[NSColor grayColor] halfWidth:YES rightHalf:NO channelHeight:(int)box.channels.count];
+        }
+        
         channelIndex += (int)box.channels.count;
     }
 }
@@ -105,46 +120,16 @@
         NSArray *channels = self.channels[controlBoxIndex];
         for(int channelIndex = 0; channelIndex < channels.count; channelIndex ++)
         {
-            [self drawChannel:channels[channelIndex] withIndex:totalChannelIndex];
+            // Only draw the channels that need redrawing
+            if(totalChannelIndex >= self.dirtyRectTopChannel && totalChannelIndex <= self.dirtyRectBottomChannel)
+            {
+                Channel *channel = channels[channelIndex];
+                [self drawRectWithChannelIndex:totalChannelIndex text:channel.title textOffset:10 color:[channel.color colorWithAlphaComponent:[[SequenceLogic sharedInstance] currentBrightnessForChannel:channel]] halfWidth:YES rightHalf:YES channelHeight:1];
+            }
+            
             totalChannelIndex ++;
         }
     }
-}
-
-#pragma mark - Helper Drawing Methods
-
-- (void)drawControlBox:(ControlBox *)controlBox withIndex:(int)index
-{
-    if([self channelIndexIsInVisibleRange:index withChannelHeight:(int)controlBox.channels.count])
-    {
-        [self drawRectWithChannelIndex:index text:controlBox.title textOffset:10 color:[NSColor grayColor] halfWidth:YES rightHalf:NO channelHeight:(int)controlBox.channels.count];
-    }
-}
-
-- (void)drawChannel:(Channel *)channel withIndex:(int)index
-{
-    if([self channelIndexIsInVisibleRange:index withChannelHeight:1])
-    {
-        [self drawRectWithChannelIndex:index text:channel.title textOffset:10 color:[channel.color colorWithAlphaComponent:[[SequenceLogic sharedInstance] currentBrightnessForChannel:channel]] halfWidth:YES rightHalf:YES channelHeight:1];
-    }
-}
-
-- (BOOL)channelIndexIsInVisibleRange:(int)index withChannelHeight:(int)channelMultiples
-{
-    float topY = CHANNEL_HEIGHT * index;
-    float bottomY = CHANNEL_HEIGHT * (index + channelMultiples);
-    
-    NSRect visibleRect = [(NSScrollView *)self.superview.superview documentVisibleRect];
-    float visibleYSmall = visibleRect.origin.y - visibleRect.size.height / 2;
-    float visibleYLarge = visibleRect.origin.y + visibleRect.size.height * 1.5;
-    
-    // Only draw if we are in the visiable range
-    if((topY > visibleYSmall && topY < visibleYLarge) || (bottomY > visibleYSmall && bottomY < visibleYLarge))
-    {
-        return YES;
-    }
-    
-    return NO;
 }
 
 - (void)drawRectWithChannelIndex:(int)index text:(NSString *)text textOffset:(int)textOffset color:(NSColor *)color halfWidth:(BOOL)halfWidth rightHalf:(BOOL)rightHalf channelHeight:(int)channelMultiples

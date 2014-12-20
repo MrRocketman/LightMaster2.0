@@ -16,7 +16,6 @@
 @interface SequenceAudioAnalysisScrollView()
 
 @property (assign, nonatomic) BOOL ignoreBoundsChanges;
-@property (assign, nonatomic) NSRect lastRefreshVisibleRect;
 
 @end
 
@@ -35,14 +34,6 @@
 
 - (void)scrollViewBoundsChange:(NSNotification *)notification
 {
-    // Only redraw every 50% width change, since the view draws 200% width
-    if(self.documentVisibleRect.origin.x > self.lastRefreshVisibleRect.origin.x + self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.x < self.lastRefreshVisibleRect.origin.x - self.lastRefreshVisibleRect.size.width / 2 || self.documentVisibleRect.origin.y > self.lastRefreshVisibleRect.origin.y + self.lastRefreshVisibleRect.size.height / 2 || self.documentVisibleRect.origin.y < self.lastRefreshVisibleRect.origin.y - self.lastRefreshVisibleRect.size.height / 2)
-    {
-        self.lastRefreshVisibleRect = self.documentVisibleRect;
-        
-        [self updateViews];
-    }
-    
     // If the scroll happened from the user mouse within this view, update
     if(!self.ignoreBoundsChanges)
     {
@@ -92,9 +83,8 @@
         // note that a scroll view watching this one will get notified here
         self.ignoreBoundsChanges = YES;
         [[self contentView] scrollToPoint:newOffset];
-        // we have to tell the NSScrollView to update its
-        // scrollers
-        //[self reflectScrolledClipView:[self contentView]];
+        // we have to tell the NSScrollView to update its scrollers
+        [self reflectScrolledClipView:[self contentView]];
         self.ignoreBoundsChanges = NO;
     }
 }
