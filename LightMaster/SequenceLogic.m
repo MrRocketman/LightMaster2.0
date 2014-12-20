@@ -172,7 +172,7 @@
 
 - (void)resetCommandsSendComplete
 {
-    NSArray *commandsToReset = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"startTatum.time >= %f AND sequence == %@", self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
+    NSArray *commandsToReset = [[[[CoreDataManager sharedManager].managedObjectContext ofType:@"Command"] where:@"startTatum.time >= %f AND sequence == %@ AND sendComplete == YES", self.currentTime, [CoreDataManager sharedManager].currentSequence] toArray];
     for(Command *command in commandsToReset)
     {
         command.sendComplete = @(NO);
@@ -514,21 +514,21 @@
 {
     if([self.serialPort isOpen])
     {
-        //NSLog(@"Send");
-        //for(int i = 0; i < length; i ++)
-        //{
-        //    NSLog(@"0x%02x", packet[i]);
-        //}
+        /*NSLog(@"Send");
+        for(int i = 0; i < length; i ++)
+        {
+            NSLog(@"0x%02x", packet[i]);
+        }*/
         [self.serialPort sendData:[NSData dataWithBytes:packet length:length]];
     }
     else
     {
-        //NSLog(@"Can't send:%@", [NSString stringWithCString:packet encoding:NSStringEncodingConversionAllowLossy]);
-        //for(int i = 0; i < length; i ++)
-        //{
-        //    NSLog(@"can't send c:%c d:%d h:%02x", packet[i], packet[i], packet[i]);
-        //}
-        //NSLog(@"Couldn't send. Not connected");
+        /*NSLog(@"Can't send:%@", [NSString stringWithCString:packet encoding:NSStringEncodingConversionAllowLossy]);
+        for(int i = 0; i < length; i ++)
+        {
+            NSLog(@"can't send c:%c d:%d h:%02x", packet[i], packet[i], packet[i]);
+        }
+        NSLog(@"Couldn't send. Not connected");*/
     }
 }
 
@@ -541,11 +541,11 @@
     }
     else
     {
-        NSLog(@"Can't send:%@", text);
+        /*NSLog(@"Can't send:%@", text);
         for(int i = 0; i < [text length]; i ++)
         {
             NSLog(@"c:%c d:%d h:%x", [text characterAtIndex:i], [text characterAtIndex:i], [text characterAtIndex:i]);
-        }
+        }*/
     }
 }
 

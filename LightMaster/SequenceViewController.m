@@ -163,39 +163,29 @@
     
     // Scroll to center
     NSRect visibleRect = [self.timelineScrollView documentVisibleRect];
+    const int rightEdgeOffset = visibleRect.size.width / 3;
     NSRect viewFrame = ((SequenceTimelineView *)self.timelineScrollView.documentView).frame;
     float smallestTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x];
-    float middleTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width / 2];
+    float nearRightEdgeTime = [[SequenceLogic sharedInstance] xToTime:visibleRect.origin.x + visibleRect.size.width - rightEdgeOffset];
     float largestTime = [[SequenceLogic sharedInstance] xToTime:viewFrame.size.width - visibleRect.size.width / 2];
-    float newLeftX;
-    // Current time is from the middle of the screen onward
-    if([SequenceLogic sharedInstance].currentTime >= middleTime && [SequenceLogic sharedInstance].currentTime < largestTime)
-    {
-        // Go to center
-        float xDifference = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0 - visibleRect.origin.x;
-        newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width / 2.0;
-        // Accelerate forward if the current time is beyond the center
-        if(xDifference > 10)
-        {
-            newLeftX -= xDifference - (xDifference / 5.0);
-        }
-    }
-    // Current time if from the left of the screen to the middle
-    else if([SequenceLogic sharedInstance].currentTime < middleTime && [SequenceLogic sharedInstance].currentTime >= smallestTime)
-    {
-        newLeftX = visibleRect.origin.x;
-    }
+    float newLeftX = visibleRect.origin.x;
+    
     // Current time is less than the left edge
-    else if([SequenceLogic sharedInstance].currentTime < smallestTime)
+    if([SequenceLogic sharedInstance].currentTime <= smallestTime + 0.01)
     {
         // left edge
         newLeftX = 0;
     }
-    // Current time is greater than the far edge
-    else
+    // Current time is less than the left edge
+    else if([SequenceLogic sharedInstance].currentTime > largestTime - 0.01)
     {
         // right edge
         newLeftX = viewFrame.size.width - visibleRect.size.width;
+    }
+    // Current time is near the right edge
+    else if([SequenceLogic sharedInstance].currentTime >= nearRightEdgeTime && [SequenceLogic sharedInstance].currentTime < largestTime)
+    {
+        newLeftX = [[SequenceLogic sharedInstance] timeToX:[SequenceLogic sharedInstance].currentTime] - visibleRect.size.width + rightEdgeOffset;
     }
     
     NSRect sequenceVisibleRect = [self.sequenceScrollView documentVisibleRect];

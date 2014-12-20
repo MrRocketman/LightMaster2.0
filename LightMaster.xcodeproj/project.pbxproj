@@ -240,9 +240,18 @@
 		1A14CA5F1A253E6200C4FEB0 /* SequenceTab */ = {
 			isa = PBXGroup;
 			children = (
-				1A27BEEA1A2BF6A10043F8C9 /* SequenceView */,
+				1A27BEF71A2C4FB90043F8C9 /* SequenceLogic.h */,
+				1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */,
+				1A14CA501A246A3800C4FEB0 /* SequenceViewController.h */,
+				1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */,
 				1A14CA531A246CB100C4FEB0 /* SequenceListViewController.h */,
 				1A14CA541A246CB100C4FEB0 /* SequenceListViewController.m */,
+				1AB616AC1A3709620065A050 /* Drawing */,
+				1A75ADCB1A3124CE00D532FB /* AudioAnalysisChannelView */,
+				1A75ADC31A31248F00D532FB /* AudioAnalysisView */,
+				1A27BEF41A2C465E0043F8C9 /* SequenceView */,
+				1A27BEF51A2C46650043F8C9 /* ChannelView */,
+				1A27BEF61A2C466C0043F8C9 /* TimelineView */,
 			);
 			name = SequenceTab;
 			sourceTree = "<group>";
@@ -272,23 +281,6 @@
 				1A3474BF1A32E72200736869 /* ApplicationServices.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		1A27BEEA1A2BF6A10043F8C9 /* SequenceView */ = {
-			isa = PBXGroup;
-			children = (
-				1A27BEF71A2C4FB90043F8C9 /* SequenceLogic.h */,
-				1A27BEF81A2C4FB90043F8C9 /* SequenceLogic.m */,
-				1A14CA501A246A3800C4FEB0 /* SequenceViewController.h */,
-				1A14CA511A246A3800C4FEB0 /* SequenceViewController.m */,
-				1AB616AC1A3709620065A050 /* Drawing */,
-				1A75ADCB1A3124CE00D532FB /* AudioAnalysisChannelView */,
-				1A75ADC31A31248F00D532FB /* AudioAnalysisView */,
-				1A27BEF41A2C465E0043F8C9 /* SequenceView */,
-				1A27BEF51A2C46650043F8C9 /* ChannelView */,
-				1A27BEF61A2C466C0043F8C9 /* TimelineView */,
-			);
-			name = SequenceView;
 			sourceTree = "<group>";
 		};
 		1A27BEF41A2C465E0043F8C9 /* SequenceView */ = {
