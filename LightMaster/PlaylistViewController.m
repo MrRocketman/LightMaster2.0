@@ -112,14 +112,18 @@
 
 - (void)sequenceComplete:(NSNotification *)notification
 {
-    self.currentSequenceIndex ++;
-    // Loop back to the first one
-    if(self.currentSequenceIndex >= self.currentSequenceFetchedResultsController.count)
+    // Load the next sequence only if we are playing a playlist
+    if(![SequenceLogic sharedInstance].drawCurrentSequence)
     {
-        self.currentSequenceIndex = 0;
+        self.currentSequenceIndex ++;
+        // Loop back to the first one
+        if(self.currentSequenceIndex >= self.currentSequenceFetchedResultsController.count)
+        {
+            self.currentSequenceIndex = 0;
+        }
+        
+        [self loadNextSequence];
     }
-    
-    [self loadNextSequence];
 }
 
 - (void)loadNextSequence
