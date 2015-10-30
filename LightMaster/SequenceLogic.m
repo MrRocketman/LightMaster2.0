@@ -35,7 +35,7 @@
 #define MAX_SHORT_DURATION 2.56
 #define MAX_LONG_DURATION 25.6
 
-#define AUDIO_LATENCY 0.100 // 0.100
+#define AUDIO_LATENCY 0.120 // 0.100
 
 @interface SequenceLogic()
 
